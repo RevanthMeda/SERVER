@@ -43,15 +43,35 @@ class Config:
     os.makedirs(SIGNATURES_FOLDER, exist_ok=True)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # Email configuration - Force reload from .env
+    # Email configuration - Force complete reload from .env
     SMTP_SERVER = os.environ.get('SMTP_SERVER') or 'smtp.gmail.com'
     SMTP_PORT = int(os.environ.get('SMTP_PORT') or 587)
     SMTP_USERNAME = os.environ.get('SMTP_USERNAME') or ''
     
-    # Force reload SMTP_PASSWORD to clear any cached values
+    # Completely clear and reload environment for SMTP password
+    import importlib
+    import sys
+    
+    # Remove dotenv from module cache if present
+    if 'dotenv' in sys.modules:
+        del sys.modules['dotenv']
+    
+    # Clear SMTP_PASSWORD from environment completely
+    os.environ.pop('SMTP_PASSWORD', None)
+    
+    # Fresh import and load
+    from dotenv import load_dotenv
     load_dotenv(override=True)
-    SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD') or ''
+    
+    # Get password fresh from environment
+    SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
     DEFAULT_SENDER = os.environ.get('DEFAULT_SENDER') or ''
+    
+    # Debug print (remove in production)
+    print(f"🔐 Loaded SMTP password length: {len(SMTP_PASSWORD)}")
+    if SMTP_PASSWORD:
+        print(f"🔐 First 4 chars: {SMTP_PASSWORD[:4]}...")
+        print(f"🔐 Last 4 chars: ...{SMTP_PASSWORD[-4:]}")
 
     # PDF export
     ENABLE_PDF_EXPORT = os.environ.get('ENABLE_PDF_EXPORT', 'False').lower() == 'true'

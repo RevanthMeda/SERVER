@@ -30,3 +30,16 @@ werkzeug
 beautifulsoup4
 lxml
 requests
+beautifulsoup4
+docxtpl==0.16.7
+flask==2.2.3
+flask-login
+flask-sqlalchemy
+flask-wtf==1.1.1
+itsdangerous
+pillow>=10.4.0
+psycopg2-binary
+python-docx
+python-dotenv==1.0.0
+requests
+werkzeug==2.2.3

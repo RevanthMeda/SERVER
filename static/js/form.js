@@ -528,34 +528,6 @@
       });
     });
 
-    // Update button states on selection change
-    editor.addEventListener('keyup', () => updateToolbarButtons(toolbar));
-    editor.addEventListener('mouseup', () => updateToolbarButtons(toolbar));
   }
-
-  function updateToolbarButtons(toolbar) {
-    const buttons = toolbar.querySelectorAll('.toolbar-btn[data-command]');
-
-    buttons.forEach(button => {
-      const command = button.dataset.command;
-      button.classList.remove('active');
-
-      try {
-        if (document.queryCommandState && document.queryCommandState(command)) {
-          button.classList.add('active');
-        }
-      } catch (e) {
-        // Command not supported
-      }
-    });
-  }
-
-  // Expose functions globally
-  window.goToStep = goToStep;
-  window.addRow = addRow;
-  window.removeRow = removeRow;
-  window.saveProgress = saveProgress;
-  window.loadState = loadState;
-  window.saveState = saveState;
 
 })();
