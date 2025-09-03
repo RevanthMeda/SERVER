@@ -227,7 +227,7 @@ if __name__ == '__main__':
     env_vars = {
         'FLASK_ENV': 'production',
         'DEBUG': 'False',
-        'PORT': '443',
+        'PORT': '5000',
         'ALLOWED_DOMAINS': 'automation-reports.mobilehmi.org',
         'SERVER_IP': '172.16.18.21',
         'BLOCK_IP_ACCESS': 'False',  # Disable IP blocking for IIS integration
@@ -242,7 +242,7 @@ if __name__ == '__main__':
         'ENABLE_EMAIL_NOTIFICATIONS': 'True',
         
         # Production security settings
-        'SESSION_COOKIE_SECURE': 'True',  # HTTPS on port 443
+        'SESSION_COOKIE_SECURE': 'False',  # HTTP backend, HTTPS handled by IIS
         'WTF_CSRF_ENABLED': 'True',
         'PERMANENT_SESSION_LIFETIME': '7200',
     }
@@ -251,13 +251,13 @@ if __name__ == '__main__':
         os.environ[key] = value
 
     try:
-        print("🔒 SAT Report Generator - Production HTTPS Server")
+        print("🔧 SAT Report Generator - Flask Backend for IIS")
         print("=" * 60)
         print("Configuration:")
-        print("- HTTPS Server: https://automation-reports.mobilehmi.org:443")
-        print("- IIS Integration: Routes traffic to Flask")
-        print("- SSL/TLS: Required")
-        print("- Domain: automation-reports.mobilehmi.org")
+        print("- IIS Frontend: https://automation-reports.mobilehmi.org:443 (HTTPS)")
+        print("- Flask Backend: http://127.0.0.1:5000 (HTTP)")
+        print("- IIS routes HTTPS traffic to Flask backend")
+        print("- Corporate hosting setup")
         print("=" * 60)
         
         # Create the app with production configuration
@@ -282,7 +282,7 @@ if __name__ == '__main__':
 
         print(f"🌐 Port: {app.config['PORT']}")
         print(f"🛡️  Domain Security: {app.config.get('BLOCK_IP_ACCESS', False)}")
-        print(f"🔒 HTTPS: Required")
+        print(f"🔒 HTTPS: Handled by IIS")
         print(f"📡 Access URL: https://automation-reports.mobilehmi.org")
         print()
 
@@ -346,38 +346,27 @@ if __name__ == '__main__':
         os.makedirs('ssl', exist_ok=True)
         
         print()
-        print("🚀 Starting HTTPS server on port 443...")
-        print("   IIS will route https://automation-reports.mobilehmi.org traffic here")
+        print("🚀 Starting Flask backend on port 5000...")
+        print("   IIS will proxy HTTPS requests from port 443 to this backend")
         print("   Health check available at: /health")
+        print()
+        print("📋 IIS Configuration Needed:")
+        print("   1. IIS handles HTTPS on port 443")
+        print("   2. IIS proxies requests to http://127.0.0.1:5000")
+        print("   3. Users access: https://automation-reports.mobilehmi.org")
         print()
 
         try:
-            if os.path.exists(ssl_cert_path) and os.path.exists(ssl_key_path):
-                print("✅ SSL certificates found - using production certificates")
-                ssl_context = (ssl_cert_path, ssl_key_path)
-            else:
-                print("⚠️  SSL certificates not found - using self-signed certificate")
-                print("   For production, place your SSL certificate files in:")
-                print("   - ssl/server.crt (certificate)")
-                print("   - ssl/server.key (private key)")
-                ssl_context = 'adhoc'  # Self-signed for development
-            
             app.run(
-                host='0.0.0.0',  # Bind to all interfaces for IIS
-                port=443,
+                host='127.0.0.1',  # Localhost only - behind IIS proxy
+                port=5000,
                 debug=False,
                 threaded=True,
-                use_reloader=False,
-                ssl_context=ssl_context
+                use_reloader=False
             )
-        except PermissionError:
-            print("❌ Permission denied for port 443!")
-            print("   Port 443 requires administrator privileges.")
-            print("   Solution: Run Command Prompt as Administrator")
-            print("   Then run: python app.py")
         except Exception as e:
             print(f"❌ Server error: {e}")
-            print("   Check SSL certificate configuration")
+            print("   Check if port 5000 is available")
 
     except Exception as e:
         print(f"❌ Server startup failed: {e}")
