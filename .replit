@@ -56,6 +56,10 @@ args = "SAT Report Generator"
 task = "workflow.run"
 args = "SAT Report HTTPS Server"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Flask Backend for IIS"
+
 [[workflows.workflow]]
 name = "SAT Report Generator"
 author = "agent"
@@ -80,6 +84,18 @@ waitForPort = 443
 [workflows.workflow.metadata]
 outputType = "console"
 
+[[workflows.workflow]]
+name = "Flask Backend for IIS"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_local_backend.py"
+waitForPort = 8080
+
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[ports]]
 localPort = 80
 externalPort = 3000
@@ -91,7 +107,6 @@ externalPort = 80
 [[ports]]
 localPort = 8080
 externalPort = 8080
-exposeLocalhost = true
 
 [agent]
 expertMode = true

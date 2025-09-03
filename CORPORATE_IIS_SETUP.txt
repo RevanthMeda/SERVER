@@ -1,0 +1,109 @@
+========================================
+CORPORATE IIS + FLASK SETUP GUIDE
+========================================
+
+Your setup: IIS (Port 443 HTTPS) → Flask (Port 8080 HTTP)
+
+========================================
+ARCHITECTURE
+========================================
+
+User Request:
+https://automation-reports.mobilehmi.org:443
+     ↓
+IIS (Handles HTTPS, SSL Certificate, Domain)
+     ↓
+URL Rewrite Module proxies to:
+http://127.0.0.1:8080 (Flask Backend)
+     ↓
+SAT Report Generator Application
+
+========================================
+DEPLOYMENT STEPS
+========================================
+
+STEP 1: Deploy IIS Configuration
+> deploy_iis_config.bat
+
+This copies:
+- web.config → C:\inetpub\wwwroot\REPORT_GENERATOR\
+- 404.html, 500.html → Error pages
+
+STEP 2: Start Flask Backend
+> start_backend_service.bat
+
+This starts Flask on http://127.0.0.1:8080
+
+STEP 3: Verify IIS Requirements
+- IIS is running on port 443
+- SSL certificate installed for automation-reports.mobilehmi.org
+- URL Rewrite Module installed in IIS
+
+STEP 4: Access Application
+https://automation-reports.mobilehmi.org
+
+========================================
+IIS REQUIREMENTS
+========================================
+
+✅ IIS Manager installed
+✅ URL Rewrite Module installed
+✅ SSL certificate for automation-reports.mobilehmi.org
+✅ Site bound to port 443 (HTTPS)
+✅ Application pool running
+
+To install URL Rewrite Module:
+1. Download from Microsoft IIS website
+2. Or use Web Platform Installer
+3. Restart IIS after installation
+
+========================================
+SECURITY FEATURES
+========================================
+
+✅ IIS handles HTTPS encryption
+✅ SSL certificate managed by IIS
+✅ Domain security enforced by IIS
+✅ Production security headers
+✅ Custom error pages
+✅ Request filtering and compression
+
+========================================
+TROUBLESHOOTING
+========================================
+
+Issue: "Internal Server Error" (500)
+Solution: Ensure Flask backend is running on port 8080
+
+Issue: "URL Rewrite Module not found"
+Solution: Install IIS URL Rewrite Module
+
+Issue: SSL certificate errors
+Solution: Verify SSL certificate in IIS Manager
+
+Issue: "Cannot connect to backend"
+Solution: Check Flask service: start_backend_service.bat
+
+========================================
+MAINTENANCE
+========================================
+
+Daily Operations:
+1. Ensure IIS service is running
+2. Start Flask backend: start_backend_service.bat
+3. Monitor both services
+
+IIS handles:
+- HTTPS encryption
+- SSL certificates
+- Domain routing
+- Static file serving
+- Error handling
+
+Flask handles:
+- Application logic
+- Database operations
+- User authentication
+- Report generation
+
+Perfect corporate hosting setup!

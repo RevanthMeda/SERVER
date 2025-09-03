@@ -1,24 +1,20 @@
 @echo off
 echo ================================================
-echo SAT Report Generator - Direct HTTPS Server
+echo SAT Report Generator - IIS Backend Service
 echo ================================================
 
 cd /d "E:\report generator\SERVER"
 
-echo Starting Flask HTTPS server on port 443...
+echo Starting Flask backend for IIS reverse proxy...
 echo.
 echo Configuration:
-echo - HTTPS Server: https://automation-reports.mobilehmi.org:443
-echo - Direct access (no IIS needed)
-echo - SSL/TLS encryption: Required
-echo - Mode: Production HTTPS server
+echo - IIS Frontend: https://automation-reports.mobilehmi.org:443
+echo - Flask Backend: http://127.0.0.1:8080
+echo - IIS handles HTTPS, routes to Flask
+echo - Corporate hosting setup
 echo.
 
-echo IMPORTANT: This requires Administrator privileges for port 443
-echo If you get "Permission denied", use start_as_admin.bat instead
-echo.
-
-echo Starting HTTPS server...
+echo Starting backend service...
 python run_local_backend.py
 
 pause
