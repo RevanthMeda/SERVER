@@ -351,6 +351,11 @@ def send_email(to_email, subject, html_content, text_content=None):
     if not smtp_username or not smtp_password:
         logger.error("SMTP credentials are not configured")
         return False
+    
+    # Check if using Gmail and provide helpful error message
+    if 'gmail.com' in smtp_server.lower() and len(smtp_password) != 16:
+        logger.warning("Gmail detected but password is not 16 characters. You may need to use an App Password instead of your regular Gmail password.")
+        logger.warning("Visit https://support.google.com/accounts/answer/185833 to generate an App Password")
 
     # Create message
     msg = EmailMessage()
