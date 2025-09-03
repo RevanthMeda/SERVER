@@ -43,28 +43,19 @@ class Config:
     os.makedirs(SIGNATURES_FOLDER, exist_ok=True)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # Email configuration - Force complete reload from .env
+    # Email configuration - Prioritize environment variables over .env file
     SMTP_SERVER = os.environ.get('SMTP_SERVER') or 'smtp.gmail.com'
     SMTP_PORT = int(os.environ.get('SMTP_PORT') or 587)
     SMTP_USERNAME = os.environ.get('SMTP_USERNAME') or ''
     
-    # Completely clear and reload environment for SMTP password
-    import importlib
-    import sys
-    
-    # Remove dotenv from module cache if present
-    if 'dotenv' in sys.modules:
-        del sys.modules['dotenv']
-    
-    # Clear SMTP_PASSWORD from environment completely
-    os.environ.pop('SMTP_PASSWORD', None)
-    
-    # Fresh import and load
-    from dotenv import load_dotenv
-    load_dotenv(override=True)
-    
-    # Get password fresh from environment
+    # Get password - prioritize Replit secrets over .env file
     SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+    if not SMTP_PASSWORD:
+        # Only try loading from .env if no environment variable exists
+        from dotenv import load_dotenv
+        load_dotenv()
+        SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+    
     DEFAULT_SENDER = os.environ.get('DEFAULT_SENDER') or ''
     
     # Debug print (remove in production)
@@ -124,8 +115,8 @@ class ProductionConfig(Config):
     DEBUG = False
     SESSION_COOKIE_SECURE = True
 
-    @classmethod
-    def init_app(cls, app):
+    @staticmethod
+    def init_app(app):
         Config.init_app(app)
 
         # Log to syslog in production

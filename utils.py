@@ -390,46 +390,7 @@ def send_email(to_email, subject, html_content, text_content=None):
             time.sleep(2)
     return False
 
-def create_approval_notification(approver_email, submission_id, stage, document_title):
-    """Create notification for approval request"""
-    try:
-        from models import Notification
-        from flask import url_for
 
-        title = f"Approval Required - Stage {stage}"
-        message = f"SAT Report '{document_title}' requires your approval."
-        action_url = url_for('approval.approve_submission', submission_id=submission_id, stage=stage, _external=True)
-
-        return Notification.create_notification(
-            user_email=approver_email,
-            title=title,
-            message=message,
-            notification_type='approval_request',
-            submission_id=submission_id,
-            action_url=action_url
-        )
-    except Exception as e:
-        current_app.logger.error(f"Failed to create approval notification: {e}")
-        return False
-
-def create_status_update_notification(user_email, submission_id, status, document_title, approver_name):
-    """Create notification for status updates"""
-    try:
-        from models import Notification
-
-        title = f"Report {status.title()}"
-        message = f"Your SAT Report '{document_title}' has been {status} by {approver_name}."
-
-        return Notification.create_notification(
-            user_email=user_email,
-            title=title,
-            message=message,
-            notification_type='status_update',
-            submission_id=submission_id
-        )
-    except Exception as e:
-        current_app.logger.error(f"Failed to create status update notification: {e}")
-        return False
 
 def create_completion_notification(user_email, submission_id, document_title):
     """Create notification for completion"""
