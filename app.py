@@ -29,9 +29,9 @@ def create_app(config_name='default'):
     config_class = config.get(config_name, config['default'])
     app.config.from_object(config_class)
     
-    # Initialize production security middleware
-    if config_name == 'production':
-        init_security_middleware(app)
+    # Initialize production security middleware - DISABLED FOR TESTING
+    # if config_name == 'production':
+    #     init_security_middleware(app)
     
     # Initialize extensions
     csrf.init_app(app)
@@ -230,7 +230,7 @@ if __name__ == '__main__':
         'PORT': '5000',
         'ALLOWED_DOMAINS': 'automation-reports.mobilehmi.org',
         'SERVER_IP': '172.16.18.21',
-        'BLOCK_IP_ACCESS': 'False',  # Disable IP blocking for IIS integration
+        'BLOCK_IP_ACCESS': 'False',  # Disable IP blocking for testing
         'SECRET_KEY': 'production-key-change-immediately',
         
         # Email configuration
