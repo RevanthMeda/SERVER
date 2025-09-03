@@ -14,10 +14,13 @@ def setup_environment():
     """Set up production environment variables"""
     
     # Set required environment variables for production
+    # Check if PORT is already set, otherwise default to 80
+    port = os.environ.get('PORT', '80')
+    
     env_vars = {
         'FLASK_ENV': 'production',
         'DEBUG': 'False',
-        'PORT': '80',
+        'PORT': port,
         'ALLOWED_DOMAINS': 'automation-reports.mobilehmi.org',
         'SERVER_IP': '172.16.18.21',
         'BLOCK_IP_ACCESS': 'True',
@@ -84,7 +87,7 @@ def main():
     print("=" * 50)
     print(f"Target Server: 172.16.18.21")
     print(f"Domain: automation-reports.mobilehmi.org")
-    print(f"Port: 80")
+    print(f"Port: {os.environ.get('PORT', '80')}")
     print("=" * 50)
     
     # Setup environment
@@ -137,20 +140,26 @@ def main():
     print("=" * 50)
     
     # Start the server
+    port = int(os.environ.get('PORT', '80'))
     try:
+        print(f"🌐 Starting server on port {port}...")
         app.run(
             host='0.0.0.0',
-            port=80,
+            port=port,
             debug=False,
             threaded=True,
             use_reloader=False
         )
     except PermissionError:
-        print("❌ Permission denied! Port 80 requires administrator privileges.")
-        print("Solution: Run as administrator or use a different port.")
-        print("To run on port 8080 instead:")
-        print("  Set PORT environment variable: set PORT=8080")
-        print("  Then configure your web server to forward port 80 to 8080")
+        if port == 80:
+            print("❌ Permission denied! Port 80 requires administrator privileges.")
+            print("Solution: Run as administrator or use a different port.")
+            print("To run on port 8080 instead:")
+            print("  Set PORT environment variable: set PORT=8080")
+            print("  Then configure your web server to forward port 80 to 8080")
+        else:
+            print(f"❌ Permission denied for port {port}!")
+            print("Try a different port number.")
     except Exception as e:
         print(f"❌ Server startup failed: {e}")
         sys.exit(1)
