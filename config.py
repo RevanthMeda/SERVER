@@ -117,11 +117,11 @@ class Config:
     # Feature Flags
     ENABLE_EMAIL_NOTIFICATIONS = os.getenv('ENABLE_EMAIL_NOTIFICATIONS', 'True').lower() == 'true'
 
-    # Security Settings - More lenient for troubleshooting
-    SESSION_COOKIE_SECURE = False  # Allow HTTP cookies for now
-    SESSION_COOKIE_HTTPONLY = False  # Allow JavaScript access for debugging
+    # Security Settings - Simple and reliable
+    SESSION_COOKIE_SECURE = False  # Allow HTTP cookies
+    SESSION_COOKIE_HTTPONLY = True  # Standard security
     SESSION_COOKIE_SAMESITE = 'Lax'
-    SESSION_TYPE = 'filesystem'  # Use file-based sessions for reliability
+    # Remove filesystem sessions - use standard Flask sessions
     PERMANENT_SESSION_LIFETIME = int(os.getenv('PERMANENT_SESSION_LIFETIME', '86400'))  # 24 hours to match CSRF
 
     @staticmethod
