@@ -32,7 +32,7 @@ def new_sat_full():
         import uuid
         from utils import get_unread_count
         
-        # Create empty submission data structure for new forms
+        # Create completely empty submission data structure for new forms
         submission_data = {
             'DOCUMENT_TITLE': '',
             'PROJECT_REFERENCE': '',
@@ -67,13 +67,16 @@ def new_sat_full():
             'ALARM_LIST': []
         }
         
+        # Completely clear any cached form data for new reports
         unread_count = get_unread_count()
         submission_id = str(uuid.uuid4())
         
+        # Don't load wizard_data for new reports - start completely fresh        
         return render_template('SAT.html', 
                              submission_data=submission_data,
                              submission_id=submission_id,
-                             unread_count=unread_count)
+                             unread_count=unread_count,
+                             is_new_report=True)
     except Exception as e:
         current_app.logger.error(f"Error rendering SAT form: {e}")
         # Provide minimal data structure even on error

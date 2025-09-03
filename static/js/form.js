@@ -414,6 +414,7 @@
   window.goToStep = goToStep;
   window.addRow = addRow;
   window.removeRow = removeRow;
+  window.handleFormSubmit = handleFormSubmit;
 
   // Utility function for debouncing
   function debounce(func, wait) {
@@ -426,6 +427,80 @@
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
     };
+  }
+
+  // Handle form submission with AJAX
+  function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const formData = new FormData(form);
+    
+    // Show loading state
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Generating Report...';
+    }
+    
+    // Clear previous alerts
+    document.querySelectorAll('.alert').forEach(alert => alert.remove());
+    
+    fetch(form.action, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Show success message
+        showAlert(data.message, 'success');
+        
+        // Clear localStorage to prevent auto-population
+        localStorage.removeItem('satFormState');
+        
+        // Redirect to status page after short delay
+        setTimeout(() => {
+          window.location.href = data.redirect_url;
+        }, 1500);
+      } else {
+        throw new Error(data.message || 'Generation failed');
+      }
+    })
+    .catch(error => {
+      console.error('Form submission error:', error);
+      showAlert('Error generating report: ' + error.message, 'error');
+    })
+    .finally(() => {
+      // Restore button state
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa fa-check"></i> Generate SAT Report';
+      }
+    });
+    
+    return false;
+  }
+  
+  // Show alert messages
+  function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type}`;
+    alertDiv.innerHTML = `
+      <i class="fa fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+      ${message}
+    `;
+    
+    // Insert at top of form
+    const form = document.getElementById('satForm');
+    if (form) {
+      form.insertBefore(alertDiv, form.firstChild);
+      
+      // Auto-remove after 5 seconds for success messages
+      if (type === 'success') {
+        setTimeout(() => alertDiv.remove(), 5000);
+      }
+    }
   }
 
   // Rich text editor setup

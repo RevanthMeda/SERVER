@@ -1033,7 +1033,7 @@
         <!-- Watermark -->
         <img src="{{ url_for('static', filename='Cully_Watermark.jpg') }}" class="watermark" alt="Watermark" />
 
-        <form id="satForm" method="POST" action="{{ url_for('main.generate') }}" enctype="multipart/form-data" novalidate>
+        <form id="satForm" method="POST" action="{{ url_for('main.generate') }}" enctype="multipart/form-data" novalidate onsubmit="return handleFormSubmit(event)">
           <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
           <input type="hidden" name="submission_id" value="{{ submission_id }}"/>
 
