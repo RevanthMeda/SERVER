@@ -11,7 +11,7 @@ class Config:
 
     # Application settings
     APP_NAME = 'SAT Report Generator'
-    PORT = int(os.environ.get('PORT', 5000))
+    PORT = int(os.environ.get('PORT', 8443))
     DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
     
     # Domain security settings
