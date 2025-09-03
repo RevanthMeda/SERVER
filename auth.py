@@ -23,7 +23,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
             return redirect(url_for('auth.login'))
-        if not current_user.is_active():
+        if not current_user.is_active:
             flash('Your account is not active. Contact your administrator.', 'error')
             return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
@@ -46,24 +46,7 @@ def role_required(allowed_roles):
         def decorated_function(*args, **kwargs):
             if not current_user.is_authenticated:
                 return redirect(url_for('auth.login'))
-            if not current_user.is_active():
-                flash('Your account is not active. Contact your administrator.', 'error')
-                return redirect(url_for('auth.login'))
-            if current_user.role not in allowed_roles:
-                flash('Access denied. You do not have permission to access this page.', 'error')
-                return redirect(url_for('dashboard.home'))
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorator
-
-def role_required(allowed_roles):
-    """Require specific roles"""
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            if not current_user.is_authenticated:
-                return redirect(url_for('auth.login'))
-            if not current_user.is_active():
+            if not current_user.is_active:
                 flash('Your account is not active. Contact your administrator.', 'error')
                 return redirect(url_for('auth.login'))
             if current_user.role not in allowed_roles:
@@ -73,14 +56,4 @@ def role_required(allowed_roles):
         return decorated_function
     return decorator
 
-def role_required(allowed_roles):
-    """Require specific roles"""
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            if not current_user.is_authenticated or current_user.role not in allowed_roles:
-                flash('Access denied. You do not have permission to access this page.', 'error')
-                return redirect(url_for('dashboard.home'))
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorator
+# Duplicate role_required function removed
