@@ -243,7 +243,10 @@ if __name__ == '__main__':
         # Print startup information
         print(f"🚀 Starting {app.config.get('APP_NAME', 'SAT Report Generator')}...")
         print(f"Debug Mode: {app.config.get('DEBUG', False)}")
-        print(f"Running on http://0.0.0.0:{app.config.get('PORT', 5000)}")
+        protocol = "https" if app.config.get('PORT') == 443 else "http"
+        print(f"Running on {protocol}://0.0.0.0:{app.config.get('PORT', 5000)}")
+        if app.config.get('PORT') == 443:
+            print("⚠️  Port 443 requires Administrator privileges!")
 
         # Create required directories if they don't exist
         try:
@@ -301,11 +304,29 @@ if __name__ == '__main__':
                 print(f"🚀 Starting production server on port {port}")
                 print("⚠️  Production mode: Use a WSGI server like Gunicorn for deployment")
             
+            # Configure SSL context for HTTPS on port 443
+            ssl_context = None
+            if port == 443:
+                try:
+                    # Try to use SSL certificate files if they exist
+                    if os.path.exists('ssl/server.crt') and os.path.exists('ssl/server.key'):
+                        ssl_context = ('ssl/server.crt', 'ssl/server.key')
+                        print("🔒 Using SSL certificate files")
+                    else:
+                        # Use self-signed certificate for development/testing
+                        ssl_context = 'adhoc'
+                        print("🔒 Using self-signed SSL certificate")
+                        print("⚠️  Browsers will show security warning for self-signed certificates")
+                except Exception as e:
+                    print(f"⚠️  SSL setup failed: {e}")
+                    print("ℹ️  Running without SSL...")
+
             app.run(
                 host=host,
                 port=port,
                 debug=debug,
                 threaded=True,
+                ssl_context=ssl_context,
                 use_reloader=False if config_name == 'production' else debug
             )
         except OSError as e:

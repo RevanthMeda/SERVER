@@ -6,13 +6,13 @@ echo ================================================
 echo SAT Report Generator - Production Deployment
 echo Server: 172.16.18.21
 echo Domain: automation-reports.mobilehmi.org
-echo Port: 8443 (No Administrator needed!)
+echo Port: 443 (HTTPS - Administrator privileges required)
 echo ================================================
 
 REM Set production environment variables
 set FLASK_ENV=production
 set DEBUG=False
-set PORT=8443
+set PORT=443
 set ALLOWED_DOMAINS=automation-reports.mobilehmi.org
 set SERVER_IP=172.16.18.21
 set BLOCK_IP_ACCESS=True
@@ -39,7 +39,7 @@ echo No administrator privileges needed for port 8443!
 echo.
 echo Starting SAT Report Generator in Production Mode...
 echo Direct Flask access - Simple deployment!
-echo Access: http://automation-reports.mobilehmi.org:8443
+echo Access: https://automation-reports.mobilehmi.org
 echo.
 
 REM Change to the project directory
