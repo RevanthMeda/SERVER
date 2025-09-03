@@ -7,7 +7,7 @@
                 <!-- Main rule: Proxy all requests to Flask backend -->
                 <rule name="Flask Backend Proxy" stopProcessing="true">
                     <match url="(.*)" />
-                    <action type="Rewrite" url="http://127.0.0.1:5000/{R:1}" />
+                    <action type="Rewrite" url="http://127.0.0.1:8000/{R:1}" />
                     <serverVariables>
                         <set name="HTTP_X_FORWARDED_PROTO" value="https" />
                         <set name="HTTP_X_FORWARDED_FOR" value="{REMOTE_ADDR}" />

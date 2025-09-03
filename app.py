@@ -227,7 +227,7 @@ if __name__ == '__main__':
     env_vars = {
         'FLASK_ENV': 'production',
         'DEBUG': 'False',
-        'PORT': '5000',
+        'PORT': '8000',
         'ALLOWED_DOMAINS': 'automation-reports.mobilehmi.org',
         'SERVER_IP': '172.16.18.21',
         'BLOCK_IP_ACCESS': 'False',  # Disable IP blocking for testing
@@ -255,7 +255,7 @@ if __name__ == '__main__':
         print("=" * 60)
         print("Configuration:")
         print("- IIS Frontend: https://automation-reports.mobilehmi.org:443 (HTTPS)")
-        print("- Flask Backend: http://127.0.0.1:5000 (HTTP)")
+        print("- Flask Backend: http://127.0.0.1:8000 (HTTP)")
         print("- IIS routes HTTPS traffic to Flask backend")
         print("- Corporate hosting setup")
         print("=" * 60)
@@ -346,27 +346,27 @@ if __name__ == '__main__':
         os.makedirs('ssl', exist_ok=True)
         
         print()
-        print("🚀 Starting Flask backend on port 5000...")
-        print("   IIS will proxy HTTPS requests from port 443 to this backend")
+        print("🚀 Starting Flask backend on port 8000...")
+        print("   IIS will proxy requests from port 80/443 to this backend")
         print("   Health check available at: /health")
         print()
         print("📋 IIS Configuration Needed:")
         print("   1. IIS handles HTTPS on port 443")
-        print("   2. IIS proxies requests to http://127.0.0.1:5000")
+        print("   2. IIS proxies requests to http://127.0.0.1:8000")
         print("   3. Users access: https://automation-reports.mobilehmi.org")
         print()
 
         try:
             app.run(
                 host='0.0.0.0',  # Allow all connections 
-                port=5000,
+                port=8000,
                 debug=False,
                 threaded=True,
                 use_reloader=False
             )
         except Exception as e:
             print(f"❌ Server error: {e}")
-            print("   Check if port 5000 is available")
+            print("   Check if port 8000 is available")
 
     except Exception as e:
         print(f"❌ Server startup failed: {e}")
