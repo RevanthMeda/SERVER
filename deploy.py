@@ -13,14 +13,13 @@ from app import create_app
 def setup_environment():
     """Set up production environment variables"""
     
-    # Set required environment variables for production
-    # Check if PORT is already set, otherwise default to 80
-    port = os.environ.get('PORT', '80')
+    # Check if PORT is already set, preserve it
+    existing_port = os.environ.get('PORT')
     
+    # Set required environment variables for production
     env_vars = {
         'FLASK_ENV': 'production',
         'DEBUG': 'False',
-        'PORT': port,
         'ALLOWED_DOMAINS': 'automation-reports.mobilehmi.org',
         'SERVER_IP': '172.16.18.21',
         'BLOCK_IP_ACCESS': 'True',
@@ -43,11 +42,17 @@ def setup_environment():
         # 'DATABASE_URL': 'postgresql://username:password@localhost/sat_reports'
     }
     
-    # Set environment variables
+    # Set environment variables (but preserve existing PORT if set)
     for key, value in env_vars.items():
         os.environ[key] = value
     
-    print("✅ Environment variables configured for production")
+    # Restore PORT if it was previously set
+    if existing_port:
+        os.environ['PORT'] = existing_port
+        print(f"✅ Environment variables configured for production (using PORT={existing_port})")
+    else:
+        os.environ['PORT'] = '80'
+        print("✅ Environment variables configured for production (using default PORT=80)")
 
 def check_dependencies():
     """Check if all required dependencies are installed"""
