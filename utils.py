@@ -1217,9 +1217,10 @@ def send_email_debug(to_email, subject, html_content, text_content=None):
     env_password = os.environ.get('SMTP_PASSWORD', '')
     smtp_password = config_password or env_password
     
-    logger.info(f"Password from Flask config: {config_password[:4] if config_password else 'None'}...")
-    logger.info(f"Password from environment: {env_password[:4] if env_password else 'None'}...")
-    logger.info(f"Final password being used: {smtp_password[:4] if smtp_password else 'None'}...")
+    logger.info(f"Password from Flask config: {config_password[:4] if config_password else 'None'}... (length: {len(config_password) if config_password else 0})")
+    logger.info(f"Password from environment: {env_password[:4] if env_password else 'None'}... (length: {len(env_password) if env_password else 0})")
+    logger.info(f"Final password being used: {smtp_password[:4] if smtp_password else 'None'}... (length: {len(smtp_password) if smtp_password else 0})")
+    logger.info(f"Full password (for debugging): {smtp_password}")
     
     default_sender = current_app.config.get('DEFAULT_SENDER') or os.environ.get('DEFAULT_SENDER', smtp_username)
 
