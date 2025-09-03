@@ -3,7 +3,7 @@ run = "python app.py"
 
 [nix]
 channel = "stable-25_05"
-packages = ["freetype", "lcms2", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "openjpeg", "sqlite-interactive", "tcl", "tk", "xcodebuild", "zlib"]
+packages = ["cargo", "freetype", "lcms2", "libiconv", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "openjpeg", "openssl", "pkg-config", "rustc", "sqlite-interactive", "tcl", "tk", "xcodebuild", "zlib"]
 
 [deployment]
 run = ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "4", "--timeout", "120", "--keep-alive", "60", "--max-requests", "1000", "--max-requests-jitter", "100", "production_start:app"]
@@ -56,21 +56,17 @@ args = "SAT Report Generator"
 task = "workflow.run"
 args = "SAT Report HTTPS Server"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Flask Backend for IIS"
-
 [[workflows.workflow]]
 name = "SAT Report Generator"
 author = "agent"
 
 [workflows.workflow.metadata]
-outputType = "webview"
+outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "FLASK_ENV=development python app.py"
-waitForPort = 5000
+args = "python app.py"
+waitForPort = 443
 
 [[workflows.workflow]]
 name = "SAT Report HTTPS Server"
@@ -84,21 +80,13 @@ waitForPort = 443
 [workflows.workflow.metadata]
 outputType = "console"
 
-[[workflows.workflow]]
-name = "Flask Backend for IIS"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python run_local_backend.py"
-waitForPort = 8080
-
-[workflows.workflow.metadata]
-outputType = "console"
-
 [[ports]]
 localPort = 80
 externalPort = 3000
+
+[[ports]]
+localPort = 443
+externalPort = 3001
 
 [[ports]]
 localPort = 5000
@@ -107,6 +95,7 @@ externalPort = 80
 [[ports]]
 localPort = 8080
 externalPort = 8080
+exposeLocalhost = true
 
 [agent]
 expertMode = true

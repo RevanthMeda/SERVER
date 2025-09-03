@@ -31,3 +31,5 @@ greenlet
 
 # Windows compatibility (conditional)
 pywin32>=307; sys_platform == 'win32'
+cryptography
+docx

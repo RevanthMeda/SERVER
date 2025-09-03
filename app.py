@@ -223,26 +223,68 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, sigint_handler)
     signal.signal(signal.SIGTERM, sigint_handler)
 
-    try:
-        print("🔧 Initializing SAT Report Generator...")
+    # Setup environment for production on port 443
+    env_vars = {
+        'FLASK_ENV': 'production',
+        'DEBUG': 'False',
+        'PORT': '443',
+        'ALLOWED_DOMAINS': 'automation-reports.mobilehmi.org',
+        'SERVER_IP': '172.16.18.21',
+        'BLOCK_IP_ACCESS': 'False',  # Disable IP blocking for IIS integration
+        'SECRET_KEY': 'production-key-change-immediately',
         
-        # Determine environment
-        flask_env = os.environ.get('FLASK_ENV', 'development')
-        config_name = 'production' if flask_env == 'production' else 'development'
+        # Email configuration
+        'SMTP_SERVER': 'smtp.gmail.com',
+        'SMTP_PORT': '587',
+        'SMTP_USERNAME': 'meda.revanth@gmail.com',
+        'SMTP_PASSWORD': 'rleg tbhv rwvb kdus',
+        'DEFAULT_SENDER': 'meda.revanth@gmail.com',
+        'ENABLE_EMAIL_NOTIFICATIONS': 'True',
         
-        # Create the app with appropriate configuration
-        app = create_app(config_name)
-        
-        # Log security status for production
-        if config_name == 'production':
-            print("🔒 Production mode: Domain security enabled")
-            print(f"🌐 Allowed domain: {app.config.get('ALLOWED_DOMAINS', [])}")
-            print(f"🚫 IP access blocking: {app.config.get('BLOCK_IP_ACCESS', False)}")
+        # Production security settings
+        'SESSION_COOKIE_SECURE': 'True',  # HTTPS on port 443
+        'WTF_CSRF_ENABLED': 'True',
+        'PERMANENT_SESSION_LIFETIME': '7200',
+    }
+    
+    for key, value in env_vars.items():
+        os.environ[key] = value
 
-        # Print startup information
-        print(f"🚀 Starting {app.config.get('APP_NAME', 'SAT Report Generator')}...")
-        print(f"Debug Mode: {app.config.get('DEBUG', False)}")
-        print(f"Running on http://0.0.0.0:{app.config.get('PORT', 5000)}")
+    try:
+        print("🔒 SAT Report Generator - Production HTTPS Server")
+        print("=" * 60)
+        print("Configuration:")
+        print("- HTTPS Server: https://automation-reports.mobilehmi.org:443")
+        print("- IIS Integration: Routes traffic to Flask")
+        print("- SSL/TLS: Required")
+        print("- Domain: automation-reports.mobilehmi.org")
+        print("=" * 60)
+        
+        # Create the app with production configuration
+        app = create_app('production')
+        
+        # Configure production security headers
+        @app.after_request
+        def production_security_headers(response):
+            response.headers['X-Content-Type-Options'] = 'nosniff'
+            response.headers['X-Frame-Options'] = 'DENY'
+            response.headers['X-XSS-Protection'] = '1; mode=block'
+            response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+            response.headers['Content-Security-Policy'] = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; "
+                "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; "
+                "font-src 'self' fonts.gstatic.com; "
+                "img-src 'self' data:;"
+            )
+            response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+            return response
+
+        print(f"🌐 Port: {app.config['PORT']}")
+        print(f"🛡️  Domain Security: {app.config.get('BLOCK_IP_ACCESS', False)}")
+        print(f"🔒 HTTPS: Required")
+        print(f"📡 Access URL: https://automation-reports.mobilehmi.org")
+        print()
 
         # Create required directories if they don't exist
         try:
@@ -268,6 +310,15 @@ if __name__ == '__main__':
         except Exception as dir_error:
             print(f"⚠️  Warning: Could not create some directories: {dir_error}")
 
+        # Initialize database
+        with app.app_context():
+            from models import db
+            try:
+                db.create_all()
+                print("✅ Database initialized")
+            except Exception as e:
+                print(f"⚠️  Database warning: {e}")
+
         # Test a simple route to ensure app is working
         @app.route('/health')
         def health_check():
@@ -287,41 +338,46 @@ if __name__ == '__main__':
                 'database': db_status
             })
 
-        print("🌐 Health check endpoint available at /health")
+        # Check for SSL certificates
+        ssl_cert_path = 'ssl/server.crt'
+        ssl_key_path = 'ssl/server.key'
+        
+        # Create SSL directory if it doesn't exist
+        os.makedirs('ssl', exist_ok=True)
+        
+        print()
+        print("🚀 Starting HTTPS server on port 443...")
+        print("   IIS will route https://automation-reports.mobilehmi.org traffic here")
+        print("   Health check available at: /health")
+        print()
 
-        # Run the server
         try:
-            # Production server configuration
-            host = '0.0.0.0'  # Bind to all interfaces
-            port = app.config['PORT']
-            debug = app.config.get('DEBUG', False)
-            
-            if config_name == 'production':
-                print(f"🚀 Starting production server on port {port}")
-                print("⚠️  Production mode: Use a WSGI server like Gunicorn for deployment")
+            if os.path.exists(ssl_cert_path) and os.path.exists(ssl_key_path):
+                print("✅ SSL certificates found - using production certificates")
+                ssl_context = (ssl_cert_path, ssl_key_path)
+            else:
+                print("⚠️  SSL certificates not found - using self-signed certificate")
+                print("   For production, place your SSL certificate files in:")
+                print("   - ssl/server.crt (certificate)")
+                print("   - ssl/server.key (private key)")
+                ssl_context = 'adhoc'  # Self-signed for development
             
             app.run(
-                host=host,
-                port=port,
-                debug=debug,
+                host='0.0.0.0',  # Bind to all interfaces for IIS
+                port=443,
+                debug=False,
                 threaded=True,
-                use_reloader=False if config_name == 'production' else debug
+                use_reloader=False,
+                ssl_context=ssl_context
             )
-        except OSError as e:
-            if "Address already in use" in str(e):
-                print("⚠️  Port 5000 is already in use. Trying to kill existing processes...")
-                import os
-                os.system('pkill -f "python app.py"')
-                import time
-                time.sleep(2)
-                print("🔄 Retrying on port 5000...")
-                app.run(
-                    host='0.0.0.0',
-                    port=app.config['PORT'],
-                    debug=app.config['DEBUG']
-                )
-            else:
-                raise
+        except PermissionError:
+            print("❌ Permission denied for port 443!")
+            print("   Port 443 requires administrator privileges.")
+            print("   Solution: Run Command Prompt as Administrator")
+            print("   Then run: python app.py")
+        except Exception as e:
+            print(f"❌ Server error: {e}")
+            print("   Check SSL certificate configuration")
 
     except Exception as e:
         print(f"❌ Server startup failed: {e}")
