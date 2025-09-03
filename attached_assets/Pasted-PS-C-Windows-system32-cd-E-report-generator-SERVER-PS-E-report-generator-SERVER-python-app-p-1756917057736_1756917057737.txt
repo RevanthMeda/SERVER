@@ -1,0 +1,87 @@
+PS C:\Windows\system32> cd "E:\report generator\SERVER"
+PS E:\report generator\SERVER> python app.py
+🔧 SAT Report Generator - Flask Backend for IIS
+============================================================
+Configuration:
+- IIS Frontend: https://automation-reports.mobilehmi.org:443 (HTTPS)
+- Flask Backend: http://127.0.0.1:5000 (HTTP)
+- IIS routes HTTPS traffic to Flask backend
+- Corporate hosting setup
+============================================================
+'FLASK_ENV' is deprecated and will not be used in Flask 2.3. Use 'FLASK_DEBUG' instead.
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🌐 Port: 5000
+🛡️  Domain Security: True
+🔒 HTTPS: Handled by IIS
+📡 Access URL: https://automation-reports.mobilehmi.org
+
+✅ Required directories created successfully
+✅ Database initialized
+
+🚀 Starting Flask backend on port 5000...
+   IIS will proxy HTTPS requests from port 443 to this backend
+   Health check available at: /health
+
+📋 IIS Configuration Needed:
+   1. IIS handles HTTPS on port 443
+   2. IIS proxies requests to http://127.0.0.1:5000
+   3. Users access: https://automation-reports.mobilehmi.org
+
+'FLASK_ENV' is deprecated and will not be used in Flask 2.3. Use 'FLASK_DEBUG' instead.
+'FLASK_ENV' is deprecated and will not be used in Flask 2.3. Use 'FLASK_DEBUG' instead.
+ * Serving Flask app 'app'
+ * Debug mode: off
+INFO:werkzeug:←[31m←[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.←[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.16.18.21:5000
+INFO:werkzeug:←[33mPress CTRL+C to quit←[0m
+INFO:werkzeug:127.0.0.1 - - [03/Sep/2025 16:03:11] "←[32mGET / HTTP/1.1←[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [03/Sep/2025 16:03:11] "GET /auth/welcome HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [03/Sep/2025 16:03:12] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [03/Sep/2025 16:03:12] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+
+📡 Shutting down server...
+PS E:\report generator\SERVER> python app.py
+🔧 SAT Report Generator - Flask Backend for IIS
+============================================================
+Configuration:
+- IIS Frontend: https://automation-reports.mobilehmi.org:443 (HTTPS)
+- Flask Backend: http://127.0.0.1:5000 (HTTP)
+- IIS routes HTTPS traffic to Flask backend
+- Corporate hosting setup
+============================================================
+'FLASK_ENV' is deprecated and will not be used in Flask 2.3. Use 'FLASK_DEBUG' instead.
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🌐 Port: 5000
+🛡️  Domain Security: True
+🔒 HTTPS: Handled by IIS
+📡 Access URL: https://automation-reports.mobilehmi.org
+
+✅ Required directories created successfully
+✅ Database initialized
+
+🚀 Starting Flask backend on port 5000...
+   IIS will proxy HTTPS requests from port 443 to this backend
+   Health check available at: /health
+
+📋 IIS Configuration Needed:
+   1. IIS handles HTTPS on port 443
+   2. IIS proxies requests to http://127.0.0.1:5000
+   3. Users access: https://automation-reports.mobilehmi.org
+
+'FLASK_ENV' is deprecated and will not be used in Flask 2.3. Use 'FLASK_DEBUG' instead.
+'FLASK_ENV' is deprecated and will not be used in Flask 2.3. Use 'FLASK_DEBUG' instead.
+ * Serving Flask app 'app'
+ * Debug mode: off
+INFO:werkzeug:←[31m←[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.←[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.16.18.21:5000
+INFO:werkzeug:←[33mPress CTRL+C to quit←[0m
+INFO:werkzeug:127.0.0.1 - - [03/Sep/2025 16:19:56] "←[32mGET / HTTP/1.1←[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [03/Sep/2025 16:19:56] "GET /auth/welcome HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [03/Sep/2025 16:19:57] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [03/Sep/2025 16:19:57] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -

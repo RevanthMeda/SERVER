@@ -1,0 +1,81 @@
+#Software: Microsoft Internet Information Services 10.0
+#Version: 1.0
+#Date: 2025-09-03 13:46:16
+#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status time-taken
+2025-09-03 13:46:16 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 403 14 0 673
+2025-09-03 13:46:16 172.16.18.21 GET /favicon.ico - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 404 0 2 33
+2025-09-03 13:53:13 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 500 19 183 149
+2025-09-03 13:53:35 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 500 19 183 30
+#Software: Microsoft Internet Information Services 10.0
+#Version: 1.0
+#Date: 2025-09-03 14:14:08
+#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status time-taken
+2025-09-03 14:14:08 172.16.18.21 GET / - 443 - 34.14.79.49 python-requests/2.32.5 - 500 19 183 22
+2025-09-03 14:14:08 172.16.18.21 GET / - 443 - 34.14.79.49 python-requests/2.32.5 - 500 19 183 22
+2025-09-03 14:14:45 172.16.18.21 GET / - 443 - 34.14.79.49 python-requests/2.32.5 - 500 19 183 19
+2025-09-03 14:14:45 172.16.18.21 GET / - 443 - 34.14.79.49 python-requests/2.32.5 - 500 19 183 22
+#Software: Microsoft Internet Information Services 10.0
+#Version: 1.0
+#Date: 2025-09-03 14:42:30
+#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status time-taken
+2025-09-03 14:42:30 172.16.18.21 GET / - 443 - 34.14.79.49 python-requests/2.32.5 - 500 19 183 290
+2025-09-03 14:42:30 172.16.18.21 GET / - 443 - 34.14.79.49 python-requests/2.32.5 - 500 19 183 364
+#Software: Microsoft Internet Information Services 10.0
+#Version: 1.0
+#Date: 2025-09-03 15:12:22
+#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status time-taken
+2025-09-03 15:12:22 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 0 483
+2025-09-03 15:12:25 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 40
+2025-09-03 15:12:26 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 37
+2025-09-03 15:12:26 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 57
+2025-09-03 15:12:26 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 38
+2025-09-03 15:12:26 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 33
+2025-09-03 15:12:30 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 0 31
+#Software: Microsoft Internet Information Services 10.0
+#Version: 1.0
+#Date: 2025-09-03 15:31:37
+#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status time-taken
+2025-09-03 15:31:37 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://replit.com/ 200 0 0 154
+2025-09-03 15:31:37 172.16.18.21 GET /favicon.ico - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 76
+2025-09-03 15:31:43 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 37
+2025-09-03 15:31:43 172.16.18.21 GET /favicon.ico - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 71
+2025-09-03 15:32:12 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 0 81
+2025-09-03 15:32:12 172.16.18.21 GET /favicon.ico - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 63
+2025-09-03 15:39:53 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 0 55
+2025-09-03 15:39:54 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 37
+2025-09-03 15:39:54 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 31
+2025-09-03 15:40:09 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 47
+2025-09-03 15:40:15 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 0 80
+2025-09-03 15:40:15 172.16.18.21 GET /favicon.ico - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 61
+2025-09-03 15:40:20 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 0 23
+2025-09-03 15:40:20 172.16.18.21 GET /favicon.ico - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 https://automation-reports.mobilehmi.org/ 200 0 0 74
+2025-09-03 15:49:17 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 76
+2025-09-03 15:49:17 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 8
+2025-09-03 15:49:18 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 15:49:23 172.16.18.21 GET / - 443 - 52.169.156.168 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:03:28 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 70
+2025-09-03 16:03:28 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 2
+2025-09-03 16:03:30 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:03:35 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 0
+2025-09-03 16:03:40 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 4
+2025-09-03 16:03:43 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 0
+2025-09-03 16:03:48 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:03:50 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:06:35 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:06:41 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 3
+2025-09-03 16:07:11 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:18:29 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 92
+2025-09-03 16:18:30 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 3
+2025-09-03 16:18:35 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:19:06 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:19:25 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:19:29 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:19:31 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 0
+2025-09-03 16:20:42 172.16.18.21 GET / - 443 - 5.183.91.21 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/138.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:20:42 172.16.18.21 GET / - 443 - 5.183.91.21 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/138.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:20:45 172.16.18.21 GET / - 443 - 5.183.91.21 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/138.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:20:46 172.16.18.21 GET / - 443 - 216.247.233.155 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/138.0.0.0+Safari/537.36 - 200 0 64 0
+2025-09-03 16:20:46 172.16.18.21 GET / - 443 - 216.247.233.155 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/138.0.0.0+Safari/537.36 - 200 0 64 0
+2025-09-03 16:20:49 172.16.18.21 GET / - 443 - 216.247.233.155 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/138.0.0.0+Safari/537.36 - 200 0 64 1
+2025-09-03 16:20:50 172.16.18.21 GET / - 443 - 195.64.115.26 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/133.0.0.0+Safari/537.36 - 200 0 64 0
+2025-09-03 16:28:15 172.16.18.21 GET / - 443 - 178.250.118.114 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/139.0.0.0+Safari/537.36 - 200 0 64 1
