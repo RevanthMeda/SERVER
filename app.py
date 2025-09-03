@@ -58,6 +58,10 @@ def create_app(config_name='default'):
         # Always generate a fresh token for better reliability
         token = generate_csrf()
         g.csrf_token = token
+        
+        # Force session to be permanent for better CSRF handling
+        from flask import session
+        session.permanent = True
 
     # Inject CSRF token into all responses and disable compression for IIS
     @app.after_request
@@ -344,11 +348,18 @@ if __name__ == '__main__':
                 app.logger.error(f"Database health check failed: {e}")
                 db_status = 'disconnected'
             
-            return jsonify({
+            # Include CSRF token for AJAX requests (for automatic token refresh)
+            response_data = {
                 'status': 'healthy', 
                 'message': 'SAT Report Generator is running',
                 'database': db_status
-            })
+            }
+            
+            # Add CSRF token if this is an AJAX request
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                response_data['csrf_token'] = generate_csrf()
+            
+            return jsonify(response_data)
 
         # Check for SSL certificates
         ssl_cert_path = 'ssl/server.crt'

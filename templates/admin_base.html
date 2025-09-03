@@ -190,6 +190,8 @@
         });
     </script>
 
+    <!-- CSRF Token Manager - Prevents token expiry errors -->
+    <script src="{{ url_for('static', filename='js/csrf_manager.js') }}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
