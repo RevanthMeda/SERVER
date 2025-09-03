@@ -88,12 +88,23 @@
     </div>
 
     <script>
-        // Auto-refresh after 3 seconds if user doesn't click anything
+        // Auto-refresh after 2 seconds - no confirmation needed
+        console.log('🔄 CSRF token expired - auto-refreshing in 2 seconds...');
+        
         setTimeout(function() {
-            if (confirm('Auto-refresh the page to fix the security token?')) {
-                window.location.reload();
+            console.log('🔄 Refreshing page to fix CSRF token...');
+            window.location.reload();
+        }, 2000);
+        
+        // Also show the old confirmation dialog as backup
+        setTimeout(function() {
+            if (!document.hidden) {  // Only show if page is visible
+                const shouldRefresh = confirm('Auto-refresh the page to fix the security token?');
+                if (shouldRefresh) {
+                    window.location.reload();
+                }
             }
-        }, 3000);
+        }, 1000);
     </script>
 </body>
 </html>

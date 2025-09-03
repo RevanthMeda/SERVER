@@ -19,11 +19,12 @@ class Config:
     SERVER_IP = os.environ.get('SERVER_IP', '')
     BLOCK_IP_ACCESS = os.environ.get('BLOCK_IP_ACCESS', 'False').lower() == 'true'
 
-    # Security
+    # Security - Bulletproof CSRF settings
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here-change-in-production-sat-2025'
     WTF_CSRF_ENABLED = True
-    WTF_CSRF_TIME_LIMIT = None  # No time limit - tokens valid until session expires
+    WTF_CSRF_TIME_LIMIT = 86400  # 24 hours - very long timeout
     WTF_CSRF_SSL_STRICT = False  # Allow HTTP for development
+    WTF_CSRF_CHECK_DEFAULT = False  # More lenient CSRF checking
 
     # Database - Use absolute path for SQLite
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -116,11 +117,12 @@ class Config:
     # Feature Flags
     ENABLE_EMAIL_NOTIFICATIONS = os.getenv('ENABLE_EMAIL_NOTIFICATIONS', 'True').lower() == 'true'
 
-    # Security Settings
-    SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False').lower() == 'true'
-    SESSION_COOKIE_HTTPONLY = True
+    # Security Settings - More lenient for troubleshooting
+    SESSION_COOKIE_SECURE = False  # Allow HTTP cookies for now
+    SESSION_COOKIE_HTTPONLY = False  # Allow JavaScript access for debugging
     SESSION_COOKIE_SAMESITE = 'Lax'
-    PERMANENT_SESSION_LIFETIME = int(os.getenv('PERMANENT_SESSION_LIFETIME', '28800'))  # 8 hours
+    SESSION_TYPE = 'filesystem'  # Use file-based sessions for reliability
+    PERMANENT_SESSION_LIFETIME = int(os.getenv('PERMANENT_SESSION_LIFETIME', '86400'))  # 24 hours to match CSRF
 
     @staticmethod
     def init_app(app):

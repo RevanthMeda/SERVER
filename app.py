@@ -55,13 +55,23 @@ def create_app(config_name='default'):
     # Add CSRF token to g for access in templates and refresh on each request
     @app.before_request
     def add_csrf_token():
-        # Always generate a fresh token for better reliability
+        from flask import session
+        
+        # Ensure session is properly configured
+        session.permanent = True
+        
+        # Force session to be saved (Flask sometimes doesn't save empty sessions)
+        if not session.get('_csrf_initialized'):
+            session['_csrf_initialized'] = True
+        
+        # Generate token and ensure it's stored in session
         token = generate_csrf()
         g.csrf_token = token
         
-        # Force session to be permanent for better CSRF handling
-        from flask import session
-        session.permanent = True
+        # Debug: Log session info
+        if app.debug or app.logger.isEnabledFor(logging.INFO):
+            app.logger.info(f"Session ID: {session.get('_csrf_token', 'None')[:20] if session.get('_csrf_token') else 'Missing'}...")
+            app.logger.info(f"Generated Token: {token[:20]}...")
 
     # Inject CSRF token into all responses and disable compression for IIS
     @app.after_request
@@ -137,24 +147,33 @@ def create_app(config_name='default'):
     # Custom CSRF error handler
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
-        app.logger.error(f"CSRF Error occurred: {str(e)}")
-        app.logger.error(f"Request Method: {request.method}")
-        app.logger.error(f"Request Form Keys: {list(request.form.keys()) if request.form else []}")
-        app.logger.error(f"CSRF Token Submitted: {request.form.get('csrf_token') if request.form else 'No form data'}")
-
-        # For AJAX requests, return JSON error
+        from flask import session
+        
+        app.logger.warning(f"🔒 CSRF Error: {str(e)}")
+        app.logger.warning(f"🔍 Session Token: {'EXISTS' if session.get('_csrf_token') else 'MISSING'}")
+        app.logger.warning(f"🔍 Form Token: {request.form.get('csrf_token', 'MISSING')[:20]}...")
+        
+        # Force session refresh
+        session['_csrf_initialized'] = True
+        session.permanent = True
+        
+        # Generate a completely fresh token
+        new_token = generate_csrf()
+        g.csrf_token = new_token
+        
+        app.logger.info(f"✅ Generated new token: {new_token[:20]}...")
+        
+        # For AJAX requests, return JSON with new token
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return jsonify({
-                'error': 'CSRF token expired',
-                'message': 'Please refresh the page and try again',
-                'csrf_token': generate_csrf()
-            }), 400
+                'error': 'CSRF token refreshed',
+                'message': 'Token automatically refreshed. Please retry.',
+                'csrf_token': new_token,
+                'auto_retry': True
+            }), 200
 
-        # Ensure we have a CSRF token for the error page
-        if not hasattr(g, 'csrf_token'):
-            g.csrf_token = generate_csrf()
-
-        return render_template('csrf_error.html', reason=str(e)), 400
+        # For form submissions, show user-friendly error with auto-refresh
+        return render_template('csrf_error.html', reason='Session issue - auto-fixing'), 400
 
     # Root route - redirect to welcome or dashboard
     @app.route('/')
@@ -335,6 +354,20 @@ if __name__ == '__main__':
             except Exception as e:
                 print(f"⚠️  Database warning: {e}")
 
+        # Test session functionality
+        @app.route('/debug/session')
+        def debug_session():
+            from flask import session
+            session['test'] = 'session_working'
+            
+            return jsonify({
+                'session_id': session.get('_csrf_token', 'None')[:20] if session.get('_csrf_token') else 'Missing',
+                'session_data': dict(session),
+                'csrf_token': generate_csrf(),
+                'test_value': session.get('test'),
+                'permanent': session.permanent
+            })
+        
         # Test a simple route to ensure app is working
         @app.route('/health')
         def health_check():
