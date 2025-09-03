@@ -13,6 +13,11 @@ class Config:
     APP_NAME = 'SAT Report Generator'
     PORT = int(os.environ.get('PORT', 5000))
     DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+    
+    # Domain security settings
+    ALLOWED_DOMAINS = os.environ.get('ALLOWED_DOMAINS', '').split(',') if os.environ.get('ALLOWED_DOMAINS') else []
+    SERVER_IP = os.environ.get('SERVER_IP', '')
+    BLOCK_IP_ACCESS = os.environ.get('BLOCK_IP_ACCESS', 'False').lower() == 'true'
 
     # Security
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here-change-in-production'
@@ -127,20 +132,44 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///sat_reports_dev.db')
 
 class ProductionConfig(Config):
-    """Production configuration"""
+    """Production configuration for domain-only access"""
     DEBUG = False
+    PORT = 80  # Production port
     SESSION_COOKIE_SECURE = True
-
+    
+    # Production domain security
+    ALLOWED_DOMAINS = ['automation-reports.mobilehmi.org']
+    SERVER_IP = '172.16.18.21'
+    BLOCK_IP_ACCESS = True
+    
+    # Enhanced security for production
+    WTF_CSRF_ENABLED = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Strict'
+    PERMANENT_SESSION_LIFETIME = 7200  # 2 hours
+    
+    # Production database (use PostgreSQL)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or f'sqlite:///{os.path.join(Config.BASE_DIR, "instance", "sat_reports_prod.db")}'
+    
     @staticmethod
     def init_app(app):
         Config.init_app(app)
 
-        # Log to syslog in production
+        # Enhanced logging for production
         import logging
-        from logging.handlers import SysLogHandler
-        syslog_handler = SysLogHandler()
-        syslog_handler.setLevel(logging.WARNING)
-        app.logger.addHandler(syslog_handler)
+        from logging.handlers import RotatingFileHandler
+        
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
+        
+        file_handler = RotatingFileHandler('logs/sat_reports.log', maxBytes=10240000, backupCount=10)
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+        
+        app.logger.setLevel(logging.INFO)
+        app.logger.info('SAT Report Generator startup - Production Mode')
 
 class TestingConfig(Config):
     """Testing configuration"""

@@ -1,45 +1,33 @@
-
+# Core Flask dependencies
 flask==2.2.3
-python-dotenv==1.0.0
-docxtpl==0.16.7
-pillow>=10.4.0
-pywin32>=307; sys_platform == 'win32'
-werkzeug==2.2.3
+flask-login
+flask-sqlalchemy
 flask-wtf==1.1.1
-python-docx
-flask-login
-flask-sqlalchemy
+werkzeug==2.2.3
+
+# Database
 psycopg2-binary
-beautifulsoup4
-requests
-itsdangerous
-beautifulsoup4
-docx
-docxtpl
-flask
-flask-login
-flask-sqlalchemy
-flask-wtf
-itsdangerous
-pillow
-psycopg2-binary
+sqlalchemy
+
+# Document processing
 python-docx
-python-dotenv
+docxtpl==0.16.7
+
+# Image processing
+pillow>=10.4.0
+
+# HTTP requests and web scraping
 requests
-werkzeug
 beautifulsoup4
 lxml
-requests
-beautifulsoup4
-docxtpl==0.16.7
-flask==2.2.3
-flask-login
-flask-sqlalchemy
-flask-wtf==1.1.1
-itsdangerous
-pillow>=10.4.0
-psycopg2-binary
-python-docx
+
+# Utilities
 python-dotenv==1.0.0
-requests
-werkzeug==2.2.3
+itsdangerous
+
+# Production server
+gunicorn
+greenlet
+
+# Windows compatibility (conditional)
+pywin32>=307; sys_platform == 'win32'

@@ -6,7 +6,8 @@ import traceback
 from flask import Flask, g, request, render_template, jsonify, make_response, redirect, url_for
 from flask_wtf.csrf import CSRFProtect, generate_csrf, CSRFError
 from flask_login import current_user, login_required
-from config import Config
+from config import Config, config
+from middleware import init_security_middleware
 
 # Initialize CSRF protection globally
 csrf = CSRFProtect()
@@ -20,11 +21,18 @@ except ImportError as e:
     print(f"❌ Import error: {e}")
     sys.exit(1)
 
-def create_app(config_class=Config):
+def create_app(config_name='default'):
     """Create and configure Flask application"""
     app = Flask(__name__)
+    
+    # Load configuration based on environment
+    config_class = config.get(config_name, config['default'])
     app.config.from_object(config_class)
-
+    
+    # Initialize production security middleware
+    if config_name == 'production':
+        init_security_middleware(app)
+    
     # Initialize extensions
     csrf.init_app(app)
 
@@ -53,7 +61,7 @@ def create_app(config_class=Config):
     # Inject CSRF token into all responses
     @app.after_request
     def set_csrf_cookie(response):
-        if response.mimetype == 'text/html':
+        if response.mimetype == 'text/html' and hasattr(g, 'csrf_token'):
             response.set_cookie(
                 'csrf_token', g.csrf_token,
                 httponly=False, samesite='Lax'
@@ -217,9 +225,19 @@ if __name__ == '__main__':
 
     try:
         print("🔧 Initializing SAT Report Generator...")
-
-        # Create the app
-        app = create_app()
+        
+        # Determine environment
+        flask_env = os.environ.get('FLASK_ENV', 'development')
+        config_name = 'production' if flask_env == 'production' else 'development'
+        
+        # Create the app with appropriate configuration
+        app = create_app(config_name)
+        
+        # Log security status for production
+        if config_name == 'production':
+            print("🔒 Production mode: Domain security enabled")
+            print(f"🌐 Allowed domain: {app.config.get('ALLOWED_DOMAINS', [])}")
+            print(f"🚫 IP access blocking: {app.config.get('BLOCK_IP_ACCESS', False)}")
 
         # Print startup information
         print(f"🚀 Starting {app.config.get('APP_NAME', 'SAT Report Generator')}...")
@@ -272,10 +290,21 @@ if __name__ == '__main__':
 
         # Run the server
         try:
+            # Production server configuration
+            host = '0.0.0.0'  # Bind to all interfaces
+            port = app.config['PORT']
+            debug = app.config.get('DEBUG', False)
+            
+            if config_name == 'production':
+                print(f"🚀 Starting production server on port {port}")
+                print("⚠️  Production mode: Use a WSGI server like Gunicorn for deployment")
+            
             app.run(
-                host='0.0.0.0',
-                port=app.config['PORT'],
-                debug=app.config['DEBUG']
+                host=host,
+                port=port,
+                debug=debug,
+                threaded=True,
+                use_reloader=False if config_name == 'production' else debug
             )
         except OSError as e:
             if "Address already in use" in str(e):

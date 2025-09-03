@@ -6,7 +6,9 @@ channel = "stable-25_05"
 packages = ["freetype", "lcms2", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "openjpeg", "sqlite-interactive", "tcl", "tk", "xcodebuild", "zlib"]
 
 [deployment]
-run = ["sh", "-c", "python app.py"]
+run = ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "4", "--timeout", "120", "--keep-alive", "60", "--max-requests", "1000", "--max-requests-jitter", "100", "production_start:app"]
+deploymentTarget = "vm"
+build = ["pip", "install", "-r", "requirements.txt"]
 
 [workflows]
 runButton = "Project"
@@ -54,13 +56,17 @@ args = "SAT Report Generator"
 name = "SAT Report Generator"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python app.py"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "FLASK_ENV=development python app.py"
+waitForPort = 5000
+
+[[ports]]
+localPort = 80
+externalPort = 3000
 
 [[ports]]
 localPort = 5000
