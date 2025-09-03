@@ -15,7 +15,7 @@ echo - Mode: Production HTTPS server
 echo.
 
 echo IMPORTANT: This requires Administrator privileges for port 443
-echo If you get "Permission denied", run Command Prompt as Administrator
+echo If you get "Permission denied", use start_as_admin.bat instead
 echo.
 
 echo Starting HTTPS server...
