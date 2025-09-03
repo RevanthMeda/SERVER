@@ -49,7 +49,28 @@ Preferred communication style: Simple, everyday language.
 - **Session Security**: HTTP-only cookies with configurable expiration
 - **Input Validation**: Server-side validation for all user inputs
 
-# External Dependencies
+# Production Deployment Configuration
+
+## Server Configuration
+- **Target Server**: 172.16.18.21 (Windows Server)
+- **Domain**: automation-reports.mobilehmi.org
+- **Port**: 80 (production) / 5000 (development)
+- **Security**: Domain-only access with IP blocking enabled
+
+## Deployment Files
+- **deploy.py**: Main production deployment script with environment setup
+- **start_production.bat**: Windows batch file for easy server startup
+- **middleware.py**: Security middleware for domain enforcement and IP blocking
+- **DEPLOYMENT_INSTRUCTIONS.txt**: Complete deployment guide with troubleshooting
+
+## Security Features
+- **Domain-only Access**: Only allows access via automation-reports.mobilehmi.org
+- **IP Blocking**: Blocks direct access via 172.16.18.21 (returns 403 Forbidden)
+- **CSRF Protection**: Enhanced token-based protection for all forms
+- **Security Headers**: Production-grade HTTP security headers
+- **Session Security**: Secure session management with timeout controls
+
+## External Dependencies
 
 ## Database
 - **PostgreSQL**: Primary production database (configurable via DATABASE_URL)
@@ -71,6 +92,7 @@ Preferred communication style: Simple, everyday language.
 - **Image Processing**: Pillow for image manipulation and signature processing
 - **Web Scraping**: requests and beautifulsoup4 for external data integration
 - **Security**: itsdangerous for secure token generation
+- **Production Server**: Gunicorn for production WSGI deployment
 
 ## Frontend Libraries
 - **Font Awesome 6.0**: Icon library for UI elements

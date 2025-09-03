@@ -79,8 +79,8 @@ def init_security_middleware(app):
         if 'replit.dev' in host or 'repl.co' in host:
             return  # Allow Replit development domains
             
-        # Apply domain security only in production
-        if current_app.config.get('FLASK_ENV') == 'production':
+        # Apply domain security based on configuration
+        if current_app.config.get('BLOCK_IP_ACCESS', False):
             domain_security_middleware()
         
         # Additional production security headers

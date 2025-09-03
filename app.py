@@ -274,7 +274,8 @@ if __name__ == '__main__':
             try:
                 # Test database connection
                 from models import db
-                db.engine.execute('SELECT 1')
+                with db.engine.connect() as connection:
+                    connection.execute(db.text('SELECT 1'))
                 db_status = 'connected'
             except Exception as e:
                 app.logger.error(f"Database health check failed: {e}")
