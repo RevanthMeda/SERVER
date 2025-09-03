@@ -6,13 +6,13 @@ echo ================================================
 echo SAT Report Generator - Production Deployment
 echo Server: 172.16.18.21
 echo Domain: automation-reports.mobilehmi.org
-echo Port: 443 (HTTPS - Administrator privileges required)
+echo Port: 8443 (HTTPS with SSL)
 echo ================================================
 
 REM Set production environment variables
 set FLASK_ENV=production
 set DEBUG=False
-set PORT=443
+set PORT=8443
 set ALLOWED_DOMAINS=automation-reports.mobilehmi.org
 set SERVER_IP=172.16.18.21
 set BLOCK_IP_ACCESS=True
@@ -34,12 +34,12 @@ set PERMANENT_SESSION_LIFETIME=7200
 echo Environment variables set for production...
 echo.
 
-echo ADMINISTRATOR PRIVILEGES REQUIRED for port 443!
+echo HTTPS enabled on port 8443 - No admin privileges needed!
 
 echo.
 echo Starting SAT Report Generator in Production Mode...
 echo Direct Flask access - Simple deployment!
-echo Access: https://automation-reports.mobilehmi.org
+echo Access: https://automation-reports.mobilehmi.org:8443
 echo.
 
 REM Change to the project directory
@@ -54,24 +54,10 @@ if %errorLevel% != 0 (
 echo Changed to project directory: %CD%
 echo.
 
-REM Check if running as Administrator
-net session >nul 2>&1
-if %errorLevel% == 0 (
-    echo ✓ Running as Administrator - Starting Flask...
-) else (
-    echo ❌ ERROR: Administrator privileges required for port 443!
-    echo.
-    echo Please run this batch file as Administrator:
-    echo 1. Right-click on start_production.bat
-    echo 2. Select "Run as Administrator"
-    echo 3. Click "Yes" when prompted
-    echo.
-    pause
-    exit /b 1
-)
+echo ✓ Starting Flask with HTTPS on port 8443...
 
 REM Start the application
-echo Starting Flask on port 443...
+echo Starting Flask on port 8443...
 python app.py
 
 if %errorLevel% != 0 (

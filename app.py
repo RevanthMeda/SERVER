@@ -243,10 +243,10 @@ if __name__ == '__main__':
         # Print startup information
         print(f"🚀 Starting {app.config.get('APP_NAME', 'SAT Report Generator')}...")
         print(f"Debug Mode: {app.config.get('DEBUG', False)}")
-        protocol = "https" if app.config.get('PORT') == 443 else "http"
+        protocol = "https" if app.config.get('PORT') == 8443 else "http"
         print(f"Running on {protocol}://0.0.0.0:{app.config.get('PORT', 5000)}")
-        if app.config.get('PORT') == 443:
-            print("⚠️  Port 443 requires Administrator privileges!")
+        if app.config.get('PORT') == 8443:
+            print("🔒 HTTPS enabled on port 8443 - SSL certificate will be used")
 
         # Create required directories if they don't exist
         try:
@@ -304,9 +304,9 @@ if __name__ == '__main__':
                 print(f"🚀 Starting production server on port {port}")
                 print("⚠️  Production mode: Use a WSGI server like Gunicorn for deployment")
             
-            # Configure SSL context for HTTPS on port 443
+            # Configure SSL context for HTTPS 
             ssl_context = None
-            if port == 443:
+            if port == 8443:
                 try:
                     # Try to use SSL certificate files if they exist
                     if os.path.exists('ssl/server.crt') and os.path.exists('ssl/server.key'):
