@@ -88,10 +88,27 @@ def init_security_middleware(app):
         def security_headers(response):
             # Security headers for production
             response.headers['X-Content-Type-Options'] = 'nosniff'
-            response.headers['X-Frame-Options'] = 'DENY'
+            
+            # Conditional X-Frame-Options for iframe support
+            if current_app.config.get('BLOCK_IP_ACCESS', True):
+                response.headers['X-Frame-Options'] = 'DENY'  # Block iframes for secure mode
+            else:
+                response.headers['X-Frame-Options'] = 'SAMEORIGIN'  # Allow same-origin iframes
+            
             response.headers['X-XSS-Protection'] = '1; mode=block'
-            response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-            response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; font-src 'self' fonts.gstatic.com; img-src 'self' data:;"
+            
+            # Only set HSTS if using HTTPS
+            if request.is_secure:
+                response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+            
+            # Flexible CSP for iframe embedding
+            if current_app.config.get('BLOCK_IP_ACCESS', True):
+                # Strict CSP for secure mode
+                response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; font-src 'self' fonts.gstatic.com; img-src 'self' data:;"
+            else:
+                # Permissive CSP for iframe embedding
+                response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; font-src 'self' fonts.gstatic.com; img-src 'self' data:; frame-ancestors *;"
+            
             response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
             
             return response
