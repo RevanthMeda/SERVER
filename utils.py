@@ -356,6 +356,7 @@ def send_email(to_email, subject, html_content, text_content=None):
     if 'gmail.com' in smtp_server.lower():
         logger.info(f"Gmail detected. Username: {smtp_username}")
         logger.info(f"Password length: {len(smtp_password)} characters")
+        logger.info(f"Password starts with: {smtp_password[:4]}... (masked)")
         logger.info(f"Password format check: {'✓' if len(smtp_password) == 16 else '✗'}")
         if len(smtp_password) != 16:
             logger.warning("Gmail App Password should be exactly 16 characters")
@@ -1210,7 +1211,16 @@ def send_email_debug(to_email, subject, html_content, text_content=None):
     smtp_server = current_app.config.get('SMTP_SERVER') or os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
     smtp_port = int(current_app.config.get('SMTP_PORT') or os.environ.get('SMTP_PORT', 587))
     smtp_username = current_app.config.get('SMTP_USERNAME') or os.environ.get('SMTP_USERNAME', '')
-    smtp_password = current_app.config.get('SMTP_PASSWORD') or os.environ.get('SMTP_PASSWORD', '')
+    
+    # Debug password sources
+    config_password = current_app.config.get('SMTP_PASSWORD', '')
+    env_password = os.environ.get('SMTP_PASSWORD', '')
+    smtp_password = config_password or env_password
+    
+    logger.info(f"Password from Flask config: {config_password[:4] if config_password else 'None'}...")
+    logger.info(f"Password from environment: {env_password[:4] if env_password else 'None'}...")
+    logger.info(f"Final password being used: {smtp_password[:4] if smtp_password else 'None'}...")
+    
     default_sender = current_app.config.get('DEFAULT_SENDER') or os.environ.get('DEFAULT_SENDER', smtp_username)
 
     logger.info(f"Email config: server={smtp_server}, port={smtp_port}, username={smtp_username}")
