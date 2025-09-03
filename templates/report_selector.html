@@ -1,504 +1,611 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choose Report Type - Cully Report Generator</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>Create Report - Cully Report Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .modern-dashboard {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
+        :root {
+            --admin-primary: #4DD0E1;
+            --admin-primary-dark: #26C6DA;
+            --admin-primary-light: #80DEEA;
+            --admin-success: #10b981;
+            --admin-warning: #f59e0b;
+            --admin-danger: #ef4444;
+            --admin-neutral: #6b7280;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1f2937;
+            line-height: 1.6;
             min-height: 100vh;
         }
 
-        .modern-nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 16px 32px;
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header Section */
+        .admin-header {
+            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
-        .nav-brand {
+        .header-info h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
             display: flex;
             align-items: center;
             gap: 16px;
         }
 
-        .brand-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
+        .header-info p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin: 0;
         }
 
-        .brand-text {
-            font-size: 20px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .header-logo {
+            height: 80px;
+            filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0,0,0,0.2));
         }
 
-        .user-profile {
+        /* Navigation */
+        .dashboard-nav {
             display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
-            display: flex;
-            align-items: center;
             justify-content: center;
-            color: white;
-        }
-
-        .user-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: #424242;
-        }
-
-        .user-role {
-            font-size: 12px;
-            color: #718096;
-        }
-
-        .logout-button {
-            padding: 8px 12px;
-            background: #e53e3e;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .logout-button:hover {
-            background: #c53030;
-        }
-
-        .dashboard-layout {
-            display: flex;
-            min-height: calc(100vh - 72px);
-        }
-
-        .modern-sidebar {
-            width: 280px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 24px;
-        }
-
-        .sidebar-header h3 {
-            color: #1a202c;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 24px;
-        }
-
-        .sidebar-nav .nav-item {
-            display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: #4a5568;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            transition: all 0.2s;
+            background: white;
+            padding: 12px 24px;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
-        .sidebar-nav .nav-item:hover,
-        .sidebar-nav .nav-item.active {
-            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
-            color: white;
+        .nav-links {
+            display: flex;
+            gap: 10px;
         }
 
-        .main-dashboard {
-            flex: 1;
-            padding: 32px;
-            overflow-y: auto;
-        }
-
-        .breadcrumb {
+        .nav-link {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 24px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .breadcrumb a {
-            color: rgba(255, 255, 255, 0.8);
+            padding: 10px 18px;
+            border-radius: 10px;
             text-decoration: none;
+            color: #64748b;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            white-space: nowrap;
         }
 
-        .breadcrumb-current {
+        .nav-link:hover {
+            background: #e2e8f0;
+            color: var(--admin-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(77, 208, 225, 0.25);
+            border-color: var(--admin-primary-light);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
             color: white;
-            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(77, 208, 225, 0.4);
+            border-color: var(--admin-primary);
         }
 
-        .dashboard-header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 32px;
-            text-align: center;
-        }
-
-        .dashboard-header h1 {
-            color: white;
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .dashboard-header p {
-            color: rgba(255, 255, 255, 0.8);
+        .nav-link i {
             font-size: 16px;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
         }
 
+        .nav-link.logout {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+            border: 2px solid #fca5a5 !important;
+        }
+
+        .nav-link.logout:hover {
+            background: #fecaca !important;
+            color: #b91c1c !important;
+            border-color: #f87171 !important;
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            margin-bottom: 24px;
+        }
+
+        .alert {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: #065f46;
+            font-weight: 500;
+            border: 1px solid #059669;
+        }
+
+        .alert.alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #059669;
+        }
+
+        .alert.alert-error {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #fca5a5;
+        }
+
+        .alert.alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #93c5fc;
+        }
+
+        .alert i {
+            font-size: 18px;
+        }
+
+        /* Report Types Grid */
         .report-types-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 24px;
             margin-bottom: 32px;
         }
 
-        .report-type-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 32px;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
+        .dashboard-widget {
+            background: white;
+            border-radius: 16px;
             overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
         }
 
-        .report-type-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        .dashboard-widget:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+            text-decoration: none;
+            color: inherit;
         }
 
-        .report-type-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
+        .widget-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .widget-content {
+            padding: 24px;
+            text-align: center;
         }
 
         .report-icon {
             width: 80px;
             height: 80px;
+            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light));
             border-radius: 50%;
-            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 24px;
             color: white;
-            font-size: 36px;
+            font-size: 32px;
+            margin: 0 auto 16px auto;
+            box-shadow: 0 4px 15px rgba(77, 208, 225, 0.3);
         }
 
-        .report-type-card h3 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 12px;
-        }
-
-        .report-type-card p {
-            color: #718096;
-            line-height: 1.6;
-            margin-bottom: 24px;
-        }
-
-        .report-features {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 24px;
-        }
-
-        .report-features li {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            color: #4a5568;
+        .report-description {
+            color: #64748b;
             font-size: 14px;
-        }
-
-        .report-features li i {
-            color: #48bb78;
-        }
-
-        .report-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .report-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(77, 208, 225, 0.3);
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
 
         .status-badge {
-            position: absolute;
-            top: 16px;
-            right: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             padding: 6px 12px;
             border-radius: 20px;
-            font-size: 12px;
             font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .status-available {
-            background: rgba(72, 187, 120, 0.1);
-            color: #22543d;
-            border: 1px solid rgba(72, 187, 120, 0.2);
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #059669;
         }
 
         .status-coming-soon {
-            background: rgba(237, 137, 54, 0.1);
-            color: #744210;
-            border: 1px solid rgba(237, 137, 54, 0.2);
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
         }
 
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-available .status-indicator {
+            background: #059669;
+        }
+
+        .status-coming-soon .status-indicator {
+            background: #f59e0b;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Disabled state for coming soon items */
+        .dashboard-widget.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .dashboard-widget.disabled:hover {
+            transform: none;
+            box-shadow: var(--card-shadow);
+        }
+
+        .developer-footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+            background-color: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            .dashboard-layout {
-                flex-direction: column;
+            .admin-container {
+                padding: 16px;
             }
 
-            .modern-sidebar {
-                width: 100%;
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .header-info h1 {
+                font-size: 2rem;
+                justify-content: center;
+            }
+
+            .dashboard-nav {
+                padding: 4px 8px;
+                flex-wrap: wrap;
+                gap: 4px;
+                justify-content: center;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 4px;
+            }
+
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 12px;
             }
 
             .report-types-grid {
                 grid-template-columns: 1fr;
             }
         }
+
+        @media (max-width: 480px) {
+            .dashboard-nav {
+                padding: 2px 4px;
+                min-height: 40px;
+            }
+
+            .nav-link {
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+
+            .nav-link i {
+                font-size: 12px;
+            }
+
+            .developer-footer {
+                padding: 12px;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
-<body>
-    <div class="modern-dashboard">
-        <!-- Top Navigation -->
-        <nav class="modern-nav">
-            <div class="nav-brand">
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="brand-logo">
-                <span class="brand-text">Cully Report Generator</span>
+<body class="dashboard-layout">
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="admin-header">
+            <div class="header-content">
+                <div class="header-info">
+                    <h1><i class="fa fa-plus-circle"></i> Create Report</h1>
+                    <p>Select a report type to begin creating a new document</p>
+                </div>
+                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
             </div>
-            <div class="nav-actions">
-                <div class="user-profile">
-                    <div class="user-avatar">
-                        <i class="fas fa-hard-hat"></i>
-                    </div>
-                    <div class="user-details">
-                        <span class="user-name">{{ current_user.full_name }}</span>
-                        <span class="user-role">{{ current_user.role }}</span>
-                    </div>
-                    <a href="{{ url_for('auth.logout') }}" class="logout-button" title="Logout">
-                        <i class="fas fa-sign-out-alt"></i>
+        </div>
+
+        <div class="dashboard-content">
+            <!-- Unified Navigation -->
+            <div class="dashboard-nav">
+                <div class="nav-links">
+                    <a href="{{ url_for('dashboard.admin') }}" class="nav-link {% if request.endpoint == 'dashboard.admin' %}active{% endif %}" id="nav-dashboard">
+                        <i class="fa fa-home"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('dashboard.user_management') }}" class="nav-link {% if request.endpoint == 'dashboard.user_management' %}active{% endif %}" id="nav-users">
+                        <i class="fa fa-users"></i> User Management
+                    </a>
+                    <a href="{{ url_for('dashboard.admin_reports') }}" class="nav-link {% if request.endpoint == 'dashboard.admin_reports' %}active{% endif %}" id="nav-reports">
+                        <i class="fa fa-file-alt"></i> All Reports
+                    </a>
+                    <a href="{{ url_for('dashboard.system_settings') }}" class="nav-link {% if request.endpoint == 'dashboard.system_settings' %}active{% endif %}" id="nav-settings">
+                        <i class="fa fa-cog"></i> System Settings
+                    </a>
+                    <a href="{{ url_for('reports.new') }}" class="nav-link {% if request.endpoint == 'reports.new' %}active{% endif %}" id="nav-create">
+                        <i class="fa fa-plus"></i> Create Report
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-link logout" id="nav-logout">
+                        <i class="fa fa-sign-out-alt"></i> Logout
                     </a>
                 </div>
             </div>
-        </nav>
 
-        <div class="dashboard-layout">
-            <!-- Sidebar -->
-            <aside class="modern-sidebar">
-                <div class="sidebar-header">
-                    <h3>My Workspace</h3>
-                </div>
-                <nav class="sidebar-nav">
-                    <a href="{{ url_for('dashboard.engineer') }}" class="nav-item">
-                        <i class="fas fa-home"></i>
-                        <span>Dashboard</span>
-                    </a>
-                    <a href="#" class="nav-item active">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>Create Report</span>
-                    </a>
-                    <a href="#" class="nav-item">
-                        <i class="fas fa-file-alt"></i>
-                        <span>My Reports</span>
-                    </a>
-                </nav>
-            </aside>
-
-            <!-- Main Content -->
-            <main class="main-dashboard">
-                <!-- Breadcrumb -->
-                <nav class="breadcrumb">
-                    <a href="{{ url_for('dashboard.engineer') }}">Dashboard</a>
-                    <span class="breadcrumb-separator">→</span>
-                    <span class="breadcrumb-current">Choose Report Type</span>
-                </nav>
-
-                <div class="dashboard-header">
-                    <div class="header-content">
-                        <h1>Choose Report Type</h1>
-                        <p>Select the type of report you want to create</p>
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <i class="fa fa-{% if category == 'success' %}check-circle{% elif category == 'error' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     </div>
-                </div>
+                {% endif %}
+            {% endwith %}
 
-                <!-- Report Types Grid -->
+            <!-- Main Content Area -->
+            <div class="dashboard-main">
                 <div class="report-types-grid">
                     <!-- SAT Report -->
-                    <div class="report-type-card" onclick="window.location.href='{{ url_for('reports.new_sat_full') }}'">
-                        <div class="status-badge status-available">Available</div>
-                        <div class="report-icon">
-                            <i class="fas fa-check-circle"></i>
+                    <a href="{{ url_for('reports.new_sat_full') }}" class="dashboard-widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-check-circle"></i>
+                                System Acceptance Testing (SAT)
+                            </h3>
+                            <span class="status-badge status-available">
+                                <div class="status-indicator"></div>
+                                Available
+                            </span>
                         </div>
-                        <h3>System Acceptance Testing (SAT)</h3>
-                        <p>Comprehensive testing documentation for system acceptance and validation procedures</p>
-                        <ul class="report-features">
-                            <li><i class="fas fa-check"></i> Digital signatures</li>
-                            <li><i class="fas fa-check"></i> Approval workflow</li>
-                            <li><i class="fas fa-check"></i> Automated formatting</li>
-                            <li><i class="fas fa-check"></i> Testing procedures</li>
-                        </ul>
-                        <a href="{{ url_for('reports.new_sat_full') }}" class="report-action">
-                            <i class="fas fa-rocket"></i>
-                            <span>Generate</span>
-                        </a>
-                    </div>
+                        <div class="widget-content">
+                            <div class="report-icon">
+                                <i class="fa fa-check-circle"></i>
+                            </div>
+                            <p class="report-description">
+                                Comprehensive testing documentation for system acceptance and validation procedures
+                            </p>
+                        </div>
+                    </a>
 
                     <!-- FDS Report -->
-                    <div class="report-type-card">
-                        <div class="status-badge status-coming-soon">Coming Soon</div>
-                        <div class="report-icon">
-                            <i class="fas fa-cogs"></i>
+                    <div class="dashboard-widget disabled">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-cogs"></i>
+                                Functional Design Specification (FDS)
+                            </h3>
+                            <span class="status-badge status-coming-soon">
+                                <div class="status-indicator"></div>
+                                Coming Soon
+                            </span>
                         </div>
-                        <h3>Functional Design Specification (FDS)</h3>
-                        <p>Detailed functional requirements and design specifications for system components</p>
-                        <ul class="report-features">
-                            <li><i class="fas fa-check"></i> Template creation</li>
-                            <li><i class="fas fa-check"></i> Version control</li>
-                            <li><i class="fas fa-check"></i> Review workflow</li>
-                            <li><i class="fas fa-check"></i> API documentation</li>
-                        </ul>
-                        <a href="#" class="report-action" style="opacity: 0.5; cursor: not-allowed;">
-                            <i class="fas fa-clock"></i>
-                            <span>Coming Soon</span>
-                        </a>
+                        <div class="widget-content">
+                            <div class="report-icon">
+                                <i class="fa fa-cogs"></i>
+                            </div>
+                            <p class="report-description">
+                                Detailed functional requirements and design specifications for system components
+                            </p>
+                        </div>
                     </div>
 
                     <!-- HDS Report -->
-                    <div class="report-type-card">
-                        <div class="status-badge status-coming-soon">Coming Soon</div>
-                        <div class="report-icon">
-                            <i class="fas fa-microchip"></i>
+                    <div class="dashboard-widget disabled">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-microchip"></i>
+                                Hardware Design Specification (HDS)
+                            </h3>
+                            <span class="status-badge status-coming-soon">
+                                <div class="status-indicator"></div>
+                                Coming Soon
+                            </span>
                         </div>
-                        <h3>Hardware Design Specification (HDS)</h3>
-                        <p>Comprehensive hardware design documentation and specifications</p>
-                        <ul class="report-features">
-                            <li><i class="fas fa-check"></i> Component specs</li>
-                            <li><i class="fas fa-check"></i> Wiring diagrams</li>
-                            <li><i class="fas fa-check"></i> Test procedures</li>
-                            <li><i class="fas fa-check"></i> BOM generation</li>
-                        </ul>
-                        <a href="#" class="report-action" style="opacity: 0.5; cursor: not-allowed;">
-                            <i class="fas fa-clock"></i>
-                            <span>Coming Soon</span>
-                        </a>
-                    </div>
-
-                    <!-- Site Survey -->
-                    <div class="report-type-card">
-                        <div class="status-badge status-coming-soon">Coming Soon</div>
-                        <div class="report-icon">
-                            <i class="fas fa-map-marked-alt"></i>
+                        <div class="widget-content">
+                            <div class="report-icon">
+                                <i class="fa fa-microchip"></i>
+                            </div>
+                            <p class="report-description">
+                                Comprehensive hardware design documentation and specifications
+                            </p>
                         </div>
-                        <h3>Site Survey</h3>
-                        <p>Detailed site assessment and survey documentation for project planning</p>
-                        <ul class="report-features">
-                            <li><i class="fas fa-check"></i> Photo mapping</li>
-                            <li><i class="fas fa-check"></i> Asset assessment</li>
-                            <li><i class="fas fa-check"></i> Risk analysis</li>
-                            <li><i class="fas fa-check"></i> GPS integration</li>
-                        </ul>
-                        <a href="#" class="report-action" style="opacity: 0.5; cursor: not-allowed;">
-                            <i class="fas fa-clock"></i>
-                            <span>Coming Soon</span>
-                        </a>
-                    </div>
-
-                    <!-- SDS Report -->
-                    <div class="report-type-card">
-                        <div class="status-badge status-coming-soon">Coming Soon</div>
-                        <div class="report-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <h3>Software Design Specification (SDS)</h3>
-                        <p>Software architecture and design documentation with detailed specifications</p>
-                        <ul class="report-features">
-                            <li><i class="fas fa-check"></i> Code structure</li>
-                            <li><i class="fas fa-check"></i> API documentation</li>
-                            <li><i class="fas fa-check"></i> Testing strategy</li>
-                            <li><i class="fas fa-check"></i> Architecture details</li>
-                        </ul>
-                        <a href="#" class="report-action" style="opacity: 0.5; cursor: not-allowed;">
-                            <i class="fas fa-clock"></i>
-                            <span>Coming Soon</span>
-                        </a>
-                    </div>
-
-                    <!-- Custom Report -->
-                    <div class="report-type-card">
-                        <div class="status-badge status-coming-soon">Coming Soon</div>
-                        <div class="report-icon">
-                            <i class="fas fa-edit"></i>
-                        </div>
-                        <h3>Custom Report (CER)</h3>
-                        <p>Build your own custom report template with flexible formatting options</p>
-                        <ul class="report-features">
-                            <li><i class="fas fa-check"></i> Template creation</li>
-                            <li><i class="fas fa-check"></i> Custom workflows</li>
-                            <li><i class="fas fa-check"></i> Field mapping</li>
-                            <li><i class="fas fa-check"></i> Export options</li>
-                        </ul>
-                        <a href="#" class="report-action" style="opacity: 0.5; cursor: not-allowed;">
-                            <i class="fas fa-clock"></i>
-                            <span>Coming Soon</span>
-                        </a>
                     </div>
                 </div>
-            </main>
+            </div>
+        </div>
+
+        <!-- Developer Credit Footer -->
+        <div class="developer-footer">
+            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
+                Developed by <strong style="color: var(--admin-primary);">Revanth Meda</strong> for Cully Automation
+            </p>
         </div>
     </div>
-<script>
+
+    <!-- Unified JavaScript -->
+    <script>
+        // Common dashboard functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // All navigation is now handled by the href attributes and onclick handlers
-            // No additional JavaScript needed for SAT report navigation
+            // Auto-refresh database status with error handling
+            function updateDatabaseStatus() {
+                fetch('/dashboard/db-status')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('HTTP ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update all database status indicators
+                        const statusElements = document.querySelectorAll('.status-badge');
+                        statusElements.forEach(element => {
+                            const textContent = element.textContent || '';
+                            if (textContent.includes('Connected') || textContent.includes('Disconnected') || textContent.includes('Not Connected')) {
+                                if (data.connected) {
+                                    element.className = 'status-badge status-connected';
+                                    element.innerHTML = '<i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Connected';
+                                } else {
+                                    element.className = 'status-badge status-disconnected';
+                                    element.innerHTML = '<i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Disconnected';
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.warn('Database status check failed:', error.message);
+                        // Update status to show disconnected on error
+                        const statusElements = document.querySelectorAll('.status-badge');
+                        statusElements.forEach(element => {
+                            const textContent = element.textContent || '';
+                            if (textContent.includes('Connected') || textContent.includes('Disconnected') || textContent.includes('Not Connected')) {
+                                element.className = 'status-badge status-disconnected';
+                                element.innerHTML = '<i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Disconnected';
+                            }
+                        });
+                    });
+            }
+
+            // Initial status check and setup interval
+            try {
+                updateDatabaseStatus();
+                setInterval(updateDatabaseStatus, 30000); // Refresh every 30 seconds
+            } catch (error) {
+                console.warn('Database status setup failed:', error);
+            }
+
+            // Common notification function
+            window.showNotification = function(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 16px 24px;
+                    border-radius: 12px;
+                    color: white;
+                    font-weight: 600;
+                    z-index: 1000;
+                    transform: translateX(100%);
+                    transition: transform 0.3s ease;
+                    ${type === 'success' ? 'background: linear-gradient(135deg, #10b981, #059669);' : 'background: linear-gradient(135deg, #ef4444, #dc2626);'}
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                `;
+                notification.textContent = message;
+
+                document.body.appendChild(notification);
+
+                // Animate in
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            };
         });
     </script>
 </body>

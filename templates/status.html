@@ -39,6 +39,10 @@
       background-color: #d1ecf1;
       color: #0c5460;
     }
+    .status-incomplete {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
     .progress-tracker {
       margin: 30px 0;
     }
@@ -101,11 +105,6 @@
       gap: 10px;
       margin-top: 20px;
     }
-    .version-display {
-      font-size: 0.9em;
-      color: #6c757d;
-      margin-left: 10px;
-    }
   </style>
 </head>
 <body>
@@ -117,27 +116,12 @@
     <h1>SAT Report Status</h1>
 
     <div class="document-info">
-      <h3>{{ document_title }} <span class="version-display">{{ submission_data.get('REVISION', 'R0') }}</span></h3>
-      <div class="info-grid">
-        <div class="info-item">
-          <label>Project Reference:</label>
-          <span>{{ project_reference or 'N/A' }}</span>
-        </div>
-        <div class="info-item">
-          <label>Client:</label>
-          <span>{{ client_name or 'N/A' }}</span>
-        </div>
-        <div class="info-item">
-          <label>Prepared By:</label>
-          <span>{{ prepared_by or 'N/A' }}</span>
-        </div>
-        <div class="info-item">
-          <label>Version:</label>
-          <span class="version-display">{{ submission_data.get('REVISION', 'R0') }}</span>
-        </div>
-      </div>
-      <p><strong>Submitted:</strong> {{ created_at.split('T')[0] if created_at else 'N/A' }}</p>
-      <p><strong>Last Updated:</strong> {{ updated_at.split('T')[0] if updated_at else 'N/A' }}</p>
+      <h3>{{ document_title }}</h3>
+      <p><strong>Project Reference:</strong> {{ project_reference or 'N/A' }}</p>
+      <p><strong>Client:</strong> {{ client_name or 'N/A' }}</p>
+      <p><strong>Prepared By:</strong> {{ prepared_by or 'N/A' }}</p>
+      <p><strong>Submitted:</strong> {{ created_at.split(' ')[0] if created_at and ' ' in created_at else (created_at or 'N/A') }}</p>
+      <p><strong>Last Updated:</strong> {{ updated_at.split(' ')[0] if updated_at and ' ' in updated_at else (updated_at or 'N/A') }}</p>
       <p><strong>Submission ID:</strong> {{ submission_id }}</p>
 
       <div class="status-badge status-{{ overall_status }}">
@@ -150,7 +134,7 @@
         {% elif overall_status == 'rejected' %}
           <i class="fa fa-times-circle"></i> Rejected
         {% elif overall_status == 'incomplete' %}
-          <i class="fa fa-exclamation-triangle"></i> Incomplete (Session Interrupted)
+          <i class="fa fa-exclamation-triangle"></i> Incomplete
         {% endif %}
       </div>
     </div>
@@ -179,7 +163,7 @@
                 </span>
               </p>
               {% if approval.timestamp %}
-              <p><strong>Date:</strong> {{ approval.timestamp.split('T')[0] if 'T' in approval.timestamp else approval.timestamp }}</p>
+              <p><strong>Date:</strong> {{ approval.timestamp.strftime('%Y-%m-%d') if approval.timestamp.__class__.__name__ == 'datetime' else (approval.timestamp.split('T')[0] if 'T' in approval.timestamp else approval.timestamp) }}</p>
               {% endif %}
               {% if approval.approver_name %}
               <p><strong>Approved By:</strong> {{ approval.approver_name }}</p>
@@ -189,9 +173,9 @@
               {% endif %}
               {% if approval.signature %}
               <p><strong>Signature:</strong></p>
-              <img src="{{ url_for('static', filename='signatures/' + approval.signature) }}" alt="Signature" style="max-width: 200px; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;">
+              <img src="{{ url_for('static', filename='signatures/' + approval.signature) }}" alt="Signature" style="max-width: 200px; max-height: 100px; border: 1px solid #ccc; border-radius: 4px;">
               {% else %}
-              <p><strong>Signature:</strong> <span style="color: #6c757d; font-style: italic;">Pending</span></p>
+              <p><strong>Signature:</strong> <span style="color: #6c757d; font-style: italic;">No signature provided</span></p>
               {% endif %}
             </div>
           </div>
@@ -201,10 +185,14 @@
     </div>
 
     <div class="actions-container">
-      {% if not locked %}
+      {% if not locked and can_edit %}
       <a href="{{ url_for('main.edit_submission', submission_id=submission_id) }}" class="btn-secondary">
         <i class="fa fa-edit"></i> Edit Submission
       </a>
+      {% elif locked and current_user.role == 'Admin' %}
+      <button onclick="revokeApproval('{{ submission_id }}')" class="btn-warning">
+        <i class="fa fa-undo"></i> Revoke Approval
+      </button>
       {% endif %}
 
       <a href="{{ url_for('status.download_report', submission_id=submission_id) }}" class="btn-primary">
@@ -222,5 +210,162 @@
       </a>
     </div>
   </div>
+
+  <!-- Revoke Approval Modal -->
+  <div id="revokeModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-undo"></i>
+        <h3>Revoke Approval</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to revoke the approval for this report?</p>
+        <div class="form-group">
+          <label for="revokeComment">Reason for revocation (required):</label>
+          <textarea id="revokeComment" class="form-control" rows="3" 
+                    placeholder="Please provide a reason for revoking the approval..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeRevokeModal()" class="btn-secondary">Cancel</button>
+        <button onclick="confirmRevoke()" class="btn-primary">Revoke Approval</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let reportToRevoke = null;
+
+    function revokeApproval(reportId) {
+      reportToRevoke = reportId;
+      document.getElementById('revokeModal').style.display = 'block';
+      document.getElementById('revokeComment').value = '';
+    }
+
+    function closeRevokeModal() {
+      document.getElementById('revokeModal').style.display = 'none';
+      reportToRevoke = null;
+    }
+
+    function confirmRevoke() {
+      const comment = document.getElementById('revokeComment').value.trim();
+      if (!comment) {
+        alert('Please provide a reason for revoking the approval.');
+        return;
+      }
+
+      if (reportToRevoke) {
+        fetch(`/dashboard/revoke-approval/${reportToRevoke}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            comment: comment
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert('Error revoking approval: ' + data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error revoking approval');
+        });
+      }
+      closeRevokeModal();
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      const revokeModal = document.getElementById('revokeModal');
+      if (event.target === revokeModal) {
+        closeRevokeModal();
+      }
+    }
+  </script>
+
+  <style>
+    .modal {
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 0;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .modal-header {
+      background-color: var(--primary);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-footer {
+      padding: 15px 20px;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .btn-warning {
+      background-color: #ffc107;
+      color: #212529;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-warning:hover {
+      background-color: #e0a800;
+    }
+  </style>
 </body>
 </html>

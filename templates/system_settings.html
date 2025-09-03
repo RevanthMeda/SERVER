@@ -483,6 +483,12 @@
             border: 1px solid #059669;
         }
 
+        .status-disconnected {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .admin-container {
@@ -513,9 +519,146 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Unified Dashboard Styling */
+        .dashboard-layout {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1f2937;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-main {
+            flex-grow: 1;
+            padding-top: 0; /* Adjust as needed */
+        }
+
+        .dashboard-nav {
+            display: flex;
+            justify-content: center; /* Center navigation links */
+            align-items: center;
+            background: white;
+            padding: 12px 24px;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+            border: 1px solid #e2e8f0;
+            overflow-x: auto; /* Enable horizontal scrolling for nav links */
+            white-space: nowrap; /* Prevent wrapping of nav links */
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px; /* Space between navigation links */
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            white-space: nowrap; /* Ensure links don't break */
+        }
+
+        .nav-link:hover {
+            background: #e2e8f0;
+            color: var(--admin-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(77, 208, 225, 0.25);
+            border-color: var(--admin-primary-light);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(77, 208, 225, 0.4);
+            border-color: var(--admin-primary);
+        }
+
+        .nav-link i {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nav-link.logout {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+            border: 2px solid #fca5a5 !important;
+        }
+
+        .nav-link.logout:hover {
+            background: #fecaca !important;
+            color: #b91c1c !important;
+            border-color: #f87171 !important;
+        }
+
+        /* Flash Messages Styling */
+        .flash-messages {
+            margin-bottom: 24px;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .alert {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: #065f46; /* Default color, overridden by specific types */
+            font-weight: 500;
+            border: 1px solid #059669; /* Default border, overridden by specific types */
+        }
+
+        .alert.alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #059669;
+        }
+
+        .alert.alert-error {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #fca5a5;
+        }
+
+        .alert.alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #93c5fc;
+        }
+
+        .alert i {
+            font-size: 18px;
+        }
+
+        .developer-footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: auto; /* Push footer to the bottom */
+            background-color: #f1f5f9; /* Light background for footer */
+            border-top: 1px solid #e2e8f0; /* Subtle separator */
+        }
     </style>
 </head>
-<body>
+<body class="dashboard-layout">
     <div class="admin-container">
         <!-- Header -->
         <div class="admin-header">
@@ -528,163 +671,287 @@
             </div>
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash-message">
-                            <i class="fa fa-check-circle"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+        <div class="dashboard-content">
+            <!-- Unified Navigation -->
+            <div class="dashboard-nav">
+                <div class="nav-links">
+                    <a href="{{ url_for('dashboard.admin') }}" class="nav-link {% if request.endpoint == 'dashboard.admin' %}active{% endif %}" id="nav-dashboard">
+                        <i class="fa fa-home"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('dashboard.user_management') }}" class="nav-link {% if request.endpoint == 'dashboard.user_management' %}active{% endif %}" id="nav-users">
+                        <i class="fa fa-users"></i> User Management
+                    </a>
+                    <a href="{{ url_for('dashboard.admin_reports') }}" class="nav-link {% if request.endpoint == 'dashboard.admin_reports' %}active{% endif %}" id="nav-reports">
+                        <i class="fa fa-file-alt"></i> All Reports
+                    </a>
+                    <a href="{{ url_for('dashboard.system_settings') }}" class="nav-link {% if request.endpoint == 'dashboard.system_settings' %}active{% endif %}" id="nav-settings">
+                        <i class="fa fa-cog"></i> System Settings
+                    </a>
+                    <a href="{{ url_for('main.sat_form') }}" class="nav-link {% if request.endpoint == 'main.sat_form' %}active{% endif %}" id="nav-create">
+                        <i class="fa fa-plus"></i> Create Report
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-link logout" id="nav-logout">
+                        <i class="fa fa-sign-out-alt"></i> Logout
+                    </a>
                 </div>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Navigation -->
-        <div class="dashboard-nav">
-            <div class="nav-left">
-                <a href="{{ url_for('dashboard.admin') }}" class="nav-item">
-                    <i class="fas fa-home"></i>
-                    Dashboard
-                </a>
-                <a href="{{ url_for('dashboard.user_management') }}" class="nav-item">
-                    <i class="fas fa-users"></i>
-                    User Management
-                </a>
-                <a href="{{ url_for('dashboard.admin_reports') }}" class="nav-item">
-                    <i class="fas fa-chart-bar"></i>
-                    Reports
-                </a>
-                <a href="{{ url_for('dashboard.system_settings') }}" class="nav-item active">
-                    <i class="fas fa-cog"></i>
-                    Settings
-                </a>
             </div>
-            <div class="nav-right">
-                <a href="{{ url_for('auth.logout') }}" class="nav-item logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <i class="fa fa-{% if category == 'success' %}check-circle{% elif category == 'error' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Main Content Area -->
+            <div class="dashboard-main">
+                <div class="settings-grid">
+                    <!-- Company Logo Settings -->
+                    <div class="dashboard-widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-image"></i>
+                                Company Logo
+                            </h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="logo-preview">
+                                <img src="{{ url_for('static', filename=company_logo.replace('static/', '')) }}" 
+                                     alt="Company Logo" class="current-logo">
+                                <div class="logo-info">
+                                    <strong>Current Logo</strong>
+                                    <p>{{ company_logo }}</p>
+                                </div>
+                            </div>
+
+                            <div class="logo-actions">
+                                <button class="btn-secondary" disabled title="Feature coming soon">
+                                    <i class="fa fa-upload"></i> Update Logo
+                                </button>
+                                <small class="help-text">Logo update functionality will be available in a future release</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Storage Settings -->
+                    <div class="dashboard-widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-folder"></i>
+                                Default Storage Location
+                            </h3>
+                        </div>
+                        <div class="widget-content">
+                            <form method="POST" action="{{ url_for('dashboard.update_settings') }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
+
+                                <div class="form-group">
+                                    <label for="storage_location">Storage Path <span class="required">*</span></label>
+                                    <input type="text" 
+                                           id="storage_location" 
+                                           name="storage_location" 
+                                           value="{{ storage_location }}" 
+                                           placeholder="/outputs/" 
+                                           required>
+                                    <small class="help-text">Specify the directory path where reports will be saved</small>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">
+                                        <i class="fa fa-save"></i> Save Settings
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Theme Settings -->
+                    <div class="dashboard-widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-palette"></i>
+                                Theme Settings
+                            </h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="theme-note">
+                                <i class="fa fa-info-circle"></i>
+                                <div>
+                                    <strong>Theme Consistency</strong>
+                                    <p>The application maintains consistent colors, fonts, and spacing across all pages. Theme customization will be available in future updates.</p>
+                                </div>
+                            </div>
+
+                            <div class="theme-preview">
+                                <div class="color-swatch primary"></div>
+                                <div class="color-swatch secondary"></div>
+                                <div class="color-swatch accent"></div>
+                                <span>Current Color Scheme</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Information -->
+                    <div class="dashboard-widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-info-circle"></i>
+                                System Information
+                            </h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="system-info">
+                                <div class="info-row">
+                                    <span class="info-label">Application Version:</span>
+                                    <span class="info-value">1.0.0 (Phase 1b)</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Database Status:</span>
+                                    <span class="info-value">
+                                        <span class="status-badge status-connected">
+                                            <i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Connected
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Last Updated:</span>
+                                    <span class="info-value">{{ "2025-01-18 10:00" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="settings-grid">
-            <!-- Company Logo Settings -->
-            <div class="dashboard-widget">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-image"></i>
-                        Company Logo
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <div class="logo-preview">
-                        <img src="{{ url_for('static', filename=company_logo.replace('static/', '')) }}" 
-                             alt="Company Logo" class="current-logo">
-                        <div class="logo-info">
-                            <strong>Current Logo</strong>
-                            <p>{{ company_logo }}</p>
-                        </div>
-                    </div>
-
-                    <div class="logo-actions">
-                        <button class="btn-secondary" disabled title="Feature coming soon">
-                            <i class="fa fa-upload"></i> Update Logo
-                        </button>
-                        <small class="help-text">Logo update functionality will be available in a future release</small>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Storage Settings -->
-            <div class="dashboard-widget">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-folder"></i>
-                        Default Storage Location
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <form method="POST" action="{{ url_for('dashboard.update_settings') }}">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
-
-                        <div class="form-group">
-                            <label for="storage_location">Storage Path <span class="required">*</span></label>
-                            <input type="text" 
-                                   id="storage_location" 
-                                   name="storage_location" 
-                                   value="{{ storage_location }}" 
-                                   placeholder="/outputs/" 
-                                   required>
-                            <small class="help-text">Specify the directory path where reports will be saved</small>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary">
-                                <i class="fa fa-save"></i> Save Settings
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Theme Settings -->
-            <div class="dashboard-widget">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-palette"></i>
-                        Theme Settings
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <div class="theme-note">
-                        <i class="fa fa-info-circle"></i>
-                        <div>
-                            <strong>Theme Consistency</strong>
-                            <p>The application maintains consistent colors, fonts, and spacing across all pages. Theme customization will be available in future updates.</p>
-                        </div>
-                    </div>
-
-                    <div class="theme-preview">
-                        <div class="color-swatch primary"></div>
-                        <div class="color-swatch secondary"></div>
-                        <div class="color-swatch accent"></div>
-                        <span>Current Color Scheme</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- System Information -->
-            <div class="dashboard-widget">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-info-circle"></i>
-                        System Information
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <div class="system-info">
-                        <div class="info-row">
-                            <span class="info-label">Application Version:</span>
-                            <span class="info-value">1.0.0 (Phase 1b)</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Database Status:</span>
-                            <span class="info-value">
-                                <span class="status-badge status-connected">
-                                    <i class="fa fa-check-circle"></i> Connected
-                                </span>
-                            </span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Last Updated:</span>
-                            <span class="info-value">{{ "2025-01-18 10:00" }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Developer Credit Footer -->
+        <div class="developer-footer">
+            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
+                Developed by <strong style="color: var(--admin-primary);">Revanth Meda</strong> for Cully Automation
+            </p>
         </div>
     </div>
+
+    <!-- Unified JavaScript -->
+    <script>
+        // Common dashboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-refresh database status with error handling
+            function updateDatabaseStatus() {
+                fetch('/dashboard/db-status')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update all database status indicators
+                        const statusElements = document.querySelectorAll('.status-badge');
+                        statusElements.forEach(element => {
+                            const textContent = element.textContent || '';
+                            if (textContent.includes('Connected') || textContent.includes('Disconnected') || textContent.includes('Not Connected')) {
+                                if (data.connected) {
+                                    element.className = 'status-badge status-connected';
+                                    element.innerHTML = '<i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Connected';
+                                } else {
+                                    element.className = 'status-badge status-disconnected';
+                                    element.innerHTML = '<i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Disconnected';
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.warn('Database status check failed:', error.message);
+                        // Update status to show disconnected on error
+                        const statusElements = document.querySelectorAll('.status-badge');
+                        statusElements.forEach(element => {
+                            const textContent = element.textContent || '';
+                            if (textContent.includes('Connected') || textContent.includes('Disconnected') || textContent.includes('Not Connected')) {
+                                element.className = 'status-badge status-disconnected';
+                                element.innerHTML = '<i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Disconnected';
+                            }
+                        });
+                    });
+            }
+
+            // Initial status check and setup interval
+            updateDatabaseStatus();
+            setInterval(updateDatabaseStatus, 30000); // Refresh every 30 seconds
+
+            // Common notification function
+            window.showNotification = function(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 4px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 10000;
+                    max-width: 400px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                `;
+                
+                if (type === 'success') {
+                    notification.style.backgroundColor = '#10b981';
+                } else if (type === 'error') {
+                    notification.style.backgroundColor = '#ef4444';
+                } else if (type === 'warning') {
+                    notification.style.backgroundColor = '#f59e0b';
+                } else {
+                    notification.style.backgroundColor = '#3b82f6';
+                }
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            };
+        });
+    </script>osition: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 16px 24px;
+                    border-radius: 12px;
+                    color: white;
+                    font-weight: 600;
+                    z-index: 1000;
+                    transform: translateX(100%);
+                    transition: transform 0.3s ease;
+                    ${type === 'success' ? 'background: linear-gradient(135deg, #10b981, #059669);' : 'background: linear-gradient(135deg, #ef4444, #dc2626);'}
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                `;
+                notification.textContent = message;
+
+                document.body.appendChild(notification);
+
+                // Animate in
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            };
+        });
+    </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,6 +120,17 @@
 
         .get-started {
             margin: 30px 0;
+            text-align: center;
+        }
+
+        .get-started-header {
+            justify-content: flex-start !important;
+            text-align: left !important;
+        }
+
+        .get-started-header i,
+        .get-started-header h2 {
+            margin-right: auto;
         }
 
         .cta-description {
@@ -132,26 +142,50 @@
 
         .auth-buttons {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             justify-content: center;
+            align-items: stretch;
             flex-wrap: wrap;
+            margin: 30px 0;
         }
 
         .btn-primary,
         .btn-secondary {
-            padding: 18px 35px;
+            padding: 20px 30px;
             font-size: 1.1rem;
             border-radius: 12px;
             display: inline-flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            gap: 15px;
             transition: all 0.3s ease;
             font-weight: bold;
-            min-width: 200px;
-            text-align: center;
+            min-width: 220px;
+            min-height: 80px;
+            text-align: left;
             text-decoration: none;
             border: 2px solid;
+            position: relative;
+        }
+
+        .btn-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .btn-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .btn-subtitle {
+            font-size: 0.85rem;
+            font-weight: normal;
+            opacity: 0.85;
+            line-height: 1.2;
         }
 
         .btn-primary {
@@ -165,6 +199,8 @@
             border-color: var(--primary-hover-color);
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(77, 208, 225, 0.4);
+            color: white;
+            text-decoration: none;
         }
 
         .btn-secondary {
@@ -177,30 +213,43 @@
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
         }
 
-        .btn-subtitle {
-            font-size: 0.8rem;
-            font-weight: normal;
-            opacity: 0.8;
-            margin-top: 5px;
+        .btn-primary i,
+        .btn-secondary i {
+            font-size: 1.5rem;
+            flex-shrink: 0;
         }
 
         .registration-info {
-            margin-top: 30px;
-            padding: 15px 25px;
-            background-color: rgba(255, 193, 7, 0.2);
-            border-radius: 8px;
-            text-align: left;
+            margin-top: 25px;
+            padding: 18px 25px;
+            background-color: rgba(255, 193, 7, 0.15);
+            border-radius: 10px;
+            text-align: center;
             font-size: 0.95rem;
-            border: 1px solid rgba(255, 193, 7, 0.4);
-            display: inline-block;
-            max-width: 600px;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(5px);
         }
 
         .registration-info p {
             margin: 0;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            line-height: 1.5;
+        }
+
+        .registration-info i {
+            font-size: 1.1rem;
+            color: rgba(255, 193, 7, 1);
         }
 
         .features {
@@ -638,8 +687,7 @@
         </div>
 
         <div class="card">
-            <div class="card-header">
-                <i class="fa fa-rocket"></i>
+            <div class="card-header get-started-header">
                 <h2>Get Started</h2>
             </div>
             <div class="card-content">
@@ -657,15 +705,19 @@
                         technical documentation faster and more accurately than ever before.
                     </p>
                     <div class="auth-buttons">
-                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                        <a href="{{ url_for('auth.login') }}" class="btn-primary">
                             <i class="fa fa-sign-in-alt"></i>
-                            Log In
-                            <span class="btn-subtitle">Access your dashboard</span>
+                            <div class="btn-content">
+                                <span class="btn-title">Log In</span>
+                                <span class="btn-subtitle">Access your dashboard</span>
+                            </div>
                         </a>
-                        <a href="{{ url_for('auth.register') }}" class="btn btn-secondary">
+                        <a href="{{ url_for('auth.register') }}" class="btn-secondary">
                             <i class="fa fa-user-plus"></i>
-                            Register
-                            <span class="btn-subtitle">Create your account</span>
+                            <div class="btn-content">
+                                <span class="btn-title">Register</span>
+                                <span class="btn-subtitle">Create your account</span>
+                            </div>
                         </a>
                     </div>
                     <div class="registration-info">
@@ -1131,7 +1183,7 @@
             content.innerHTML = body;
             modal.style.display = 'block';
             modal.setAttribute('aria-hidden', 'false');
-            
+
             // Focus the modal and set up focus trapping
             const closeButton = modal.querySelector('.close');
             if (closeButton) {
@@ -1144,7 +1196,7 @@
             const modal = document.getElementById('contentModal');
             modal.style.display = 'none';
             modal.setAttribute('aria-hidden', 'true');
-            
+
             // Return focus to the element that opened the modal
             const activeElement = document.activeElement;
             if (activeElement && activeElement.onclick) {
@@ -1196,9 +1248,9 @@
         function showModal(type) {
             const modal = document.getElementById('contentModal');
             const content = document.getElementById('modalContent');
-            
+
             // ... existing modal content logic stays the same ...
-            
+
             let title = '';
             let body = '';
 

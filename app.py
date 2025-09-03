@@ -75,7 +75,7 @@ def create_app(config_class=Config):
     @app.route('/api/get-users-by-role')
     @login_required
     def get_users_by_role():
-        """API endpoint to get users grouped by role for dropdowns"""
+        """API endpoint to get users by role for dropdowns"""
         try:
             # Only get active users
             users = User.query.filter_by(status='Active').all()
@@ -91,7 +91,7 @@ def create_app(config_class=Config):
                     'name': user.full_name,
                     'email': user.email
                 }
-                
+
                 # Map database roles to frontend role categories
                 if user.role == 'Admin':
                     users_by_role['Admin'].append(user_data)
@@ -104,7 +104,7 @@ def create_app(config_class=Config):
 
             app.logger.info(f"Found {len(users)} total users")
             app.logger.info(f"Users by role: TM={len(users_by_role['TM'])}, PM={len(users_by_role['PM'])}, Admin={len(users_by_role['Admin'])}, Engineer={len(users_by_role['Engineer'])}")
-            
+
             return jsonify({'success': True, 'users': users_by_role})
         except Exception as e:
             app.logger.error(f"Error in get_users_by_role endpoint: {e}")
@@ -222,9 +222,9 @@ if __name__ == '__main__':
         app = create_app()
 
         # Print startup information
-        print("🚀 Starting SAT Report Generator...")
-        print(f"Debug Mode: {app.config.get('DEBUG', True)}")
-        print(f"Running on http://0.0.0.0:5000")
+        print(f"🚀 Starting {app.config.get('APP_NAME', 'SAT Report Generator')}...")
+        print(f"Debug Mode: {app.config.get('DEBUG', False)}")
+        print(f"Running on http://0.0.0.0:{app.config.get('PORT', 5000)}")
 
         # Create required directories if they don't exist
         try:
@@ -237,6 +237,15 @@ if __name__ == '__main__':
             os.makedirs(os.path.dirname(submissions_file), exist_ok=True)
             os.makedirs('instance', exist_ok=True)
             os.makedirs('logs', exist_ok=True)
+            # Ensure upload directory exists
+            upload_dir = app.config.get('UPLOAD_FOLDER')
+            if upload_dir and not os.path.exists(upload_dir):
+                os.makedirs(upload_dir, exist_ok=True)
+
+            # Ensure output directory exists
+            output_dir = app.config.get('OUTPUT_DIR')
+            if output_dir and not os.path.exists(output_dir):
+                os.makedirs(output_dir, exist_ok=True)
             print("✅ Required directories created successfully")
         except Exception as dir_error:
             print(f"⚠️  Warning: Could not create some directories: {dir_error}")
@@ -244,17 +253,45 @@ if __name__ == '__main__':
         # Test a simple route to ensure app is working
         @app.route('/health')
         def health_check():
-            return jsonify({'status': 'healthy', 'message': 'SAT Report Generator is running'})
+            try:
+                # Test database connection
+                from models import db
+                db.engine.execute('SELECT 1')
+                db_status = 'connected'
+            except Exception as e:
+                app.logger.error(f"Database health check failed: {e}")
+                db_status = 'disconnected'
+            
+            return jsonify({
+                'status': 'healthy', 
+                'message': 'SAT Report Generator is running',
+                'database': db_status
+            })
 
         print("🌐 Health check endpoint available at /health")
 
         # Run the server
-        app.run(
-            host='0.0.0.0', 
-            port=5000, 
-            debug=True,  
-            use_reloader=False  # Disable reloader to prevent double initialization
-        )
+        try:
+            app.run(
+                host='0.0.0.0',
+                port=app.config['PORT'],
+                debug=app.config['DEBUG']
+            )
+        except OSError as e:
+            if "Address already in use" in str(e):
+                print("⚠️  Port 5000 is already in use. Trying to kill existing processes...")
+                import os
+                os.system('pkill -f "python app.py"')
+                import time
+                time.sleep(2)
+                print("🔄 Retrying on port 5000...")
+                app.run(
+                    host='0.0.0.0',
+                    port=app.config['PORT'],
+                    debug=app.config['DEBUG']
+                )
+            else:
+                raise
 
     except Exception as e:
         print(f"❌ Server startup failed: {e}")

@@ -1,3 +1,56 @@
+
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, jsonify
+from flask_login import login_required, current_user
+from models import db, Report, SATReport
+import json
+
+main_bp = Blueprint('main', __name__)
+
+@main_bp.route('/edit/<submission_id>')
+@login_required
+def edit_submission(submission_id):
+    """Edit a submission with role-based permissions"""
+    
+    # Get the report
+    report = Report.query.get(submission_id)
+    if not report:
+        flash('Report not found.', 'error')
+        return redirect(url_for('dashboard.home'))
+    
+    # Check permissions
+    can_edit = False
+    if current_user.role == 'Admin':
+        can_edit = True  # Admin can edit any report
+    elif current_user.role == 'Engineer' and current_user.email == report.user_email:
+        # Engineers can edit their own reports until approved by TM
+        if report.approvals_json:
+            try:
+                approvals = json.loads(report.approvals_json)
+                tm_approved = any(a.get("status") == "approved" and a.get("stage") == 1 for a in approvals)
+                can_edit = not tm_approved
+            except:
+                can_edit = True  # If can't parse approvals, allow edit
+        else:
+            can_edit = True
+    elif current_user.role == 'TM':
+        # TM can edit reports until approved by PM
+        if report.approvals_json:
+            try:
+                approvals = json.loads(report.approvals_json)
+                pm_approved = any(a.get("status") == "approved" and a.get("stage") == 2 for a in approvals)
+                can_edit = not pm_approved
+            except:
+                can_edit = True
+        else:
+            can_edit = True
+    
+    if not can_edit:
+        flash('You do not have permission to edit this report.', 'error')
+        return redirect(url_for('status.view_status', submission_id=submission_id))
+    
+    # If user can edit, redirect to the SAT wizard with the submission ID
+    return redirect(url_for('reports.sat_wizard', submission_id=submission_id))
+
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash, send_file, current_app
 from flask_login import current_user
 from auth import login_required
@@ -5,6 +58,7 @@ import json
 import os
 import uuid
 import datetime as dt
+from datetime import datetime
 
 try:
     from models import db, Report, SATReport, test_db_connection
@@ -25,11 +79,17 @@ except ImportError as e:
     create_docx_from_template = None
     convert_to_pdf = None
 
+# Helper function to get unread notification count (assuming it exists elsewhere)
+def get_unread_count():
+    """Placeholder for getting unread notification count"""
+    # Replace with actual implementation if available
+    return 0
+
 def setup_approval_workflow_db(report, approver_emails):
     """Set up approval workflow for database-stored reports"""
     approvals = []
     valid_emails = [email for email in approver_emails if email]
-    
+
     for i, email in enumerate(valid_emails, 1):
         approvals.append({
             "stage": i,
@@ -38,7 +98,7 @@ def setup_approval_workflow_db(report, approver_emails):
             "approved_at": None,
             "signature": None
         })
-    
+
     # Lock the report if there are approvers
     locked = len(valid_emails) > 0
     return approvals, locked
@@ -48,19 +108,19 @@ def send_approval_link(email, submission_id, stage):
     try:
         from flask import url_for
         from utils import send_email
-        
-        approval_url = url_for('approval.approve', submission_id=submission_id, stage=stage, _external=True)
+
+        approval_url = url_for('approval.approve_submission', submission_id=submission_id, stage=stage, _external=True)
         subject = f"SAT Report Approval Required - Stage {stage}"
         body = f"""
         You have been assigned to review and approve a SAT report.
-        
+
         Please click the following link to review and approve:
         {approval_url}
-        
+
         Submission ID: {submission_id}
         Stage: {stage}
         """
-        
+
         return send_email(email, subject, body)
     except Exception as e:
         current_app.logger.error(f"Error sending approval link: {e}")
@@ -70,7 +130,7 @@ def create_approval_notification(approver_email, submission_id, stage, document_
     """Create approval notification"""
     try:
         from models import Notification, db
-        
+
         notification = Notification(
             user_email=approver_email,
             title="New Approval Request",
@@ -89,7 +149,7 @@ def create_new_submission_notification(admin_emails, submission_id, document_tit
     """Create new submission notification for admins"""
     try:
         from models import Notification, db
-        
+
         for email in admin_emails:
             notification = Notification(
                 user_email=email,
@@ -99,7 +159,7 @@ def create_new_submission_notification(admin_emails, submission_id, document_tit
                 read=False
             )
             db.session.add(notification)
-        
+
         db.session.commit()
         return True
     except Exception as e:
@@ -144,20 +204,24 @@ def sat_form():
     wizard_data = session.pop('wizard_data', {})
 
     # Pre-populate submission_data with wizard data if available
-    submission_data = {}
+    submission_data = {
+        'USER_EMAIL': current_user.email if current_user.is_authenticated else '',
+        'PREPARED_BY': current_user.full_name if current_user.is_authenticated else '',
+    }
     if wizard_data:
         submission_data.update({
             'DOCUMENT_TITLE': wizard_data.get('document_title', ''),
             'PROJECT_REFERENCE': wizard_data.get('project_reference', ''),
             'CLIENT_NAME': wizard_data.get('client_name', ''),
             'DATE': wizard_data.get('date', ''),
-            'PREPARED_BY': wizard_data.get('prepared_by', ''),
+            'PREPARED_BY': current_user.full_name if current_user.is_authenticated else wizard_data.get('prepared_by', ''),
             'REVISION': wizard_data.get('revision', ''),
             'PURPOSE': wizard_data.get('purpose', ''),
             'SCOPE': wizard_data.get('scope', ''),
             'approver_1_email': wizard_data.get('approver_1_email', ''),
             'approver_2_email': wizard_data.get('approver_2_email', ''),
             'approver_3_email': wizard_data.get('approver_3_email', ''),
+            'USER_EMAIL': current_user.email if current_user.is_authenticated else wizard_data.get('user_email', ''),
         })
 
     # Always render the SAT.html template (the full SAT form)
@@ -170,6 +234,29 @@ def sat_form():
 @main_bp.route('/edit/<submission_id>')
 @login_required
 def edit_submission(submission_id):
+    """Edit an existing submission"""
+    from models import Report, SATReport
+    import json
+
+    # Check if submission exists and user has permission
+    report = Report.query.filter_by(id=submission_id).first()
+    if not report:
+        flash('Report not found.', 'error')
+        return redirect(url_for('dashboard.home'))
+
+    # Check if user owns this report or is admin
+    if current_user.email != report.user_email and current_user.role != 'Admin':
+        flash('Access denied. You do not have permission to access this page.', 'error')
+        return redirect(url_for('dashboard.home'))
+
+    # Check if submission is locked
+    if report.locked:
+        flash('This submission is locked and cannot be edited.', 'error')
+        return redirect(url_for('status.view_status', submission_id=submission_id))
+
+@main_bp.route('/edit/<submission_id>')
+@login_required  
+def edit_submission_legacy(submission_id):
     """Edit an existing submission (if not yet locked)"""
     try:
         from models import Report, SATReport
@@ -200,9 +287,13 @@ def edit_submission(submission_id):
         stored_data = json.loads(sat_report.data_json)
         context_data = stored_data.get("context", {})
 
+        # Get unread notifications count
+        unread_count = get_unread_count()
+
         return render_template('SAT.html',
                               submission_data=context_data,
                               submission_id=submission_id,
+                              unread_count=unread_count,
                               user_role=current_user.role if hasattr(current_user, 'role') else 'user',
                               edit_mode=True)
     except Exception as e:

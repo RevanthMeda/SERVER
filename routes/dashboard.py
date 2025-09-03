@@ -58,23 +58,36 @@ def admin():
     # Calculate report statistics
     try:
         total_reports = Report.query.count()
+        current_app.logger.info(f"Admin dashboard: Found {total_reports} total reports")
+        
         recent_reports = Report.query.order_by(Report.created_at.desc()).limit(5).all()
+        current_app.logger.info(f"Admin dashboard: Processing {len(recent_reports)} recent reports")
+        
         # Add basic report info for display
         for report in recent_reports:
-            if hasattr(report, 'sat_report') and report.sat_report:
-                import json
-                try:
-                    data = json.loads(report.sat_report.data_json)
-                    report.document_title = data.get('context', {}).get('DOCUMENT_TITLE', 'Untitled Report')
-                    report.project_reference = data.get('context', {}).get('PROJECT_REFERENCE', 'N/A')
-                except:
-                    report.document_title = 'Untitled Report'
-                    report.project_reference = 'N/A'
+            # Start with basic data
+            report.document_title = report.document_title or 'Untitled Report'
+            report.project_reference = report.project_reference or 'N/A'
+            report.status = 'draft'
+            
+            # Try to get enhanced data from SAT report
+            try:
+                sat_report = SATReport.query.filter_by(report_id=report.id).first()
+                if sat_report and sat_report.data_json:
+                    data = json.loads(sat_report.data_json)
+                    context_data = data.get('context', {})
+                    if context_data.get('DOCUMENT_TITLE'):
+                        report.document_title = context_data['DOCUMENT_TITLE']
+                    if context_data.get('PROJECT_REFERENCE'):
+                        report.project_reference = context_data['PROJECT_REFERENCE']
+            except Exception as sat_error:
+                current_app.logger.debug(f"Could not get SAT data for report {report.id}: {sat_error}")
 
-                # Determine status from approvals
-                if report.approvals_json:
-                    try:
-                        approvals = json.loads(report.approvals_json)
+            # Determine status from approvals
+            if report.approvals_json:
+                try:
+                    approvals = json.loads(report.approvals_json)
+                    if approvals:
                         statuses = [a.get("status", "pending") for a in approvals]
                         if "rejected" in statuses:
                             report.status = "rejected"
@@ -84,16 +97,12 @@ def admin():
                             report.status = "partially_approved"
                         else:
                             report.status = "pending"
-                    except:
-                        report.status = "pending"
-                else:
+                except Exception as approval_error:
+                    current_app.logger.debug(f"Could not parse approvals for report {report.id}: {approval_error}")
                     report.status = "pending"
-            else:
-                report.document_title = 'Untitled Report'
-                report.project_reference = 'N/A'
-                report.status = 'draft'
+                    
     except Exception as e:
-        current_app.logger.warning(f"Could not retrieve report statistics for admin: {e}")
+        current_app.logger.error(f"Could not retrieve report statistics for admin: {e}", exc_info=True)
         total_reports = 0
         recent_reports = []
 
@@ -470,8 +479,119 @@ def update_settings():
 @dashboard_bp.route('/reports')
 @admin_required
 def admin_reports():
-    """Admin reports view - placeholder"""
-    return render_template('admin_reports.html')
+    """Admin reports view - show all system reports"""
+    from models import Report, SATReport
+    import json
+    from datetime import datetime, timedelta
+    
+    try:
+        # Calculate this month start for template
+        now = datetime.now()
+        this_month_start = datetime(now.year, now.month, 1)
+        
+        # Get all reports - don't filter, get everything
+        reports = Report.query.order_by(Report.created_at.desc()).all()
+        reports_data = []
+        
+        current_app.logger.info(f"Admin reports: Found {len(reports)} total reports in database")
+        
+        for report in reports:
+            try:
+                # Get SAT report data if it exists
+                sat_report = SATReport.query.filter_by(report_id=report.id).first()
+                
+                # Start with basic report data
+                project_name = report.document_title or 'Untitled Report'
+                client_name = report.client_name or ''
+                location = report.project_reference or ''
+                status = 'Draft'
+                
+                # If SAT report exists, try to get enhanced data
+                if sat_report and sat_report.data_json:
+                    try:
+                        stored_data = json.loads(sat_report.data_json)
+                        context_data = stored_data.get('context', {})
+                        
+                        # Override with SAT data if available
+                        if context_data.get('DOCUMENT_TITLE'):
+                            project_name = context_data['DOCUMENT_TITLE']
+                        if context_data.get('CLIENT_NAME'):
+                            client_name = context_data['CLIENT_NAME']
+                        if context_data.get('PROJECT_REFERENCE'):
+                            location = context_data['PROJECT_REFERENCE']
+                            
+                    except (json.JSONDecodeError, KeyError, TypeError) as e:
+                        current_app.logger.warning(f"Could not decode SATReport data for report ID {report.id}: {e}")
+                
+                # Determine status from approvals
+                if report.approvals_json:
+                    try:
+                        approvals = json.loads(report.approvals_json)
+                        if approvals:
+                            statuses = [a.get("status", "pending") for a in approvals]
+                            if "rejected" in statuses:
+                                status = "Rejected"
+                            elif all(s == "approved" for s in statuses):
+                                status = "Approved"
+                            elif any(s == "approved" for s in statuses):
+                                status = "Partially Approved"
+                            else:
+                                status = "Pending Review"
+                        else:
+                            status = "Draft"
+                    except (json.JSONDecodeError, TypeError):
+                        status = "Pending Review"
+                else:
+                    status = "Draft"
+                
+                # Add report to list
+                reports_data.append({
+                    'id': report.id,
+                    'project_name': project_name,
+                    'client_name': client_name,
+                    'location': location,
+                    'created_by': report.user_email,
+                    'status': status,
+                    'created_date': report.created_at
+                })
+                
+                current_app.logger.debug(f"Processed report {report.id}: {project_name}")
+                
+            except Exception as report_error:
+                current_app.logger.error(f"Error processing report {report.id}: {report_error}", exc_info=True)
+                # Add basic report info even if processing fails
+                reports_data.append({
+                    'id': report.id,
+                    'project_name': report.document_title or f'Report {report.id}',
+                    'client_name': report.client_name or '',
+                    'location': report.project_reference or '',
+                    'created_by': report.user_email,
+                    'status': 'Error',
+                    'created_date': report.created_at
+                })
+        
+        current_app.logger.info(f"Admin reports: Successfully processed {len(reports_data)} reports for display")
+        
+        return render_template('admin_reports.html', 
+                             reports=reports_data,
+                             this_month_start=this_month_start)
+        
+    except Exception as e:
+        current_app.logger.error(f"Error in admin_reports function: {e}", exc_info=True)
+        
+        # Try to get basic report count for debugging
+        try:
+            report_count = Report.query.count()
+            current_app.logger.info(f"Database has {report_count} reports total")
+        except Exception as count_error:
+            current_app.logger.error(f"Cannot even count reports: {count_error}")
+            
+        # Still provide this_month_start even on error
+        now = datetime.now()
+        this_month_start = datetime(now.year, now.month, 1)
+        return render_template('admin_reports.html', 
+                             reports=[],
+                             this_month_start=this_month_start)
 
 @dashboard_bp.route('/create-report')
 @role_required(['Engineer'])
@@ -607,6 +727,131 @@ def api_admin_stats():
     except Exception as e:
         current_app.logger.error(f"Error fetching stats: {e}")
         return jsonify({'success': False, 'error': str(e)})
+
+@dashboard_bp.route('/debug/reports')
+@admin_required
+def debug_reports():
+    """Debug endpoint to check report data"""
+    try:
+        from models import Report, SATReport
+        
+        # Get basic report count
+        total_reports = Report.query.count()
+        
+        # Get all reports with basic info
+        reports = Report.query.all()
+        report_info = []
+        
+        for report in reports:
+            sat_report = SATReport.query.filter_by(report_id=report.id).first()
+            report_info.append({
+                'id': report.id,
+                'type': report.type,
+                'user_email': report.user_email,
+                'document_title': report.document_title,
+                'created_at': str(report.created_at),
+                'has_sat_data': sat_report is not None
+            })
+        
+        return jsonify({
+            'success': True,
+            'total_reports': total_reports,
+            'reports': report_info
+        })
+        
+    except Exception as e:
+        current_app.logger.error(f"Debug reports error: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+@dashboard_bp.route('/revoke-approval/<report_id>', methods=['POST'])
+@admin_required
+def revoke_approval(report_id):
+    """Revoke approval for a report"""
+    from models import Report, Notification
+    import json
+    
+    try:
+        report = Report.query.get(report_id)
+        if not report:
+            return jsonify({'success': False, 'message': 'Report not found'}), 404
+        
+        # Get the comment from request
+        data = request.get_json()
+        comment = data.get('comment', '').strip()
+        
+        if not comment:
+            return jsonify({'success': False, 'message': 'Comment is required for revocation'}), 400
+        
+        # Check if report has approval workflow before resetting
+        current_approvals = json.loads(report.approvals_json) if report.approvals_json else []
+        
+        if not current_approvals:
+            # If no approval workflow exists, just unlock the report
+            report.locked = False
+            report.status = 'DRAFT'
+        else:
+            # Reset approvals and unlock the report
+            report.approvals_json = json.dumps([])
+            report.locked = False
+            report.status = 'DRAFT'
+        
+        # Create notification for the report creator
+        try:
+            Notification.create_notification(
+                user_email=report.user_email,
+                title='Report Approval Revoked',
+                message=f'Your report "{report.document_title or "SAT Report"}" approval has been revoked by admin. Reason: {comment}',
+                notification_type='approval_revoked',
+                submission_id=report_id,
+                action_url=f'/status/{report_id}'
+            )
+        except Exception as notif_error:
+            current_app.logger.warning(f"Could not create notification: {notif_error}")
+        
+        db.session.commit()
+        
+        current_app.logger.info(f"Report {report_id} approval revoked by admin {current_user.email}. Reason: {comment}")
+        return jsonify({
+            'success': True, 
+            'message': 'Report unlocked and status reset successfully. You can now edit the report.'
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error revoking approval for report {report_id}: {e}")
+        return jsonify({'success': False, 'message': 'Failed to revoke approval'}), 500
+
+@dashboard_bp.route('/delete-report/<report_id>', methods=['POST'])
+@admin_required
+def delete_report(report_id):
+    """Delete a report permanently"""
+    from models import Report, SATReport
+    
+    try:
+        # Get the report
+        report = Report.query.get(report_id)
+        if not report:
+            return jsonify({'success': False, 'message': 'Report not found'}), 404
+        
+        # Delete associated SAT report data first
+        sat_report = SATReport.query.filter_by(report_id=report_id).first()
+        if sat_report:
+            db.session.delete(sat_report)
+        
+        # Delete the main report
+        db.session.delete(report)
+        db.session.commit()
+        
+        current_app.logger.info(f"Report {report_id} deleted by admin {current_user.email}")
+        return jsonify({'success': True, 'message': 'Report deleted successfully'})
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error deleting report {report_id}: {e}")
+        return jsonify({'success': False, 'message': 'Failed to delete report'}), 500
 
 @dashboard_bp.route('/my-reports')
 @role_required(['Engineer'])

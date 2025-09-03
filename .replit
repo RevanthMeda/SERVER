@@ -3,7 +3,7 @@ run = "python app.py"
 
 [nix]
 channel = "stable-25_05"
-packages = ["freetype", "lcms2", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "openjpeg", "sqlite-interactive", "tcl", "tk", "zlib"]
+packages = ["freetype", "lcms2", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "openjpeg", "sqlite-interactive", "tcl", "tk", "xcodebuild", "zlib"]
 
 [deployment]
 run = ["sh", "-c", "python app.py"]
@@ -15,6 +15,10 @@ runButton = "Run Flask App"
 name = "Run Flask App"
 author = 43227527
 mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -c \"import os; os.system('pkill -f python')\" 2>/dev/null || true"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"

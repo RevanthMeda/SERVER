@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,9 +36,9 @@
             padding: 24px;
         }
 
-        /* Header Section */
+        /* Header Section - Exact same as System Settings */
         .admin-header {
-            background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-dark) 100%);
+            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
             border-radius: 16px;
             padding: 32px;
             margin-bottom: 32px;
@@ -86,50 +87,72 @@
             filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0,0,0,0.2));
         }
 
-        /* Navigation */
-        .admin-nav {
+        /* Navigation - Exact same as System Settings */
+        .dashboard-nav {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 32px;
-            padding: 20px;
+            justify-content: center;
+            align-items: center;
             background: white;
+            padding: 12px 24px;
             border-radius: 16px;
             box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
-        .nav-item {
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-link {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 20px;
-            background: #f8fafc;
-            border: 2px solid transparent;
-            border-radius: 12px;
+            padding: 10px 18px;
+            border-radius: 10px;
             text-decoration: none;
             color: #64748b;
             font-weight: 600;
             transition: all 0.3s ease;
-            position: relative;
+            font-size: 14px;
+            white-space: nowrap;
         }
 
-        .nav-item:hover {
+        .nav-link:hover {
             background: #e2e8f0;
             color: var(--admin-primary);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(77, 208, 225, 0.25);
+            border-color: var(--admin-primary-light);
         }
 
-        .nav-item.active {
+        .nav-link.active {
             background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
             color: white;
             box-shadow: 0 4px 15px rgba(77, 208, 225, 0.4);
+            border-color: var(--admin-primary);
         }
 
-        .nav-item i {
+        .nav-link i {
             font-size: 16px;
             width: 20px;
             text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nav-link.logout {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+            border: 2px solid #fca5a5 !important;
+        }
+
+        .nav-link.logout:hover {
+            background: #fecaca !important;
+            color: #b91c1c !important;
+            border-color: #f87171 !important;
         }
 
         /* Flash Messages */
@@ -154,7 +177,7 @@
             font-size: 18px;
         }
 
-        /* Stats Grid */
+        /* Stats Grid - Same as System Settings */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -170,10 +193,11 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            border: 1px solid #e2e8f0;
         }
 
         .stat-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-2px);
             box-shadow: var(--card-shadow-hover);
         }
 
@@ -184,7 +208,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--admin-primary);
+            background: linear-gradient(90deg, var(--admin-primary), var(--admin-primary-light));
         }
 
         .stat-header {
@@ -195,15 +219,15 @@
         }
 
         .stat-icon {
-            width: 48px;
-            height: 48px;
+            width: 56px;
+            height: 56px;
             background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light));
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 20px;
+            font-size: 24px;
         }
 
         .stat-value {
@@ -220,6 +244,96 @@
             margin: 4px 0 0 0;
         }
 
+        /* Dashboard Widgets - Same as System Settings */
+        .widgets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .dashboard-widget {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-widget:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .widget-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .widget-content {
+            padding: 24px;
+        }
+
+        .widget-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .widget-action:hover {
+            background: linear-gradient(135deg, var(--admin-primary-dark), #00acc1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(77, 208, 225, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 32px 16px;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h4 {
+            color: #374151;
+            font-size: 18px;
+            margin: 0 0 8px 0;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* Status badges - Same as System Settings */
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -256,155 +370,35 @@
             50% { opacity: 0.5; }
         }
 
-        /* Dashboard Widgets */
-        .widgets-grid {
+        /* System Overview - Same styling as System Settings */
+        .system-overview {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
+            gap: 15px;
         }
 
-        .widget-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-        }
-
-        .widget-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow-hover);
-        }
-
-        .widget-header {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 20px 24px;
-            border-bottom: 1px solid #e2e8f0;
+        .info-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .widget-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .info-row:last-child {
+            border-bottom: none;
         }
 
-        .widget-action {
-            padding: 8px 16px;
-            background: var(--admin-primary);
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
+        .info-label {
+            color: #64748b;
             font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
         }
 
-        .widget-action:hover {
-            background: var(--admin-primary-dark);
-            transform: translateY(-1px);
-        }
-
-        .widget-content {
-            padding: 24px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 32px 16px;
-            color: #64748b;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            color: #cbd5e1;
-            margin-bottom: 16px;
-        }
-
-        .empty-state h4 {
-            color: #374151;
-            font-size: 18px;
-            margin: 0 0 8px 0;
-        }
-
-        .empty-state p {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        /* System Overview */
-        .system-overview {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: var(--card-shadow);
-        }
-
-        .section-title {
-            font-size: 24px;
-            font-weight: 700;
+        .info-value {
             color: #1f2937;
-            margin: 0 0 24px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .system-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .system-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            transition: all 0.2s ease;
-        }
-
-        .system-item:hover {
-            background: #f1f5f9;
-            border-color: var(--admin-primary);
-        }
-
-        .system-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-        }
-
-        .system-details h4 {
-            margin: 0 0 4px 0;
-            font-size: 16px;
             font-weight: 600;
-            color: #1f2937;
         }
 
-        .system-value {
-            margin: 0;
-            font-size: 14px;
-            color: #64748b;
-        }
-
-        /* Pending Approvals */
+        /* User management styles */
         .approval-item {
             display: flex;
             align-items: center;
@@ -469,190 +463,12 @@
             transform: translateY(-1px);
         }
 
-        /* Navigation badges */
-        .nav-badge {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-            min-width: 18px;
+        .developer-footer {
             text-align: center;
-        }
-
-        .nav-item.active .nav-badge {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .nav-badge-pending {
-            background: #fef3c7 !important;
-            color: #92400e !important;
-        }
-
-        .nav-badge-active {
-            background: #d1fae5 !important;
-            color: #065f46 !important;
-        }
-
-        .nav-badge-disabled {
-            background: #fee2e2 !important;
-            color: #991b1b !important;
-        }
-
-        /* Widget actions */
-        .widget-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .widget-action {
-            padding: 8px 12px;
-            background: var(--admin-primary);
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 12px;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-        }
-
-        .widget-action:hover {
-            background: var(--admin-primary-dark);
-            transform: translateY(-1px);
-        }
-
-        /* Search container */
-        .search-container {
-            position: relative;
-            max-width: 400px;
-        }
-
-        .search-box {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 12px;
-            color: #9ca3af;
-            z-index: 1;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 10px 12px 10px 36px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-            background: white;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--admin-primary);
-            box-shadow: 0 0 0 3px rgba(77, 208, 225, 0.1);
-        }
-
-        /* User table styles */
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0;
-        }
-
-        .users-table th {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            color: #374151;
-            padding: 16px 12px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
-            border-bottom: 2px solid #e5e7eb;
-        }
-
-        .users-table td {
-            padding: 16px 12px;
-            border-bottom: 1px solid #f1f5f9;
-            vertical-align: middle;
-        }
-
-        .users-table tr:hover {
-            background: #f8fafc;
-        }
-
-        .user-details {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .user-info {
-            min-width: 0;
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: #1f2937;
-            font-size: 14px;
-            margin-bottom: 2px;
-        }
-
-        .user-email {
-            color: #6b7280;
-            font-size: 13px;
-        }
-
-        .requested-role {
-            color: #f59e0b;
-            font-size: 12px;
-            font-style: italic;
-            margin-top: 2px;
-        }
-
-        .user-actions {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .role-select {
-            padding: 4px 8px;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            font-size: 12px;
-            background: white;
-            margin-right: 8px;
-        }
-
-        .date-text {
-            color: #6b7280;
-            font-size: 13px;
+            padding: 20px;
+            margin-top: auto;
+            background-color: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
         }
 
         /* Mobile Responsiveness */
@@ -672,13 +488,15 @@
                 justify-content: center;
             }
 
-            .admin-nav {
-                flex-direction: column;
-                gap: 8px;
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 4px;
             }
 
-            .nav-item {
-                justify-content: center;
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 12px;
             }
 
             .stats-grid {
@@ -688,28 +506,10 @@
             .widgets-grid {
                 grid-template-columns: 1fr;
             }
-
-            .system-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .widget-actions {
-                flex-wrap: wrap;
-                gap: 4px;
-            }
-
-            .widget-action {
-                font-size: 11px;
-                padding: 6px 8px;
-            }
-
-            .search-container {
-                max-width: 100%;
-            }
         }
     </style>
 </head>
-<body>
+<body class="dashboard-layout">
     <div class="admin-container">
         <!-- Header -->
         <div class="admin-header">
@@ -722,221 +522,210 @@
             </div>
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash-message">
-                            <i class="fa fa-check-circle"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+        <div class="dashboard-content">
+            <!-- Unified Navigation -->
+            <div class="dashboard-nav">
+                <div class="nav-links">
+                    <a href="{{ url_for('dashboard.admin') }}" class="nav-link {% if request.endpoint == 'dashboard.admin' %}active{% endif %}">
+                        <i class="fa fa-home"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('dashboard.user_management') }}" class="nav-link {% if request.endpoint == 'dashboard.user_management' %}active{% endif %}">
+                        <i class="fa fa-users"></i> User Management
+                        {% if pending_users > 0 %}
+                        <span class="nav-badge">{{ pending_users }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{{ url_for('dashboard.admin_reports') }}" class="nav-link {% if request.endpoint == 'dashboard.admin_reports' %}active{% endif %}">
+                        <i class="fa fa-file-alt"></i> All Reports
+                        {% if total_reports > 0 %}
+                        <span class="nav-badge">{{ total_reports }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{{ url_for('dashboard.system_settings') }}" class="nav-link {% if request.endpoint == 'dashboard.system_settings' %}active{% endif %}">
+                        <i class="fa fa-cog"></i> System Settings
+                    </a>
+                    <a href="{{ url_for('main.sat_form') }}" class="nav-link {% if request.endpoint == 'main.sat_form' %}active{% endif %}">
+                        <i class="fa fa-plus"></i> Create Report
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-link logout">
+                        <i class="fa fa-sign-out-alt"></i> Logout
+                    </a>
                 </div>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Navigation -->
-        <div class="admin-nav">
-            <a href="{{ url_for('dashboard.admin') }}" class="nav-item active">
-                <i class="fa fa-tachometer-alt"></i>
-                Dashboard
-            </a>
-            <a href="{{ url_for('dashboard.user_management') }}" class="nav-item">
-                <i class="fa fa-users"></i>
-                User Management
-            </a>
-            <a href="{{ url_for('dashboard.admin_reports') }}" class="nav-item">
-                <i class="fa fa-chart-bar"></i>
-                All Reports
-            </a>
-            <a href="{{ url_for('dashboard.system_settings') }}" class="nav-item">
-                <i class="fa fa-cogs"></i>
-                System Settings
-            </a>
-            <a href="{{ url_for('reports.new') }}" class="nav-item">
-                <i class="fa fa-plus"></i>
-                Create Report
-            </a>
-            <a href="{{ url_for('auth.logout') }}" class="nav-item" style="margin-left: auto;">
-                <i class="fa fa-sign-out-alt"></i>
-                Logout
-            </a>
-        </div>
-
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-users"></i>
-                    </div>
-                </div>
-                <div class="stat-value" id="total-users-count">{{ total_users }}</div>
-                <p class="stat-label">Total Users</p>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-clock"></i>
-                    </div>
-                </div>
-                <div class="stat-value" id="pending-users-count">{{ pending_users }}</div>
-                <p class="stat-label">Pending Approval</p>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-file-alt"></i>
-                    </div>
-                </div>
-                <div class="stat-value" id="total-reports-count">{{ total_reports }}</div>
-                <p class="stat-label">Total Reports</p>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-database"></i>
-                    </div>
-                </div>
-                <div class="stat-value">
-                    <span class="status-badge {{ 'status-connected' if db_status else 'status-disconnected' }}" id="db-status-badge">
-                        <div class="status-indicator" style="background: {{ '#059669' if db_status else '#dc2626' }};"></div>
-                        {{ 'Connected' if db_status else 'Disconnected' }}
-                    </span>
-                </div>
-                <p class="stat-label">Database Status</p>
-            </div>
-        </div>
-
-        <!-- Dashboard Widgets -->
-        <div class="widgets-grid">
-            <div class="widget-card">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-exclamation-triangle"></i>
-                        Pending Approvals
-                    </h3>
-                    <a href="{{ url_for('dashboard.user_management') }}" class="widget-action">Manage All</a>
-                </div>
-                <div class="widget-content" id="pending-approvals-content">
-                    {% if pending_users_list %}
-                        {% for user in pending_users_list %}
-                            <div class="approval-item">
-                                <div class="user-info">
-                                    <div class="user-avatar">
-                                        {{ user.full_name[0] if user.full_name else 'U' }}
-                                    </div>
-                                    <div class="user-details">
-                                        <h5>{{ user.full_name }}</h5>
-                                        <span>{{ user.requested_role or 'No role specified' }}</span>
-                                    </div>
-                                </div>
-                                <button type="button" class="approve-btn" onclick="approveUser({{ user.id }})">
-                                    <i class="fa fa-check"></i> Approve
-                                </button>
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message">
+                                <i class="fa fa-check-circle"></i>
+                                {{ message }}
                             </div>
                         {% endfor %}
-                    {% else %}
-                        <div class="empty-state">
-                            <i class="fa fa-check-circle"></i>
-                            <h4>All caught up!</h4>
-                            <p>No pending user approvals at this time</p>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Main Content Area -->
+            <div class="dashboard-main">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fa fa-users"></i>
+                            </div>
                         </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="widget-card">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-clock"></i>
-                        Recent Activity
-                    </h3>
-                    <a href="{{ url_for('dashboard.user_management') }}" class="widget-action">View All</a>
-                </div>
-                <div class="widget-content">
-                    <div class="empty-state">
-                        <i class="fa fa-history"></i>
-                        <h4>No recent activity</h4>
-                        <p>User activities and system events will appear here</p>
+                        <div class="stat-value">{{ total_users }}</div>
+                        <p class="stat-label">Total Users</p>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- System Overview -->
-        <div class="system-overview">
-            <h2 class="section-title">
-                <i class="fa fa-cogs"></i>
-                System Overview
-            </h2>
-            <div class="system-grid">
-                <div class="system-item">
-                    <div class="system-icon">
-                        <i class="fa fa-database"></i>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fa fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{ pending_users }}</div>
+                        <p class="stat-label">Pending Approval</p>
                     </div>
-                    <div class="system-details">
-                        <h4>Database Connection</h4>
-                        <div class="system-value">
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fa fa-file-alt"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{ total_reports }}</div>
+                        <p class="stat-label">Total Reports</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fa fa-database"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">
                             <span class="status-badge {{ 'status-connected' if db_status else 'status-disconnected' }}">
                                 <div class="status-indicator" style="background: {{ '#059669' if db_status else '#dc2626' }};"></div>
-                                {{ 'Operational' if db_status else 'Connection Failed' }}
+                                {{ 'Connected' if db_status else 'Disconnected' }}
                             </span>
+                        </div>
+                        <p class="stat-label">Database Status</p>
+                    </div>
+                </div>
+
+                <!-- Dashboard Widgets -->
+                <div class="widgets-grid">
+                    <div class="dashboard-widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                Pending Approvals
+                            </h3>
+                            <a href="{{ url_for('dashboard.user_management') }}" class="widget-action">Manage All</a>
+                        </div>
+                        <div class="widget-content">
+                            {% if pending_users_list %}
+                                {% for user in pending_users_list %}
+                                    <div class="approval-item">
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                {{ user.full_name[0] if user.full_name else 'U' }}
+                                            </div>
+                                            <div class="user-details">
+                                                <h5>{{ user.full_name }}</h5>
+                                                <span>{{ user.requested_role or 'No role specified' }}</span>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="approve-btn" onclick="approveUser({{ user.id }})">
+                                            <i class="fa fa-check"></i> Approve
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-state">
+                                    <i class="fa fa-check-circle"></i>
+                                    <h4>All caught up!</h4>
+                                    <p>No pending user approvals at this time</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="dashboard-widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-clock"></i>
+                                Recent Activity
+                            </h3>
+                            <a href="{{ url_for('dashboard.user_management') }}" class="widget-action">View All</a>
+                        </div>
+                        <div class="widget-content">
+                            <div class="empty-state">
+                                <i class="fa fa-history"></i>
+                                <h4>No recent activity</h4>
+                                <p>User activities and system events will appear here</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="system-item">
-                    <div class="system-icon">
-                        <i class="fa fa-folder"></i>
+                <!-- System Overview -->
+                <div class="dashboard-widget">
+                    <div class="widget-header">
+                        <h3 class="widget-title">
+                            <i class="fa fa-cogs"></i>
+                            System Overview
+                        </h3>
                     </div>
-                    <div class="system-details">
-                        <h4>Storage Location</h4>
-                        <div class="system-value">{{ storage_location or 'Not configured' }}</div>
-                    </div>
-                </div>
-
-                <div class="system-item">
-                    <div class="system-icon">
-                        <i class="fa fa-image"></i>
-                    </div>
-                    <div class="system-details">
-                        <h4>Company Branding</h4>
-                        <div class="system-value">
-                            <span class="status-badge status-connected">
-                                <div class="status-indicator" style="background: #059669;"></div>
-                                Configured
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="system-item">
-                    <div class="system-icon">
-                        <i class="fa fa-shield-alt"></i>
-                    </div>
-                    <div class="system-details">
-                        <h4>Security Status</h4>
-                        <div class="system-value">
-                            <span class="status-badge status-connected">
-                                <div class="status-indicator" style="background: #059669;"></div>
-                                Protected
-                            </span>
+                    <div class="widget-content">
+                        <div class="system-overview">
+                            <div class="info-row">
+                                <span class="info-label">Database Connection:</span>
+                                <span class="info-value">
+                                    <span class="status-badge {{ 'status-connected' if db_status else 'status-disconnected' }}">
+                                        <div class="status-indicator" style="background: {{ '#059669' if db_status else '#dc2626' }};"></div>
+                                        {{ 'Operational' if db_status else 'Connection Failed' }}
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Storage Location:</span>
+                                <span class="info-value">{{ storage_location or 'Not configured' }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Company Branding:</span>
+                                <span class="info-value">
+                                    <span class="status-badge status-connected">
+                                        <div class="status-indicator" style="background: #059669;"></div>
+                                        Configured
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Security Status:</span>
+                                <span class="info-value">
+                                    <span class="status-badge status-connected">
+                                        <div class="status-indicator" style="background: #059669;"></div>
+                                        Protected
+                                    </span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Developer Credit Footer -->
-    <div style="text-align: center; padding: 20px; margin-top: 40px; background: rgba(77, 208, 225, 0.05); border-top: 1px solid rgba(77, 208, 225, 0.1); border-radius: 12px;">
-        <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
-            Developed by <strong style="color: var(--admin-primary);">Revanth Meda</strong> for Cully Automation
-        </p>
+        <!-- Developer Credit Footer -->
+        <div class="developer-footer">
+            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
+                Developed by <strong style="color: var(--admin-primary);">Revanth Meda</strong> for Cully Automation
+            </p>
+        </div>
     </div>
 
     <script>
@@ -948,28 +737,9 @@
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 const data = await response.json();
-
-                const statusElement = document.getElementById('db-status');
-                const statusDot = document.getElementById('db-status-dot');
-
-                if (data.status === 'connected') {
-                    statusElement.textContent = 'Connected';
-                    statusElement.className = 'status-badge connected';
-                    statusDot.className = 'status-dot connected';
-                } else {
-                    statusElement.textContent = 'Disconnected';
-                    statusElement.className = 'status-badge disconnected';
-                    statusDot.className = 'status-dot disconnected';
-                }
+                console.log('Database status:', data.connected ? 'Connected' : 'Disconnected');
             } catch (error) {
                 console.error('Database status check failed:', error);
-                const statusElement = document.getElementById('db-status');
-                const statusDot = document.getElementById('db-status-dot');
-                if (statusElement && statusDot) {
-                    statusElement.textContent = 'Error';
-                    statusElement.className = 'status-badge disconnected';
-                    statusDot.className = 'status-dot disconnected';
-                }
             }
         }
 
@@ -994,7 +764,6 @@
                 });
 
                 if (response.ok) {
-                    // Show success and reload page
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);

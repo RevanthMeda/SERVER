@@ -669,27 +669,31 @@ def process_table_rows(form_data, field_mappings):
 
     return rows
 
-def handle_image_removals(form_data, field_name, url_list):
-    """Remove any flagged images from the filesystem and URL list"""
-    if not form_data.get(field_name):
-        return
+def handle_image_removals(form_data, removal_field_name, url_list):
+    """Handle removal of images marked for deletion"""
+    try:
+        # Get list of images to remove from form data
+        removed_images = form_data.getlist(removal_field_name)
 
-    for url in filter(None, form_data.get(field_name, "").split(",")):
-        try:
-            # Parse the URL to get the file path
-            rel_path = url.replace(url_for('main.index', _external=True).rstrip("/"), "")
-            fs_path = os.path.join(current_app.root_path, rel_path.lstrip("/"))
+        for image_url in removed_images:
+            if image_url and image_url in url_list:
+                # Remove from URL list
+                url_list.remove(image_url)
 
-            # Remove the file if it exists
-            if os.path.exists(fs_path):
-                os.remove(fs_path)
-                logger.info(f"Removed file: {fs_path}")
+                # Extract filename from URL and remove physical file
+                try:
+                    # Parse URL to get relative path
+                    if '/static/' in image_url:
+                        relative_path = image_url.split('/static/')[-1]
+                        file_path = os.path.join(current_app.static_folder, relative_path)
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+                            current_app.logger.info(f"Removed image file: {file_path}")
+                except Exception as file_error:
+                    current_app.logger.warning(f"Could not remove physical file for {image_url}: {file_error}")
 
-            # Remove the URL from the list
-            if url in url_list:
-                url_list.remove(url)
-        except Exception as e:
-            logger.error(f"Error removing file {url}: {e}")
+    except Exception as e:
+        current_app.logger.error(f"Error handling image removals: {e}")
 
 def setup_approval_workflow(submission_id, submissions, approver_emails=None):
     """Setup or retrieve the approval workflow for a submission"""
@@ -1298,18 +1302,67 @@ def setup_approval_workflow(submission_data):
     """Setup approval workflow (placeholder)"""
     return {"status": "pending", "approvers": []}
 
-def process_table_rows(table_data):
-    """Process table rows (placeholder)"""
-    return table_data
+def process_table_rows(form_data, field_mappings):
+    """Process multiple rows of table data from form fields.
 
-def handle_image_removals(removed_images):
-    """Handle image removals (placeholder)"""
-    for image in removed_images:
-        try:
-            if os.path.exists(image):
-                os.remove(image)
-        except Exception as e:
-            print(f"Error removing image {image}: {e}")
+    Args:
+        form_data: The form data from request.form
+        field_mappings: A dictionary mapping form field names to output field names
+
+    Returns:
+        A list of dictionaries, each representing a row of data
+    """
+    # Get the first field name to determine number of rows
+    if not field_mappings:
+        return []
+    first_field = list(field_mappings.keys())[0]
+    values = form_data.getlist(first_field)
+    num_rows = len(values)
+
+    rows = []
+    for i in range(num_rows):
+        row = {}
+        for form_field, output_field in field_mappings.items():
+            field_values = form_data.getlist(form_field)
+            row[output_field] = field_values[i].strip() if i < len(field_values) else ""
+
+        # Only include rows where at least one field has a value
+        if any(value for value in row.values()):
+            rows.append(row)
+
+    # If no rows, add a blank row as placeholder
+    if not rows and field_mappings:
+        row = {output_field: "" for output_field in field_mappings.values()}
+        rows.append(row)
+
+    return rows
+
+
+def handle_image_removals(form_data, removal_field_name, url_list):
+    """Handle removal of images marked for deletion"""
+    try:
+        # Get list of images to remove from form data
+        removed_images = form_data.getlist(removal_field_name)
+
+        for image_url in removed_images:
+            if image_url and image_url in url_list:
+                # Remove from URL list
+                url_list.remove(image_url)
+
+                # Extract filename from URL and remove physical file
+                try:
+                    # Parse URL to get relative path
+                    if '/static/' in image_url:
+                        relative_path = image_url.split('/static/')[-1]
+                        file_path = os.path.join(current_app.static_folder, relative_path)
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+                            current_app.logger.info(f"Removed image file: {file_path}")
+                except Exception as file_error:
+                    current_app.logger.warning(f"Could not remove physical file for {image_url}: {file_error}")
+
+    except Exception as e:
+        current_app.logger.error(f"Error handling image removals: {e}")
 
 def allowed_file(filename):
     """Check if file extension is allowed"""
@@ -1341,7 +1394,7 @@ def get_unread_count():
         if current_user.is_authenticated:
             from models import Notification
             count = Notification.query.filter_by(
-                user_email=current_user.email, 
+                user_email=current_user.email,
                 read=False
             ).count()
             return count

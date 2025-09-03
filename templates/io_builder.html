@@ -1,15 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>I/O Builder - Cully Report Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            /* Use exact same color variables as main Dashboard */
             --admin-primary: #4DD0E1;
             --admin-primary-dark: #26C6DA;
             --admin-primary-light: #80DEEA;
@@ -36,7 +36,7 @@
             padding: 24px;
         }
 
-        /* Header Section - Exact same as main Dashboard */
+        /* Header Section */
         .dashboard-header {
             background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-dark) 100%);
             border-radius: 16px;
@@ -45,17 +45,6 @@
             box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
-        }
-
-        .dashboard-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 200px;
-            height: 200px;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/></svg>');
-            opacity: 0.3;
         }
 
         .header-content {
@@ -87,29 +76,7 @@
             filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0,0,0,0.2));
         }
 
-        /* Flash Messages */
-        .flash-messages {
-            margin-bottom: 24px;
-        }
-
-        .flash-message {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 20px;
-            background: #d1fae5;
-            border: 1px solid #059669;
-            border-radius: 12px;
-            color: #065f46;
-            font-weight: 500;
-            box-shadow: var(--card-shadow);
-        }
-
-        .flash-message i {
-            font-size: 18px;
-        }
-
-        /* Horizontal Navigation - Exact same as main Dashboard */
+        /* Navigation */
         .dashboard-nav {
             display: flex;
             justify-content: space-between;
@@ -172,13 +139,7 @@
             border-color: #1d4ed8;
         }
 
-        .nav-link i {
-            font-size: 16px;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* User Info Section */
+        /* User Info */
         .user-info {
             display: flex;
             align-items: center;
@@ -216,7 +177,7 @@
             margin: 0;
         }
 
-        /* Widget Cards - Exact same as main Dashboard */
+        /* Widget Cards */
         .widgets-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -260,189 +221,53 @@
             padding: 24px;
         }
 
-        /* Action Grid */
-        .action-grid {
+        /* Form Styling */
+        .form-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
         }
 
-        .action-item {
+        .form-section {
             background: #f8fafc;
             border-radius: 12px;
             padding: 20px;
             border: 1px solid #e2e8f0;
-            transition: all 0.2s ease;
         }
 
-        .action-item:hover:not(.disabled) {
-            background: #f1f5f9;
-            border-color: var(--admin-primary);
-            transform: translateY(-2px);
-        }
-
-        .action-item.featured {
-            background: linear-gradient(135deg, var(--admin-primary-light) 0%, #e0f7fa 100%);
-            border-color: var(--admin-primary);
-        }
-
-        .action-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .action-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            background: var(--admin-primary);
-            color: white;
-        }
-
-        .action-title {
+        .form-section h4 {
+            color: var(--admin-primary);
+            margin: 0 0 16px 0;
             font-size: 16px;
             font-weight: 600;
-            color: #1f2937;
-            margin: 0;
         }
 
-        .action-description {
-            color: #64748b;
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-
-        .action-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            background: var(--admin-primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .action-button:hover:not(:disabled) {
-            background: var(--admin-primary-dark);
-            transform: translateY(-1px);
-            color: white;
-        }
-
-        .action-button.secondary {
-            background: #f1f5f9;
-            color: #64748b;
-        }
-
-        .action-button.secondary:hover {
-            background: #e2e8f0;
-            color: #1f2937;
-        }
-
-        /* Form Styling */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .spec-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
-
-        .spec-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .spec-item label {
-            font-weight: 600;
-            color: #374151;
-            font-size: 14px;
-        }
-
-        .spec-item span {
-            padding: 8px 12px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 14px;
-        }
-
-        .source-indicator {
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        .source-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .source-database {
-            background: #d1fae5;
-            color: #065f46;
-            border: 1px solid #059669;
-        }
-
-        .source-web {
-            background: #dbeafe;
-            color: #1e40af;
-            border: 1px solid #3b82f6;
-        }
-
-        .source-manual {
-            background: #fef3c7;
-            color: #92400e;
-            border: 1px solid #f59e0b;
-        }
-
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 8px;
         }
 
         .form-group label {
             font-weight: 600;
             color: #1f2937;
+            font-size: 14px;
         }
 
         .form-group input, .form-group select {
-            padding: 0.75rem;
+            padding: 12px;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             font-size: 14px;
             transition: all 0.2s ease;
+            background: white;
         }
 
         .form-group input:focus, .form-group select:focus {
@@ -453,107 +278,301 @@
 
         .full-width {
             grid-column: 1 / -1;
-            display: flex;
-            gap: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--admin-primary);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--admin-primary-dark);
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+            color: #1f2937;
+        }
+
+        .btn-success {
+            background: var(--admin-success);
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: #059669;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Module Configuration */
+        .module-spec-display {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid var(--admin-primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .module-spec-display h5 {
+            color: var(--admin-primary);
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            font-weight: 600;
         }
 
         .spec-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
         }
 
         .spec-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
         }
 
         .spec-item label {
+            display: block;
             font-weight: 600;
-            color: #1f2937;
-        }
-
-        .spec-item input {
-            padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        /* Tables */
-        .table-responsive {
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-            font-size: 14px;
-        }
-
-        .users-table th {
-            background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-dark) 100%);
-            color: white;
-            padding: 16px 20px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
-            border-bottom: 3px solid var(--admin-primary-light);
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .users-table td {
+        .spec-item .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--admin-primary);
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .status-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #3b82f6;
+        }
+
+        /* Module List */
+        .modules-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .modules-list-header {
+            background: var(--admin-primary);
+            color: white;
+            padding: 16px 20px;
+            font-weight: 600;
+        }
+
+        .module-item {
             padding: 16px 20px;
             border-bottom: 1px solid #f1f5f9;
-            vertical-align: middle;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .users-table tr:hover {
-            background: linear-gradient(90deg, rgba(77, 208, 225, 0.05), rgba(77, 208, 225, 0.08));
+        .module-item:last-child {
+            border-bottom: none;
         }
 
-        .users-table tr:nth-child(even) {
-            background: rgba(248, 250, 252, 0.5);
+        .module-item:hover {
+            background: #f8fafc;
         }
 
-        .users-table tr:nth-child(even):hover {
-            background: linear-gradient(90deg, rgba(77, 208, 225, 0.05), rgba(77, 208, 225, 0.08));
+        .module-info {
+            flex: 1;
+        }
+
+        .module-name {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .module-details {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .module-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .module-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: var(--card-shadow);
+        }
+
+        .table-header {
+            background: var(--admin-primary);
+            color: white;
+            padding: 16px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .io-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .io-table th {
+            background: #f8fafc;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .io-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        .io-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .signal-tag {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: var(--admin-primary);
+        }
+
+        /* Loading States */
+        .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
         }
 
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            .dashboard-container {
-                padding: 16px;
+            .form-container {
+                grid-template-columns: 1fr;
             }
 
-            .header-content {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
+            .form-grid {
+                grid-template-columns: 1fr;
             }
 
-            .header-info h1 {
-                font-size: 2rem;
-                justify-content: center;
+            .spec-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .dashboard-nav {
                 flex-direction: column;
                 gap: 16px;
-                align-items: stretch;
             }
 
             .nav-links {
                 flex-wrap: wrap;
                 justify-content: center;
-            }
-
-            .action-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -564,27 +583,14 @@
         <div class="dashboard-header">
             <div class="header-content">
                 <div class="header-info">
-                    <h1><i class="fas fa-sitemap"></i> I/O Builder</h1>
-                    <p>Generate I/O tables and module configurations for industrial automation systems</p>
+                    <h1><i class="fas fa-sitemap"></i> I/O Configuration Builder</h1>
+                    <p>Advanced I/O module configuration with online specifications and automatic testing table generation</p>
                 </div>
                 <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
             </div>
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash-message">
-                            <i class="fa fa-check-circle"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Horizontal Navigation -->
+        <!-- Navigation -->
         <div class="dashboard-nav">
             <div class="nav-links">
                 <a href="{{ url_for('dashboard.engineer') }}" class="nav-link">
@@ -628,388 +634,719 @@
             </div>
         </div>
 
-        <!-- I/O Configuration Tools -->
+        <!-- Main I/O Builder Interface -->
         <div class="widgets-grid">
             <div class="widget-card">
                 <div class="widget-header">
                     <h3 class="widget-title">
-                        <i class="fa fa-cogs"></i>
-                        I/O Configuration Tools
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <div class="action-grid">
-                        <div class="action-item featured">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-microchip"></i>
-                                </div>
-                                <h4 class="action-title">Module Configuration</h4>
-                            </div>
-                            <p class="action-description">Configure industrial I/O modules and generate signal tables</p>
-                            <button class="action-button" onclick="showModuleBuilder()">
-                                <i class="fa fa-plus"></i> Start Configuration
-                            </button>
-                        </div>
-
-                        <div class="action-item">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-network-wired"></i>
-                                </div>
-                                <h4 class="action-title">Modbus Configuration</h4>
-                            </div>
-                            <p class="action-description">Set up Modbus registers and communication parameters</p>
-                            <button class="action-button secondary" onclick="showModbusBuilder()">
-                                <i class="fa fa-plus"></i> Configure Modbus
-                            </button>
-                        </div>
-
-                        <div class="action-item">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-table"></i>
-                                </div>
-                                <h4 class="action-title">Generate I/O Tables</h4>
-                            </div>
-                            <p class="action-description">Create comprehensive I/O documentation and test tables</p>
-                            <button class="action-button secondary" onclick="generateTables()">
-                                <i class="fa fa-file-export"></i> Generate Tables
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Module Builder Section (Hidden by default) -->
-        <div id="moduleBuilder" class="widgets-grid" style="display: none;">
-            <div class="widget-card">
-                <div class="widget-header">
-                    <h3 class="widget-title">
                         <i class="fa fa-microchip"></i>
-                        Module Configuration
+                        I/O Module Configuration
                     </h3>
                 </div>
                 <div class="widget-content">
-                    <form id="moduleForm" class="form-grid">
-                        <div class="form-group">
-                            <label for="company">Vendor:</label>
-                            <select id="company" name="company" required>
-                                <option value="">Select Vendor</option>
-                                <option value="ABB">ABB</option>
-                                <option value="SIEMENS">Siemens</option>
-                                <option value="SCHNEIDER">Schneider Electric</option>
-                                <option value="ROCKWELL">Rockwell Automation</option>
-                                <option value="OMRON">Omron</option>
-                            </select>
+                    <!-- Module Configuration Form -->
+                    <div class="form-container">
+                        <!-- Module Selection -->
+                        <div class="form-section">
+                            <h4><i class="fa fa-search"></i> Module Selection</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="vendor">Vendor:</label>
+                                    <select id="vendor" name="vendor" required>
+                                        <option value="">Select Vendor</option>
+                                        <option value="ABB">ABB</option>
+                                        <option value="SIEMENS">Siemens</option>
+                                        <option value="SCHNEIDER">Schneider Electric</option>
+                                        <option value="ROCKWELL">Rockwell Automation</option>
+                                        <option value="OMRON">Omron</option>
+                                        <option value="MITSUBISHI">Mitsubishi</option>
+                                        <option value="BECKHOFF">Beckhoff</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="model">Model Number:</label>
+                                    <input type="text" id="model" name="model" placeholder="e.g., DA501, DI810, SM1231" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <button type="button" id="lookupBtn" class="btn btn-primary" onclick="lookupModuleSpecs()">
+                                        <i class="fa fa-search"></i> Search for Module Specifications
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="model">Model:</label>
-                            <input type="text" id="model" name="model" placeholder="e.g., DI810, SM1221" required>
+                        <!-- System Configuration -->
+                        <div class="form-section">
+                            <h4><i class="fa fa-cogs"></i> System Configuration</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="rack_no">Rack Number:</label>
+                                    <input type="number" id="rack_no" name="rack_no" value="1" min="0" max="99" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="slot_no">Slot/Position:</label>
+                                    <input type="number" id="slot_no" name="slot_no" value="1" min="1" max="32" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="start_address">Start Address:</label>
+                                    <input type="number" id="start_address" name="start_address" value="0" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description_prefix">Description Prefix:</label>
+                                    <input type="text" id="description_prefix" name="description_prefix" placeholder="e.g., PUMP_01, VALVE_" maxlength="20">
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="rack_no">Rack Number:</label>
-                            <input type="number" id="rack_no" name="rack_no" value="1" min="0" required>
+                    <!-- Status Messages -->
+                    <div id="statusMessages"></div>
+
+                    <!-- Module Specifications Display -->
+                    <div id="moduleSpecDisplay" class="module-spec-display hidden">
+                        <h5><i class="fa fa-info-circle"></i> Module Specifications Found</h5>
+                        <div class="spec-grid">
+                            <div class="spec-item">
+                                <label>Digital Inputs</label>
+                                <div class="value" id="specDI">0</div>
+                            </div>
+                            <div class="spec-item">
+                                <label>Digital Outputs</label>
+                                <div class="value" id="specDO">0</div>
+                            </div>
+                            <div class="spec-item">
+                                <label>Analog Inputs</label>
+                                <div class="value" id="specAI">0</div>
+                            </div>
+                            <div class="spec-item">
+                                <label>Analog Outputs</label>
+                                <div class="value" id="specAO">0</div>
+                            </div>
+                            <div class="spec-item">
+                                <label>Total Channels</label>
+                                <div class="value" id="specTotal">0</div>
+                            </div>
+                            <div class="spec-item">
+                                <label>Signal Type</label>
+                                <div class="value" id="specType">Mixed</div>
+                            </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="module_position">Module Position:</label>
-                            <input type="number" id="module_position" name="module_position" value="1" min="1" required>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <button type="button" class="action-button" onclick="lookupModule()">
-                                <i class="fa fa-search"></i> Lookup Module Specs
+                        <div style="margin-top: 16px; text-align: center;">
+                            <button type="button" class="btn btn-success" onclick="addModuleToConfiguration()">
+                                <i class="fa fa-plus"></i> Add to Configuration
                             </button>
-                            <button type="button" class="action-button secondary" onclick="addModule()">
-                                <i class="fa fa-plus"></i> Add Module
+                            <button type="button" class="btn btn-secondary" onclick="editModuleSpecs()">
+                                <i class="fa fa-edit"></i> Edit Specifications
                             </button>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    </div>
 
-        <!-- Module Specifications -->
-        <div id="moduleSpecs" class="widgets-grid" style="display: none;">
-            <div class="widget-card">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-cog"></i>
-                        Module Specifications
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <div class="spec-grid">
-                        <div class="spec-item">
-                            <label>Digital Inputs:</label>
-                            <span id="digital_inputs">0</span>
+                    <!-- Manual Specification Editor -->
+                    <div id="manualSpecEditor" class="module-spec-display hidden">
+                        <h5><i class="fa fa-edit"></i> Manual Specification Entry</h5>
+                        <div class="spec-grid">
+                            <div class="form-group">
+                                <label>Digital Inputs:</label>
+                                <input type="number" id="manualDI" value="0" min="0" max="999">
+                            </div>
+                            <div class="form-group">
+                                <label>Digital Outputs:</label>
+                                <input type="number" id="manualDO" value="0" min="0" max="999">
+                            </div>
+                            <div class="form-group">
+                                <label>Analog Inputs:</label>
+                                <input type="number" id="manualAI" value="0" min="0" max="999">
+                            </div>
+                            <div class="form-group">
+                                <label>Analog Outputs:</label>
+                                <input type="number" id="manualAO" value="0" min="0" max="999">
+                            </div>
+                            <div class="form-group">
+                                <label>Voltage Range:</label>
+                                <input type="text" id="manualVoltage" value="24 VDC" placeholder="e.g., 24 VDC, 0-10V">
+                            </div>
+                            <div class="form-group">
+                                <label>Current Range:</label>
+                                <input type="text" id="manualCurrent" value="4-20mA" placeholder="e.g., 4-20mA, 0-20mA">
+                            </div>
                         </div>
-                        <div class="spec-item">
-                            <label>Digital Outputs:</label>
-                            <span id="digital_outputs">0</span>
-                        </div>
-                        <div class="spec-item">
-                            <label>Analog Inputs:</label>
-                            <span id="analog_inputs">0</span>
-                        </div>
-                        <div class="spec-item">
-                            <label>Analog Outputs:</label>
-                            <span id="analog_outputs">0</span>
+                        <div style="margin-top: 16px; text-align: center;">
+                            <button type="button" class="btn btn-success" onclick="applyManualSpecs()">
+                                <i class="fa fa-check"></i> Apply Specifications
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelManualEdit()">
+                                <i class="fa fa-times"></i> Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Results Section -->
-        <div id="resultsSection" class="widgets-grid" style="display: none;">
+        <!-- Configured Modules List -->
+        <div id="modulesList" class="widgets-grid hidden">
+            <div class="widget-card">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <i class="fa fa-list"></i>
+                        Configured Modules
+                    </h3>
+                </div>
+                <div class="widget-content">
+                    <div id="modulesContainer" class="modules-list">
+                        <div class="modules-list-header">
+                            Configured I/O Modules
+                        </div>
+                        <div id="modulesListContent">
+                            <!-- Module items will be added here -->
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button type="button" class="btn btn-primary" onclick="generateIOTables()">
+                            <i class="fa fa-table"></i> Generate I/O Testing Tables
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="clearAllModules()">
+                            <i class="fa fa-trash"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated I/O Tables -->
+        <div id="ioTablesSection" class="widgets-grid hidden">
             <div class="widget-card">
                 <div class="widget-header">
                     <h3 class="widget-title">
                         <i class="fa fa-table"></i>
-                        Generated I/O Tables
+                        Generated I/O Testing Tables
                     </h3>
                 </div>
-                <div id="ioTables" class="widget-content">
-                    <!-- Generated tables will appear here -->
+                <div class="widget-content">
+                    <div id="ioTablesContent">
+                        <!-- Generated tables will appear here -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let modules = [];
+        // Global variables
+        let configuredModules = [];
+        let currentModuleSpec = null;
 
-        function showModuleBuilder() {
-            document.getElementById('moduleBuilder').style.display = 'block';
-            document.getElementById('moduleSpecs').style.display = 'none'; // Hide specs when opening builder
-        }
-
-        function showModbusBuilder() {
-            alert('Modbus configuration feature coming soon!');
-        }
-
-        function lookupModule() {
-            const company = document.getElementById('company').value;
-            const model = document.getElementById('model').value;
-
-            if (!company || !model) {
-                alert('Please select vendor and enter model number');
-                return;
-            }
-
-            // Show loading state
-            const btn = event.target;
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Looking up...';
-            btn.disabled = true;
-
-            fetch('/io-builder/api/module-lookup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('meta[name=csrf-token]')?.getAttribute('content') || ''
-                },
-                body: JSON.stringify({ company, model })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const module = data.module;
-                    document.getElementById('digital_inputs').innerText = module.digital_inputs || 0;
-                    document.getElementById('digital_outputs').innerText = module.digital_outputs || 0;
-                    document.getElementById('analog_inputs').innerText = module.analog_inputs || 0;
-                    document.getElementById('analog_outputs').innerText = module.analog_outputs || 0;
-
-                    document.getElementById('moduleSpecs').style.display = 'block';
-                } else {
-                    alert('Module not found. Please enter specifications manually.');
-                    // Clear previous specs and show the section for manual entry
-                    document.getElementById('digital_inputs').innerText = '0';
-                    document.getElementById('digital_outputs').innerText = '0';
-                    document.getElementById('analog_inputs').innerText = '0';
-                    document.getElementById('analog_outputs').innerText = '0';
-                    document.getElementById('moduleSpecs').style.display = 'block';
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('I/O Builder initialized');
+            
+            // Add event listeners
+            document.getElementById('model').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    lookupModuleSpecs();
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error looking up module. Please try again.');
-                // Ensure specs section is shown even on error, with default values
-                document.getElementById('digital_inputs').innerText = '0';
-                document.getElementById('digital_outputs').innerText = '0';
-                document.getElementById('analog_inputs').innerText = '0';
-                document.getElementById('analog_outputs').innerText = '0';
-                document.getElementById('moduleSpecs').style.display = 'block';
-            })
-            .finally(() => {
-                btn.innerHTML = '<i class="fa fa-search"></i> Lookup Module Specs';
-                btn.disabled = false;
             });
-        }
+        });
 
-        function addModule() {
-            const company = document.getElementById('company').value;
+        // Lookup module specifications online
+        async function lookupModuleSpecs() {
+            const vendor = document.getElementById('vendor').value;
             const model = document.getElementById('model').value;
-            const rack_no = document.getElementById('rack_no').value;
-            const module_position = document.getElementById('module_position').value;
 
-            // Ensure that the specification values are taken from the displayed spans
-            const digital_inputs = parseInt(document.getElementById('digital_inputs').innerText) || 0;
-            const digital_outputs = parseInt(document.getElementById('digital_outputs').innerText) || 0;
-            const analog_inputs = parseInt(document.getElementById('analog_inputs').innerText) || 0;
-            const analog_outputs = parseInt(document.getElementById('analog_outputs').innerText) || 0;
+            console.log(`Looking up: Vendor='${vendor}', Model='${model}'`);
 
-
-            if (!company || !model) {
-                alert('Please fill in all required fields');
+            if (!vendor || !model) {
+                showStatusMessage('Please select a vendor and enter a model number', 'warning');
                 return;
             }
 
-            const module = {
-                company,
-                model,
-                rack_no,
-                module_position,
-                digital_inputs,
-                digital_outputs,
-                analog_inputs,
-                analog_outputs
+            const lookupBtn = document.getElementById('lookupBtn');
+            const originalText = lookupBtn.innerHTML;
+            lookupBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Searching...';
+            lookupBtn.disabled = true;
+
+            try {
+                showStatusMessage(`🔍 Searching for ${vendor} ${model} specifications...`, 'info');
+
+                const response = await fetch('/io-builder/api/module-lookup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    body: JSON.stringify({ 
+                        company: vendor, 
+                        model: model 
+                    })
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Lookup response:', data);
+
+                if (data.success && data.module) {
+                    currentModuleSpec = data.module;
+                    console.log('Current module spec:', currentModuleSpec);
+                    
+                    displayModuleSpecs(data.module);
+                    
+                    let message = '';
+                    let messageType = 'success';
+                    
+                    if (data.source === 'database') {
+                        message = `✅ Found ${vendor} ${model} specifications in database`;
+                    } else if (data.source === 'web') {
+                        message = `✅ Found ${vendor} ${model} specifications online!`;
+                    } else if (data.source === 'manual') {
+                        message = data.message || `⚠ Module ${vendor} ${model} not found. Please enter specifications manually.`;
+                        messageType = 'warning';
+                        showManualSpecEditor();
+                    }
+
+                    // Add detailed I/O info to message
+                    const totalChannels = (data.module.digital_inputs || 0) + (data.module.digital_outputs || 0) + 
+                                         (data.module.analog_inputs || 0) + (data.module.analog_outputs || 0);
+                    
+                    if (totalChannels > 0) {
+                        message += ` | DI: ${data.module.digital_inputs || 0}, DO: ${data.module.digital_outputs || 0}, AI: ${data.module.analog_inputs || 0}, AO: ${data.module.analog_outputs || 0}`;
+                    }
+
+                    showStatusMessage(message, messageType);
+                } else {
+                    const errorMessage = data.error || 'Module not found. Please enter specifications manually.';
+                    showStatusMessage(errorMessage, 'warning');
+                    showManualSpecEditor();
+                }
+            } catch (error) {
+                console.error('Lookup error:', error);
+                showStatusMessage(`❌ Network error: ${error.message}. Please try again or enter specifications manually.`, 'error');
+                showManualSpecEditor();
+            } finally {
+                lookupBtn.innerHTML = originalText;
+                lookupBtn.disabled = false;
+            }
+        }
+
+        // Display module specifications
+        function displayModuleSpecs(module) {
+            console.log('Displaying module specs:', module);
+            
+            document.getElementById('specDI').textContent = module.digital_inputs || 0;
+            document.getElementById('specDO').textContent = module.digital_outputs || 0;
+            document.getElementById('specAI').textContent = module.analog_inputs || 0;
+            document.getElementById('specAO').textContent = module.analog_outputs || 0;
+            
+            const total = (module.digital_inputs || 0) + (module.digital_outputs || 0) + 
+                         (module.analog_inputs || 0) + (module.analog_outputs || 0);
+            document.getElementById('specTotal').textContent = total;
+            
+            // Determine signal type
+            let signalType = 'Unknown';
+            const hasDigital = (module.digital_inputs || 0) + (module.digital_outputs || 0) > 0;
+            const hasAnalog = (module.analog_inputs || 0) + (module.analog_outputs || 0) > 0;
+            
+            if (hasDigital && hasAnalog) {
+                signalType = 'Mixed';
+            } else if (hasDigital) {
+                signalType = 'Digital';
+            } else if (hasAnalog) {
+                signalType = 'Analog';
+            }
+            
+            document.getElementById('specType').textContent = signalType;
+            
+            document.getElementById('moduleSpecDisplay').classList.remove('hidden');
+            document.getElementById('manualSpecEditor').classList.add('hidden');
+        }
+
+        // Show manual specification editor
+        function showManualSpecEditor() {
+            document.getElementById('manualSpecEditor').classList.remove('hidden');
+            document.getElementById('moduleSpecDisplay').classList.add('hidden');
+        }
+
+        // Edit module specifications
+        function editModuleSpecs() {
+            if (currentModuleSpec) {
+                document.getElementById('manualDI').value = currentModuleSpec.digital_inputs || 0;
+                document.getElementById('manualDO').value = currentModuleSpec.digital_outputs || 0;
+                document.getElementById('manualAI').value = currentModuleSpec.analog_inputs || 0;
+                document.getElementById('manualAO').value = currentModuleSpec.analog_outputs || 0;
+                document.getElementById('manualVoltage').value = currentModuleSpec.voltage_range || '24 VDC';
+                document.getElementById('manualCurrent').value = currentModuleSpec.current_range || '4-20mA';
+            }
+            showManualSpecEditor();
+        }
+
+        // Apply manual specifications
+        function applyManualSpecs() {
+            const vendor = document.getElementById('vendor').value;
+            const model = document.getElementById('model').value;
+
+            if (!vendor || !model) {
+                showStatusMessage('Please select a vendor and enter a model number', 'warning');
+                return;
+            }
+
+            currentModuleSpec = {
+                company: vendor,
+                model: model,
+                digital_inputs: parseInt(document.getElementById('manualDI').value) || 0,
+                digital_outputs: parseInt(document.getElementById('manualDO').value) || 0,
+                analog_inputs: parseInt(document.getElementById('manualAI').value) || 0,
+                analog_outputs: parseInt(document.getElementById('manualAO').value) || 0,
+                voltage_range: document.getElementById('manualVoltage').value || '24 VDC',
+                current_range: document.getElementById('manualCurrent').value || '4-20mA',
+                description: `${vendor} ${model} - Manual Entry`,
+                verified: false
             };
 
-            modules.push(module);
-            updateModulesList();
-            clearForm();
+            console.log('Applied manual specs:', currentModuleSpec);
+            displayModuleSpecs(currentModuleSpec);
+            showStatusMessage('✅ Manual specifications applied successfully', 'success');
         }
 
-        function updateModulesList() {
-            // Update modules list display (implementation needed)
-            console.log('Current modules:', modules);
+        // Cancel manual edit
+        function cancelManualEdit() {
+            if (currentModuleSpec) {
+                displayModuleSpecs(currentModuleSpec);
+            } else {
+                document.getElementById('manualSpecEditor').classList.add('hidden');
+                document.getElementById('moduleSpecDisplay').classList.add('hidden');
+            }
         }
 
-        function clearForm() {
-            document.getElementById('moduleForm').reset();
-            document.getElementById('moduleSpecs').style.display = 'none';
-            // Reset spec values to default
-            document.getElementById('digital_inputs').innerText = '0';
-            document.getElementById('digital_outputs').innerText = '0';
-            document.getElementById('analog_inputs').innerText = '0';
-            document.getElementById('analog_outputs').innerText = '0';
-        }
-
-        function generateTables() {
-            if (modules.length === 0) {
-                alert('Please add at least one module before generating tables');
+        // Add module to configuration
+        function addModuleToConfiguration() {
+            if (!currentModuleSpec) {
+                showStatusMessage('No module specifications available', 'error');
                 return;
             }
 
-            fetch('/io-builder/api/generate-io-table', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('meta[name=csrf-token]')?.getAttribute('content') || ''
-                },
-                body: JSON.stringify({ modules })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    displayTables(data.tables);
-                    document.getElementById('resultsSection').style.display = 'block';
-                } else {
-                    alert('Error generating tables: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error generating tables. Please try again.');
+            const rackNo = document.getElementById('rack_no').value;
+            const slotNo = document.getElementById('slot_no').value;
+            const startAddress = document.getElementById('start_address').value;
+            const descriptionPrefix = document.getElementById('description_prefix').value;
+
+            const moduleConfig = {
+                ...currentModuleSpec,
+                rack_no: rackNo,
+                slot_no: slotNo,
+                start_address: startAddress,
+                description_prefix: descriptionPrefix,
+                id: Date.now()
+            };
+
+            configuredModules.push(moduleConfig);
+            updateModulesList();
+            clearForm();
+            
+            const total = (currentModuleSpec.digital_inputs || 0) + (currentModuleSpec.digital_outputs || 0) + 
+                         (currentModuleSpec.analog_inputs || 0) + (currentModuleSpec.analog_outputs || 0);
+            
+            showStatusMessage(`✅ Module ${currentModuleSpec.company} ${currentModuleSpec.model} added with ${total} I/O points`, 'success');
+        }
+
+        // Update modules list display
+        function updateModulesList() {
+            const container = document.getElementById('modulesListContent');
+            
+            if (configuredModules.length === 0) {
+                document.getElementById('modulesList').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('modulesList').classList.remove('hidden');
+            
+            container.innerHTML = '';
+            
+            configuredModules.forEach((module, index) => {
+                const moduleItem = document.createElement('div');
+                moduleItem.className = 'module-item';
+                
+                const total = (module.digital_inputs || 0) + (module.digital_outputs || 0) + 
+                             (module.analog_inputs || 0) + (module.analog_outputs || 0);
+                
+                moduleItem.innerHTML = `
+                    <div class="module-info">
+                        <div class="module-name">${module.company} ${module.model}</div>
+                        <div class="module-details">
+                            Rack ${module.rack_no}, Slot ${module.slot_no} | 
+                            ${module.description_prefix ? 'Prefix: ' + module.description_prefix + ' | ' : ''}
+                            Start Address: ${module.start_address}
+                        </div>
+                    </div>
+                    <div class="module-stats">
+                        <span><strong>DI:</strong> ${module.digital_inputs || 0}</span>
+                        <span><strong>DO:</strong> ${module.digital_outputs || 0}</span>
+                        <span><strong>AI:</strong> ${module.analog_inputs || 0}</span>
+                        <span><strong>AO:</strong> ${module.analog_outputs || 0}</span>
+                        <span><strong>Total:</strong> ${total}</span>
+                    </div>
+                    <div class="module-actions">
+                        <button class="btn btn-secondary btn-small" onclick="removeModule(${index})">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(moduleItem);
             });
         }
 
-        function displayTables(tables) {
-            const container = document.getElementById('ioTables');
+        // Remove module from configuration
+        function removeModule(index) {
+            if (confirm('Are you sure you want to remove this module?')) {
+                configuredModules.splice(index, 1);
+                updateModulesList();
+                showStatusMessage('Module removed from configuration', 'info');
+            }
+        }
+
+        // Clear all modules
+        function clearAllModules() {
+            if (configuredModules.length === 0) {
+                showStatusMessage('No modules to clear', 'info');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to clear all configured modules?')) {
+                configuredModules = [];
+                updateModulesList();
+                document.getElementById('ioTablesSection').classList.add('hidden');
+                showStatusMessage('All modules cleared', 'info');
+            }
+        }
+
+        // Generate I/O tables
+        async function generateIOTables() {
+            if (configuredModules.length === 0) {
+                showStatusMessage('Please add at least one module before generating tables', 'warning');
+                return;
+            }
+
+            try {
+                showStatusMessage('📊 Generating I/O testing tables...', 'info');
+
+                const response = await fetch('/io-builder/api/generate-io-table', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    body: JSON.stringify({ 
+                        modules: configuredModules 
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Generate tables response:', data);
+
+                if (data.success) {
+                    displayIOTables(data.tables, data.summary);
+                    showStatusMessage(`✅ Generated ${data.summary.total_points} I/O testing points successfully!`, 'success');
+                } else {
+                    showStatusMessage('❌ Error generating tables: ' + (data.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Generation error:', error);
+                showStatusMessage('❌ Network error during table generation. Please try again.', 'error');
+            }
+        }
+
+        // Display generated I/O tables
+        function displayIOTables(tables, summary) {
+            const container = document.getElementById('ioTablesContent');
             let html = '';
 
+            // Summary
+            html += `
+                <div class="status-message status-success">
+                    <i class="fa fa-check-circle"></i>
+                    Successfully generated ${summary.total_points} total I/O testing points from ${summary.modules_processed} modules
+                </div>
+            `;
+
+            // Digital Input Table
             if (tables.digital_inputs && tables.digital_inputs.length > 0) {
-                html += '<h4>Digital Inputs</h4>';
-                html += '<div class="table-responsive"><table class="users-table"><thead><tr>';
-                html += '<th>S.No</th><th>Rack</th><th>Position</th><th>Signal Tag</th><th>Description</th></tr></thead><tbody>';
-                tables.digital_inputs.forEach(signal => {
-                    html += `<tr><td>${signal.sno}</td><td>${signal.rack_no}</td><td>${signal.module_position}</td>`;
-                    html += `<td>${signal.signal_tag}</td><td>${signal.signal_description}</td></tr>`;
-                });
-                html += '</tbody></table></div><br>';
+                html += createIOTable('Digital Input Testing', tables.digital_inputs, [
+                    'S.No', 'Rack', 'Slot', 'Signal Tag', 'Description', 'Expected State', 'Test Result', 'Verified By', 'Comments'
+                ]);
             }
 
+            // Digital Output Table
             if (tables.digital_outputs && tables.digital_outputs.length > 0) {
-                html += '<h4>Digital Outputs</h4>';
-                html += '<div class="table-responsive"><table class="users-table"><thead><tr>';
-                html += '<th>S.No</th><th>Rack</th><th>Position</th><th>Signal Tag</th><th>Description</th></tr></thead><tbody>';
-                tables.digital_outputs.forEach(signal => {
-                    html += `<tr><td>${signal.sno}</td><td>${signal.rack_no}</td><td>${signal.module_position}</td>`;
-                    html += `<td>${signal.signal_tag}</td><td>${signal.signal_description}</td></tr>`;
-                });
-                html += '</tbody></table></div><br>';
+                html += createIOTable('Digital Output Testing', tables.digital_outputs, [
+                    'S.No', 'Rack', 'Slot', 'Signal Tag', 'Description', 'Command State', 'Test Result', 'Verified By', 'Comments'
+                ]);
             }
 
+            // Analog Input Table
             if (tables.analog_inputs && tables.analog_inputs.length > 0) {
-                html += '<h4>Analog Inputs</h4>';
-                html += '<div class="table-responsive"><table class="users-table"><thead><tr>';
-                html += '<th>S.No</th><th>Rack</th><th>Position</th><th>Signal Tag</th><th>Description</th></tr></thead><tbody>';
-                tables.analog_inputs.forEach(signal => {
-                    html += `<tr><td>${signal.sno}</td><td>${signal.rack_no}</td><td>${signal.module_position}</td>`;
-                    html += `<td>${signal.signal_tag}</td><td>${signal.signal_description}</td></tr>`;
-                });
-                html += '</tbody></table></div><br>';
+                html += createIOTable('Analog Input Testing', tables.analog_inputs, [
+                    'S.No', 'Rack', 'Slot', 'Signal Tag', 'Description', 'Range', 'Test Values', 'Test Result', 'Verified By', 'Comments'
+                ]);
             }
 
+            // Analog Output Table
             if (tables.analog_outputs && tables.analog_outputs.length > 0) {
-                html += '<h4>Analog Outputs</h4>';
-                html += '<div class="table-responsive"><table class="users-table"><thead><tr>';
-                html += '<th>S.No</th><th>Rack</th><th>Position</th><th>Signal Tag</th><th>Description</th></tr></thead><tbody>';
-                tables.analog_outputs.forEach(signal => {
-                    html += `<tr><td>${signal.sno}</td><td>${signal.rack_no}</td><td>${signal.module_position}</td>`;
-                    html += `<td>${signal.signal_tag}</td><td>${signal.signal_description}</td></tr>`;
-                });
-                html += '</tbody></table></div>';
+                html += createIOTable('Analog Output Testing', tables.analog_outputs, [
+                    'S.No', 'Rack', 'Slot', 'Signal Tag', 'Description', 'Range', 'Command Values', 'Test Result', 'Verified By', 'Comments'
+                ]);
             }
 
             container.innerHTML = html;
-
-            // Apply table enhancements after content is loaded
-            document.querySelectorAll('.users-table').forEach(table => {
-                setupStickyColumns(table);
-                addHeaderTooltips(table);
-            });
+            document.getElementById('ioTablesSection').classList.remove('hidden');
         }
 
-        function setupStickyColumns(table) {
-            // Add sticky column functionality
-            const headers = table.querySelectorAll('thead th');
-            headers.forEach((header, index) => {
-                const text = header.textContent.toLowerCase();
-                if (text.includes('signal') && text.includes('tag')) {
-                    header.style.position = 'sticky';
-                    header.style.left = '0';
-                    header.style.zIndex = '10';
-                    header.style.backgroundColor = 'var(--admin-primary)';
-                }
-            });
-        }
+        // Create I/O table HTML
+        function createIOTable(title, data, headers) {
+            let html = `
+                <div class="table-container">
+                    <div class="table-header">
+                        <span><i class="fa fa-table"></i> ${title}</span>
+                        <span>${data.length} Points</span>
+                    </div>
+                    <table class="io-table">
+                        <thead>
+                            <tr>
+            `;
 
-        function addHeaderTooltips(table) {
-            // Add tooltips to table headers
-            const headers = table.querySelectorAll('thead th');
             headers.forEach(header => {
-                const text = header.textContent.trim();
-                if (text.length > 10) {
-                    header.title = text;
+                html += `<th>${header}</th>`;
+            });
+
+            html += `
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            data.forEach(item => {
+                html += '<tr>';
+                html += `<td><strong>${item.sno}</strong></td>`;
+                html += `<td>${item.rack_no}</td>`;
+                html += `<td>${item.module_position || item.slot_no}</td>`;
+                html += `<td class="signal-tag">${item.signal_tag}</td>`;
+                html += `<td>${item.signal_description}</td>`;
+                
+                // Add appropriate columns based on table type
+                if (title.includes('Digital Input')) {
+                    html += `<td>${item.expected_state}</td>`;
+                } else if (title.includes('Digital Output')) {
+                    html += `<td>${item.command_state}</td>`;
+                } else if (title.includes('Analog')) {
+                    html += `<td>${item.signal_range}</td>`;
+                    if (title.includes('Input')) {
+                        html += `<td>${item.test_value_low}, ${item.test_value_mid}, ${item.test_value_high}</td>`;
+                    } else {
+                        html += `<td>${item.command_value_low}, ${item.command_value_mid}, ${item.command_value_high}</td>`;
+                    }
+                }
+                
+                html += `<td><input type="text" placeholder="PASS/FAIL" style="width: 80px; border: 1px solid #ddd; padding: 4px; border-radius: 4px;"></td>`;
+                html += `<td><input type="text" placeholder="Initials" style="width: 60px; border: 1px solid #ddd; padding: 4px; border-radius: 4px;"></td>`;
+                html += `<td><input type="text" placeholder="Comments" style="width: 150px; border: 1px solid #ddd; padding: 4px; border-radius: 4px;"></td>`;
+                html += '</tr>';
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            return html;
+        }
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('vendor').value = '';
+            document.getElementById('model').value = '';
+            document.getElementById('description_prefix').value = '';
+            document.getElementById('moduleSpecDisplay').classList.add('hidden');
+            document.getElementById('manualSpecEditor').classList.add('hidden');
+            currentModuleSpec = null;
+            
+            // Clear status messages
+            document.getElementById('statusMessages').innerHTML = '';
+        }
+
+        // Show status message
+        function showStatusMessage(message, type = 'info') {
+            const container = document.getElementById('statusMessages');
+            
+            const messageEl = document.createElement('div');
+            messageEl.className = `status-message status-${type}`;
+            
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            else if (type === 'warning') icon = 'fa-exclamation-triangle';
+            else if (type === 'error') icon = 'fa-times-circle';
+            
+            messageEl.innerHTML = `<i class="fa ${icon}"></i> ${message}`;
+            
+            container.innerHTML = '';
+            container.appendChild(messageEl);
+            
+            // Auto-hide after 10 seconds for non-error messages
+            if (type !== 'error') {
+                setTimeout(() => {
+                    if (messageEl.parentNode) {
+                        messageEl.style.opacity = '0';
+                        setTimeout(() => {
+                            if (messageEl.parentNode) {
+                                messageEl.parentNode.removeChild(messageEl);
+                            }
+                        }, 300);
+                    }
+                }, 10000);
+            }
+        }
+
+        // Get CSRF token
+        function getCSRFToken() {
+            const metaToken = document.querySelector('meta[name=csrf-token]');
+            if (metaToken) {
+                return metaToken.getAttribute('content');
+            }
+            
+            const hiddenToken = document.querySelector('input[name=csrf_token]');
+            if (hiddenToken) {
+                return hiddenToken.value;
+            }
+            
+            console.warn('CSRF token not found');
+            return '';
+        }
+
+        // Test function for debugging
+        async function testModuleLookup(company, model) {
+            try {
+                const response = await fetch(`/io-builder/api/test-lookup/${company}/${model}`);
+                const data = await response.json();
+                console.log('Test lookup result:', data);
+                return data;
+            } catch (error) {
+                console.error('Test lookup error:', error);
+                return null;
+            }
+        }
+
+        // Auto-test DA501 on page load for debugging
+        window.addEventListener('load', function() {
+            console.log('Page loaded - testing DA501 lookup...');
+            testModuleLookup('ABB', 'DA501').then(result => {
+                if (result) {
+                    console.log('DA501 test result:', result);
                 }
             });
-        }
+        });
     </script>
 </body>
 </html>

@@ -9,15 +9,20 @@ load_dotenv()
 class Config:
     """Application configuration class"""
 
+    # Application settings
+    APP_NAME = 'SAT Report Generator'
+    PORT = int(os.environ.get('PORT', 5000))
+    DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+
     # Security
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here-change-in-production'
     WTF_CSRF_ENABLED = True
-    WTF_CSRF_TIME_LIMIT = 3600
+    WTF_CSRF_TIME_LIMIT = 14400  # Increased to 4 hours
 
     # Database - Use absolute path for SQLite
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or f'sqlite:///{os.path.join(BASE_DIR, "instance", "sat_reports.db")}'
-    
+
     # Lazy directory creation and optimized database settings
     INSTANCE_DIR = os.path.join(BASE_DIR, "instance")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -26,10 +31,17 @@ class Config:
         'pool_recycle': 600,
     }
 
-    # File paths
-    UPLOAD_ROOT = os.environ.get('UPLOAD_ROOT') or 'static/uploads'
-    SIGNATURES_FOLDER = os.environ.get('SIGNATURES_FOLDER') or 'static/signatures'
-    SUBMISSIONS_FILE = os.environ.get('SUBMISSIONS_FILE') or 'data/submissions.json'
+    # File upload settings
+    UPLOAD_ROOT = os.path.join(BASE_DIR, 'static', 'uploads')
+    SIGNATURES_FOLDER = os.path.join(BASE_DIR, 'static', 'signatures')
+
+    # Output directory for generated reports
+    OUTPUT_DIR = os.path.join(BASE_DIR, 'outputs')
+
+    # Ensure directories exist
+    os.makedirs(UPLOAD_ROOT, exist_ok=True)
+    os.makedirs(SIGNATURES_FOLDER, exist_ok=True)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     # Email configuration
     SMTP_SERVER = os.environ.get('SMTP_SERVER') or 'smtp.gmail.com'

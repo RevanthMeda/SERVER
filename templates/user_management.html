@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +36,7 @@
             padding: 24px;
         }
 
-        /* Header Section - Exact same as Dashboard */
+        /* Header Section */
         .admin-header {
             background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
             border-radius: 16px;
@@ -86,50 +87,72 @@
             filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0,0,0,0.2));
         }
 
-        /* Navigation - Exact same as Dashboard */
-        .admin-nav {
+        /* Navigation - Consistent Styling for All Items */
+        .dashboard-nav {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 32px;
-            padding: 20px;
+            justify-content: center;
+            align-items: center;
             background: white;
+            padding: 12px 24px;
             border-radius: 16px;
             box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
-        .nav-item {
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-link {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 20px;
-            background: #f8fafc;
-            border: 2px solid transparent;
-            border-radius: 12px;
+            padding: 10px 18px;
+            border-radius: 10px;
             text-decoration: none;
             color: #64748b;
             font-weight: 600;
             transition: all 0.3s ease;
-            position: relative;
+            font-size: 14px;
+            white-space: nowrap;
         }
 
-        .nav-item:hover {
+        .nav-link:hover {
             background: #e2e8f0;
             color: var(--admin-primary);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(77, 208, 225, 0.25);
+            border-color: var(--admin-primary-light);
         }
 
-        .nav-item.active {
+        .nav-link.active {
             background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
             color: white;
             box-shadow: 0 4px 15px rgba(77, 208, 225, 0.4);
+            border-color: var(--admin-primary);
         }
 
-        .nav-item i {
+        .nav-link i {
             font-size: 16px;
             width: 20px;
             text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nav-link.logout {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+            border: 2px solid #fca5a5 !important;
+        }
+
+        .nav-link.logout:hover {
+            background: #fecaca !important;
+            color: #b91c1c !important;
+            border-color: #f87171 !important;
         }
 
         /* Flash Messages */
@@ -137,24 +160,83 @@
             margin-bottom: 24px;
         }
 
-        .flash-message {
+        .alert {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 16px 20px;
-            background: #d1fae5;
-            border: 1px solid #059669;
             border-radius: 12px;
             color: #065f46;
             font-weight: 500;
-            box-shadow: var(--card-shadow);
+            border: 1px solid #059669;
         }
 
-        .flash-message i {
+        .alert.alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #059669;
+        }
+
+        .alert.alert-error {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #fca5a5;
+        }
+
+        .alert.alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #93c5fc;
+        }
+
+        .alert i {
             font-size: 18px;
         }
 
-        /* Stats Grid - Exact same as Dashboard */
+        /* User Management Grid */
+        .user-management-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .dashboard-widget {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-widget:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .widget-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .widget-content {
+            padding: 24px;
+        }
+
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -220,79 +302,6 @@
             margin: 4px 0 0 0;
         }
 
-        /* Dashboard Widgets - Exact same as Dashboard */
-        .widgets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .widget-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-        }
-
-        .widget-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow-hover);
-        }
-
-        .widget-header {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 20px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .widget-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .widget-action {
-            padding: 8px 16px;
-            background: var(--admin-primary);
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-        }
-
-        .widget-action:hover {
-            background: var(--admin-primary-dark);
-            transform: translateY(-1px);
-        }
-
-        .widget-content {
-            padding: 24px;
-        }
-
-        .widget-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
         /* Status badges */
         .status-badge {
             display: inline-flex;
@@ -334,74 +343,6 @@
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
-        }
-
-        /* Navigation badges */
-        .nav-badge {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-            min-width: 18px;
-            text-align: center;
-        }
-
-        .nav-item.active .nav-badge {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .nav-badge-pending {
-            background: #fef3c7 !important;
-            color: #92400e !important;
-        }
-
-        .nav-badge-active {
-            background: #d1fae5 !important;
-            color: #065f46 !important;
-        }
-
-        .nav-badge-disabled {
-            background: #fee2e2 !important;
-            color: #991b1b !important;
-        }
-
-        /* Search container */
-        .search-container {
-            position: relative;
-            max-width: 400px;
-            margin-bottom: 20px;
-        }
-
-        .search-box {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 12px;
-            color: #9ca3af;
-            z-index: 1;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 10px 12px 10px 36px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-            background: white;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--admin-primary);
-            box-shadow: 0 0 0 3px rgba(77, 208, 225, 0.1);
         }
 
         /* User table styles */
@@ -534,6 +475,14 @@
             font-size: 14px;
         }
 
+        .developer-footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+            background-color: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .admin-container {
@@ -551,55 +500,58 @@
                 justify-content: center;
             }
 
-            .admin-nav {
-                flex-direction: column;
-                gap: 8px;
+            .dashboard-nav {
+                padding: 4px 8px;
+                flex-wrap: wrap;
+                gap: 4px;
+                justify-content: center;
             }
 
-            .nav-item {
+            .nav-links {
+                flex-wrap: wrap;
                 justify-content: center;
+                gap: 4px;
+            }
+
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 12px;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            .widgets-grid {
+            .user-management-grid {
                 grid-template-columns: 1fr;
             }
+        }
 
-            .widget-actions {
-                flex-wrap: wrap;
-                gap: 4px;
+        @media (max-width: 480px) {
+            .dashboard-nav {
+                padding: 2px 4px;
+                min-height: 40px;
             }
 
-            .widget-action {
-                font-size: 11px;
-                padding: 6px 8px;
+            .nav-link {
+                padding: 4px 8px;
+                font-size: 10px;
             }
 
-            .search-container {
-                max-width: 100%;
+            .nav-link i {
+                font-size: 12px;
+            }
+
+            .developer-footer {
+                padding: 12px;
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
-<body>
+<body class="dashboard-layout">
     <div class="admin-container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash-message">
-                            <i class="fa fa-check-circle"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Header Section -->
+        <!-- Header -->
         <div class="admin-header">
             <div class="header-content">
                 <div class="header-info">
@@ -610,284 +562,347 @@
             </div>
         </div>
 
-        <!-- Navigation -->
-        <div class="admin-nav">
-            <a href="{{ url_for('dashboard.admin') }}" class="nav-item">
-                <i class="fa fa-tachometer-alt"></i>
-                Dashboard
-            </a>
-            <a href="{{ url_for('dashboard.user_management') }}" class="nav-item active">
-                <i class="fa fa-users"></i>
-                User Management
-            </a>
-            <a href="{{ url_for('dashboard.admin_reports') }}" class="nav-item">
-                <i class="fa fa-chart-bar"></i>
-                All Reports
-            </a>
-            <a href="{{ url_for('dashboard.system_settings') }}" class="nav-item">
-                <i class="fa fa-cogs"></i>
-                System Settings
-            </a>
-            <a href="{{ url_for('reports.new') }}" class="nav-item">
-                <i class="fa fa-plus"></i>
-                Create Report
-            </a>
-            <a href="{{ url_for('auth.logout') }}" class="nav-item" style="margin-left: auto;">
-                <i class="fa fa-sign-out-alt"></i>
-                Logout
-            </a>
-        </div>
-
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-users"></i>
-                    </div>
+        <div class="dashboard-content">
+            <!-- Unified Navigation -->
+            <div class="dashboard-nav">
+                <div class="nav-links">
+                    <a href="{{ url_for('dashboard.admin') }}" class="nav-link {% if request.endpoint == 'dashboard.admin' %}active{% endif %}" id="nav-dashboard">
+                        <i class="fa fa-home"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('dashboard.user_management') }}" class="nav-link {% if request.endpoint == 'dashboard.user_management' %}active{% endif %}" id="nav-users">
+                        <i class="fa fa-users"></i> User Management
+                    </a>
+                    <a href="{{ url_for('dashboard.admin_reports') }}" class="nav-link {% if request.endpoint == 'dashboard.admin_reports' %}active{% endif %}" id="nav-reports">
+                        <i class="fa fa-file-alt"></i> All Reports
+                    </a>
+                    <a href="{{ url_for('dashboard.system_settings') }}" class="nav-link {% if request.endpoint == 'dashboard.system_settings' %}active{% endif %}" id="nav-settings">
+                        <i class="fa fa-cog"></i> System Settings
+                    </a>
+                    <a href="{{ url_for('main.sat_form') }}" class="nav-link {% if request.endpoint == 'main.sat_form' %}active{% endif %}" id="nav-create">
+                        <i class="fa fa-plus"></i> Create Report
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-link logout" id="nav-logout">
+                        <i class="fa fa-sign-out-alt"></i> Logout
+                    </a>
                 </div>
-                <div class="stat-value">{{ users|length }}</div>
-                <p class="stat-label">Total Users</p>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-clock"></i>
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <i class="fa fa-{% if category == 'success' %}check-circle{% elif category == 'error' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Main Content Area -->
+            <div class="dashboard-main">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fa fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{ users|length }}</div>
+                        <p class="stat-label">Total Users</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fa fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{ users|selectattr('status', 'equalto', 'Pending')|list|length }}</div>
+                        <p class="stat-label">Pending Approval</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fa fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{ users|selectattr('status', 'equalto', 'Active')|list|length }}</div>
+                        <p class="stat-label">Active Users</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fa fa-ban"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{ users|selectattr('status', 'equalto', 'Disabled')|list|length }}</div>
+                        <p class="stat-label">Disabled Users</p>
                     </div>
                 </div>
-                <div class="stat-value">{{ users|selectattr('status', 'equalto', 'Pending')|list|length }}</div>
-                <p class="stat-label">Pending Approval</p>
-            </div>
 
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-check-circle"></i>
-                    </div>
-                </div>
-                <div class="stat-value">{{ users|selectattr('status', 'equalto', 'Active')|list|length }}</div>
-                <p class="stat-label">Active Users</p>
-            </div>
+                <!-- User Management Grid -->
+                <div class="user-management-grid">
+                    <!-- User Management Widget -->
+                    <div class="dashboard-widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-users"></i>
+                                All Users
+                            </h3>
+                        </div>
+                        <div class="widget-content">
+                            {% if users %}
+                            <!-- Users Table -->
+                            <div class="table-responsive">
+                                <table class="users-table">
+                                    <thead>
+                                        <tr>
+                                            <th>User Details</th>
+                                            <th>Role</th>
+                                            <th>Status</th>
+                                            <th>Joined Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user in users %}
+                                        <tr class="user-row">
+                                            <td>
+                                                <div class="user-details">
+                                                    <div class="user-avatar">
+                                                        {{ user.full_name[0] if user.full_name else 'U' }}
+                                                    </div>
+                                                    <div class="user-info">
+                                                        <div class="user-name">{{ user.full_name }}</div>
+                                                        <div class="user-email">{{ user.email }}</div>
+                                                        {% if user.requested_role and user.status == 'Pending' %}
+                                                            <div class="requested-role">Requested: {{ user.requested_role }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {% if user.role %}
+                                                    <span class="status-badge status-connected">
+                                                        <div class="status-indicator" style="background: #059669;"></div>
+                                                        {{ user.role }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="status-badge status-warning">
+                                                        <div class="status-indicator" style="background: #f59e0b;"></div>
+                                                        {{ user.requested_role or 'Not Set' }}
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="status-badge {% if user.status == 'Active' %}status-connected{% elif user.status == 'Pending' %}status-warning{% else %}status-disconnected{% endif %}">
+                                                    <div class="status-indicator" style="background: {% if user.status == 'Active' %}#059669{% elif user.status == 'Pending' %}#f59e0b{% else %}#dc2626{% endif %};"></div>
+                                                    {{ user.status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="date-text">{{ user.created_date.strftime('%b %d, %Y') }}</span>
+                                            </td>
+                                            <td>
+                                                <div class="user-actions">
+                                                    {% if user.status == 'Pending' %}
+                                                        <form method="POST" action="{{ url_for('dashboard.approve_user', user_id=user.id) }}" style="display: inline;">
+                                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                                            <select name="role" required class="role-select">
+                                                                <option value="{{ user.requested_role }}" selected>{{ user.requested_role }}</option>
+                                                                <option value="Admin">Admin</option>
+                                                                <option value="Engineer">Engineer</option>
+                                                                <option value="Automation Manager">Automation Manager</option>
+                                                                <option value="PM">PM</option>
+                                                            </select>
+                                                            <button type="submit" class="approve-btn" onclick="return confirmApproval('{{ user.full_name }}', this.form.role.value)">
+                                                                <i class="fa fa-check"></i> Approve
+                                                            </button>
+                                                        </form>
+                                                    {% elif user.status == 'Active' and user.email != current_user.email %}
+                                                        <form method="POST" action="{{ url_for('dashboard.change_user_role', user_id=user.id) }}" style="display: inline;">
+                                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                                            <select name="role" required class="role-select">
+                                                                <option value="{{ user.role }}" selected>{{ user.role }}</option>
+                                                                {% for role in ['Admin', 'Engineer', 'Automation Manager', 'PM'] %}
+                                                                    {% if role != user.role %}
+                                                                        <option value="{{ role }}">{{ role }}</option>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </select>
+                                                            <button type="submit" class="approve-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="return confirmRoleChange('{{ user.full_name }}', this.form.role.value)">
+                                                                <i class="fa fa-user-edit"></i> Change Role
+                                                            </button>
+                                                        </form>
+                                                        <form method="POST" action="{{ url_for('dashboard.disable_user', user_id=user.id) }}" style="display: inline;">
+                                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                                            <button type="submit" class="approve-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-left: 4px;" onclick="return confirmDisable('{{ user.full_name }}')">
+                                                                <i class="fa fa-ban"></i> Disable
+                                                            </button>
+                                                        </form>
+                                                    {% elif user.status == 'Disabled' %}
+                                                        <form method="POST" action="{{ url_for('dashboard.enable_user', user_id=user.id) }}" style="display: inline;">
+                                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                                            <button type="submit" class="approve-btn" onclick="return confirmEnable('{{ user.full_name }}')">
+                                                                <i class="fa fa-check"></i> Enable
+                                                            </button>
+                                                        </form>
+                                                    {% endif %}
 
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-ban"></i>
-                    </div>
-                </div>
-                <div class="stat-value">{{ users|selectattr('status', 'equalto', 'Disabled')|list|length }}</div>
-                <p class="stat-label">Disabled Users</p>
-            </div>
-        </div>
-
-        <!-- User Management Widget -->
-        <div class="widgets-grid">
-            <div class="widget-card" style="grid-column: 1 / -1;">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-users"></i>
-                        All Users
-                    </h3>
-                    <div class="widget-actions">
-                        <button class="widget-action" id="inviteUserBtn">
-                            <i class="fa fa-user-plus"></i>
-                            Invite User
-                        </button>
-                        <button class="widget-action" id="exportUsersBtn">
-                            <i class="fa fa-download"></i>
-                            Export
-                        </button>
-                        <button class="widget-action" id="refreshUsersBtn">
-                            <i class="fa fa-sync-alt"></i>
-                            Refresh
-                        </button>
-                    </div>
-                </div>
-
-                <div class="widget-content">
-                    <!-- Status Filter Tabs Inside Widget -->
-                    <div class="admin-nav" style="margin-bottom: 24px;">
-                        <a href="{{ url_for('dashboard.user_management') }}" 
-                           class="nav-item {% if current_filter == 'All' or not current_filter %}active{% endif %}">
-                            <i class="fa fa-users"></i>
-                            All Users
-                            <span class="nav-badge">{{ users|length }}</span>
-                        </a>
-                        <a href="{{ url_for('dashboard.user_management', status='Pending') }}" 
-                           class="nav-item {% if current_filter == 'Pending' %}active{% endif %}">
-                            <i class="fa fa-clock"></i>
-                            Pending
-                            <span class="nav-badge nav-badge-pending">{{ users|selectattr('status', 'equalto', 'Pending')|list|length }}</span>
-                        </a>
-                        <a href="{{ url_for('dashboard.user_management', status='Active') }}" 
-                           class="nav-item {% if current_filter == 'Active' %}active{% endif %}">
-                            <i class="fa fa-check-circle"></i>
-                            Active
-                            <span class="nav-badge nav-badge-active">{{ users|selectattr('status', 'equalto', 'Active')|list|length }}</span>
-                        </a>
-                        <a href="{{ url_for('dashboard.user_management', status='Disabled') }}" 
-                           class="nav-item {% if current_filter == 'Disabled' %}active{% endif %}">
-                            <i class="fa fa-ban"></i>
-                            Disabled
-                            <span class="nav-badge nav-badge-disabled">{{ users|selectattr('status', 'equalto', 'Disabled')|list|length }}</span>
-                        </a>
-                    </div>
-
-                    <!-- Search Bar -->
-                    <div class="search-container">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="userSearch" placeholder="Search by name, email, or role">
+                                                    {% if user.email != current_user.email %}
+                                                        <form method="POST" action="{{ url_for('dashboard.delete_user', user_id=user.id) }}" style="display: inline;">
+                                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                                            <button type="submit" class="approve-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-left: 4px;" onclick="return confirmDelete('{{ user.full_name }}')">
+                                                                <i class="fa fa-trash"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="empty-state">
+                                <i class="fa fa-users"></i>
+                                <h4>No Users Found</h4>
+                                <p>No users have been registered yet.</p>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
-
-                    {% if users %}
-                    <!-- Users Table -->
-                    <div class="table-responsive">
-                        <table class="users-table">
-                            <thead>
-                                <tr>
-                                    <th>User Details</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th>Joined Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for user in users %}
-                                <tr class="user-row">
-                                    <td>
-                                        <div class="user-details">
-                                            <div class="user-avatar">
-                                                {{ user.full_name[0] if user.full_name else 'U' }}
-                                            </div>
-                                            <div class="user-info">
-                                                <div class="user-name">{{ user.full_name }}</div>
-                                                <div class="user-email">{{ user.email }}</div>
-                                                {% if user.requested_role and user.status == 'Pending' %}
-                                                    <div class="requested-role">Requested: {{ user.requested_role }}</div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {% if user.role %}
-                                            <span class="status-badge status-connected">
-                                                <div class="status-indicator" style="background: #059669;"></div>
-                                                {{ user.role }}
-                                            </span>
-                                        {% else %}
-                                            <span class="status-badge status-warning">
-                                                <div class="status-indicator" style="background: #f59e0b;"></div>
-                                                {{ user.requested_role or 'Not Set' }}
-                                            </span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <span class="status-badge {% if user.status == 'Active' %}status-connected{% elif user.status == 'Pending' %}status-warning{% else %}status-disconnected{% endif %}">
-                                            <div class="status-indicator" style="background: {% if user.status == 'Active' %}#059669{% elif user.status == 'Pending' %}#f59e0b{% else %}#dc2626{% endif %};"></div>
-                                            {{ user.status }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="date-text">{{ user.created_date.strftime('%b %d, %Y') }}</span>
-                                    </td>
-                                    <td>
-                                        <div class="user-actions">
-                                            {% if user.status == 'Pending' %}
-                                                <form method="POST" action="{{ url_for('dashboard.approve_user', user_id=user.id) }}" style="display: inline;">
-                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                                    <select name="role" required class="role-select">
-                                                        <option value="{{ user.requested_role }}" selected>{{ user.requested_role }}</option>
-                                                        <option value="Admin">Admin</option>
-                                                        <option value="Engineer">Engineer</option>
-                                                        <option value="Automation Manager">Automation Manager</option>
-                                                        <option value="PM">PM</option>
-                                                    </select>
-                                                    <button type="submit" class="approve-btn" onclick="return confirmApproval('{{ user.full_name }}', this.form.role.value)">
-                                                        <i class="fa fa-check"></i> Approve
-                                                    </button>
-                                                </form>
-                                            {% elif user.status == 'Active' and user.email != current_user.email %}
-                                                <form method="POST" action="{{ url_for('dashboard.change_user_role', user_id=user.id) }}" style="display: inline;">
-                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                                    <select name="role" required class="role-select">
-                                                        <option value="{{ user.role }}" selected>{{ user.role }}</option>
-                                                        {% for role in ['Admin', 'Engineer', 'Automation Manager', 'PM'] %}
-                                                            {% if role != user.role %}
-                                                                <option value="{{ role }}">{{ role }}</option>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </select>
-                                                    <button type="submit" class="approve-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="return confirmRoleChange('{{ user.full_name }}', this.form.role.value)">
-                                                        <i class="fa fa-user-edit"></i> Change Role
-                                                    </button>
-                                                </form>
-                                                <form method="POST" action="{{ url_for('dashboard.disable_user', user_id=user.id) }}" style="display: inline;">
-                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                                    <button type="submit" class="approve-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-left: 4px;" onclick="return confirmDisable('{{ user.full_name }}')">
-                                                        <i class="fa fa-ban"></i> Disable
-                                                    </button>
-                                                </form>
-                                            {% elif user.status == 'Disabled' %}
-                                                <form method="POST" action="{{ url_for('dashboard.enable_user', user_id=user.id) }}" style="display: inline;">
-                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                                    <button type="submit" class="approve-btn" onclick="return confirmEnable('{{ user.full_name }}')">
-                                                        <i class="fa fa-check"></i> Enable
-                                                    </button>
-                                                </form>
-                                            {% endif %}
-
-                                            {% if user.email != current_user.email %}
-                                                <form method="POST" action="{{ url_for('dashboard.delete_user', user_id=user.id) }}" style="display: inline;">
-                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                                    <button type="submit" class="approve-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-left: 4px;" onclick="return confirmDelete('{{ user.full_name }}')">
-                                                        <i class="fa fa-trash"></i> Delete
-                                                    </button>
-                                                </form>
-                                            {% endif %}
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="empty-state">
-                        <i class="fa fa-users"></i>
-                        <h4>No Users Found</h4>
-                        <p>{% if current_filter == 'All' %}No users have been registered yet.{% else %}No users match the "{{ current_filter }}" status filter.{% endif %}</p>
-                    </div>
-                    {% endif %}
                 </div>
             </div>
+        </div>
+
+        <!-- Developer Credit Footer -->
+        <div class="developer-footer">
+            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
+                Developed by <strong style="color: var(--admin-primary);">Revanth Meda</strong> for Cully Automation
+            </p>
         </div>
     </div>
 
+    <!-- Unified JavaScript -->
     <script>
-        // Enhanced search functionality
-        document.getElementById('userSearch').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const tableRows = document.querySelectorAll('.user-row');
-            let visibleCount = 0;
+        // Common dashboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-refresh database status with error handling
+            function updateDatabaseStatus() {
+                fetch('/dashboard/db-status')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update all database status indicators
+                        const statusElements = document.querySelectorAll('.status-badge');
+                        statusElements.forEach(element => {
+                            const textContent = element.textContent || '';
+                            if (textContent.includes('Connected') || textContent.includes('Disconnected') || textContent.includes('Not Connected')) {
+                                if (data.connected) {
+                                    element.className = 'status-badge status-connected';
+                                    element.innerHTML = '<i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Connected';
+                                } else {
+                                    element.className = 'status-badge status-disconnected';
+                                    element.innerHTML = '<i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Disconnected';
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.warn('Database status check failed:', error.message);
+                        // Update status to show disconnected on error
+                        const statusElements = document.querySelectorAll('.status-badge');
+                        statusElements.forEach(element => {
+                            const textContent = element.textContent || '';
+                            if (textContent.includes('Connected') || textContent.includes('Disconnected') || textContent.includes('Not Connected')) {
+                                element.className = 'status-badge status-disconnected';
+                                element.innerHTML = '<i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Disconnected';
+                            }
+                        });
+                    });
+            }
 
-            tableRows.forEach(row => {
-                const userName = row.querySelector('.user-name').textContent.toLowerCase();
-                const userEmail = row.querySelector('.user-email').textContent.toLowerCase();
-                const roleText = row.querySelector('.status-badge').textContent.toLowerCase();
+            // Initial status check and setup interval
+            updateDatabaseStatus();
+            setInterval(updateDatabaseStatus, 30000); // Refresh every 30 seconds
 
-                if (userName.includes(searchTerm) || userEmail.includes(searchTerm) || roleText.includes(searchTerm)) {
-                    row.style.display = '';
-                    visibleCount++;
+            // Common notification function
+            window.showNotification = function(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 4px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 10000;
+                    max-width: 400px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                `;
+                
+                if (type === 'success') {
+                    notification.style.backgroundColor = '#10b981';
+                } else if (type === 'error') {
+                    notification.style.backgroundColor = '#ef4444';
+                } else if (type === 'warning') {
+                    notification.style.backgroundColor = '#f59e0b';
                 } else {
-                    row.style.display = 'none';
+                    notification.style.backgroundColor = '#3b82f6';
                 }
-            });
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            };
+        });
+    </script>osition: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 16px 24px;
+                    border-radius: 12px;
+                    color: white;
+                    font-weight: 600;
+                    z-index: 1000;
+                    transform: translateX(100%);
+                    transition: transform 0.3s ease;
+                    ${type === 'success' ? 'background: linear-gradient(135deg, #10b981, #059669);' : 'background: linear-gradient(135deg, #ef4444, #dc2626);'}
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                `;
+                notification.textContent = message;
 
-            console.log('Showing ' + visibleCount + ' of {{ users|length }} users');
+                document.body.appendChild(notification);
+
+                // Animate in
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            };
         });
 
         // Confirmation dialogs
@@ -911,78 +926,6 @@
         function confirmRoleChange(userName, newRole) {
             return confirm('Change ' + userName + '\'s role to ' + newRole + '?\n\nThis will immediately update their system permissions.');
         }
-
-        // Button functionality
-        document.getElementById('inviteUserBtn').addEventListener('click', function() {
-            showNotification('User invitation feature coming in next update', 'success');
-        });
-
-        document.getElementById('exportUsersBtn').addEventListener('click', function() {
-            const users = Array.from(document.querySelectorAll('.user-row')).map(row => {
-                const name = row.querySelector('.user-name').textContent;
-                const email = row.querySelector('.user-email').textContent;
-                const role = row.querySelector('.status-badge').textContent.trim();
-                const statusBadges = row.querySelectorAll('.status-badge');
-                const status = statusBadges.length > 1 ? statusBadges[1].textContent.trim() : 'Unknown';
-                return '"' + name + '","' + email + '","' + role + '","' + status + '"';
-            });
-
-            const csvContent = 'Name,Email,Role,Status\n' + users.join('\n');
-            const blob = new Blob([csvContent], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'users_export.csv';
-            a.click();
-            window.URL.revokeObjectURL(url);
-
-            showNotification('User list exported successfully', 'success');
-        });
-
-        document.getElementById('refreshUsersBtn').addEventListener('click', function() {
-            showNotification('Refreshing user list...', 'success');
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
-        });
-
-        // Notification helper function
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? '#10b981' : '#ef4444'};
-                color: white;
-                padding: 12px 20px;
-                border-radius: 8px;
-                z-index: 1000;
-                font-weight: 500;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        // Database status check function for consistency
-        async function checkDatabaseStatus() {
-            try {
-                const response = await fetch('/dashboard/db-status');
-                const data = await response.json();
-                console.log('Database status:', data.connected ? 'Connected' : 'Disconnected');
-            } catch (error) {
-                console.log('Database status check failed:', error);
-            }
-        }
-
-        // Initialize
-        checkDatabaseStatus();
-        setInterval(checkDatabaseStatus, 30000);
     </script>
 </body>
 </html>

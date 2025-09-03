@@ -66,6 +66,13 @@
                 {% block content %}{% endblock %}
             </div>
         </div>
+
+        <!-- Developer Credit Footer -->
+        <div class="developer-footer">
+            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
+                Developed by <strong style="color: var(--admin-primary);">Revanth Meda</strong> for Cully Automation
+            </p>
+        </div>
     </div>
 
     <!-- Unified JavaScript -->
@@ -121,6 +128,36 @@
                 notification.className = `notification notification-${type}`;
                 notification.style.cssText = `
                     position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 4px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 10000;
+                    max-width: 400px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                `;
+                
+                if (type === 'success') {
+                    notification.style.backgroundColor = '#10b981';
+                } else if (type === 'error') {
+                    notification.style.backgroundColor = '#ef4444';
+                } else if (type === 'warning') {
+                    notification.style.backgroundColor = '#f59e0b';
+                } else {
+                    notification.style.backgroundColor = '#3b82f6';
+                }
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            };
+        });
+    </script>osition: fixed;
                     top: 20px;
                     right: 20px;
                     padding: 16px 24px;
