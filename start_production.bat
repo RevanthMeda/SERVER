@@ -42,6 +42,18 @@ echo Direct Flask access - Simple deployment!
 echo Access: http://automation-reports.mobilehmi.org:8443
 echo.
 
+REM Change to the project directory
+cd /d "E:\report generator\SERVER"
+if %errorLevel% != 0 (
+    echo ERROR: Could not find project directory!
+    echo Please make sure the path is correct: E:\report generator\SERVER
+    pause
+    exit /b 1
+)
+
+echo Changed to project directory: %CD%
+echo.
+
 REM Start the application
 python app.py
 
