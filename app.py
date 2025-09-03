@@ -30,8 +30,9 @@ def create_app(config_name='default'):
     app.config.from_object(config_class)
     
     # Initialize production security middleware
-    if config_name == 'production':
-        init_security_middleware(app)
+    # Temporarily disabled for remote access testing
+    # if config_name == 'production':
+    #     init_security_middleware(app)
     
     # Initialize extensions
     csrf.init_app(app)
