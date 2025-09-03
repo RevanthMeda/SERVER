@@ -1,0 +1,141 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Windows\system32> cd "E:\report generator\SERVER"
+PS E:\report generator\SERVER> python app.py
+🔧 Initializing SAT Report Generator...
+[2025-09-03 18:07:25,270] INFO in models: Database connection successful
+[2025-09-03 18:07:25,288] INFO in models: Database tables created successfully
+[2025-09-03 18:07:25,322] INFO in models: Default system settings initialized
+[2025-09-03 18:07:25,323] INFO in models: Database initialized successfully
+[2025-09-03 18:07:25,323] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:8443
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+ * Serving Flask app 'app'
+ * Debug mode: on
+INFO:werkzeug:←[31m←[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.←[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8443
+ * Running on http://172.16.18.21:8443
+INFO:werkzeug:←[33mPress CTRL+C to quit←[0m
+INFO:werkzeug: * Restarting with stat
+🔧 Initializing SAT Report Generator...
+[2025-09-03 18:07:27,287] INFO in models: Database connection successful
+[2025-09-03 18:07:27,314] INFO in models: Database tables created successfully
+[2025-09-03 18:07:27,353] INFO in models: Default system settings initialized
+[2025-09-03 18:07:27,354] INFO in models: Database initialized successfully
+[2025-09-03 18:07:27,357] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:8443
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 273-260-108
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:44] "←[32mGET / HTTP/1.1←[0m" 302 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:45] "GET /auth/welcome HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:45] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:45] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:47] "GET /auth/login HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:47] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:47] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:57] "←[32mPOST /auth/login HTTP/1.1←[0m" 302 -
+[2025-09-03 18:07:58,011] INFO in dashboard: Admin dashboard: Found 1 total reports
+INFO:app:Admin dashboard: Found 1 total reports
+[2025-09-03 18:07:58,017] INFO in dashboard: Admin dashboard: Processing 1 recent reports
+INFO:app:Admin dashboard: Processing 1 recent reports
+[2025-09-03 18:07:58,018] DEBUG in dashboard: Could not get SAT data for report 19890bcf-9093-4e33-9079-465e3888d2d8: name 'SATReport' is not defined
+DEBUG:app:Could not get SAT data for report 19890bcf-9093-4e33-9079-465e3888d2d8: name 'SATReport' is not defined
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:58] "GET /dashboard/admin HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:58] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:58] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:07:58] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:08:28] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:08:58] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:09:28] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:09:58] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:10:28] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:10:58] "GET /dashboard/db-status HTTP/1.1" 200 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:05] code 400, message Bad request version ('ÊÊ\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06\x9c')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:05] "←[31m←[1m▬♥☺  ☺ ♣♥♥±v¬S´þ¡%àõ TòE3 ÃÐ£J¢±ÿ«t¬sé¡¸ &â♣më/+↑sâ'Lq♣ÌÛ  ÊÊ‼☺‼☻‼♥À+À/À,À0Ì©Ì¨À‼À¶   / 5☺ ♠←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:05] code 400, message Bad request version ('Ë`(eÆÊz\x805\x86\x01R\x05D')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:05] "←[31m←[1m▬♥☺)☺ %♥♥±¬☼E¥ç®´Ôr+`ZãO3ÿ­ üqVìLY\¼h© ËíXÖ⌂1%Ff¯ ↕ ►♦♦☺♣♠♠☺DÍ ♣ ♥☻h2 #   3♦ï♦í ☺ ◄ì♦À¼$0=♥♀Ye(Z¸Àè+P☺^çeJWìÌ♀E   ►,zÁk°♫ô·6íE∟RûÉ,ørë<û!_§0ÏR¼/¬ÂX↓rb↕¼z«bP6MP£¸y£!¬aÐp&ùÅQå­þ∟iÖk¶Wo      *g!‼`$☼¯`Üµ¶CdU¡zÖ Ýá‼|=⌂ÓjêÈü/`ì¬s·Ú◄¦ÍS▬ª1ÃcË♦)u÷xtªWwÄ|¶×ªê+mcLBÀ▬☻+uág_íj↔\Ät¬¯jsZãxÊI9Ab¾Ó%!   <ÏÒkt9³ÿ:♦[T▼7¦9úx[♀÷p%↓♀Ë`(eÆÊz5☺R♣D←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:07] code 400, message Bad request version ('automation-reports.mobilehmi.org\x00-\x00\x02\x01\x01\x00')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:07] "←[31m←[1m▬♥☺♠é☺ ♠å♥♥▼±6G£ù¢ìÂ;ÝL®☼(±v£c¡↑ ¤←n­øàP▼ `Ö6P®¬⌂¾ c¸Í  ::‼☺‼☻‼♥À+À/À,À0Ì©Ì¨À‼À¶   / 5☺ ♠|JJ     % #   automation-reports.mobilehmi.org - ☻☺☺ ←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:07] code 400, message Bad request version ('\x97~ßÕ»Û¨ù*D\x90¸')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:07] "←[31m←[1m▬♥☺♠É☺ ♠Å♥♥► $*⌂ß▬♀Ä↨ß¿ü☻µ¶íü½→´5^♦ä ~ßÕ»Û¨ù*D¸←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:08] code 400, message Bad request version ('\x9a\x9a\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06\x9c\x9a\x9a\x00\x00\x00+\x00\x07\x06ºº\x03\x04\x03\x03\x00')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:08] "←[31m←[1m▬♥☺  ☺ ♣♥♥1aÈ↓?Ø/←ïËyfaß+ÅãÓURà=ë/·ÙòÎM ûùÄ@ø
+q▬  ‼☺‼☻‼♥À+À/À,À0Ì©Ì¨À‼À¶   / 5☺ ♠   + ♠ºº♥♦♥♥ ←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:09] code 400, message Bad request version ('jj\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06\\**\x00\x00ÿ\x01\x00\x01\x00\x00')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:09] "←[31m←[1m▬♥☺♠É☺ ♠Å♥♥ uåÀÄ»☻▬6☼\◄Þà#oÎ♥ì¥¯♫ùÕk.Ü ó¨Þu▲4L1®ÐIn→ÑÄÐ¦nîEo]°ßN~I  jj‼☺‼☻‼♥À+À/À,À0Ì©Ì¨À‼À¶   / 5☺ ♠\**  ÿ☺ ☺  ←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:15] code 400, message Bad request version ('\x89ó\x8d\x05ã¥')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:15] "←[31m←[1m▬♥☺♠é☺ ♠å♥♥¨+←%è?I,☼¢RÔL_âDXdþºNpI$ |P▲ó♣ã¥←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:15] code 400, message Bad request version ('automation-reports.mobilehmi.org\x00\x12\x00\x00\x00#\x00\x00\x00')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:12:15] "←[31m←[1m▬♥☺♠É☺ ♠Å♥♥´|{G☻t¼O0¹↔Z8èEuÙ♣oFl,[- ☼¹ ÈÞçp73¶8«+N´x2&¿`×Då¦ô+♣W0  úú‼☺‼☻‼♥À+À/À,À0Ì©Ì¨À‼À¶   / 5☺ ♠\JJ     % #   automation-reports.mobilehmi.org ↕   #   ←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:14:39] code 400, message Bad request version ('8Ð÷{\x9bÕnñ¶p\x19ºC\x80s\x7fp\x16)gÑ\x00Èð°;+^\x17à\x9d\x86ê\x04]e\x12?Q')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:14:39] "←[31m←[1m▬♥☺♠É☺ ♠Å♥♥4↔gÓáïÀ☻_÷J↨e«ôz1j£åx,♀♂{ÑìüÑJ ▼qHD▼&G^Ûó¿ljÌ!§â¡Ê½°  ‼☺‼☻‼♥À+À/À,À0Ì©Ì¨À‼À¶   / 5☺ ♠\   ← ♥☻ ☻ÿ☺ ☺    % #   automation-reports.mobilehmi.org #   Ç%Ñ~PÇ8☼Úl▬←MWd]µ§Èi♦f)~§:b45ô¸∟å±wR5OÎ;q$J←ôP}♂¼"Ès ²CºÁÛðSW→s£ÈÇºr♂Ì►¾e♫6^â♂8Ð÷{Õnñ¶p↓ºCs⌂p▬)gÑ Èð°;+^↨àê♦]e↕?Q←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:14:39] code 400, message Bad request version ('\x1aË}å\x80y')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:14:39] "←[31m←[1m▬♥☺♠é☺ ♠å♥♥PMÒàMÄ³Al°ë¯♀c↨ï0Ø7¹4¦Õ¿Y{⌂( →Ë}åy←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:14:59] code 400, message Bad request version ('_\x8a\x81¿è¤3p')
+Te¨ºO8pÛ#»g´´;¶ÛËªNµFÇDï; ì◄­7èG∟ñzÅ¦§ÿ~´yÊòÀÛÄ↑ÿ↓ý*¹  úú‼☺‼☻‼♥À+À/À,À0Ì©Ì¨À‼À¶   / 5☺ ♠ºº     % #   automat ↕ ►♦♦☺♣♠♠☺ ← ♥☻ ☻ 3♦ï♦í ☺ ◄ì♦Àæ7Q♥o♦¡A¶§¬   w$öPÏqÂ¤&å      ° hÌe!¥£nWÄ?p⌂Ë2☺ÀUÃD)4§BZ☻0►r↕#¢Ì´<¶☻J↔-è5`¹À>V$úZïc↨q»d®Ðä\=cCp0IjUgÓÅ|H:l7☻»;►_¿è¤3p←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:14:59] code 400, message Bad request version ('automation-reports.mobilehmi.org\x00+\x00\x07\x06zz\x03\x04\x03\x03\x00\x12\x00\x00\x00')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:14:59] "←[31m←[1m▬♥☺  ☺ ♣♥♥_ñå:►'mç♠B0M¨p\¸f→M³KAíF¶ò♫e♣K Þ&++&ß³gøBÇ"¡ï→Ó♂GxõBpxùã¯7  ZZ‼☺‼☻‼♥À+À/À,À0Ì©Ì¨À‼À¶   / 5☺ ♠  ÿ☺ ☺  - ☻☺☺ ← ♥☻ ☻ ► ♫ ♀☻http/1.1 ♣ ♣☺       % #   automation-reports.mobilehmi.org + ♠zz♥♦♥♥ ↕   ←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:16:48] code 400, message Bad request version ('°[\x93v3èÝN&¹æ\x7f\x15\x89\x034x}\x0e+ã±n\x0fÒê;ÃØÉ:O\x00')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:16:48] "←[31m←[1m▬♥☺  ☺ ♣♥♥‼P:É       £8Ìäñ3eD7YTÒ«A▲;ÊraA7áe▬♂¾ °[v3èÝN&¹æ⌂§♥4x}♫+ã±n☼Òê;ÃØÉ:O  ←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:16:48] code 400, message Bad request version ('2\x18\x00')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:16:48] "←[31m←[1m▬♥☺♠É☺ ♠Å♥♥Syý☺Ñ£♦☼3¥çÿïÕh☺←☺1Òî.m>2 £Ø(¥'?*©­ËÅpÿkô←Æ¶♂$ZFgÂ~þjA▼2↑  ←[0m" 400 -
+
+📡 Shutting down server...
+
+📡 Shutting down server...
+PS E:\report generator\SERVER> python app.py
+🔧 Initializing SAT Report Generator...
+[2025-09-03 18:16:55,472] INFO in models: Database connection successful
+[2025-09-03 18:16:55,491] INFO in models: Database tables created successfully
+[2025-09-03 18:16:55,529] INFO in models: Default system settings initialized
+[2025-09-03 18:16:55,530] INFO in models: Database initialized successfully
+[2025-09-03 18:16:55,532] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:8443
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+ * Serving Flask app 'app'
+ * Debug mode: on
+INFO:werkzeug:←[31m←[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.←[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8443
+ * Running on http://172.16.18.21:8443
+INFO:werkzeug:←[33mPress CTRL+C to quit←[0m
+INFO:werkzeug: * Restarting with stat
+🔧 Initializing SAT Report Generator...
+[2025-09-03 18:16:57,534] INFO in models: Database connection successful
+[2025-09-03 18:16:57,551] INFO in models: Database tables created successfully
+[2025-09-03 18:16:57,588] INFO in models: Default system settings initialized
+[2025-09-03 18:16:57,589] INFO in models: Database initialized successfully
+[2025-09-03 18:16:57,591] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:8443
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 273-260-108
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:16:59] code 400, message Bad request version ('¾\x7f\x15\x15ªî\x9bÏ\x0fºÔ\x8b')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:16:59] "←[31m←[1m▬♥☺  ☺ ♣♥♥è£↔§Åq¨ß÷☼ P↔ù×¯♠↨×JâÛ^#↔ßÇ ª ‼↓JÅ∟¾⌂§§ªîÏ☼ºÔ←[0m" 400 -
+ERROR:werkzeug:178.250.118.114 - - [03/Sep/2025 18:16:59] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x07)\x01\x00\x07%\x03\x03*?m\x873)MþØ?¸')
+INFO:werkzeug:178.250.118.114 - - [03/Sep/2025 18:16:59] "←[31m←[1m▬♥☺)☺ %♥♥*?m3)MþØ?¸∟↓ÀËÉ¼]°BjY←[0m" 400 -
