@@ -34,7 +34,7 @@ set PERMANENT_SESSION_LIFETIME=7200
 echo Environment variables set for production...
 echo.
 
-echo No administrator privileges needed for port 8443!
+echo ADMINISTRATOR PRIVILEGES REQUIRED for port 443!
 
 echo.
 echo Starting SAT Report Generator in Production Mode...
@@ -54,7 +54,34 @@ if %errorLevel% != 0 (
 echo Changed to project directory: %CD%
 echo.
 
+REM Check if running as Administrator
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    echo ✓ Running as Administrator - Starting Flask...
+) else (
+    echo ❌ ERROR: Administrator privileges required for port 443!
+    echo.
+    echo Please run this batch file as Administrator:
+    echo 1. Right-click on start_production.bat
+    echo 2. Select "Run as Administrator"
+    echo 3. Click "Yes" when prompted
+    echo.
+    pause
+    exit /b 1
+)
+
 REM Start the application
+echo Starting Flask on port 443...
 python app.py
+
+if %errorLevel% != 0 (
+    echo.
+    echo ❌ Flask failed to start!
+    echo Common issues:
+    echo - Port 443 already in use
+    echo - Administrator privileges needed
+    echo - Firewall blocking port 443
+    echo.
+)
 
 pause
