@@ -68,10 +68,7 @@ def create_app(config_name='default'):
         token = generate_csrf()
         g.csrf_token = token
         
-        # Debug: Log session info
-        if app.debug or app.logger.isEnabledFor(logging.INFO):
-            app.logger.info(f"Session ID: {session.get('_csrf_token', 'None')[:20] if session.get('_csrf_token') else 'Missing'}...")
-            app.logger.info(f"Generated Token: {token[:20]}...")
+        # Clean token generation without verbose logging
 
     # Inject CSRF token into all responses and disable compression for IIS
     @app.after_request
@@ -149,31 +146,21 @@ def create_app(config_name='default'):
     def handle_csrf_error(e):
         from flask import session
         
-        app.logger.warning(f"🔒 CSRF Error: {str(e)}")
-        app.logger.warning(f"🔍 Session Token: {'EXISTS' if session.get('_csrf_token') else 'MISSING'}")
-        app.logger.warning(f"🔍 Form Token: {request.form.get('csrf_token', 'MISSING')[:20]}...")
-        
-        # Force session refresh
-        session['_csrf_initialized'] = True
+        # Simple, clean error handling
         session.permanent = True
-        
-        # Generate a completely fresh token
         new_token = generate_csrf()
         g.csrf_token = new_token
         
-        app.logger.info(f"✅ Generated new token: {new_token[:20]}...")
-        
-        # For AJAX requests, return JSON with new token
+        # For AJAX requests, return JSON
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return jsonify({
-                'error': 'CSRF token refreshed',
-                'message': 'Token automatically refreshed. Please retry.',
-                'csrf_token': new_token,
-                'auto_retry': True
-            }), 200
+                'error': 'CSRF token expired',
+                'message': 'Please refresh and try again',
+                'csrf_token': new_token
+            }), 400
 
-        # For form submissions, show user-friendly error with auto-refresh
-        return render_template('csrf_error.html', reason='Session issue - auto-fixing'), 400
+        # For form submissions, show clean error page
+        return render_template('csrf_error.html', reason='Security token expired'), 400
 
     # Root route - redirect to welcome or dashboard
     @app.route('/')
@@ -354,19 +341,7 @@ if __name__ == '__main__':
             except Exception as e:
                 print(f"⚠️  Database warning: {e}")
 
-        # Test session functionality
-        @app.route('/debug/session')
-        def debug_session():
-            from flask import session
-            session['test'] = 'session_working'
-            
-            return jsonify({
-                'session_id': session.get('_csrf_token', 'None')[:20] if session.get('_csrf_token') else 'Missing',
-                'session_data': dict(session),
-                'csrf_token': generate_csrf(),
-                'test_value': session.get('test'),
-                'permanent': session.permanent
-            })
+        # Removed debug session endpoint - not needed in production
         
         # Test a simple route to ensure app is working
         @app.route('/health')
