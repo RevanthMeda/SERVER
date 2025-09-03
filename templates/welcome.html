@@ -1249,13 +1249,34 @@
             const modal = document.getElementById('contentModal');
             const content = document.getElementById('modalContent');
 
-            // ... existing modal content logic stays the same ...
-
             let title = '';
             let body = '';
 
-            // Add the switch statement content here (keeping existing cases)
+            // Complete the modal functionality
             switch(type) {
+                case 'privacy':
+                    title = 'Privacy Policy';
+                    body = '<h2>Privacy Policy</h2><p>Coming soon...</p>';
+                    break;
+                case 'terms':
+                    title = 'Terms of Service';
+                    body = '<h2>Terms of Service</h2><p>Coming soon...</p>';
+                    break;
+                default:
+                    title = 'Information';
+                    body = '<p>Content not available</p>';
+            }
+
+            content.innerHTML = '<h2>' + title + '</h2>' + body;
+            modal.style.display = 'block';
+            modal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('contentModal');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+        }
     </script>
 </body>
 </html>

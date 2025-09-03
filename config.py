@@ -43,26 +43,42 @@ class Config:
     os.makedirs(SIGNATURES_FOLDER, exist_ok=True)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # Email configuration - Prioritize environment variables over .env file
+    # Email configuration - Dynamic loading (no caching)
+    # Static config for server/port/username (these rarely change)
     SMTP_SERVER = os.environ.get('SMTP_SERVER') or 'smtp.gmail.com'
     SMTP_PORT = int(os.environ.get('SMTP_PORT') or 587)
     SMTP_USERNAME = os.environ.get('SMTP_USERNAME') or ''
-    
-    # Get password - prioritize Replit secrets over .env file
-    SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
-    if not SMTP_PASSWORD:
-        # Only try loading from .env if no environment variable exists
-        from dotenv import load_dotenv
-        load_dotenv()
-        SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
-    
     DEFAULT_SENDER = os.environ.get('DEFAULT_SENDER') or ''
     
-    # Debug print (remove in production)
-    print(f"🔐 Loaded SMTP password length: {len(SMTP_PASSWORD)}")
-    if SMTP_PASSWORD:
-        print(f"🔐 First 4 chars: {SMTP_PASSWORD[:4]}...")
-        print(f"🔐 Last 4 chars: ...{SMTP_PASSWORD[-4:]}")
+    # Dynamic password loading - always fresh from environment
+    @staticmethod
+    def get_smtp_credentials():
+        """
+        Always fetch fresh SMTP credentials from environment variables.
+        This prevents password caching issues when credentials change.
+        """
+        import os
+        from dotenv import load_dotenv
+        
+        # Force refresh environment variables
+        smtp_password = os.environ.get('SMTP_PASSWORD', '')
+        
+        # If not found in environment, try .env file (for local development)
+        if not smtp_password:
+            load_dotenv(override=True)
+            smtp_password = os.environ.get('SMTP_PASSWORD', '')
+        
+        print(f"🔄 Fresh SMTP credentials loaded - Password length: {len(smtp_password)}")
+        if smtp_password:
+            print(f"🔐 Password: {smtp_password[:4]}...{smtp_password[-4:]}")
+        
+        return {
+            'server': Config.SMTP_SERVER,
+            'port': Config.SMTP_PORT,
+            'username': Config.SMTP_USERNAME,
+            'password': smtp_password,
+            'sender': Config.DEFAULT_SENDER
+        }
 
     # PDF export
     ENABLE_PDF_EXPORT = os.environ.get('ENABLE_PDF_EXPORT', 'False').lower() == 'true'

@@ -342,11 +342,14 @@ def send_email(to_email, subject, html_content, text_content=None):
     # Log attempt
     logger.info(f"Attempting to send email to {to_email}")
 
-    # Get email configuration
-    smtp_server = current_app.config['SMTP_SERVER']
-    smtp_port = current_app.config['SMTP_PORT']
-    smtp_username = current_app.config['SMTP_USERNAME']
-    smtp_password = current_app.config['SMTP_PASSWORD']
+    # Get fresh email configuration (prevents password caching)
+    from config import Config
+    credentials = Config.get_smtp_credentials()
+    
+    smtp_server = credentials['server']
+    smtp_port = credentials['port'] 
+    smtp_username = credentials['username']
+    smtp_password = credentials['password']
 
     if not smtp_username or not smtp_password:
         logger.error("SMTP credentials are not configured")
@@ -365,7 +368,7 @@ def send_email(to_email, subject, html_content, text_content=None):
     # Create message
     msg = EmailMessage()
     msg["Subject"] = subject
-    msg["From"] = current_app.config['DEFAULT_SENDER'] or smtp_username
+    msg["From"] = credentials['sender'] or smtp_username
     msg["To"] = to_email
     msg.set_content(text_content or html_content.replace("<br>", "\n").replace("<p>", "").replace("</p>", "\n\n"))
     msg.add_alternative(html_content, subtype="html")
