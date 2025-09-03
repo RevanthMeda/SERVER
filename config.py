@@ -134,7 +134,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Production configuration for domain-only access"""
     DEBUG = False
-    PORT = 80  # Production port
+    # PORT is inherited from Config class (uses environment variable)
     SESSION_COOKIE_SECURE = True
     
     # Production domain security

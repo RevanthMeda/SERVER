@@ -1,0 +1,45 @@
+================================================
+SAT Report Generator - Port 8080 Deployment
+================================================
+Starting on port 8080 (no administrator required)...
+
+🚀 SAT Report Generator - Production Deployment
+==================================================
+Target Server: 172.16.18.21
+Domain: automation-reports.mobilehmi.org
+Port: 8080
+==================================================
+✅ Environment variables configured for production (using PORT=8080)
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+✅ All required dependencies are available
+✅ Required directories created
+'FLASK_ENV' is deprecated and will not be used in Flask 2.3. Use 'FLASK_DEBUG' instead.
+🌐 Allowed Domains: ['automation-reports.mobilehmi.org']
+🛡️  IP Blocking: True
+🔒 Debug Mode: False
+🚪 Port: 80
+
+✅ Database initialized successfully
+
+🔐 SECURITY STATUS:
+✅ Domain-only access: ENABLED
+   - automation-reports.mobilehmi.org ✅ ALLOWED
+   - 172.16.18.21 ❌ BLOCKED
+✅ Production mode: ENABLED
+
+==================================================
+🚀 Starting production server...
+🌐 Access your application at: http://automation-reports.mobilehmi.org
+🚫 Direct IP access will be blocked
+==================================================
+🌐 Starting server on port 8080...
+'FLASK_ENV' is deprecated and will not be used in Flask 2.3. Use 'FLASK_DEBUG' instead.
+'FLASK_ENV' is deprecated and will not be used in Flask 2.3. Use 'FLASK_DEBUG' instead.
+ * Serving Flask app 'app'
+ * Debug mode: off
+INFO:werkzeug:←[31m←[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.←[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.18.21:8080
+INFO:werkzeug:←[33mPress CTRL+C to quit←[0m
