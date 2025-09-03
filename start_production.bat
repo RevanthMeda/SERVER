@@ -6,13 +6,13 @@ echo ================================================
 echo SAT Report Generator - Production Deployment
 echo Server: 172.16.18.21
 echo Domain: automation-reports.mobilehmi.org
-echo Port: 80 (Requires Administrator)
+echo Port: 8443 (No Administrator needed!)
 echo ================================================
 
 REM Set production environment variables
 set FLASK_ENV=production
 set DEBUG=False
-set PORT=80
+set PORT=8443
 set ALLOWED_DOMAINS=automation-reports.mobilehmi.org
 set SERVER_IP=172.16.18.21
 set BLOCK_IP_ACCESS=True
@@ -34,28 +34,15 @@ set PERMANENT_SESSION_LIFETIME=7200
 echo Environment variables set for production...
 echo.
 
-REM Check if running as administrator
-net session >nul 2>&1
-if %errorLevel% == 0 (
-    echo Running as Administrator: YES
-) else (
-    echo WARNING: Not running as Administrator!
-    echo Port 80 requires administrator privileges.
-    echo Please run this script as Administrator.
-    echo.
-    echo Alternative: Use port 8080 instead:
-    echo   set PORT=8080
-    echo   Then configure IIS/Apache to forward port 80 to 8080
-    pause
-    exit /b 1
-)
+echo No administrator privileges needed for port 8443!
 
 echo.
 echo Starting SAT Report Generator in Production Mode...
-echo Domain-only access enabled - IP access blocked
+echo Direct Flask access - Simple deployment!
+echo Access: http://automation-reports.mobilehmi.org:8443
 echo.
 
 REM Start the application
-python deploy.py
+python app.py
 
 pause

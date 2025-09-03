@@ -22,7 +22,7 @@ class Config:
     # Security
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here-change-in-production'
     WTF_CSRF_ENABLED = True
-    WTF_CSRF_TIME_LIMIT = 14400  # Increased to 4 hours
+    WTF_CSRF_TIME_LIMIT = None  # No time limit - tokens valid until session expires
 
     # Database - Use absolute path for SQLite
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -119,7 +119,7 @@ class Config:
     SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False').lower() == 'true'
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
-    PERMANENT_SESSION_LIFETIME = int(os.getenv('PERMANENT_SESSION_LIFETIME', '3600'))  # 1 hour
+    PERMANENT_SESSION_LIFETIME = int(os.getenv('PERMANENT_SESSION_LIFETIME', '28800'))  # 8 hours
 
     @staticmethod
     def init_app(app):

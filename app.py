@@ -52,9 +52,10 @@ def create_app(config_name='default'):
     # Simplified logging for better performance
     logging.basicConfig(level=logging.WARNING)
 
-    # Add CSRF token to g for access in templates
+    # Add CSRF token to g for access in templates and refresh on each request
     @app.before_request
     def add_csrf_token():
+        # Always generate a fresh token for better reliability
         token = generate_csrf()
         g.csrf_token = token
 
@@ -64,12 +65,18 @@ def create_app(config_name='default'):
         if response.mimetype == 'text/html' and hasattr(g, 'csrf_token'):
             response.set_cookie(
                 'csrf_token', g.csrf_token,
-                httponly=False, samesite='Lax'
+                httponly=False, 
+                samesite='Lax',
+                max_age=28800  # 8 hours to match session lifetime
             )
         
         # Disable compression for IIS compatibility
         response.headers['Content-Encoding'] = 'identity'
         response.headers['Vary'] = 'Accept-Encoding'
+        
+        # Add cache control for better CSRF token handling
+        if 'Cache-Control' not in response.headers:
+            response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
         
         return response
 
