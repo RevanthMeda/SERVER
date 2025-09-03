@@ -52,6 +52,10 @@ author = "agent"
 task = "workflow.run"
 args = "SAT Report Generator"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "SAT Report Generator Backend"
+
 [[workflows.workflow]]
 name = "SAT Report Generator"
 author = "agent"
@@ -64,6 +68,18 @@ task = "shell.exec"
 args = "FLASK_ENV=development python app.py"
 waitForPort = 5000
 
+[[workflows.workflow]]
+name = "SAT Report Generator Backend"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_local_backend.py"
+waitForPort = 8080
+
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[ports]]
 localPort = 80
 externalPort = 3000
@@ -71,6 +87,11 @@ externalPort = 3000
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+exposeLocalhost = true
 
 [agent]
 expertMode = true

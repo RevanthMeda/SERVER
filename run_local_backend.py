@@ -7,8 +7,6 @@ IIS handles HTTPS on port 443 and serves this via iframe
 
 import os
 import sys
-from config import config
-from app import create_app
 
 def setup_backend_environment():
     """Set up environment for local backend with IIS frontend"""
@@ -53,6 +51,10 @@ def main():
     print("=" * 55)
     
     setup_backend_environment()
+    
+    # Import after environment is set
+    from config import config
+    from app import create_app
     
     # Create Flask app
     app = create_app('production')
@@ -117,7 +119,7 @@ def main():
         print(f"🚀 Backend service running on http://127.0.0.1:8080")
         app.run(
             host='127.0.0.1',  # Localhost only
-            port=8080,
+            port=int(os.environ.get('PORT', 8080)),  # Use environment PORT or default to 8080
             debug=False,
             threaded=True,
             use_reloader=False
