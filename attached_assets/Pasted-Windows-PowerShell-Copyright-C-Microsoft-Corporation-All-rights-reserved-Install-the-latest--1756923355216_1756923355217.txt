@@ -1,0 +1,64 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Windows\system32> netsh advfirewall firewall add rule name="SAT Reports Inbound" dir=in action=allow protocol=TCP localport=8443
+>> netsh advfirewall firewall add rule name="SAT Reports Outbound" dir=out action=allow protocol=TCP localport=8443
+Ok.
+
+Ok.
+
+PS C:\Windows\system32> External Port: 8443
+External : The term 'External' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ External Port: 8443
++ ~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (External:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Windows\system32> Internal IP: 172.16.18.21
+Internal : The term 'Internal' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ Internal IP: 172.16.18.21
++ ~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Internal:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Windows\system32> Internal Port: 8443
+Internal : The term 'Internal' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ Internal Port: 8443
++ ~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Internal:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Windows\system32> Domain: automation-reports.mobilehmi.org
+Domain: : The term 'Domain:' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ Domain: automation-reports.mobilehmi.org
++ ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Domain::String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Windows\system32> Points to: Your public IP address
+Points : The term 'Points' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ Points to: Your public IP address
++ ~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Points:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Windows\system32> Port: 8443
+Port: : The term 'Port:' is not recognized as the name of a cmdlet, function, script file, or operable program. Check
+the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ Port: 8443
++ ~~~~~
+    + CategoryInfo          : ObjectNotFound: (Port::String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
