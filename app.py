@@ -29,9 +29,9 @@ def create_app(config_name='default'):
     config_class = config.get(config_name, config['default'])
     app.config.from_object(config_class)
     
-    # Initialize production security middleware - DISABLED FOR TESTING
-    # if config_name == 'production':
-    #     init_security_middleware(app)
+    # Initialize production security middleware
+    if config_name == 'production':
+        init_security_middleware(app)
     
     # Initialize extensions
     csrf.init_app(app)
@@ -52,43 +52,20 @@ def create_app(config_name='default'):
     # Simplified logging for better performance
     logging.basicConfig(level=logging.WARNING)
 
-    # Add CSRF token to g for access in templates and refresh on each request
+    # Add CSRF token to g for access in templates
     @app.before_request
     def add_csrf_token():
-        from flask import session
-        
-        # Ensure session is properly configured
-        session.permanent = True
-        
-        # Force session to be saved (Flask sometimes doesn't save empty sessions)
-        if not session.get('_csrf_initialized'):
-            session['_csrf_initialized'] = True
-        
-        # Generate token and ensure it's stored in session
         token = generate_csrf()
         g.csrf_token = token
-        
-        # Clean token generation without verbose logging
 
-    # Inject CSRF token into all responses and disable compression for IIS
+    # Inject CSRF token into all responses
     @app.after_request
     def set_csrf_cookie(response):
         if response.mimetype == 'text/html' and hasattr(g, 'csrf_token'):
             response.set_cookie(
                 'csrf_token', g.csrf_token,
-                httponly=False, 
-                samesite='Lax',
-                max_age=28800  # 8 hours to match session lifetime
+                httponly=False, samesite='Lax'
             )
-        
-        # Disable compression for IIS compatibility
-        response.headers['Content-Encoding'] = 'identity'
-        response.headers['Vary'] = 'Accept-Encoding'
-        
-        # Add cache control for better CSRF token handling
-        if 'Cache-Control' not in response.headers:
-            response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-        
         return response
 
     # Make CSRF token available in all templates
@@ -144,23 +121,24 @@ def create_app(config_name='default'):
     # Custom CSRF error handler
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
-        from flask import session
-        
-        # Simple, clean error handling
-        session.permanent = True
-        new_token = generate_csrf()
-        g.csrf_token = new_token
-        
-        # For AJAX requests, return JSON
+        app.logger.error(f"CSRF Error occurred: {str(e)}")
+        app.logger.error(f"Request Method: {request.method}")
+        app.logger.error(f"Request Form Keys: {list(request.form.keys()) if request.form else []}")
+        app.logger.error(f"CSRF Token Submitted: {request.form.get('csrf_token') if request.form else 'No form data'}")
+
+        # For AJAX requests, return JSON error
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return jsonify({
                 'error': 'CSRF token expired',
-                'message': 'Please refresh and try again',
-                'csrf_token': new_token
+                'message': 'Please refresh the page and try again',
+                'csrf_token': generate_csrf()
             }), 400
 
-        # For form submissions, show clean error page
-        return render_template('csrf_error.html', reason='Security token expired'), 400
+        # Ensure we have a CSRF token for the error page
+        if not hasattr(g, 'csrf_token'):
+            g.csrf_token = generate_csrf()
+
+        return render_template('csrf_error.html', reason=str(e)), 400
 
     # Root route - redirect to welcome or dashboard
     @app.route('/')
@@ -245,68 +223,26 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, sigint_handler)
     signal.signal(signal.SIGTERM, sigint_handler)
 
-    # Setup environment for production on port 443
-    env_vars = {
-        'FLASK_ENV': 'production',
-        'DEBUG': 'False',
-        'PORT': '8000',
-        'ALLOWED_DOMAINS': 'automation-reports.mobilehmi.org',
-        'SERVER_IP': '172.16.18.21',
-        'BLOCK_IP_ACCESS': 'False',  # Disable IP blocking for testing
-        'SECRET_KEY': 'production-key-change-immediately',
-        
-        # Email configuration
-        'SMTP_SERVER': 'smtp.gmail.com',
-        'SMTP_PORT': '587',
-        'SMTP_USERNAME': 'meda.revanth@gmail.com',
-        'SMTP_PASSWORD': 'rleg tbhv rwvb kdus',
-        'DEFAULT_SENDER': 'meda.revanth@gmail.com',
-        'ENABLE_EMAIL_NOTIFICATIONS': 'True',
-        
-        # Production security settings
-        'SESSION_COOKIE_SECURE': 'False',  # HTTP backend, HTTPS handled by IIS
-        'WTF_CSRF_ENABLED': 'True',
-        'PERMANENT_SESSION_LIFETIME': '7200',
-    }
-    
-    for key, value in env_vars.items():
-        os.environ[key] = value
-
     try:
-        print("🔧 SAT Report Generator - Flask Backend for IIS")
-        print("=" * 60)
-        print("Configuration:")
-        print("- IIS Frontend: https://automation-reports.mobilehmi.org:443 (HTTPS)")
-        print("- Flask Backend: http://127.0.0.1:8000 (HTTP)")
-        print("- IIS routes HTTPS traffic to Flask backend")
-        print("- Corporate hosting setup")
-        print("=" * 60)
+        print("🔧 Initializing SAT Report Generator...")
         
-        # Create the app with production configuration
-        app = create_app('production')
+        # Determine environment
+        flask_env = os.environ.get('FLASK_ENV', 'development')
+        config_name = 'production' if flask_env == 'production' else 'development'
         
-        # Configure production security headers
-        @app.after_request
-        def production_security_headers(response):
-            response.headers['X-Content-Type-Options'] = 'nosniff'
-            response.headers['X-Frame-Options'] = 'DENY'
-            response.headers['X-XSS-Protection'] = '1; mode=block'
-            response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-            response.headers['Content-Security-Policy'] = (
-                "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; "
-                "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; "
-                "font-src 'self' fonts.gstatic.com; "
-                "img-src 'self' data:;"
-            )
-            response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
-            return response
+        # Create the app with appropriate configuration
+        app = create_app(config_name)
+        
+        # Log security status for production
+        if config_name == 'production':
+            print("🔒 Production mode: Domain security enabled")
+            print(f"🌐 Allowed domain: {app.config.get('ALLOWED_DOMAINS', [])}")
+            print(f"🚫 IP access blocking: {app.config.get('BLOCK_IP_ACCESS', False)}")
 
-        print(f"🌐 Port: 5000")
-        print(f"🛡️  Domain Security: {app.config.get('BLOCK_IP_ACCESS', False)}")
-        print(f"🔒 HTTPS: Handled by IIS")
-        print(f"📡 Access URL: https://automation-reports.mobilehmi.org")
-        print()
+        # Print startup information
+        print(f"🚀 Starting {app.config.get('APP_NAME', 'SAT Report Generator')}...")
+        print(f"Debug Mode: {app.config.get('DEBUG', False)}")
+        print(f"Running on http://0.0.0.0:{app.config.get('PORT', 5000)}")
 
         # Create required directories if they don't exist
         try:
@@ -332,17 +268,6 @@ if __name__ == '__main__':
         except Exception as dir_error:
             print(f"⚠️  Warning: Could not create some directories: {dir_error}")
 
-        # Initialize database
-        with app.app_context():
-            from models import db
-            try:
-                db.create_all()
-                print("✅ Database initialized")
-            except Exception as e:
-                print(f"⚠️  Database warning: {e}")
-
-        # Removed debug session endpoint - not needed in production
-        
         # Test a simple route to ensure app is working
         @app.route('/health')
         def health_check():
@@ -356,50 +281,47 @@ if __name__ == '__main__':
                 app.logger.error(f"Database health check failed: {e}")
                 db_status = 'disconnected'
             
-            # Include CSRF token for AJAX requests (for automatic token refresh)
-            response_data = {
+            return jsonify({
                 'status': 'healthy', 
                 'message': 'SAT Report Generator is running',
                 'database': db_status
-            }
-            
-            # Add CSRF token if this is an AJAX request
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                response_data['csrf_token'] = generate_csrf()
-            
-            return jsonify(response_data)
+            })
 
-        # Check for SSL certificates
-        ssl_cert_path = 'ssl/server.crt'
-        ssl_key_path = 'ssl/server.key'
-        
-        # Create SSL directory if it doesn't exist
-        os.makedirs('ssl', exist_ok=True)
-        
-        print()
-        print("🚀 Starting SAT Report Generator - Direct Access")
-        print("   No IIS needed - Simple Flask deployment!")
-        print("   Health check available at: /health")
-        print()
+        print("🌐 Health check endpoint available at /health")
 
-        # Simple solution: Use port 8443 (no admin rights needed)
-        port = 8443
-        print(f"🚀 Starting SAT Report Generator on port {port}...")
-        print(f"   Access: http://automation-reports.mobilehmi.org:{port}")
-        print(f"   Or: http://127.0.0.1:{port}")
-        print("   No IIS needed - Direct Flask access!")
-        
+        # Run the server
         try:
+            # Production server configuration
+            host = '0.0.0.0'  # Bind to all interfaces
+            port = app.config['PORT']
+            debug = app.config.get('DEBUG', False)
+            
+            if config_name == 'production':
+                print(f"🚀 Starting production server on port {port}")
+                print("⚠️  Production mode: Use a WSGI server like Gunicorn for deployment")
+            
             app.run(
-                host='0.0.0.0',
+                host=host,
                 port=port,
-                debug=False,
+                debug=debug,
                 threaded=True,
-                use_reloader=False
+                use_reloader=False if config_name == 'production' else debug
             )
-        except Exception as e:
-            print(f"❌ Server error: {e}")
-            print("   Check if port 8000 is available")
+        except OSError as e:
+            if "Address already in use" in str(e):
+                print("⚠️  Port 5000 is already in use. Trying to kill existing processes...")
+                import os
+                os.system('pkill -f "python app.py"')
+                import time
+                time.sleep(2)
+                print("🔄 Retrying on port 5000...")
+                app.run(
+                    host='0.0.0.0',
+                    port=app.config['PORT'],
+                    debug=app.config['DEBUG']
+                )
+            else:
+                raise
 
     except Exception as e:
         print(f"❌ Server startup failed: {e}")
