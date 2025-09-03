@@ -243,10 +243,9 @@ if __name__ == '__main__':
         # Print startup information
         print(f"🚀 Starting {app.config.get('APP_NAME', 'SAT Report Generator')}...")
         print(f"Debug Mode: {app.config.get('DEBUG', False)}")
-        protocol = "https" if app.config.get('PORT') == 8443 else "http"
+        protocol = "http"  # Temporarily using HTTP for testing
         print(f"Running on {protocol}://0.0.0.0:{app.config.get('PORT', 5000)}")
-        if app.config.get('PORT') == 8443:
-            print("🔒 HTTPS enabled on port 8443 - SSL certificate will be used")
+        print("ℹ️  Testing with HTTP - SSL disabled temporarily")
 
         # Create required directories if they don't exist
         try:
@@ -304,22 +303,9 @@ if __name__ == '__main__':
                 print(f"🚀 Starting production server on port {port}")
                 print("⚠️  Production mode: Use a WSGI server like Gunicorn for deployment")
             
-            # Configure SSL context for HTTPS 
+            # Temporarily disable SSL for testing
             ssl_context = None
-            if port == 8443:
-                try:
-                    # Try to use SSL certificate files if they exist
-                    if os.path.exists('ssl/server.crt') and os.path.exists('ssl/server.key'):
-                        ssl_context = ('ssl/server.crt', 'ssl/server.key')
-                        print("🔒 Using SSL certificate files")
-                    else:
-                        # Use self-signed certificate for development/testing
-                        ssl_context = 'adhoc'
-                        print("🔒 Using self-signed SSL certificate")
-                        print("⚠️  Browsers will show security warning for self-signed certificates")
-                except Exception as e:
-                    print(f"⚠️  SSL setup failed: {e}")
-                    print("ℹ️  Running without SSL...")
+            print("ℹ️  SSL temporarily disabled for testing - using HTTP")
 
             app.run(
                 host=host,
