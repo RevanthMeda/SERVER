@@ -280,7 +280,7 @@ if __name__ == '__main__':
             response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
             return response
 
-        print(f"🌐 Port: {app.config['PORT']}")
+        print(f"🌐 Port: 5000")
         print(f"🛡️  Domain Security: {app.config.get('BLOCK_IP_ACCESS', False)}")
         print(f"🔒 HTTPS: Handled by IIS")
         print(f"📡 Access URL: https://automation-reports.mobilehmi.org")
@@ -358,7 +358,7 @@ if __name__ == '__main__':
 
         try:
             app.run(
-                host='127.0.0.1',  # Localhost only - behind IIS proxy
+                host='0.0.0.0',  # Allow all connections 
                 port=5000,
                 debug=False,
                 threaded=True,
