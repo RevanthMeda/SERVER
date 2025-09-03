@@ -15,11 +15,11 @@ def setup_local_environment():
     env_vars = {
         'FLASK_ENV': 'production',
         'DEBUG': 'False',
-        'PORT': '8080',
-        'ALLOWED_DOMAINS': '',  # Allow all domains for iframe embedding
-        'SERVER_IP': '127.0.0.1',
-        'BLOCK_IP_ACCESS': 'False',  # Disable blocking for local access
-        'SECRET_KEY': 'local-secure-key-change-in-production',
+        'PORT': '443',
+        'ALLOWED_DOMAINS': 'automation-reports.mobilehmi.org',
+        'SERVER_IP': '172.16.18.21',
+        'BLOCK_IP_ACCESS': 'True',  # Enable security for direct HTTPS access
+        'SECRET_KEY': 'production-secure-key-change-immediately',
         
         # Email configuration
         'SMTP_SERVER': 'smtp.gmail.com',
@@ -41,14 +41,14 @@ def setup_local_environment():
     print("✅ Local environment configured for IIS integration")
 
 def main():
-    """Local Flask application for IIS embedding"""
-    print("🏠 SAT Report Generator - Local IIS Integration")
+    """Direct HTTPS Flask application on port 443"""
+    print("🔒 SAT Report Generator - Direct HTTPS Server")
     print("=" * 50)
     print("Configuration:")
-    print("- Local server: http://127.0.0.1:8080")
-    print("- IIS frontend: https://automation-reports.mobilehmi.org")
-    print("- Mode: Iframe embedding enabled")
-    print("- Domain blocking: Disabled")
+    print("- HTTPS server: https://automation-reports.mobilehmi.org:443")
+    print("- Direct access (no IIS redirection needed)")
+    print("- Domain-only access: ENABLED")
+    print("- SSL/TLS: Required")
     print("=" * 50)
     
     setup_local_environment()
@@ -101,14 +101,17 @@ def main():
         except Exception as e:
             print(f"⚠️  Database warning: {e}")
     
-    # Start local server
+    # Start HTTPS server on port 443
     try:
+        # For production, you'll need proper SSL certificates
+        # This is a development setup - replace with proper certificates
         app.run(
-            host='127.0.0.1',  # Localhost only
-            port=8080,
+            host='0.0.0.0',  # Bind to all interfaces
+            port=443,
             debug=False,
             threaded=True,
-            use_reloader=False
+            use_reloader=False,
+            ssl_context='adhoc'  # For development - replace with proper SSL cert
         )
     except Exception as e:
         print(f"❌ Server error: {e}")
