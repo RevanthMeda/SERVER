@@ -351,8 +351,8 @@ if __name__ == '__main__':
         os.makedirs('ssl', exist_ok=True)
         
         print()
-        print("🚀 Starting Flask backend on port 8000...")
-        print("   IIS will proxy requests from port 80/443 to this backend")
+        print("🚀 Starting Flask with HTTPS support...")
+        print("   Direct HTTPS access - no IIS needed!")
         print("   Health check available at: /health")
         print()
         print("📋 IIS Configuration Needed:")
@@ -362,8 +362,57 @@ if __name__ == '__main__':
         print()
 
         try:
+            # For production HTTPS - create self-signed cert for testing
+            import ssl
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            
+            # Option 1: Use existing certificate if available
+            try:
+                context.load_cert_chain('ssl_certificate.crt', 'ssl_private.key')
+                print("✅ Using existing SSL certificate")
+                ssl_enabled = True
+            except:
+                print("⚠️  SSL certificate not found, creating self-signed for testing...")
+                # Create self-signed certificate
+                os.system('openssl req -x509 -newkey rsa:4096 -keyout ssl_private.key -out ssl_certificate.crt -days 365 -nodes -subj "/CN=automation-reports.mobilehmi.org"')
+                try:
+                    context.load_cert_chain('ssl_certificate.crt', 'ssl_private.key')
+                    ssl_enabled = True
+                    print("✅ Created and loaded self-signed certificate")
+                except:
+                    ssl_enabled = False
+                    print("❌ SSL setup failed, running HTTP only")
+            
+            if ssl_enabled:
+                print("🚀 Starting Flask with HTTPS on port 443...")
+                print("   Access: https://automation-reports.mobilehmi.org")
+                app.run(
+                    host='0.0.0.0',
+                    port=443,
+                    debug=False,
+                    threaded=True,
+                    use_reloader=False,
+                    ssl_context=context
+                )
+            else:
+                print("🚀 Starting Flask with HTTP on port 80...")
+                print("   Access: http://automation-reports.mobilehmi.org")
+                app.run(
+                    host='0.0.0.0',
+                    port=80,
+                    debug=False,
+                    threaded=True,
+                    use_reloader=False
+                )
+                
+        except PermissionError as e:
+            print(f"❌ Permission denied: {e}")
+            print("   Run as Administrator to use port 80/443")
+            print("   Or use: python app.py --port 8000")
+            
+            # Fallback to port 8000
             app.run(
-                host='0.0.0.0',  # Allow all connections 
+                host='0.0.0.0',
                 port=8000,
                 debug=False,
                 threaded=True,
