@@ -58,7 +58,7 @@ def create_app(config_name='default'):
         token = generate_csrf()
         g.csrf_token = token
 
-    # Inject CSRF token into all responses
+    # Inject CSRF token into all responses and disable compression for IIS
     @app.after_request
     def set_csrf_cookie(response):
         if response.mimetype == 'text/html' and hasattr(g, 'csrf_token'):
@@ -66,6 +66,11 @@ def create_app(config_name='default'):
                 'csrf_token', g.csrf_token,
                 httponly=False, samesite='Lax'
             )
+        
+        # Disable compression for IIS compatibility
+        response.headers['Content-Encoding'] = 'identity'
+        response.headers['Vary'] = 'Accept-Encoding'
+        
         return response
 
     # Make CSRF token available in all templates
