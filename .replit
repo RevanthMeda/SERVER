@@ -54,7 +54,7 @@ args = "SAT Report Generator"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "SAT Report Generator Backend"
+args = "SAT Report HTTPS Server"
 
 [[workflows.workflow]]
 name = "SAT Report Generator"
@@ -69,13 +69,13 @@ args = "FLASK_ENV=development python app.py"
 waitForPort = 5000
 
 [[workflows.workflow]]
-name = "SAT Report Generator Backend"
+name = "SAT Report HTTPS Server"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python run_local_backend.py"
-waitForPort = 8080
+waitForPort = 443
 
 [workflows.workflow.metadata]
 outputType = "console"

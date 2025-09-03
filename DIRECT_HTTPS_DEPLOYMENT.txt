@@ -1,0 +1,85 @@
+========================================
+SAT REPORT GENERATOR - DIRECT HTTPS
+========================================
+
+Your application now runs directly on HTTPS port 443
+No IIS configuration needed!
+
+========================================
+SIMPLIFIED DEPLOYMENT
+========================================
+
+STEP 1: Start HTTPS Server (as Administrator)
+> start_backend_service.bat
+
+STEP 2: Access Application
+https://automation-reports.mobilehmi.org
+
+That's it! No additional setup required.
+
+========================================
+REQUIREMENTS
+========================================
+
+✅ Administrator privileges (for port 443)
+✅ Domain: automation-reports.mobilehmi.org
+✅ SSL certificate (optional - will use self-signed)
+
+========================================
+SSL CERTIFICATE (OPTIONAL)
+========================================
+
+For production SSL certificate:
+1. Place certificate files in ssl/ directory:
+   - ssl/server.crt (certificate)
+   - ssl/server.key (private key)
+
+Without certificate:
+- Uses self-signed certificate automatically
+- Browser will show security warning (click "Advanced" → "Continue")
+
+========================================
+ARCHITECTURE
+========================================
+
+Direct HTTPS Flask Application (Port 443)
+├── Handles SSL/TLS encryption
+├── Serves SAT Report Generator directly
+├── Domain security enabled
+├── Production security headers
+└── No external dependencies
+
+========================================
+SECURITY FEATURES
+========================================
+
+✅ HTTPS encryption (SSL/TLS)
+✅ Domain-only access (automation-reports.mobilehmi.org)
+✅ IP blocking (172.16.18.21 blocked)
+✅ Production security headers
+✅ CSRF protection
+✅ Session security
+
+========================================
+TROUBLESHOOTING
+========================================
+
+Issue: "Permission denied" error
+Solution: Run Command Prompt as Administrator
+
+Issue: SSL certificate warnings
+Solution: Use proper SSL certificate or click "Advanced" → "Continue"
+
+Issue: Cannot access via domain
+Solution: Ensure DNS points automation-reports.mobilehmi.org to 172.16.18.21
+
+========================================
+MAINTENANCE
+========================================
+
+Daily Startup:
+1. Run Command Prompt as Administrator
+2. start_backend_service.bat
+3. Access: https://automation-reports.mobilehmi.org
+
+Simple, direct, no additional configuration needed!
