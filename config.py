@@ -43,10 +43,13 @@ class Config:
     os.makedirs(SIGNATURES_FOLDER, exist_ok=True)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # Email configuration
+    # Email configuration - Force reload from .env
     SMTP_SERVER = os.environ.get('SMTP_SERVER') or 'smtp.gmail.com'
     SMTP_PORT = int(os.environ.get('SMTP_PORT') or 587)
     SMTP_USERNAME = os.environ.get('SMTP_USERNAME') or ''
+    
+    # Force reload SMTP_PASSWORD to clear any cached values
+    load_dotenv(override=True)
     SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD') or ''
     DEFAULT_SENDER = os.environ.get('DEFAULT_SENDER') or ''
 
