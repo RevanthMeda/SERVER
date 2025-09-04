@@ -343,8 +343,8 @@ def download_report(submission_id):
                     
                 return False
             
-            # STEP 2: Fix missing DOCUMENT_TITLE tag in template
-            current_app.logger.info("=== CHECKING FOR MISSING DOCUMENT_TITLE TAG ===")
+            # STEP 2: Add missing invisible tags that aren't visible without Office
+            current_app.logger.info("=== ADDING MISSING INVISIBLE TAGS ===")
             
             # Look for Document Title row and add missing tag if needed
             for table_idx, table in enumerate(doc.tables):
@@ -355,13 +355,44 @@ def download_report(submission_id):
                         
                         current_app.logger.info(f"CHECKING TABLE {table_idx} ROW {row_idx}: LEFT='{left_cell}' RIGHT='{right_cell}'")
                         
-                        # If left cell says "Document Title" and right cell is empty, add the tag
+                        # If left cell says "Document Title" and right cell is empty, add the missing tag
                         if 'Document Title' in left_cell and not right_cell:
                             current_app.logger.info(f"FOUND EMPTY DOCUMENT TITLE CELL - Adding {{ DOCUMENT_TITLE }} tag")
                             row.cells[1].text = '{{ DOCUMENT_TITLE }}'
-                            current_app.logger.info(f"ADDED MISSING TAG to TABLE {table_idx} ROW {row_idx}")
+                            current_app.logger.info(f"ADDED MISSING DOCUMENT_TITLE TAG to TABLE {table_idx} ROW {row_idx}")
                         elif 'Document Title' in left_cell:
                             current_app.logger.info(f"FOUND DOCUMENT TITLE ROW but right cell has content: '{right_cell}'")
+            
+            # Add missing footer tags that are invisible without Office
+            current_app.logger.info("=== ADDING MISSING FOOTER TAGS ===")
+            for section_idx, section in enumerate(doc.sections):
+                if hasattr(section, 'footer'):
+                    footer = section.footer
+                    # Add footer table if it doesn't exist
+                    if len(footer.tables) == 0:
+                        current_app.logger.info(f"CREATING FOOTER TABLE in section {section_idx}")
+                        # Create a simple footer table for document info
+                        footer_table = footer.add_table(rows=1, cols=3)
+                        footer_table.cell(0, 0).text = '{{ DOCUMENT_REFERENCE }}'
+                        footer_table.cell(0, 1).text = 'Page'
+                        footer_table.cell(0, 2).text = '{{ REVISION }}'
+                        current_app.logger.info(f"ADDED FOOTER TABLE with DOCUMENT_REFERENCE and REVISION tags")
+                    else:
+                        # Check existing footer tables for missing tags
+                        for table_idx, table in enumerate(footer.tables):
+                            current_app.logger.info(f"CHECKING FOOTER TABLE {table_idx} in section {section_idx}")
+                            for row_idx, row in enumerate(table.rows):
+                                for cell_idx, cell in enumerate(row.cells):
+                                    cell_text = cell.text.strip()
+                                    current_app.logger.info(f"FOOTER TABLE {table_idx} ROW {row_idx} CELL {cell_idx}: '{cell_text}'")
+                                    
+                                    # Add missing footer tags if cells are empty
+                                    if not cell_text and cell_idx == 0:  # First cell - document reference
+                                        cell.text = '{{ DOCUMENT_REFERENCE }}'
+                                        current_app.logger.info(f"ADDED DOCUMENT_REFERENCE tag to footer")
+                                    elif not cell_text and cell_idx == 2:  # Last cell - revision
+                                        cell.text = '{{ REVISION }}'
+                                        current_app.logger.info(f"ADDED REVISION tag to footer")
             
             # STEP 3: Apply brute force replacement to EVERYTHING
             current_app.logger.info("Processing paragraphs...")
