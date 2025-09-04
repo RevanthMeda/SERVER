@@ -207,58 +207,57 @@ def download_report(submission_id):
                 flash('Report template file not found.', 'error')
                 return redirect(url_for('status.view_status', submission_id=submission_id))
 
-            # AVOID DocxTemplate - Recreate template structure with working python-docx
+            # PRESERVE EXACT TEMPLATE FORMAT - Open original and replace content only
             from docx import Document
-            from docx.shared import Inches, Pt
-            from docx.enum.text import WD_ALIGN_PARAGRAPH
-            from docx.enum.table import WD_TABLE_ALIGNMENT
+            import re
             
-            # Create new document using WORKING method (no DocxTemplate)
-            doc = Document()
-            current_app.logger.info("Creating SAT report using working python-docx method")
+            # Open the original SAT_Template.docx to preserve ALL formatting
+            doc = Document(template_file)
+            current_app.logger.info(f"Opened original SAT_Template.docx to preserve exact formatting: {template_file}")
             
-            # Recreate the SAT template structure manually
-            # Document Information Section
-            doc.add_heading('Document Information', level=1)
+            # Create mapping of template tags to actual data
+            replacement_data = {
+                'DOCUMENT_TITLE': context_data.get('DOCUMENT_TITLE', ''),
+                'PROJECT_REFERENCE': context_data.get('PROJECT_REFERENCE', ''),
+                'DOCUMENT_REFERENCE': context_data.get('DOCUMENT_REFERENCE', ''),
+                'DATE': context_data.get('DATE', ''),
+                'CLIENT_NAME': context_data.get('CLIENT_NAME', ''),
+                'REVISION': context_data.get('REVISION', ''),
+                'PREPARED_BY': context_data.get('PREPARED_BY', ''),
+                'PREPARER_DATE': context_data.get('PREPARER_DATE', ''),
+                'REVIEWED_BY_TECH_LEAD': context_data.get('REVIEWED_BY_TECH_LEAD', ''),
+                'TECH_LEAD_DATE': context_data.get('TECH_LEAD_DATE', ''),
+                'REVIEWED_BY_PM': context_data.get('REVIEWED_BY_PM', ''),
+                'PM_DATE': context_data.get('PM_DATE', ''),
+                'APPROVED_BY_CLIENT': context_data.get('APPROVED_BY_CLIENT', ''),
+                'PURPOSE': context_data.get('PURPOSE', ''),
+                'SCOPE': context_data.get('SCOPE', ''),
+                'REVISION_DETAILS': context_data.get('REVISION_DETAILS', ''),
+                'REVISION_DATE': context_data.get('REVISION_DATE', '')
+            }
             
-            # Create document info table
-            info_table = doc.add_table(rows=6, cols=2)
-            info_table.alignment = WD_TABLE_ALIGNMENT.LEFT
+            # Replace text in paragraphs (preserves all formatting)
+            for paragraph in doc.paragraphs:
+                if paragraph.text:
+                    text = paragraph.text
+                    for tag, value in replacement_data.items():
+                        text = text.replace('{{ ' + tag + ' }}', str(value) if value else '')
+                        text = text.replace('{{' + tag + '}}', str(value) if value else '')
+                    paragraph.text = text
             
-            # Fill document information
-            info_data = [
-                ('Document Title', context_data.get('DOCUMENT_TITLE', 'N/A')),
-                ('Project Reference', context_data.get('PROJECT_REFERENCE', 'N/A')), 
-                ('Document Reference', context_data.get('DOCUMENT_REFERENCE', 'N/A')),
-                ('Date', context_data.get('DATE', 'N/A')),
-                ('Prepared for', context_data.get('CLIENT_NAME', 'N/A')),
-                ('Revision', context_data.get('REVISION', 'N/A'))
-            ]
+            # Replace text in tables (preserves table formatting)
+            for table in doc.tables:
+                for row in table.rows:
+                    for cell in row.cells:
+                        for paragraph in cell.paragraphs:
+                            if paragraph.text:
+                                text = paragraph.text
+                                for tag, value in replacement_data.items():
+                                    text = text.replace('{{ ' + tag + ' }}', str(value) if value else '')
+                                    text = text.replace('{{' + tag + '}}', str(value) if value else '')
+                                paragraph.text = text
             
-            for i, (label, value) in enumerate(info_data):
-                info_table.cell(i, 0).text = label
-                info_table.cell(i, 1).text = str(value)
-            
-            # Document Approvals Section
-            doc.add_heading('Document Approvals', level=1)
-            
-            approval_table = doc.add_table(rows=4, cols=3)
-            approval_table.alignment = WD_TABLE_ALIGNMENT.LEFT
-            
-            # Fill approval information  
-            approval_data = [
-                ('Prepared by', context_data.get('PREPARED_BY', 'N/A'), 'Date: ' + context_data.get('PREPARER_DATE', 'N/A')),
-                ('Reviewed by (Tech Lead)', context_data.get('REVIEWED_BY_TECH_LEAD', 'N/A'), 'Date: ' + context_data.get('TECH_LEAD_DATE', 'N/A')),
-                ('Reviewed by (PM)', context_data.get('REVIEWED_BY_PM', 'N/A'), 'Date: ' + context_data.get('PM_DATE', 'N/A')),
-                ('Approval (Client)', context_data.get('APPROVED_BY_CLIENT', 'N/A'), 'Date: N/A')
-            ]
-            
-            for i, (role, name, date) in enumerate(approval_data):
-                approval_table.cell(i, 0).text = role
-                approval_table.cell(i, 1).text = str(name)
-                approval_table.cell(i, 2).text = str(date)
-            
-            current_app.logger.info("Created document structure using working method")
+            current_app.logger.info("Replaced template tags while preserving exact formatting")
 
             # Render template with field tags using FIXED approach
             try:
@@ -266,32 +265,9 @@ def download_report(submission_id):
                 permanent_dir = current_app.config['OUTPUT_DIR']
                 os.makedirs(permanent_dir, exist_ok=True)
                 
-                # Add Introduction section
-                doc.add_page_break()
-                doc.add_heading('1. Introduction', level=1)
-                
-                doc.add_heading('1.1 Purpose', level=2)
-                doc.add_paragraph(context_data.get('PURPOSE', 'N/A'))
-                
-                doc.add_heading('1.2 Scope', level=2) 
-                doc.add_paragraph(context_data.get('SCOPE', 'N/A'))
-                
-                # Add main test sections if data exists
-                if context_data.get('PRE_TEST_REQUIREMENTS'):
-                    doc.add_heading('2. Pre-Test Requirements', level=1)
-                    # Add pre-test requirements table here
-                
-                if context_data.get('KEY_COMPONENTS'):
-                    doc.add_heading('3. Asset Register', level=1)
-                    doc.add_heading('3.1 Key Components', level=2)
-                    # Add key components table here
-                
-                if context_data.get('SIGNAL_LISTS'):
-                    doc.add_heading('4. Signal Tests', level=1) 
-                    doc.add_heading('4.1 Digital Module Signals', level=2)
-                    # Add signal tests table here
-                
-                current_app.logger.info("Added main SAT report sections")
+                # Template content already exists - no need to add sections
+                # All formatting, logos, headers, footers, styles are preserved
+                current_app.logger.info("Original template structure and formatting preserved")
                 
                 # Save using FIXED approach (memory buffer to avoid corruption)
                 try:
