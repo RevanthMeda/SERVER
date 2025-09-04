@@ -199,9 +199,12 @@ def download_report(submission_id):
                 flash('Report template file not found.', 'error')
                 return redirect(url_for('status.view_status', submission_id=submission_id))
 
-            # Initialize DocxTemplate
+            # Initialize DocxTemplate with clean environment
             from docxtpl import DocxTemplate, InlineImage
             from docx.shared import Mm
+            import copy
+            
+            # Create a fresh template instance to avoid cached issues
             doc = DocxTemplate(template_file)
 
             # Process signatures from stored data
@@ -294,12 +297,34 @@ def download_report(submission_id):
                 permanent_dir = current_app.config['OUTPUT_DIR']
                 os.makedirs(permanent_dir, exist_ok=True)
                 
-                # Save document with better error handling and verification
+                # Save document and create a clean copy
                 try:
-                    doc.save(permanent_path)
-                    current_app.logger.info(f"Initial document save completed: {permanent_path}")
+                    # First save to temporary file
+                    temp_doc_path = permanent_path + '.temp'
+                    doc.save(temp_doc_path)
+                    current_app.logger.info(f"Initial document save completed: {temp_doc_path}")
+                    
+                    # Now create a clean copy by re-opening and re-saving with python-docx
+                    # This removes any DocxTemplate artifacts and creates a clean Word document
+                    from docx import Document
+                    clean_doc = Document(temp_doc_path)
+                    clean_doc.save(permanent_path)
+                    
+                    # Remove temp file
+                    if os.path.exists(temp_doc_path):
+                        os.remove(temp_doc_path)
+                        
+                    current_app.logger.info(f"Clean document created: {permanent_path}")
+                    
                 except Exception as save_error:
                     current_app.logger.error(f"Document save failed: {save_error}")
+                    # Clean up temp file if it exists
+                    temp_path = permanent_path + '.temp'
+                    if os.path.exists(temp_path):
+                        try:
+                            os.remove(temp_path)
+                        except:
+                            pass
                     raise Exception(f"Failed to save document: {save_error}")
                 
                 # Verify file was created and has reasonable size
@@ -343,31 +368,36 @@ def download_report(submission_id):
 
             current_app.logger.info(f"Serving file: {permanent_path} as {download_name}")
             
-            # Copy to a clean download path to avoid any path issues
-            download_dir = tempfile.mkdtemp()
-            clean_download_path = os.path.join(download_dir, download_name)
+            # Create a final clean copy for download to ensure portability
+            final_download_path = os.path.join(tempfile.mkdtemp(), download_name)
             
             try:
-                shutil.copy2(permanent_path, clean_download_path)
+                # Create completely clean document for download
+                from docx import Document
+                final_doc = Document(permanent_path)
+                final_doc.save(final_download_path)
                 
-                # Return the clean file
+                current_app.logger.info(f"Final clean document created for download: {final_download_path}")
+                
+                # Return the clean file with proper headers
                 response = send_file(
-                    clean_download_path, 
+                    final_download_path, 
                     as_attachment=True, 
                     download_name=download_name,
                     mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                 )
                 
-                # Add headers to prevent caching issues
+                # Add headers for better compatibility
                 response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-                response.headers["Pragma"] = "no-cache"
+                response.headers["Pragma"] = "no-cache" 
                 response.headers["Expires"] = "0"
+                response.headers["Content-Disposition"] = f"attachment; filename*=UTF-8''{download_name}"
                 
                 return response
                 
-            except Exception as copy_error:
-                current_app.logger.error(f"Error preparing download: {copy_error}")
-                # Fallback to original method
+            except Exception as final_error:
+                current_app.logger.error(f"Error creating final clean document: {final_error}")
+                # If all else fails, serve the original file
                 return send_file(
                     permanent_path, 
                     as_attachment=True, 
