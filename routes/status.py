@@ -207,58 +207,32 @@ def download_report(submission_id):
                 flash('Report template file not found.', 'error')
                 return redirect(url_for('status.view_status', submission_id=submission_id))
 
-            # Initialize DocxTemplate with clean environment
-            from docxtpl import DocxTemplate, InlineImage
-            from docx.shared import Mm
-            import copy
+            # TEST: Create simple document without DocxTemplate to isolate issue
+            from docx import Document
+            from docx.shared import Inches
             
-            # Create a fresh template instance to avoid cached issues
-            doc = DocxTemplate(template_file)
-
-            # TEMPORARILY DISABLE ALL IMAGES TO FIX CORRUPTION
-            # Process signatures from stored data
-            SIG_PREPARED = ""
-            # Commenting out signature processing to isolate corruption issue
-            # if context_data.get("prepared_signature"):
-            #     sig_path = os.path.join(current_app.config['SIGNATURES_FOLDER'], context_data["prepared_signature"])
-            #     if os.path.exists(sig_path):
-            #         try:
-            #             SIG_PREPARED = InlineImage(doc, sig_path, width=Mm(40))
-            #         except Exception as e:
-            #             current_app.logger.error(f"Error loading signature: {e}")
-
-            # DISABLE IMAGE PROCESSING TEMPORARILY
-            scada_image_objects = []
-            trends_image_objects = []
-            alarm_image_objects = []
+            # Create a completely new document from scratch
+            doc = Document()
             
-            current_app.logger.info("Images disabled for corruption testing")
+            # Add basic content
+            doc.add_heading('SAT Report - Test Document', 0)
+            doc.add_paragraph(f'Project Reference: {context_data.get("PROJECT_REFERENCE", "N/A")}')
+            doc.add_paragraph(f'Document Title: {context_data.get("DOCUMENT_TITLE", "N/A")}')
+            doc.add_paragraph(f'Client: {context_data.get("CLIENT_NAME", "N/A")}')
+            doc.add_paragraph('This is a test document created without DocxTemplate to verify basic functionality.')
+            
+            current_app.logger.info("Created simple document without DocxTemplate")
 
-            # Build context for template rendering
-            render_context = dict(context_data)
-            render_context.update({
-                "SIG_PREPARED": SIG_PREPARED,
-                "SCADA_IMAGES": scada_image_objects,
-                "TRENDS_IMAGES": trends_image_objects,
-                "ALARM_IMAGES": alarm_image_objects,
-                "SIG_APPROVER_1": "",
-                "SIG_APPROVER_2": "",
-                "SIG_APPROVER_3": "",
-            })
-
-            # Render the document with proper error handling
+            # Skip all template rendering since we're creating a simple document
             try:
-                doc.render(render_context)
-                
                 # Ensure output directory exists
                 permanent_dir = current_app.config['OUTPUT_DIR']
                 os.makedirs(permanent_dir, exist_ok=True)
                 
-                # SIMPLIFIED SAVE WITHOUT CLEANING TO ISOLATE ISSUE
+                # Save simple document directly
                 try:
-                    # Direct save without cleaning to test if cleaning process causes corruption
                     doc.save(permanent_path)
-                    current_app.logger.info(f"Document saved directly: {permanent_path}")
+                    current_app.logger.info(f"Simple test document saved: {permanent_path}")
                     
                 except Exception as save_error:
                     current_app.logger.error(f"Document save failed: {save_error}")
