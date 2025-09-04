@@ -307,10 +307,10 @@ def pm():
 
 # Legacy redirects for dashboard routes
 @dashboard_bp.route('/technical-manager')
-@role_required(['TM'])
+@role_required(['Automation Manager'])
 def technical_manager():
     """Legacy redirect for TM dashboard"""
-    return redirect(url_for('dashboard.tm'))
+    return redirect(url_for('dashboard.automation_manager'))
 
 @dashboard_bp.route('/project-manager')
 @role_required(['PM'])

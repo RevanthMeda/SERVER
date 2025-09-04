@@ -1,0 +1,59 @@
+BuildError
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'dashboard.tm'. Did you mean 'dashboard.pm' instead?
+
+Traceback (most recent call last)
+File "C:\Program Files\Python312\Lib\site-packages\flask\app.py", line 2551, in __call__
+return self.wsgi_app(environ, start_response)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\flask\app.py", line 2531, in wsgi_app
+response = self.handle_exception(e)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\flask\app.py", line 2528, in wsgi_app
+response = self.full_dispatch_request()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\flask\app.py", line 1825, in full_dispatch_request
+rv = self.handle_user_exception(e)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\flask\app.py", line 1823, in full_dispatch_request
+rv = self.dispatch_request()
+     ^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\flask\app.py", line 1799, in dispatch_request
+return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "E:\report generator\SERVER\auth.py", line 55, in decorated_function
+return f(*args, **kwargs)
+       ^^^^^^^^^^^^^^^^^^
+File "E:\report generator\SERVER\routes\dashboard.py", line 225, in automation_manager
+return render_template('automation_manager_dashboard.html',
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\flask\templating.py", line 147, in render_template
+return _render(app, template, context)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\flask\templating.py", line 130, in _render
+rv = template.render(context)
+     ^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+self.environment.handle_exception()
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+raise rewrite_traceback_stack(source=source)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "E:\report generator\SERVER\templates\automation_manager_dashboard.html", line 511, in top-level template code
+<a href="{{ url_for('dashboard.tm') }}" class="nav-link active">
+File "C:\Program Files\Python312\Lib\site-packages\flask\app.py", line 2034, in url_for
+return self.handle_url_build_error(error, endpoint, values)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Program Files\Python312\Lib\site-packages\flask\app.py", line 2023, in url_for
+rv = url_adapter.build(  # type: ignore[union-attr]
+     
+File "C:\Program Files\Python312\Lib\site-packages\werkzeug\routing\map.py", line 917, in build
+raise BuildError(endpoint, values, method, self)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'dashboard.tm'. Did you mean 'dashboard.pm' instead?
+The debugger caught an exception in your WSGI application. You can now look at the traceback which led to the error.
+To switch between the interactive traceback and the plaintext one, you can click on the "Traceback" headline. From the text traceback you can also create a paste of it. For code execution mouse-over the frame you want to debug and click on the console icon on the right side.
+
+You can execute arbitrary Python code in the stack frames and there are some extra helpers available for introspection:
+
+dump() shows all variables in the frame
+dump(obj) dumps all that's known about the object
