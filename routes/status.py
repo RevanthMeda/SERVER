@@ -326,24 +326,43 @@ def download_report(submission_id):
                 
                 return text
             
+            # Advanced replacement: Process runs within paragraphs (handles split template tags)
+            def replace_in_runs(paragraph):
+                """Replace template tags that might be split across runs in Word"""
+                if not paragraph.runs:
+                    return False
+                
+                # Get full text from all runs
+                full_text = ''.join(run.text for run in paragraph.runs)
+                if not full_text or '{{' not in full_text:
+                    return False
+                
+                # Clean the full text
+                new_full_text = clean_text(full_text)
+                if new_full_text == full_text:
+                    return False
+                
+                current_app.logger.info(f"RUN REPLACEMENT: '{full_text[:50]}...' -> '{new_full_text[:50]}...'")
+                
+                # Clear all runs and add new text as single run
+                for run in paragraph.runs:
+                    run.clear()
+                
+                # Add the cleaned text as a new run
+                if new_full_text.strip():
+                    paragraph.add_run(new_full_text)
+                
+                return True
+            
             # Replace text in paragraphs (preserves all formatting)
             paragraph_count = 0
             for paragraph in doc.paragraphs:
                 if paragraph.text and paragraph.text.strip():
-                    old_text = paragraph.text
-                    # TEST: Manual replacement for debugging
-                    if '{{ DOCUMENT_TITLE }}' in old_text:
-                        current_app.logger.info(f"FOUND DOCUMENT_TITLE TAG in paragraph {paragraph_count}")
-                        current_app.logger.info(f"Before replacement: '{old_text}'")
-                        manual_replaced = old_text.replace('{{ DOCUMENT_TITLE }}', 'TEST MANUAL REPLACEMENT')
-                        current_app.logger.info(f"Manual test result: '{manual_replaced}'")
-                    
-                    new_text = clean_text(paragraph.text)
-                    if old_text != new_text:
-                        current_app.logger.info(f"Para {paragraph_count}: '{old_text[:50]}...' -> '{new_text[:50]}...'")
-                        paragraph.text = new_text
-                    elif '{{' in old_text:
-                        current_app.logger.info(f"Para {paragraph_count} UNCHANGED but has template tags: '{old_text[:50]}...'")
+                    # Try run-level replacement first
+                    if replace_in_runs(paragraph):
+                        current_app.logger.info(f"Para {paragraph_count}: RUNS PROCESSED")
+                    elif '{{' in paragraph.text:
+                        current_app.logger.info(f"Para {paragraph_count} UNCHANGED but has template tags: '{paragraph.text[:50]}...'")
                     paragraph_count += 1
             
             # Replace text in tables (preserves table formatting)
@@ -353,11 +372,11 @@ def download_report(submission_id):
                     for cell_idx, cell in enumerate(row.cells):
                         for para_idx, paragraph in enumerate(cell.paragraphs):
                             if paragraph.text and paragraph.text.strip():
-                                old_text = paragraph.text
-                                new_text = clean_text(paragraph.text)
-                                if old_text != new_text:
-                                    current_app.logger.info(f"Table {table_count} Row {row_idx} Cell {cell_idx}: '{old_text[:30]}...' -> '{new_text[:30]}...'")
-                                    paragraph.text = new_text
+                                # Try run-level replacement for table cells too
+                                if replace_in_runs(paragraph):
+                                    current_app.logger.info(f"Table {table_count} Row {row_idx} Cell {cell_idx}: RUNS PROCESSED")
+                                elif '{{' in paragraph.text:
+                                    current_app.logger.info(f"Table {table_count} Row {row_idx} Cell {cell_idx} UNCHANGED: '{paragraph.text[:30]}...'")
                 table_count += 1
             
             # Process headers and footers (Word documents can have these)
@@ -367,21 +386,19 @@ def download_report(submission_id):
                 if hasattr(section, 'header'):
                     for paragraph in section.header.paragraphs:
                         if paragraph.text and paragraph.text.strip():
-                            old_text = paragraph.text
-                            new_text = clean_text(paragraph.text)
-                            if old_text != new_text:
-                                current_app.logger.info(f"Header {header_footer_count}: '{old_text[:30]}...' -> '{new_text[:30]}...'")
-                                paragraph.text = new_text
+                            if replace_in_runs(paragraph):
+                                current_app.logger.info(f"Header {header_footer_count}: RUNS PROCESSED")
+                            elif '{{' in paragraph.text:
+                                current_app.logger.info(f"Header {header_footer_count} UNCHANGED: '{paragraph.text[:30]}...'")
                 
                 # Process footers
                 if hasattr(section, 'footer'):
                     for paragraph in section.footer.paragraphs:
                         if paragraph.text and paragraph.text.strip():
-                            old_text = paragraph.text
-                            new_text = clean_text(paragraph.text)
-                            if old_text != new_text:
-                                current_app.logger.info(f"Footer {header_footer_count}: '{old_text[:30]}...' -> '{new_text[:30]}...'")
-                                paragraph.text = new_text
+                            if replace_in_runs(paragraph):
+                                current_app.logger.info(f"Footer {header_footer_count}: RUNS PROCESSED")
+                            elif '{{' in paragraph.text:
+                                current_app.logger.info(f"Footer {header_footer_count} UNCHANGED: '{paragraph.text[:30]}...'")
                 
                 header_footer_count += 1
             
