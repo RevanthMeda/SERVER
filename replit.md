@@ -53,22 +53,21 @@ Preferred communication style: Simple, everyday language.
 
 ## Server Configuration
 - **Target Server**: 172.16.18.21 (Windows Server)
-- **Domain**: automation-reports.mobilehmi.org
-- **Port**: 80 (production) / 5000 (development)
-- **Security**: Domain-only access with IP blocking enabled
+- **Internal Access**: http://172.16.18.21:5000 (company network only)
+- **Security Model**: No external ports exposed - internal access only
+- **Access Control**: Company network employees only (secure by design)
 
 ## Deployment Files
-- **deploy.py**: Main production deployment script with environment setup
-- **start_production.bat**: Windows batch file for easy server startup
-- **middleware.py**: Security middleware for domain enforcement and IP blocking
-- **DEPLOYMENT_INSTRUCTIONS.txt**: Complete deployment guide with troubleshooting
+- **app.py**: Main Flask application with production configuration
+- **start_production.bat**: Windows batch file for server startup
+- **config.py**: Environment configuration and security settings
 
 ## Security Features
-- **Domain-only Access**: Only allows access via automation-reports.mobilehmi.org
-- **IP Blocking**: Blocks direct access via 172.16.18.21 (returns 403 Forbidden)
+- **Network Isolation**: Internal company network access only
+- **No External Ports**: Maximum security through network-level isolation
 - **CSRF Protection**: Enhanced token-based protection for all forms
-- **Security Headers**: Production-grade HTTP security headers
 - **Session Security**: Secure session management with timeout controls
+- **Authentication**: Role-based access control with password hashing
 
 ## External Dependencies
 
