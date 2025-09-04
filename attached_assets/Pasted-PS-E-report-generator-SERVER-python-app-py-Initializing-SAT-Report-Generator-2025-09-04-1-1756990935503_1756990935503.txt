@@ -1,0 +1,42 @@
+PS E:\report generator\SERVER> python app.py
+🔧 Initializing SAT Report Generator...
+[2025-09-04 13:01:24,279] INFO in models: Database connection successful
+[2025-09-04 13:01:24,298] INFO in models: Database tables created successfully
+[2025-09-04 13:01:24,336] INFO in models: Default system settings initialized
+[2025-09-04 13:01:24,337] INFO in models: Database initialized successfully
+[2025-09-04 13:01:24,338] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+🔒 HTTPS enabled with password-protected .pfx SSL certificate
+ * Serving Flask app 'app'
+ * Debug mode: off
+[2025-09-04 13:01:40,050] ERROR in status: Error in download_report for 19890bcf-9093-4e33-9079-465e3888d2d8: cannot access local variable 'os' where it is not associated with a value
+Traceback (most recent call last):
+  File "E:\report generator\SERVER\routes\status.py", line 109, in download_report
+    permanent_path = os.path.join(current_app.config['OUTPUT_DIR'], f'SAT_Report_{submission_id}_Final.docx')
+                     ^^
+UnboundLocalError: cannot access local variable 'os' where it is not associated with a value
+ERROR:app:Error in download_report for 19890bcf-9093-4e33-9079-465e3888d2d8: cannot access local variable 'os' where it is not associated with a value
+Traceback (most recent call last):
+  File "E:\report generator\SERVER\routes\status.py", line 109, in download_report
+    permanent_path = os.path.join(current_app.config['OUTPUT_DIR'], f'SAT_Report_{submission_id}_Final.docx')
+                     ^^
+UnboundLocalError: cannot access local variable 'os' where it is not associated with a value
+[2025-09-04 13:01:56,626] ERROR in status: Error in download_report for 19890bcf-9093-4e33-9079-465e3888d2d8: cannot access local variable 'os' where it is not associated with a value
+Traceback (most recent call last):
+  File "E:\report generator\SERVER\routes\status.py", line 109, in download_report
+    permanent_path = os.path.join(current_app.config['OUTPUT_DIR'], f'SAT_Report_{submission_id}_Final.docx')
+                     ^^
+UnboundLocalError: cannot access local variable 'os' where it is not associated with a value
+ERROR:app:Error in download_report for 19890bcf-9093-4e33-9079-465e3888d2d8: cannot access local variable 'os' where it is not associated with a value
+Traceback (most recent call last):
+  File "E:\report generator\SERVER\routes\status.py", line 109, in download_report
+    permanent_path = os.path.join(current_app.config['OUTPUT_DIR'], f'SAT_Report_{submission_id}_Final.docx')
+                     ^^
+UnboundLocalError: cannot access local variable 'os' where it is not associated with a value

@@ -278,7 +278,6 @@ def download_report(submission_id):
                 
                 # Force file system sync to ensure complete write
                 try:
-                    import os
                     if hasattr(os, 'fsync'):
                         with open(permanent_path, 'rb') as f:
                             os.fsync(f.fileno())
@@ -323,12 +322,10 @@ def download_report(submission_id):
             current_app.logger.info(f"Serving file: {permanent_path} as {download_name}")
             
             # Copy to a clean download path to avoid any path issues
-            import tempfile
             download_dir = tempfile.mkdtemp()
             clean_download_path = os.path.join(download_dir, download_name)
             
             try:
-                import shutil
                 shutil.copy2(permanent_path, clean_download_path)
                 
                 # Return the clean file
