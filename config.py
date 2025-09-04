@@ -23,13 +23,13 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here-change-in-production-sat-2025'
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = 86400  # 24 hours - very long timeout
-    WTF_CSRF_SSL_STRICT = False  # Allow HTTP for now
+    WTF_CSRF_SSL_STRICT = True  # Enable SSL strict mode for HTTPS
     WTF_CSRF_CHECK_DEFAULT = False  # More lenient CSRF checking
     
     # SSL/HTTPS Configuration
-    SSL_CERT_PATH = os.path.join(os.path.dirname(__file__), 'cert.pem')
-    SSL_KEY_PATH = os.path.join(os.path.dirname(__file__), 'key.pem')
-    USE_HTTPS = False
+    SSL_CERT_PATH = r'E:\report generator\SERVER\ssl\mobilehmi.org2025.pfx'
+    SSL_KEY_PATH = None  # Not needed for .pfx files
+    USE_HTTPS = True
 
     # Database - Use absolute path for SQLite
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -125,8 +125,8 @@ class Config:
     # Feature Flags
     ENABLE_EMAIL_NOTIFICATIONS = os.getenv('ENABLE_EMAIL_NOTIFICATIONS', 'True').lower() == 'true'
 
-    # Security Settings - Fixed for external domain access
-    SESSION_COOKIE_SECURE = False  # Allow HTTP cookies (external domain uses HTTP)
+    # Security Settings - Updated for HTTPS
+    SESSION_COOKIE_SECURE = True  # Require HTTPS for session cookies
     SESSION_COOKIE_HTTPONLY = True  # Standard security
     SESSION_COOKIE_SAMESITE = 'Lax'  # Allow cross-site cookies for external domain access
     SESSION_COOKIE_DOMAIN = None  # Let Flask handle domain automatically

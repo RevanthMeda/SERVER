@@ -311,12 +311,31 @@ if __name__ == '__main__':
                 print("⚠️  Production mode: Use a WSGI server like Gunicorn for deployment")
             
             # Enable SSL/HTTPS for secure connections
-            if app.config.get('USE_HTTPS', False) and os.path.exists(app.config.get('SSL_CERT_PATH', '')) and os.path.exists(app.config.get('SSL_KEY_PATH', '')):
-                ssl_context = (app.config['SSL_CERT_PATH'], app.config['SSL_KEY_PATH'])
-                print("🔒 HTTPS enabled with SSL certificates")
+            if app.config.get('USE_HTTPS', False):
+                ssl_cert_path = app.config.get('SSL_CERT_PATH', '')
+                
+                # Check if it's a .pfx file (contains both cert and key)
+                if ssl_cert_path.endswith('.pfx') and os.path.exists(ssl_cert_path):
+                    try:
+                        import ssl
+                        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+                        ssl_context.load_cert_chain(ssl_cert_path)
+                        print("🔒 HTTPS enabled with .pfx SSL certificate")
+                    except Exception as e:
+                        print(f"⚠️  Error loading .pfx certificate: {e}")
+                        ssl_context = None
+                        print("ℹ️  Falling back to HTTP mode")
+                # Check for separate cert and key files  
+                elif (ssl_cert_path and os.path.exists(ssl_cert_path) and 
+                      app.config.get('SSL_KEY_PATH') and os.path.exists(app.config.get('SSL_KEY_PATH', ''))):
+                    ssl_context = (ssl_cert_path, app.config['SSL_KEY_PATH'])
+                    print("🔒 HTTPS enabled with separate SSL certificate and key files")
+                else:
+                    ssl_context = None
+                    print("ℹ️  SSL certificate not found - running in HTTP mode")
             else:
                 ssl_context = None
-                print("ℹ️  Running in HTTP mode - SSL certificates not found")
+                print("ℹ️  HTTPS disabled - running in HTTP mode")
 
             app.run(
                 host=host,
