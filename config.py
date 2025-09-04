@@ -30,12 +30,15 @@ class Config:
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or f'sqlite:///{os.path.join(BASE_DIR, "instance", "sat_reports.db")}'
 
-    # Lazy directory creation and optimized database settings
+    # Optimized database settings for performance
     INSTANCE_DIR = os.path.join(BASE_DIR, "instance")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_pre_ping': False,  # Disable for faster startup
-        'pool_recycle': 600,
+        'pool_pre_ping': False,  # Disable for faster startup  
+        'pool_recycle': 3600,   # Longer pool recycle
+        'pool_size': 10,        # Connection pool size
+        'max_overflow': 20,     # Max overflow connections
+        'pool_timeout': 30,     # Connection timeout
     }
 
     # File upload settings
