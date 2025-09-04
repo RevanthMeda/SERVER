@@ -128,11 +128,32 @@ def download_report(submission_id):
                 current_app.logger.warning(f"Database error when getting title, using default: {db_error}")
                 doc_title = "SAT_Report"
             
-            # Clean the title for use in filename
-            safe_title = "".join(c if c.isalnum() or c in ['_', '-'] else "_" for c in doc_title)
-            download_name = f"{safe_title}_{submission_id}.docx"
+            # Get project number for filename (SAT_PROJNUMBER format)
+            project_number = context_data.get("PROJECT_REFERENCE", "").strip()
+            if not project_number:
+                project_number = context_data.get("PROJECT_NUMBER", "").strip()
+            if not project_number:
+                project_number = submission_id[:8]  # Fallback to submission ID
+                
+            # Clean project number for filename  
+            safe_proj_num = "".join(c if c.isalnum() or c in ['_', '-'] else "_" for c in project_number)
+            download_name = f"SAT_{safe_proj_num}.docx"
             
-            return send_file(permanent_path, as_attachment=True, download_name=download_name)
+            # Ensure file is not corrupted and has proper headers
+            if not os.path.exists(permanent_path) or os.path.getsize(permanent_path) < 1000:
+                current_app.logger.error(f"Existing file is corrupted or too small: {permanent_path}")
+                flash('Report file is corrupted. Please regenerate.', 'error')
+                return redirect(url_for('status.view_status', submission_id=submission_id))
+            
+            current_app.logger.info(f"Serving existing file: {permanent_path} as {download_name}")
+            
+            # Return with proper Word document headers
+            return send_file(
+                permanent_path, 
+                as_attachment=True, 
+                download_name=download_name,
+                mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            )
 
         # If file doesn't exist, try to get data from database and generate
         try:
@@ -273,22 +294,23 @@ def download_report(submission_id):
                 permanent_dir = current_app.config['OUTPUT_DIR']
                 os.makedirs(permanent_dir, exist_ok=True)
                 
-                # Save the document directly with flush
-                doc.save(permanent_path)
-                
-                # Force file system sync to ensure complete write
+                # Save document with better error handling and verification
                 try:
-                    if hasattr(os, 'fsync'):
-                        with open(permanent_path, 'rb') as f:
-                            os.fsync(f.fileno())
-                except:
-                    pass
+                    doc.save(permanent_path)
+                    current_app.logger.info(f"Initial document save completed: {permanent_path}")
+                except Exception as save_error:
+                    current_app.logger.error(f"Document save failed: {save_error}")
+                    raise Exception(f"Failed to save document: {save_error}")
                 
-                # Verify file integrity
-                if not os.path.exists(permanent_path) or os.path.getsize(permanent_path) < 1000:  # Word docs should be at least 1KB
-                    raise Exception(f"Document save failed - file missing or too small ({os.path.getsize(permanent_path) if os.path.exists(permanent_path) else 0} bytes)")
+                # Verify file was created and has reasonable size
+                if not os.path.exists(permanent_path):
+                    raise Exception("Document file was not created")
                     
-                current_app.logger.info(f"Document successfully saved: {permanent_path} ({os.path.getsize(permanent_path)} bytes)")
+                file_size = os.path.getsize(permanent_path)
+                if file_size < 1000:  # Word docs should be at least 1KB
+                    raise Exception(f"Document file too small ({file_size} bytes) - likely corrupted")
+                    
+                current_app.logger.info(f"Document verified: {permanent_path} ({file_size} bytes)")
                 
                 # Verify the file was created and has content
                 if not os.path.exists(permanent_path) or os.path.getsize(permanent_path) == 0:
