@@ -353,11 +353,15 @@ def download_report(submission_id):
                         left_cell = row.cells[0].text.strip()
                         right_cell = row.cells[1].text.strip()
                         
+                        current_app.logger.info(f"CHECKING TABLE {table_idx} ROW {row_idx}: LEFT='{left_cell}' RIGHT='{right_cell}'")
+                        
                         # If left cell says "Document Title" and right cell is empty, add the tag
                         if 'Document Title' in left_cell and not right_cell:
                             current_app.logger.info(f"FOUND EMPTY DOCUMENT TITLE CELL - Adding {{ DOCUMENT_TITLE }} tag")
                             row.cells[1].text = '{{ DOCUMENT_TITLE }}'
                             current_app.logger.info(f"ADDED MISSING TAG to TABLE {table_idx} ROW {row_idx}")
+                        elif 'Document Title' in left_cell:
+                            current_app.logger.info(f"FOUND DOCUMENT TITLE ROW but right cell has content: '{right_cell}'")
             
             # STEP 3: Apply brute force replacement to EVERYTHING
             current_app.logger.info("Processing paragraphs...")
