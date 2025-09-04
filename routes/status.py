@@ -229,10 +229,21 @@ def download_report(submission_id):
                 permanent_dir = current_app.config['OUTPUT_DIR']
                 os.makedirs(permanent_dir, exist_ok=True)
                 
-                # Save simple document directly
+                # Save simple document with debugging
                 try:
-                    doc.save(permanent_path)
-                    current_app.logger.info(f"Simple test document saved: {permanent_path}")
+                    # Try saving to a memory buffer first to test
+                    import io
+                    buffer = io.BytesIO()
+                    doc.save(buffer)
+                    buffer_size = len(buffer.getvalue())
+                    current_app.logger.info(f"Document saved to memory buffer: {buffer_size} bytes")
+                    
+                    # Now save to file
+                    buffer.seek(0)
+                    with open(permanent_path, 'wb') as f:
+                        f.write(buffer.getvalue())
+                    
+                    current_app.logger.info(f"Simple test document written to file: {permanent_path}")
                     
                 except Exception as save_error:
                     current_app.logger.error(f"Document save failed: {save_error}")
@@ -279,42 +290,46 @@ def download_report(submission_id):
 
             current_app.logger.info(f"Serving file: {permanent_path} as {download_name}")
             
-            # Create a final clean copy for download to ensure portability
-            final_download_path = os.path.join(tempfile.mkdtemp(), download_name)
+            # Test different download approaches
+            current_app.logger.info(f"Testing direct file serve without modifications")
             
+            # First verify the file on server is good
             try:
-                # Create completely clean document for download
                 from docx import Document
-                final_doc = Document(permanent_path)
-                final_doc.save(final_download_path)
+                test_doc = Document(permanent_path)
+                para_count = len(test_doc.paragraphs)
+                current_app.logger.info(f"Server verification: Document has {para_count} paragraphs and can be opened")
+            except Exception as verify_error:
+                current_app.logger.error(f"Document corrupt on server: {verify_error}")
+                flash('Document is corrupted on server', 'error')
+                return redirect(url_for('status.view_status', submission_id=submission_id))
+            
+            # Try serving the file with minimal processing
+            try:
+                # Read file into memory and serve from memory to avoid file locking issues
+                with open(permanent_path, 'rb') as f:
+                    file_data = f.read()
                 
-                current_app.logger.info(f"Final clean document created for download: {final_download_path}")
+                current_app.logger.info(f"Read {len(file_data)} bytes from file")
                 
-                # Return the clean file with proper headers
-                response = send_file(
-                    final_download_path, 
-                    as_attachment=True, 
-                    download_name=download_name,
-                    mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                # Create response from memory
+                from flask import Response
+                response = Response(
+                    file_data,
+                    mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    headers={
+                        'Content-Disposition': f'attachment; filename="{download_name}"',
+                        'Content-Length': str(len(file_data))
+                    }
                 )
                 
-                # Add headers for better compatibility
-                response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-                response.headers["Pragma"] = "no-cache" 
-                response.headers["Expires"] = "0"
-                response.headers["Content-Disposition"] = f"attachment; filename*=UTF-8''{download_name}"
-                
+                current_app.logger.info(f"Serving {download_name} from memory ({len(file_data)} bytes)")
                 return response
                 
-            except Exception as final_error:
-                current_app.logger.error(f"Error creating final clean document: {final_error}")
-                # If all else fails, serve the original file
-                return send_file(
-                    permanent_path, 
-                    as_attachment=True, 
-                    download_name=download_name,
-                    mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                )
+            except Exception as serve_error:
+                current_app.logger.error(f"Error serving from memory: {serve_error}")
+                # Final fallback
+                return send_file(permanent_path, as_attachment=True, download_name=download_name)
 
         except Exception as generation_error:
             current_app.logger.error(f"Error during report generation: {generation_error}", exc_info=True)
