@@ -371,13 +371,32 @@ def download_report(submission_id):
                         current_app.logger.info(f"Para {paragraph_count} UNCHANGED but has template tags: '{paragraph.text[:50]}...'")
                     paragraph_count += 1
             
-            # Replace text in tables (preserves table formatting)
+            # Replace text in tables (preserves table formatting) - ENHANCED FOR DOCUMENT_TITLE
             table_count = 0
             for table in doc.tables:
                 for row_idx, row in enumerate(table.rows):
                     for cell_idx, cell in enumerate(row.cells):
+                        # Check cell text directly
+                        cell_text = cell.text
+                        if 'DOCUMENT_TITLE' in cell_text:
+                            current_app.logger.info(f"FOUND DOCUMENT_TITLE IN TABLE {table_count} ROW {row_idx} CELL {cell_idx}: '{cell_text}'")
+                        
                         for para_idx, paragraph in enumerate(cell.paragraphs):
                             if paragraph.text and paragraph.text.strip():
+                                # Special handling for DOCUMENT_TITLE
+                                if 'DOCUMENT_TITLE' in paragraph.text:
+                                    current_app.logger.info(f"DOCUMENT_TITLE PARAGRAPH: '{paragraph.text}'")
+                                    # Try direct replacement
+                                    old_text = paragraph.text
+                                    new_text = old_text.replace('{{ DOCUMENT_TITLE }}', replacement_data.get('DOCUMENT_TITLE', ''))
+                                    new_text = new_text.replace('{{DOCUMENT_TITLE}}', replacement_data.get('DOCUMENT_TITLE', ''))
+                                    new_text = new_text.replace('{{ DOCUMENT_TITLE}}', replacement_data.get('DOCUMENT_TITLE', ''))
+                                    new_text = new_text.replace('{{DOCUMENT_TITLE }}', replacement_data.get('DOCUMENT_TITLE', ''))
+                                    if new_text != old_text:
+                                        paragraph.text = new_text
+                                        current_app.logger.info(f"DIRECT DOCUMENT_TITLE REPLACEMENT: '{old_text}' -> '{new_text}'")
+                                        continue
+                                
                                 # Try run-level replacement for table cells too
                                 if replace_in_runs(paragraph):
                                     current_app.logger.info(f"Table {table_count} Row {row_idx} Cell {cell_idx}: RUNS PROCESSED")
