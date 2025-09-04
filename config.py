@@ -12,7 +12,7 @@ class Config:
     # Application settings
     APP_NAME = 'SAT Report Generator'
     PORT = int(os.environ.get('PORT', 5000))
-    DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+    DEBUG = False  # Force disable debug mode for production performance
     
     # Domain security settings
     ALLOWED_DOMAINS = os.environ.get('ALLOWED_DOMAINS', '').split(',') if os.environ.get('ALLOWED_DOMAINS') else []

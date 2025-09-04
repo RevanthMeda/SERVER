@@ -50,8 +50,9 @@ def create_app(config_name='default'):
         traceback.print_exc()
         db_initialized = False
 
-    # Minimal logging for maximum performance
-    logging.basicConfig(level=logging.ERROR)
+    # Minimal logging for maximum performance - only critical errors
+    logging.basicConfig(level=logging.CRITICAL)
+    logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
     # Add CSRF token to g for access in templates
     @app.before_request
@@ -347,9 +348,15 @@ if __name__ == '__main__':
                             ))
                             key_temp_path = key_file.name
                         
-                        # Create SSL context with extracted cert and key
+                        # Create optimized SSL context with extracted cert and key
                         ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
                         ssl_context.load_cert_chain(cert_temp_path, key_temp_path)
+                        
+                        # Performance optimizations for SSL
+                        ssl_context.set_ciphers('ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM:DHE+CHACHA20:!aNULL:!MD5:!DSS')
+                        ssl_context.options |= ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 | ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1
+                        ssl_context.options |= ssl.OP_SINGLE_DH_USE | ssl.OP_SINGLE_ECDH_USE
+                        ssl_context.set_alpn_protocols(['h2', 'http/1.1'])  # Enable HTTP/2 if supported
                         
                         print("🔒 HTTPS enabled with password-protected .pfx SSL certificate")
                         
@@ -383,10 +390,11 @@ if __name__ == '__main__':
             app.run(
                 host=host,
                 port=port,
-                debug=debug,
+                debug=False,  # Always disable debug for performance
                 threaded=True,
                 ssl_context=ssl_context,
-                use_reloader=False if config_name == 'production' else debug
+                use_reloader=False,  # Disable reloader for performance
+                processes=1  # Single process for stability
             )
         except OSError as e:
             if "Address already in use" in str(e):
