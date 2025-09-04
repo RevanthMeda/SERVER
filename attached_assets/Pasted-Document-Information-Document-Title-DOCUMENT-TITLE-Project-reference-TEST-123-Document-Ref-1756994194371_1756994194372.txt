@@ -1,0 +1,217 @@
+Document Information
+Document Title	{{ DOCUMENT_TITLE }}
+Project reference	TEST-123
+Document Reference	test-doc-12
+Date	2025-09-02
+Prepared for	test
+Revision	R0
+________________________________________
+Document Approvals
+Prepared by	Revanth	{{ SIG_PREPARED }}
+
+Reviewed by	Jinnu	{{ SIG_REVIEW_TECH }}
+
+Reviewed by	Dazel	{{ SIG_REVIEW_PM }}
+
+Approval (Client)	Test	{{ SIG_APPROVAL_CLIENT }}
+________________________________________
+Document Version Control
+Revision Number	Details	Date
+R0	test	2025-09-02
+		
+________________________________________
+Confidentiality Notice	This document contains confidential and proprietary information of Cully. Unauthorized distribution or reproduction is strictly prohibited.
+WWW.CULLY.IE
+ 
+Table Of Contents
+1.	Introduction	3
+1.1	Purpose	3
+1.2	Scope	3
+1.3	Relationship with other documents	3
+1.4	SAT Protocol Pre-Execution Approval	3
+1.5	SAT Protocol Post Execution Approval	3
+2.	Pre-Test Requirements	4
+3.	Asset Register	5
+3.1	Key Components	5
+3.2	IP Address Records	5
+4.	Signal Tests	6
+4.1	Digital Module Signals	6
+4.2	Modbus Digital	7
+4.3	Modbus Analogue	9
+4.4	Data Validation	10
+5.	Process test	11
+6.	SCADA Verification	12
+7.	Trends Testing	14
+8.	Scada / SMS Alarms	17
+9.	List Of Test Equipment	21
+10.	Punch List Items	21
+
+
+
+
+
+
+
+
+1.	Introduction
+1.1	Purpose
+<p style="text-align: left;">Hlo</p>
+1.2	Scope
+<p style="text-align: left;"><b><i><u>Hlo</u></i></b></p>
+1.3	Relationship with Other Documents
+
+Document Reference	Document Title
+{% for item in RELATED_DOCUMENTS %}{{ item.Document_Reference }}	{{ item.Document_Title }}
+{% endfor %}	
+1.4	SAT Protocol Pre-Execution Approval
+Print Name	Signature	Date	Initial	Company
+{% for row in PRE_APPROVALS%}{{row['Print_Name’] }}	{{ row['Signature'] }}	{{row['Date'] }}	{{row['Initial']}}	{{row['Company']}}
+{% endfor %}				
+
+1.5	SAT Protocol Post Execution Approval
+Print Name	Signature	Date	Initial	Company
+{% for row in POST_APPROVALS%}{{row['Print_Name’] }}	{{ row['Signature'] }}	{{row['Date'] }}	{{row['Initial']}}	{{row['Company']}}
+{% endfor %}				
+
+
+
+
+
+ 
+2.	Pre-Test Requirements
+
+
+Item	Test	Method/Test Steps	Acceptance Criteria	Result	Punch Item	Verified by	Comment
+{% for row in PRE_TEST_REQUIREMENTS %}{{ row['Item'] }}	{{ row['Test'] }}	{{ row['Method/Test Steps'] }}	{{ row['Acceptance Criteria'] }}	{{ row['Result'] }}	{{ row['Punch Item'] }}	{{ row['Verified by'] }}	{{ row['Comment'] }}
+
+
+{% endfor %}							
+ 
+3.	Asset Register
+3.1	KEY COMPONENTS
+S.no	Model	Description	Remarks
+{% for row in KEY_COMPONENTS %}{{ row['S_no'] }}	{{ row['Model'] }}	{{ row['Description'] }}	{{ row['Remarks'] }}
+{% endfor %}			
+
+3.2	IP ADDRESS RECORDS
+Device	IP Address/Subnet/Gateway	Comments
+{% for row in IP_RECORDS %}{{ row['Device_Name'] }}	{{ row['IP_Address'] }}	{{ row['Comment'] }}
+{% endfor %}	 	 
+
+
+
+
+
+
+
+
+
+
+ 
+4.	Signal Tests
+4.1	Digital Module Signals
+S. No.	Rack No.	Module Position	Signal TAG	Signal Description	Result	Punch Item	Verified By	Comment
+{% for row in SIGNAL_LISTS %}{{ row['S. No.'] }}	{{ row['Rack No.'] }}	{{ row['Module Position'] }}	{{ row['Signal TAG'] }}	{{ row['Signal Description'] }}	{{ row[‘Result'] }}	{{ row['Punch Item'] }}	{{ row['Verified By'] }}	{{ row['Comment'] }}
+{% endfor %}								
+4.2 Analogue Module Signals
+S. No.	Rack No.	Module Position	Signal TAG	Signal Description	Result	Punch Item	Verified By	Comment
+{% for row in ANALOGUE_LISTS %}{{ row['S. No.'] }}	{{ row['Rack No.'] }}	{{ row['Module Position'] }}	{{ row['Signal TAG'] }}	{{ row['Signal Description'] }}	{{ row[‘Result'] }}	{{ row['Punch Item'] }}	{{ row['Verified By'] }}	{{ row['Comment'] }}
+{% endfor %}								
+
+
+
+
+
+
+4.3Modbus Digital
+
+Address	Description	Remarks	Result	Punch Item	Verified By	Comment
+{% for row in MODBUS_DIGITAL_LISTS %}{{ row['Address'] }}	{{ row['Description'] }}	{{ row['Remarks'] }}	{{ row['Result'] }}	{{ row[‘Punch Item'] }}	{{ row['Verified By'] }}	{{ row['Comment'] }}
+{% endfor %}						
+ 
+4.4Modbus Analogue
+Address	Description	Range	Result	Punch Item	Verified By	Comment
+{% for row in MODBUS_ANALOGUE_LISTS %}{{ row[' Address'] }}	{{ row['Description'] }}	{{ row['Range'] }}	{{ row['Result'] }}	{{ row[‘Punch Item'] }}	{{ row['Verified By'] }}	{{ row['Comment'] }}
+{% endfor %}				 	 	 
+
+
+
+
+ 
+4.5Data Validation
+Tag	Range	SCADA Value	HMI Value
+{% for row in DATA_VALIDATION%}{{ row['Tag'] }}	{{ row['Range'] }}	{{ row['SCADA Value'] }}	{{ row['HMI Value'] }}
+{% endfor %}			
+
+
+
+
+
+
+
+
+ 
+5.	Process test
+Item	Action	Expected / Required Result	Pass/Fail	Comments
+{% for row in PROCESS_TEST%}{{ row['Item'] }}	{{ row['Action'] }}	{{ row['Expected / Required Result'] }}	{{ row[' Pass/Fail '] }}	{{ row[' Comments '] }}
+{% endfor %}				
+
+
+
+
+
+
+
+
+
+ 
+6.	SCADA Verification
+Task	Expected Result	Pass/Fail	Comments
+{% for row in SCADA_VERIFICATION %}{{ row['Task'] }}	{{ row['Expected Result'] }}	{{ row['Pass/Fail'] }}	{{ row['Comments'] }}
+{% endfor %}			
+
+{% for image in SCADA_IMAGES %}
+{{ image }}
+{% endfor %}
+7.	Trends Testing
+Trend	Expected Behavior	Pass/Fail	Comments
+{% for row in TRENDS_TESTING %}{{ row['Trend'] }}	{{ row['Expected Behavior'] }}	{{ row['Pass/Fail'] }}	{{ row['Comments'] }}
+{% endfor %}			
+
+{% for image in TRENDS_IMAGES %}
+{{ image }}
+{% endfor %} 
+8.	Scada / SMS Alarms
+Alarm Type	Expected Result	Pass/Fail	Comments
+{% for row in ALARM_LIST%}{{ row['Alarm Type'] }}	{{ row['Expected / Required Result'] }}	{{ row[' Pass/Fail '] }}	{{ row[' Comments '] }}
+{% endfor %}			
+
+{% for image in ALARM_IMAGES %}
+{{ image }}
+{% endfor %}
+
+ 
+9.	List Of Test Equipment
+Item	Equipment/Tool	Make/Model	Serial No.	Calibration Date
+1				
+2				
+3				
+4				
+5				
+6				
+7				
+
+10.	Punch List Items
+Item	Detail of Non-Conformance	Raised By	Comment	Approved By	Date
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+

@@ -215,6 +215,10 @@ def download_report(submission_id):
             doc = Document(template_file)
             current_app.logger.info(f"Opened original SAT_Template.docx to preserve exact formatting: {template_file}")
             
+            # Log the context_data to debug DOCUMENT_TITLE issue
+            current_app.logger.info(f"Context data keys: {list(context_data.keys())}")
+            current_app.logger.info(f"Document title value: '{context_data.get('DOCUMENT_TITLE', 'NOT_FOUND')}'")
+            
             # Create mapping of template tags to actual data
             replacement_data = {
                 'DOCUMENT_TITLE': context_data.get('DOCUMENT_TITLE', ''),
@@ -233,17 +237,54 @@ def download_report(submission_id):
                 'PURPOSE': context_data.get('PURPOSE', ''),
                 'SCOPE': context_data.get('SCOPE', ''),
                 'REVISION_DETAILS': context_data.get('REVISION_DETAILS', ''),
-                'REVISION_DATE': context_data.get('REVISION_DATE', '')
+                'REVISION_DATE': context_data.get('REVISION_DATE', ''),
+                # Add signature placeholders
+                'SIG_PREPARED': '',
+                'SIG_REVIEW_TECH': '',
+                'SIG_REVIEW_PM': '',
+                'SIG_APPROVAL_CLIENT': ''
             }
+            
+            def clean_text(text):
+                """Clean template text by replacing tags and removing empty Jinja2 blocks"""
+                # Replace simple template tags
+                for tag, value in replacement_data.items():
+                    text = text.replace('{{ ' + tag + ' }}', str(value) if value else '')
+                    text = text.replace('{{' + tag + '}}', str(value) if value else '')
+                
+                # Remove empty Jinja2 loop blocks (when no data exists)
+                import re
+                # Remove entire {% for %} blocks when they contain only template tags
+                jinja_patterns = [
+                    r'{% for row in PRE_TEST_REQUIREMENTS %}.*?{% endfor %}',
+                    r'{% for row in KEY_COMPONENTS %}.*?{% endfor %}',
+                    r'{% for row in IP_RECORDS %}.*?{% endfor %}',
+                    r'{% for row in SIGNAL_LISTS %}.*?{% endfor %}',
+                    r'{% for row in ANALOGUE_LISTS %}.*?{% endfor %}',
+                    r'{% for row in MODBUS_DIGITAL_LISTS %}.*?{% endfor %}',
+                    r'{% for row in MODBUS_ANALOGUE_LISTS %}.*?{% endfor %}',
+                    r'{% for row in DATA_VALIDATION %}.*?{% endfor %}',
+                    r'{% for row in PROCESS_TEST %}.*?{% endfor %}',
+                    r'{% for row in SCADA_VERIFICATION %}.*?{% endfor %}',
+                    r'{% for row in TRENDS_TESTING %}.*?{% endfor %}',
+                    r'{% for row in ALARM_LIST %}.*?{% endfor %}',
+                    r'{% for row in PRE_APPROVALS %}.*?{% endfor %}',
+                    r'{% for row in POST_APPROVALS %}.*?{% endfor %}',
+                    r'{% for item in RELATED_DOCUMENTS %}.*?{% endfor %}',
+                    r'{% for image in SCADA_IMAGES %}.*?{% endfor %}',
+                    r'{% for image in TRENDS_IMAGES %}.*?{% endfor %}',
+                    r'{% for image in ALARM_IMAGES %}.*?{% endfor %}'
+                ]
+                
+                for pattern in jinja_patterns:
+                    text = re.sub(pattern, '', text, flags=re.DOTALL)
+                
+                return text
             
             # Replace text in paragraphs (preserves all formatting)
             for paragraph in doc.paragraphs:
                 if paragraph.text:
-                    text = paragraph.text
-                    for tag, value in replacement_data.items():
-                        text = text.replace('{{ ' + tag + ' }}', str(value) if value else '')
-                        text = text.replace('{{' + tag + '}}', str(value) if value else '')
-                    paragraph.text = text
+                    paragraph.text = clean_text(paragraph.text)
             
             # Replace text in tables (preserves table formatting)
             for table in doc.tables:
@@ -251,11 +292,7 @@ def download_report(submission_id):
                     for cell in row.cells:
                         for paragraph in cell.paragraphs:
                             if paragraph.text:
-                                text = paragraph.text
-                                for tag, value in replacement_data.items():
-                                    text = text.replace('{{ ' + tag + ' }}', str(value) if value else '')
-                                    text = text.replace('{{' + tag + '}}', str(value) if value else '')
-                                paragraph.text = text
+                                paragraph.text = clean_text(paragraph.text)
             
             current_app.logger.info("Replaced template tags while preserving exact formatting")
 
