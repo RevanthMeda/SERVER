@@ -207,80 +207,74 @@ def download_report(submission_id):
                 flash('Report template file not found.', 'error')
                 return redirect(url_for('status.view_status', submission_id=submission_id))
 
-            # Create proper SAT report using working approach
-            from docx import Document
-            from docx.shared import Inches
-            from docx.enum.text import WD_ALIGN_PARAGRAPH
+            # Use SAT_Template.docx with field tags - FIXED VERSION
+            from docxtpl import DocxTemplate, InlineImage
+            from docx.shared import Mm
+            import copy
             
-            # Create a new document from scratch using working method
-            doc = Document()
+            # Load the SAT_Template.docx with field tags
+            doc = DocxTemplate(template_file)
+            current_app.logger.info(f"Loaded SAT_Template.docx: {template_file}")
             
-            # Add proper SAT report header
-            title = doc.add_heading('System Acceptance Test (SAT) Report', 0)
-            title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            
-            # Add document information table
-            doc.add_heading('Document Information', level=1)
-            doc.add_paragraph(f'Project Reference: {context_data.get("PROJECT_REFERENCE", "N/A")}')
-            doc.add_paragraph(f'Document Title: {context_data.get("DOCUMENT_TITLE", "N/A")}')
-            doc.add_paragraph(f'Client: {context_data.get("CLIENT_NAME", "N/A")}')
-            doc.add_paragraph(f'Prepared By: {context_data.get("PREPARED_BY", "N/A")}')
-            doc.add_paragraph(f'Date: {context_data.get("DATE", "N/A")}')
-            
-            # Add test sections
-            doc.add_heading('Test Summary', level=1)
-            doc.add_paragraph(f'Overall Result: {context_data.get("OVERALL_RESULT", "N/A")}')
-            doc.add_paragraph(f'Test Description: {context_data.get("TEST_DESCRIPTION", "N/A")}')
-            
-            # Add more report sections with actual data
-            if context_data.get("SYSTEM_DESCRIPTION"):
-                doc.add_heading('System Description', level=1)
-                doc.add_paragraph(context_data.get("SYSTEM_DESCRIPTION", ""))
-            
-            if context_data.get("TEST_PROCEDURES"):
-                doc.add_heading('Test Procedures', level=1)
-                doc.add_paragraph(context_data.get("TEST_PROCEDURES", ""))
-                
-            if context_data.get("RESULTS"):
-                doc.add_heading('Test Results', level=1)
-                doc.add_paragraph(context_data.get("RESULTS", ""))
-                
-            if context_data.get("CONCLUSIONS"):
-                doc.add_heading('Conclusions', level=1)
-                doc.add_paragraph(context_data.get("CONCLUSIONS", ""))
-            
-            # Add signature section
-            doc.add_heading('Approvals', level=1)
-            doc.add_paragraph(f'Technical Lead: {context_data.get("TECHNICAL_LEAD", "N/A")}')
-            doc.add_paragraph(f'Project Manager: {context_data.get("PROJECT_MANAGER", "N/A")}')
-            
-            current_app.logger.info("Created proper SAT report document")
+            # Process signatures if available
+            SIG_PREPARED = ""
+            if context_data.get("prepared_signature"):
+                sig_path = os.path.join(current_app.config['SIGNATURES_FOLDER'], context_data["prepared_signature"])
+                if os.path.exists(sig_path):
+                    try:
+                        SIG_PREPARED = InlineImage(doc, sig_path, width=Mm(40))
+                        current_app.logger.info(f"Added signature: {sig_path}")
+                    except Exception as e:
+                        current_app.logger.error(f"Error loading signature: {e}")
+                        SIG_PREPARED = "[Signature not available]"
 
-            # Skip all template rendering since we're creating a simple document
+            # Process uploaded images for SCADA, trends, alarms
+            scada_image_objects = []
+            trends_image_objects = []
+            alarm_image_objects = []
+            
+            # Build complete context for template rendering with ALL field tags
+            render_context = dict(context_data)
+            render_context.update({
+                "SIG_PREPARED": SIG_PREPARED,
+                "SCADA_IMAGES": scada_image_objects,
+                "TRENDS_IMAGES": trends_image_objects,
+                "ALARM_IMAGES": alarm_image_objects,
+                "SIG_APPROVER_1": "",
+                "SIG_APPROVER_2": "",
+                "SIG_APPROVER_3": "",
+            })
+            
+            current_app.logger.info("Rendering SAT template with field tags")
+
+            # Render template with field tags using FIXED approach
             try:
                 # Ensure output directory exists
                 permanent_dir = current_app.config['OUTPUT_DIR']
                 os.makedirs(permanent_dir, exist_ok=True)
                 
-                # Save simple document with debugging
+                # Render the template with field tags
+                doc.render(render_context)
+                current_app.logger.info("Template rendered successfully with field tags")
+                
+                # Save using FIXED approach (memory buffer to avoid corruption)
                 try:
-                    # Try saving to a memory buffer first to test
                     import io
                     buffer = io.BytesIO()
                     doc.save(buffer)
                     buffer_size = len(buffer.getvalue())
-                    current_app.logger.info(f"Document saved to memory buffer: {buffer_size} bytes")
+                    current_app.logger.info(f"Template document saved to memory buffer: {buffer_size} bytes")
                     
-                    # Now save to file
+                    # Write to file using working method
                     buffer.seek(0)
                     with open(permanent_path, 'wb') as f:
                         f.write(buffer.getvalue())
                     
-                    current_app.logger.info(f"Simple test document written to file: {permanent_path}")
+                    current_app.logger.info(f"SAT template document written to file: {permanent_path}")
                     
                 except Exception as save_error:
-                    current_app.logger.error(f"Document save failed: {save_error}")
-                    raise Exception(f"Failed to save document: {save_error}")
+                    current_app.logger.error(f"Template save failed: {save_error}")
+                    raise Exception(f"Failed to save template document: {save_error}")
                 
                 # Verify file was created and has reasonable size
                 if not os.path.exists(permanent_path):
