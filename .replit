@@ -57,12 +57,12 @@ name = "SAT Report Generator"
 author = "agent"
 
 [workflows.workflow.metadata]
-outputType = "console"
+outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python app.py"
-waitForPort = 8443
+waitForPort = 5000
 
 [[ports]]
 localPort = 80
@@ -75,10 +75,6 @@ externalPort = 3001
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 8443
-externalPort = 3002
 
 [agent]
 expertMode = true

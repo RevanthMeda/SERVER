@@ -117,10 +117,11 @@ class Config:
     # Feature Flags
     ENABLE_EMAIL_NOTIFICATIONS = os.getenv('ENABLE_EMAIL_NOTIFICATIONS', 'True').lower() == 'true'
 
-    # Security Settings - Simple and reliable
-    SESSION_COOKIE_SECURE = False  # Allow HTTP cookies
+    # Security Settings - Fixed for external domain access
+    SESSION_COOKIE_SECURE = False  # Allow HTTP cookies (external domain uses HTTP)
     SESSION_COOKIE_HTTPONLY = True  # Standard security
-    SESSION_COOKIE_SAMESITE = 'Lax'
+    SESSION_COOKIE_SAMESITE = 'Lax'  # Allow cross-site cookies for external domain access
+    SESSION_COOKIE_DOMAIN = None  # Let Flask handle domain automatically
     # Remove filesystem sessions - use standard Flask sessions
     PERMANENT_SESSION_LIFETIME = int(os.getenv('PERMANENT_SESSION_LIFETIME', '86400'))  # 24 hours to match CSRF
 

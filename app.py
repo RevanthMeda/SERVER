@@ -58,6 +58,21 @@ def create_app(config_name='default'):
     def add_csrf_token():
         token = generate_csrf()
         g.csrf_token = token
+    
+    # Fix session handling for external domain access
+    @app.before_request
+    def fix_session_for_external_access():
+        """Ensure sessions work properly for external domain access"""
+        # Get the host from request
+        host = request.headers.get('Host', '').lower()
+        
+        # If accessing via external domain, ensure session cookies work
+        if 'mobilehmi.org' in host and not request.is_secure:
+            # For external HTTP access, ensure cookies are more permissive
+            app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+        elif request.remote_addr and not request.remote_addr.startswith('127.0.0.1'):
+            # For any external access, use more permissive cookies
+            app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
     # Inject CSRF token into all responses
     @app.after_request
