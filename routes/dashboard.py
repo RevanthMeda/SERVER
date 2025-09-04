@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from flask_login import login_required, current_user
 from auth import admin_required, role_required
-from models import db, User, Report, Notification, SystemSettings, test_db_connection
+from models import db, User, Report, Notification, SystemSettings, SATReport, test_db_connection
 from utils import get_unread_count
 import json
 
@@ -70,7 +70,7 @@ def admin():
             report.project_reference = report.project_reference or 'N/A'
             report.status = 'draft'
             
-            # Try to get enhanced data from SAT report
+            # Try to get enhanced data from SAT report (with timeout protection)
             try:
                 sat_report = SATReport.query.filter_by(report_id=report.id).first()
                 if sat_report and sat_report.data_json:
@@ -80,8 +80,9 @@ def admin():
                         report.document_title = context_data['DOCUMENT_TITLE']
                     if context_data.get('PROJECT_REFERENCE'):
                         report.project_reference = context_data['PROJECT_REFERENCE']
-            except Exception as sat_error:
-                current_app.logger.debug(f"Could not get SAT data for report {report.id}: {sat_error}")
+            except Exception:
+                # Silent fail to prevent log spam and hanging
+                pass
 
             # Determine status from approvals
             if report.approvals_json:

@@ -59,6 +59,12 @@ def create_app(config_name='default'):
     def add_csrf_token():
         token = generate_csrf()
         g.csrf_token = token
+        
+        # Close any leftover database connections to prevent hanging
+        try:
+            db.session.close()
+        except:
+            pass
     
     # Performance optimization - remove slow session checks
 
@@ -393,7 +399,9 @@ if __name__ == '__main__':
                 threaded=True,
                 ssl_context=ssl_context,
                 use_reloader=False,  # Disable reloader for performance
-                processes=1  # Single process for stability
+                processes=1,  # Single process for stability
+                request_handler=None,  # Use default handler
+                passthrough_errors=False  # Prevent hanging on errors
             )
         except OSError as e:
             if "Address already in use" in str(e):
