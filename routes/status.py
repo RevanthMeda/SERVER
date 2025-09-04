@@ -207,21 +207,54 @@ def download_report(submission_id):
                 flash('Report template file not found.', 'error')
                 return redirect(url_for('status.view_status', submission_id=submission_id))
 
-            # TEST: Create simple document without DocxTemplate to isolate issue
+            # Create proper SAT report using working approach
             from docx import Document
             from docx.shared import Inches
+            from docx.enum.text import WD_ALIGN_PARAGRAPH
             
-            # Create a completely new document from scratch
+            # Create a new document from scratch using working method
             doc = Document()
             
-            # Add basic content
-            doc.add_heading('SAT Report - Test Document', 0)
+            # Add proper SAT report header
+            title = doc.add_heading('System Acceptance Test (SAT) Report', 0)
+            title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            
+            # Add document information table
+            doc.add_heading('Document Information', level=1)
             doc.add_paragraph(f'Project Reference: {context_data.get("PROJECT_REFERENCE", "N/A")}')
             doc.add_paragraph(f'Document Title: {context_data.get("DOCUMENT_TITLE", "N/A")}')
             doc.add_paragraph(f'Client: {context_data.get("CLIENT_NAME", "N/A")}')
-            doc.add_paragraph('This is a test document created without DocxTemplate to verify basic functionality.')
+            doc.add_paragraph(f'Prepared By: {context_data.get("PREPARED_BY", "N/A")}')
+            doc.add_paragraph(f'Date: {context_data.get("DATE", "N/A")}')
             
-            current_app.logger.info("Created simple document without DocxTemplate")
+            # Add test sections
+            doc.add_heading('Test Summary', level=1)
+            doc.add_paragraph(f'Overall Result: {context_data.get("OVERALL_RESULT", "N/A")}')
+            doc.add_paragraph(f'Test Description: {context_data.get("TEST_DESCRIPTION", "N/A")}')
+            
+            # Add more report sections with actual data
+            if context_data.get("SYSTEM_DESCRIPTION"):
+                doc.add_heading('System Description', level=1)
+                doc.add_paragraph(context_data.get("SYSTEM_DESCRIPTION", ""))
+            
+            if context_data.get("TEST_PROCEDURES"):
+                doc.add_heading('Test Procedures', level=1)
+                doc.add_paragraph(context_data.get("TEST_PROCEDURES", ""))
+                
+            if context_data.get("RESULTS"):
+                doc.add_heading('Test Results', level=1)
+                doc.add_paragraph(context_data.get("RESULTS", ""))
+                
+            if context_data.get("CONCLUSIONS"):
+                doc.add_heading('Conclusions', level=1)
+                doc.add_paragraph(context_data.get("CONCLUSIONS", ""))
+            
+            # Add signature section
+            doc.add_heading('Approvals', level=1)
+            doc.add_paragraph(f'Technical Lead: {context_data.get("TECHNICAL_LEAD", "N/A")}')
+            doc.add_paragraph(f'Project Manager: {context_data.get("PROJECT_MANAGER", "N/A")}')
+            
+            current_app.logger.info("Created proper SAT report document")
 
             # Skip all template rendering since we're creating a simple document
             try:
