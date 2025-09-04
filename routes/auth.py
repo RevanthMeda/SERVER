@@ -68,47 +68,73 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email', '').strip().lower()
         password = request.form.get('password', '')
+        client_ip = request.remote_addr
+        
+        # Debug logging for external users
+        current_app.logger.info(f"🔐 Login attempt - IP: {client_ip}, Email: {email}")
 
         if not email or not password:
+            current_app.logger.warning(f"❌ Missing credentials - IP: {client_ip}")
             flash('Email and password are required.', 'error')
             return render_template('login.html')
 
         try:
             # Test database connection first
             db.session.execute(db.text('SELECT 1'))
+            current_app.logger.info(f"✅ Database connection OK - IP: {client_ip}")
+            
             user = User.query.filter_by(email=email).first()
+            current_app.logger.info(f"🔍 User lookup - Email: {email}, Found: {user is not None}, IP: {client_ip}")
 
             if user and user.check_password(password):
+                current_app.logger.info(f"✅ Password valid - Email: {email}, Status: {user.status}, Role: {user.role}, IP: {client_ip}")
+                
                 # Check user status
                 if user.status == 'Pending':
+                    current_app.logger.info(f"⏳ User pending approval - Email: {email}, IP: {client_ip}")
                     return render_template('pending_approval.html', user=user)
                 elif user.status == 'Disabled':
+                    current_app.logger.info(f"🚫 User disabled - Email: {email}, IP: {client_ip}")
                     flash('Your account has been disabled. Please contact an administrator.', 'error')
                     return render_template('login.html')
                 elif user.status == 'Active':
-                    login_user(user)
-                    flash('Login successful!', 'success')
+                    current_app.logger.info(f"🎯 Attempting login_user() - Email: {email}, IP: {client_ip}")
+                    login_success = login_user(user)
+                    current_app.logger.info(f"🔑 login_user() result: {login_success}, is_authenticated: {current_user.is_authenticated}, IP: {client_ip}")
+                    
+                    if current_user.is_authenticated:
+                        flash('Login successful!', 'success')
+                        current_app.logger.info(f"🎉 Login successful! Redirecting {user.role} user - Email: {email}, IP: {client_ip}")
 
-                    # Role-based dashboard redirect
-                    if user.role == 'Admin':
-                        return redirect(url_for('dashboard.admin'))
-                    elif user.role == 'Engineer':
-                        return redirect(url_for('dashboard.engineer'))
-                    elif user.role == 'TM':
-                        return redirect(url_for('dashboard.tm'))
-                    elif user.role == 'PM':
-                        return redirect(url_for('dashboard.pm'))
+                        # Role-based dashboard redirect
+                        if user.role == 'Admin':
+                            return redirect(url_for('dashboard.admin'))
+                        elif user.role == 'Engineer':
+                            return redirect(url_for('dashboard.engineer'))
+                        elif user.role == 'TM':
+                            return redirect(url_for('dashboard.tm'))
+                        elif user.role == 'PM':
+                            return redirect(url_for('dashboard.pm'))
+                        else:
+                            return redirect(url_for('dashboard.home'))
                     else:
-                        return redirect(url_for('dashboard.home'))
+                        current_app.logger.error(f"❌ login_user() failed - session not authenticated - Email: {email}, IP: {client_ip}")
+                        flash('Login failed. Please try again.', 'error')
+                        return render_template('login.html')
                 else:
+                    current_app.logger.warning(f"❓ Unknown user status: {user.status} - Email: {email}, IP: {client_ip}")
                     flash('Account status unknown. Please contact an administrator.', 'error')
                     return render_template('login.html')
             else:
+                if user:
+                    current_app.logger.warning(f"❌ Invalid password - Email: {email}, IP: {client_ip}")
+                else:
+                    current_app.logger.warning(f"❌ User not found - Email: {email}, IP: {client_ip}")
                 flash('Invalid email or password', 'error')
                 return render_template('login.html')
 
         except Exception as e:
-            current_app.logger.error(f"Login error: {e}")
+            current_app.logger.error(f"💥 Login error - Email: {email}, IP: {client_ip}, Error: {e}")
             flash('System temporarily unavailable. Please try again later.', 'error')
             return render_template('login.html')
 

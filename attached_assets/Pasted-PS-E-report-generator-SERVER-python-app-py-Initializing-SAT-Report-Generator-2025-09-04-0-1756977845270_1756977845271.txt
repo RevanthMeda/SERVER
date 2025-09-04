@@ -1,0 +1,44 @@
+PS E:\report generator\SERVER> python app.py
+🔧 Initializing SAT Report Generator...
+[2025-09-04 09:20:48,613] INFO in models: Database connection successful
+[2025-09-04 09:20:48,634] INFO in models: Database tables created successfully
+[2025-09-04 09:20:48,673] INFO in models: Default system settings initialized
+[2025-09-04 09:20:48,673] INFO in models: Database initialized successfully
+[2025-09-04 09:20:48,675] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+ℹ️  SSL temporarily disabled for testing - using HTTP
+ * Serving Flask app 'app'
+ * Debug mode: on
+INFO:werkzeug:←[31m←[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.←[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.16.18.21:5000
+INFO:werkzeug:←[33mPress CTRL+C to quit←[0m
+INFO:werkzeug: * Restarting with stat
+🔧 Initializing SAT Report Generator...
+[2025-09-04 09:20:50,717] INFO in models: Database connection successful
+[2025-09-04 09:20:50,735] INFO in models: Database tables created successfully
+[2025-09-04 09:20:50,774] INFO in models: Default system settings initialized
+[2025-09-04 09:20:50,775] INFO in models: Database initialized successfully
+[2025-09-04 09:20:50,776] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+ℹ️  SSL temporarily disabled for testing - using HTTP
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 273-260-108
+INFO:werkzeug:178.250.118.114 - - [04/Sep/2025 09:23:44] "POST /auth/login HTTP/1.1" 200 -
+INFO:werkzeug:178.250.118.114 - - [04/Sep/2025 09:23:44] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:178.250.118.114 - - [04/Sep/2025 09:23:44] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
