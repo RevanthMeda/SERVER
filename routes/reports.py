@@ -11,7 +11,7 @@ reports_bp = Blueprint('reports', __name__, url_prefix='/reports')
 
 @reports_bp.route('/new')
 @login_required
-@role_required(['Engineer', 'Admin'])
+@role_required(['Engineer', 'Automation Manager', 'PM', 'Admin'])
 def new():
     """Show report type selection page"""
     return render_template('report_selector.html')
