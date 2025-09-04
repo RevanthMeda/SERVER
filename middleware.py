@@ -30,9 +30,13 @@ def domain_security_middleware():
     # Check if accessing via IP address
     try:
         ipaddress.ip_address(host_without_port)
-        # This is an IP address access - block it
-        current_app.logger.warning(f"Blocked IP access attempt: {host} from {request.remote_addr}")
-        abort(403)  # Forbidden
+        # This is an IP address access - allow internal server IP, block others
+        server_ip = current_app.config.get('SERVER_IP', '')
+        if host_without_port == server_ip or host_without_port in ['127.0.0.1', 'localhost']:
+            return  # Allow internal server IP and localhost
+        else:
+            current_app.logger.warning(f"Blocked external IP access attempt: {host} from {request.remote_addr}")
+            abort(403)  # Forbidden
     except ValueError:
         # This is a domain name, check if it's allowed
         pass
