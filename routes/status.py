@@ -215,12 +215,12 @@ def download_report(submission_id):
             doc = Document(template_file)
             current_app.logger.info(f"Opened original SAT_Template.docx to preserve exact formatting: {template_file}")
             
-            # Debug: Print all available keys and values
-            current_app.logger.info(f"All context_data keys: {list(context_data.keys())}")
-            # Check all possible field variations
+            # AGGRESSIVE DEBUG: Print EVERYTHING
+            current_app.logger.info("="*50)
+            current_app.logger.info("FULL CONTEXT_DATA DUMP:")
             for key, value in context_data.items():
-                if any(search_term in key.lower() for search_term in ['document', 'title', 'reference', 'revision']):
-                    current_app.logger.info(f"Key '{key}': '{value}'")
+                current_app.logger.info(f"  '{key}': '{value}'")
+            current_app.logger.info("="*50)
             
             # Create comprehensive mapping with more field variations
             replacement_data = {
@@ -285,16 +285,29 @@ def download_report(submission_id):
                 """Clean template text by replacing tags and removing empty Jinja2 blocks"""
                 if not text.strip():
                     return text
-                    
-                # Replace simple template tags with all variations
+                
+                original_text = text
+                
+                # AGGRESSIVE replacement - try every possible tag format
                 for tag, value in replacement_data.items():
-                    replacements = [
-                        f'{{{{ {tag} }}}}',  # {{ TAG }}
-                        f'{{{{{tag}}}}}',    # {{TAG}}
-                        f'{{{{  {tag}  }}}}' # {{  TAG  }}
-                    ]
-                    for pattern in replacements:
-                        text = text.replace(pattern, str(value) if value else '')
+                    if value:  # Only replace if we have a value
+                        patterns_to_try = [
+                            f'{{{{ {tag} }}}}',     # {{ TAG }}
+                            f'{{{{{tag}}}}}',       # {{TAG}}
+                            f'{{{{  {tag}  }}}}',   # {{  TAG  }}
+                            f'{{{{ {tag}}}}}',      # {{ TAG}}
+                            f'{{{{{tag} }}}}',      # {{TAG }}
+                        ]
+                        for pattern in patterns_to_try:
+                            if pattern in text:
+                                text = text.replace(pattern, str(value))
+                                current_app.logger.info(f"REPLACED '{pattern}' with '{value}' in text")
+                
+                # Log if we still have template tags after replacement
+                if '{{' in text and text != original_text:
+                    current_app.logger.info(f"STILL HAS TAGS after replacement: '{text[:100]}...'")
+                elif '{{' in text:
+                    current_app.logger.info(f"NO REPLACEMENT MADE for text with tags: '{text[:100]}...'")
                 
                 # Remove Jinja2 template syntax (more aggressive)
                 import re
@@ -302,7 +315,7 @@ def download_report(submission_id):
                 # Remove {% for %} ... {% endfor %} blocks
                 text = re.sub(r'{%\s*for\s+[^%]*%}.*?{%\s*endfor\s*%}', '', text, flags=re.DOTALL)
                 
-                # Remove remaining {{ }} placeholders
+                # Remove remaining {{ }} placeholders only if they're empty
                 text = re.sub(r'{{\s*[^}]*\s*}}', '', text)
                 
                 # Remove {% %} blocks
@@ -318,10 +331,19 @@ def download_report(submission_id):
             for paragraph in doc.paragraphs:
                 if paragraph.text and paragraph.text.strip():
                     old_text = paragraph.text
+                    # TEST: Manual replacement for debugging
+                    if '{{ DOCUMENT_TITLE }}' in old_text:
+                        current_app.logger.info(f"FOUND DOCUMENT_TITLE TAG in paragraph {paragraph_count}")
+                        current_app.logger.info(f"Before replacement: '{old_text}'")
+                        manual_replaced = old_text.replace('{{ DOCUMENT_TITLE }}', 'TEST MANUAL REPLACEMENT')
+                        current_app.logger.info(f"Manual test result: '{manual_replaced}'")
+                    
                     new_text = clean_text(paragraph.text)
                     if old_text != new_text:
                         current_app.logger.info(f"Para {paragraph_count}: '{old_text[:50]}...' -> '{new_text[:50]}...'")
                         paragraph.text = new_text
+                    elif '{{' in old_text:
+                        current_app.logger.info(f"Para {paragraph_count} UNCHANGED but has template tags: '{old_text[:50]}...'")
                     paragraph_count += 1
             
             # Replace text in tables (preserves table formatting)
