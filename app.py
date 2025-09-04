@@ -67,8 +67,13 @@ def create_app(config_name='default'):
         if response.mimetype == 'text/html' and hasattr(g, 'csrf_token'):
             response.set_cookie(
                 'csrf_token', g.csrf_token,
-                httponly=False, samesite='Lax'
+                httponly=False, samesite='Lax', secure=app.config.get('USE_HTTPS', False)
             )
+        # Enforce HTTPS security headers
+        if app.config.get('USE_HTTPS', False):
+            response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+            response.headers['X-Content-Type-Options'] = 'nosniff'
+            response.headers['X-Frame-Options'] = 'DENY'
         return response
 
     # Make CSRF token available in all templates
@@ -305,9 +310,13 @@ if __name__ == '__main__':
                 print(f"🚀 Starting production server on port {port}")
                 print("⚠️  Production mode: Use a WSGI server like Gunicorn for deployment")
             
-            # Temporarily disable SSL for testing
-            ssl_context = None
-            print("ℹ️  SSL temporarily disabled for testing - using HTTP")
+            # Enable SSL/HTTPS for secure connections
+            if app.config.get('USE_HTTPS', False) and os.path.exists(app.config.get('SSL_CERT_PATH', '')) and os.path.exists(app.config.get('SSL_KEY_PATH', '')):
+                ssl_context = (app.config['SSL_CERT_PATH'], app.config['SSL_KEY_PATH'])
+                print("🔒 HTTPS enabled with SSL certificates")
+            else:
+                ssl_context = None
+                print("ℹ️  Running in HTTP mode - SSL certificates not found")
 
             app.run(
                 host=host,

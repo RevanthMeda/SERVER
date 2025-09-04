@@ -19,12 +19,17 @@ class Config:
     SERVER_IP = os.environ.get('SERVER_IP', '')
     BLOCK_IP_ACCESS = os.environ.get('BLOCK_IP_ACCESS', 'False').lower() == 'true'
 
-    # Security - Bulletproof CSRF settings
+    # Security - Bulletproof CSRF settings with HTTPS
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here-change-in-production-sat-2025'
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = 86400  # 24 hours - very long timeout
-    WTF_CSRF_SSL_STRICT = False  # Allow HTTP for development
+    WTF_CSRF_SSL_STRICT = True   # Enforce HTTPS for security
     WTF_CSRF_CHECK_DEFAULT = False  # More lenient CSRF checking
+    
+    # SSL/HTTPS Configuration
+    SSL_CERT_PATH = os.path.join(os.path.dirname(__file__), 'cert.pem')
+    SSL_KEY_PATH = os.path.join(os.path.dirname(__file__), 'key.pem')
+    USE_HTTPS = True
 
     # Database - Use absolute path for SQLite
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
