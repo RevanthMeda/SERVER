@@ -272,6 +272,22 @@ def download_report(submission_id):
                     
                 return False
             
+            # FIRST: Fix missing DOCUMENT_TITLE tag in template
+            current_app.logger.info("=== CHECKING FOR MISSING DOCUMENT_TITLE TAG ===")
+            
+            # Look for Document Title row and add missing tag if needed
+            for table_idx, table in enumerate(doc.tables):
+                for row_idx, row in enumerate(table.rows):
+                    if len(row.cells) >= 2:
+                        left_cell = row.cells[0].text.strip()
+                        right_cell = row.cells[1].text.strip()
+                        
+                        # If left cell says "Document Title" and right cell is empty, add the tag
+                        if 'Document Title' in left_cell and not right_cell:
+                            current_app.logger.info(f"FOUND EMPTY DOCUMENT TITLE CELL - Adding {{ DOCUMENT_TITLE }} tag")
+                            row.cells[1].text = '{{ DOCUMENT_TITLE }}'
+                            current_app.logger.info(f"ADDED MISSING TAG to TABLE {table_idx} ROW {row_idx}")
+            
             # Apply brute force replacement to EVERYTHING
             current_app.logger.info("Processing paragraphs...")
             for i, paragraph in enumerate(doc.paragraphs):
