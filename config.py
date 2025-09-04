@@ -23,7 +23,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here-change-in-production-sat-2025'
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = 86400  # 24 hours - very long timeout
-    WTF_CSRF_SSL_STRICT = True  # Enable SSL strict mode for HTTPS
+    WTF_CSRF_SSL_STRICT = False  # More lenient for login compatibility
     WTF_CSRF_CHECK_DEFAULT = False  # More lenient CSRF checking
     
     # SSL/HTTPS Configuration

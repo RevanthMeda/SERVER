@@ -305,7 +305,7 @@ if __name__ == '__main__':
             # Production server configuration
             host = '0.0.0.0'  # Bind to all interfaces
             port = app.config['PORT']
-            debug = app.config.get('DEBUG', False)
+            debug = False  # Force debug off for performance
             
             if config_name == 'production':
                 print(f"🚀 Starting production server on port {port}")
@@ -352,11 +352,10 @@ if __name__ == '__main__':
                         ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
                         ssl_context.load_cert_chain(cert_temp_path, key_temp_path)
                         
-                        # Performance optimizations for SSL
+                        # Performance optimizations for SSL (compatible with Flask dev server)
                         ssl_context.set_ciphers('ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM:DHE+CHACHA20:!aNULL:!MD5:!DSS')
-                        ssl_context.options |= ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 | ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1
+                        ssl_context.minimum_version = ssl.TLSVersion.TLSv1_2  # Use modern method instead of deprecated options
                         ssl_context.options |= ssl.OP_SINGLE_DH_USE | ssl.OP_SINGLE_ECDH_USE
-                        ssl_context.set_alpn_protocols(['h2', 'http/1.1'])  # Enable HTTP/2 if supported
                         
                         print("🔒 HTTPS enabled with password-protected .pfx SSL certificate")
                         
