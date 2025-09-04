@@ -215,6 +215,37 @@ def download_report(submission_id):
             doc = Document(template_file)
             current_app.logger.info(f"Opened original SAT_Template.docx to preserve exact formatting: {template_file}")
             
+            # COMPREHENSIVE SCAN - Find where DOCUMENT_TITLE is hiding
+            current_app.logger.info("=== COMPREHENSIVE DOCUMENT SCAN ===")
+            
+            # Scan ALL paragraphs for DOCUMENT_TITLE
+            for i, paragraph in enumerate(doc.paragraphs):
+                if 'DOCUMENT_TITLE' in paragraph.text:
+                    current_app.logger.info(f"DOCUMENT_TITLE FOUND IN PARAGRAPH {i}: '{paragraph.text}'")
+            
+            # Scan ALL tables for DOCUMENT_TITLE  
+            for table_idx, table in enumerate(doc.tables):
+                for row_idx, row in enumerate(table.rows):
+                    for cell_idx, cell in enumerate(row.cells):
+                        if 'DOCUMENT_TITLE' in cell.text:
+                            current_app.logger.info(f"DOCUMENT_TITLE FOUND IN TABLE {table_idx} ROW {row_idx} CELL {cell_idx}: '{cell.text}'")
+            
+            # Scan headers and footers
+            for section_idx, section in enumerate(doc.sections):
+                # Check header
+                if hasattr(section, 'header'):
+                    for para_idx, paragraph in enumerate(section.header.paragraphs):
+                        if 'DOCUMENT_TITLE' in paragraph.text:
+                            current_app.logger.info(f"DOCUMENT_TITLE FOUND IN HEADER {section_idx} PARA {para_idx}: '{paragraph.text}'")
+                            
+                # Check footer  
+                if hasattr(section, 'footer'):
+                    for para_idx, paragraph in enumerate(section.footer.paragraphs):
+                        if 'DOCUMENT_TITLE' in paragraph.text:
+                            current_app.logger.info(f"DOCUMENT_TITLE FOUND IN FOOTER {section_idx} PARA {para_idx}: '{paragraph.text}'")
+            
+            current_app.logger.info("=== END COMPREHENSIVE SCAN ===")
+            
             # AGGRESSIVE DEBUG: Print EVERYTHING + DOCUMENT_TITLE specific check
             current_app.logger.info("="*50)
             current_app.logger.info("FULL CONTEXT_DATA DUMP:")
