@@ -318,11 +318,54 @@ if __name__ == '__main__':
                 if ssl_cert_path.endswith('.pfx') and os.path.exists(ssl_cert_path):
                     try:
                         import ssl
+                        from cryptography.hazmat.primitives import serialization
+                        from cryptography.hazmat.primitives.serialization import pkcs12
+                        import tempfile
+                        
+                        # Get password from config
+                        cert_password = app.config.get('SSL_CERT_PASSWORD', '').encode() if app.config.get('SSL_CERT_PASSWORD') else None
+                        
+                        # Load the .pfx file
+                        with open(ssl_cert_path, 'rb') as f:
+                            pfx_data = f.read()
+                        
+                        # Parse the PKCS#12 file
+                        private_key, certificate, additional_certificates = pkcs12.load_key_and_certificates(
+                            pfx_data, cert_password
+                        )
+                        
+                        # Create temporary files for cert and key
+                        with tempfile.NamedTemporaryFile(mode='wb', delete=False, suffix='.pem') as cert_file:
+                            cert_file.write(certificate.public_bytes(serialization.Encoding.PEM))
+                            cert_temp_path = cert_file.name
+                        
+                        with tempfile.NamedTemporaryFile(mode='wb', delete=False, suffix='.key') as key_file:
+                            key_file.write(private_key.private_bytes(
+                                encoding=serialization.Encoding.PEM,
+                                format=serialization.PrivateFormat.PKCS8,
+                                encryption_algorithm=serialization.NoEncryption()
+                            ))
+                            key_temp_path = key_file.name
+                        
+                        # Create SSL context with extracted cert and key
                         ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-                        ssl_context.load_cert_chain(ssl_cert_path)
-                        print("🔒 HTTPS enabled with .pfx SSL certificate")
+                        ssl_context.load_cert_chain(cert_temp_path, key_temp_path)
+                        
+                        print("🔒 HTTPS enabled with password-protected .pfx SSL certificate")
+                        
+                        # Clean up temporary files after loading
+                        import atexit
+                        def cleanup_temp_files():
+                            try:
+                                os.unlink(cert_temp_path)
+                                os.unlink(key_temp_path)
+                            except:
+                                pass
+                        atexit.register(cleanup_temp_files)
+                        
                     except Exception as e:
                         print(f"⚠️  Error loading .pfx certificate: {e}")
+                        print("💡 Make sure SSL_CERT_PASSWORD is set in your .env file")
                         ssl_context = None
                         print("ℹ️  Falling back to HTTP mode")
                 # Check for separate cert and key files  

@@ -29,6 +29,7 @@ class Config:
     # SSL/HTTPS Configuration
     SSL_CERT_PATH = r'E:\report generator\SERVER\ssl\mobilehmi.org2025.pfx'
     SSL_KEY_PATH = None  # Not needed for .pfx files
+    SSL_CERT_PASSWORD = os.environ.get('SSL_CERT_PASSWORD', '')  # Password for .pfx file
     USE_HTTPS = True
 
     # Database - Use absolute path for SQLite
