@@ -12,6 +12,7 @@ dashboard_bp = Blueprint('dashboard', __name__)
 def home():
     """Role-based dashboard home"""
     role = current_user.role
+    current_app.logger.error(f"🔍 Dashboard role check - User: {current_user.email}, Role: '{role}', Length: {len(role)}")
 
     if role == 'Admin':
         return redirect(url_for('dashboard.admin'))
@@ -22,6 +23,7 @@ def home():
     elif role == 'PM':
         return redirect(url_for('dashboard.pm'))
     else:
+        current_app.logger.error(f"❌ UNRECOGNIZED ROLE: '{role}' for user {current_user.email}")
         flash('Invalid role. Contact your administrator.', 'error')
         return redirect(url_for('auth.logout'))
 
