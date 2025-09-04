@@ -273,18 +273,23 @@ def download_report(submission_id):
                 permanent_dir = current_app.config['OUTPUT_DIR']
                 os.makedirs(permanent_dir, exist_ok=True)
                 
-                # Save the document with proper file integrity checks
-                temp_save_path = permanent_path + '.tmp'
-                doc.save(temp_save_path)
+                # Save the document directly with flush
+                doc.save(permanent_path)
                 
-                # Verify the file was saved completely and has content
-                if os.path.exists(temp_save_path) and os.path.getsize(temp_save_path) > 0:
-                    # Move temp file to final location atomically
-                    import shutil
-                    shutil.move(temp_save_path, permanent_path)
-                    current_app.logger.info(f"Document successfully saved: {permanent_path} ({os.path.getsize(permanent_path)} bytes)")
-                else:
-                    raise Exception("Document save failed - empty or missing file")
+                # Force file system sync to ensure complete write
+                try:
+                    import os
+                    if hasattr(os, 'fsync'):
+                        with open(permanent_path, 'rb') as f:
+                            os.fsync(f.fileno())
+                except:
+                    pass
+                
+                # Verify file integrity
+                if not os.path.exists(permanent_path) or os.path.getsize(permanent_path) < 1000:  # Word docs should be at least 1KB
+                    raise Exception(f"Document save failed - file missing or too small ({os.path.getsize(permanent_path) if os.path.exists(permanent_path) else 0} bytes)")
+                    
+                current_app.logger.info(f"Document successfully saved: {permanent_path} ({os.path.getsize(permanent_path)} bytes)")
                 
                 # Verify the file was created and has content
                 if not os.path.exists(permanent_path) or os.path.getsize(permanent_path) == 0:
@@ -299,14 +304,16 @@ def download_report(submission_id):
 
             current_app.logger.info(f"Fresh report generated: {permanent_path}")
 
-            # Get document title for filename (sanitize for compatibility)
-            doc_title = context_data.get("DOCUMENT_TITLE", "SAT_Report")
-            # More aggressive filename sanitization for better compatibility
-            safe_title = "".join(c if c.isalnum() or c in ['_', '-', ' '] else "_" for c in doc_title[:50])
-            safe_title = safe_title.replace(' ', '_').strip('_')
-            if not safe_title:
-                safe_title = "SAT_Report"
-            download_name = f"{safe_title}_{submission_id[:8]}.docx"
+            # Get project number for filename (SAT_PROJNUMBER format)
+            project_number = context_data.get("PROJECT_REFERENCE", "").strip()
+            if not project_number:
+                project_number = context_data.get("PROJECT_NUMBER", "").strip()
+            if not project_number:
+                project_number = submission_id[:8]  # Fallback to submission ID
+                
+            # Clean project number for filename
+            safe_proj_num = "".join(c if c.isalnum() or c in ['_', '-'] else "_" for c in project_number)
+            download_name = f"SAT_{safe_proj_num}.docx"
 
             # Verify file exists and has proper size before sending
             if not os.path.exists(permanent_path) or os.path.getsize(permanent_path) == 0:
@@ -315,13 +322,39 @@ def download_report(submission_id):
 
             current_app.logger.info(f"Serving file: {permanent_path} as {download_name}")
             
-            # Return the file with proper headers for Word compatibility
-            return send_file(
-                permanent_path, 
-                as_attachment=True, 
-                download_name=download_name,
-                mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-            )
+            # Copy to a clean download path to avoid any path issues
+            import tempfile
+            download_dir = tempfile.mkdtemp()
+            clean_download_path = os.path.join(download_dir, download_name)
+            
+            try:
+                import shutil
+                shutil.copy2(permanent_path, clean_download_path)
+                
+                # Return the clean file
+                response = send_file(
+                    clean_download_path, 
+                    as_attachment=True, 
+                    download_name=download_name,
+                    mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                )
+                
+                # Add headers to prevent caching issues
+                response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                response.headers["Pragma"] = "no-cache"
+                response.headers["Expires"] = "0"
+                
+                return response
+                
+            except Exception as copy_error:
+                current_app.logger.error(f"Error preparing download: {copy_error}")
+                # Fallback to original method
+                return send_file(
+                    permanent_path, 
+                    as_attachment=True, 
+                    download_name=download_name,
+                    mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                )
 
         except Exception as generation_error:
             current_app.logger.error(f"Error during report generation: {generation_error}", exc_info=True)
