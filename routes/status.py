@@ -217,18 +217,46 @@ def download_report(submission_id):
             
             # Debug: Print all available keys and values
             current_app.logger.info(f"All context_data keys: {list(context_data.keys())}")
+            # Check all possible field variations
             for key, value in context_data.items():
-                if key in ['DOCUMENT_TITLE', 'document_title', 'PROJECT_REFERENCE']:
+                if any(search_term in key.lower() for search_term in ['document', 'title', 'reference', 'revision']):
                     current_app.logger.info(f"Key '{key}': '{value}'")
             
-            # Create comprehensive mapping of template tags to actual data
+            # Create comprehensive mapping with more field variations
             replacement_data = {
-                'DOCUMENT_TITLE': context_data.get('DOCUMENT_TITLE', context_data.get('document_title', '')),
-                'PROJECT_REFERENCE': context_data.get('PROJECT_REFERENCE', context_data.get('project_reference', '')),
-                'DOCUMENT_REFERENCE': context_data.get('DOCUMENT_REFERENCE', context_data.get('document_reference', '')),
-                'DATE': context_data.get('DATE', context_data.get('date', '')),
-                'CLIENT_NAME': context_data.get('CLIENT_NAME', context_data.get('client_name', '')),
-                'REVISION': context_data.get('REVISION', context_data.get('revision', '')),
+                'DOCUMENT_TITLE': (
+                    context_data.get('DOCUMENT_TITLE') or 
+                    context_data.get('document_title') or 
+                    context_data.get('Document_Title') or 
+                    context_data.get('documentTitle') or ''
+                ),
+                'PROJECT_REFERENCE': (
+                    context_data.get('PROJECT_REFERENCE') or 
+                    context_data.get('project_reference') or 
+                    context_data.get('Project_Reference') or ''
+                ),
+                'DOCUMENT_REFERENCE': (
+                    context_data.get('DOCUMENT_REFERENCE') or 
+                    context_data.get('document_reference') or 
+                    context_data.get('Document_Reference') or 
+                    context_data.get('doc_reference') or ''
+                ),
+                'DATE': (
+                    context_data.get('DATE') or 
+                    context_data.get('date') or 
+                    context_data.get('Date') or ''
+                ),
+                'CLIENT_NAME': (
+                    context_data.get('CLIENT_NAME') or 
+                    context_data.get('client_name') or 
+                    context_data.get('Client_Name') or ''
+                ),
+                'REVISION': (
+                    context_data.get('REVISION') or 
+                    context_data.get('revision') or 
+                    context_data.get('Revision') or 
+                    context_data.get('rev') or ''
+                ),
                 'PREPARED_BY': context_data.get('PREPARED_BY', context_data.get('prepared_by', '')),
                 'PREPARER_DATE': context_data.get('PREPARER_DATE', context_data.get('preparer_date', '')),
                 'REVIEWED_BY_TECH_LEAD': context_data.get('REVIEWED_BY_TECH_LEAD', context_data.get('reviewed_by_tech_lead', '')),
@@ -247,7 +275,10 @@ def download_report(submission_id):
                 'SIG_APPROVAL_CLIENT': ''
             }
             
+            # Log final values for debugging
             current_app.logger.info(f"Final DOCUMENT_TITLE value: '{replacement_data['DOCUMENT_TITLE']}'")
+            current_app.logger.info(f"Final DOCUMENT_REFERENCE value: '{replacement_data['DOCUMENT_REFERENCE']}'")
+            current_app.logger.info(f"Final REVISION value: '{replacement_data['REVISION']}'")
             current_app.logger.info(f"Final PROJECT_REFERENCE value: '{replacement_data['PROJECT_REFERENCE']}'")
             
             def clean_text(text):
@@ -307,7 +338,32 @@ def download_report(submission_id):
                                     paragraph.text = new_text
                 table_count += 1
             
-            current_app.logger.info("Replaced template tags while preserving exact formatting")
+            # Process headers and footers (Word documents can have these)
+            header_footer_count = 0
+            for section in doc.sections:
+                # Process headers
+                if hasattr(section, 'header'):
+                    for paragraph in section.header.paragraphs:
+                        if paragraph.text and paragraph.text.strip():
+                            old_text = paragraph.text
+                            new_text = clean_text(paragraph.text)
+                            if old_text != new_text:
+                                current_app.logger.info(f"Header {header_footer_count}: '{old_text[:30]}...' -> '{new_text[:30]}...'")
+                                paragraph.text = new_text
+                
+                # Process footers
+                if hasattr(section, 'footer'):
+                    for paragraph in section.footer.paragraphs:
+                        if paragraph.text and paragraph.text.strip():
+                            old_text = paragraph.text
+                            new_text = clean_text(paragraph.text)
+                            if old_text != new_text:
+                                current_app.logger.info(f"Footer {header_footer_count}: '{old_text[:30]}...' -> '{new_text[:30]}...'")
+                                paragraph.text = new_text
+                
+                header_footer_count += 1
+            
+            current_app.logger.info("Replaced template tags in document, tables, headers, and footers")
 
             # Render template with field tags using FIXED approach
             try:
