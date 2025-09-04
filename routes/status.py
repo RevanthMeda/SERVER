@@ -218,9 +218,9 @@ def download_report(submission_id):
             # BRUTE FORCE APPROACH - Replace tags everywhere without detection
             current_app.logger.info("=== BRUTE FORCE REPLACEMENT MODE ===")
             
-            def brute_force_replace_in_runs(paragraph, location_info=""):
+            def brute_force_replace_in_runs(paragraph, location_info="", replacement_dict=None):
                 """Aggressively replace template tags in paragraph runs"""
-                if not paragraph.runs:
+                if not paragraph.runs or not replacement_dict:
                     return False
                 
                 # Get full text from all runs
@@ -236,7 +236,7 @@ def download_report(submission_id):
                 new_text = full_text
                 replacements_made = 0
                 
-                for tag, value in replacement_data.items():
+                for tag, value in replacement_dict.items():
                     if value:  # Only replace if we have a value
                         tag_patterns = [
                             f'{{{{ {tag} }}}}',
@@ -291,24 +291,24 @@ def download_report(submission_id):
             # Apply brute force replacement to EVERYTHING
             current_app.logger.info("Processing paragraphs...")
             for i, paragraph in enumerate(doc.paragraphs):
-                brute_force_replace_in_runs(paragraph, f"PARAGRAPH {i}")
+                brute_force_replace_in_runs(paragraph, f"PARAGRAPH {i}", replacement_data)
             
             current_app.logger.info("Processing tables...")
             for table_idx, table in enumerate(doc.tables):
                 for row_idx, row in enumerate(table.rows):
                     for cell_idx, cell in enumerate(row.cells):
                         for para_idx, paragraph in enumerate(cell.paragraphs):
-                            brute_force_replace_in_runs(paragraph, f"TABLE {table_idx} ROW {row_idx} CELL {cell_idx}")
+                            brute_force_replace_in_runs(paragraph, f"TABLE {table_idx} ROW {row_idx} CELL {cell_idx}", replacement_data)
             
             current_app.logger.info("Processing headers and footers...")
             for section_idx, section in enumerate(doc.sections):
                 if hasattr(section, 'header'):
                     for para_idx, paragraph in enumerate(section.header.paragraphs):
-                        brute_force_replace_in_runs(paragraph, f"HEADER {section_idx} PARA {para_idx}")
+                        brute_force_replace_in_runs(paragraph, f"HEADER {section_idx} PARA {para_idx}", replacement_data)
                         
                 if hasattr(section, 'footer'):
                     for para_idx, paragraph in enumerate(section.footer.paragraphs):
-                        brute_force_replace_in_runs(paragraph, f"FOOTER {section_idx} PARA {para_idx}")
+                        brute_force_replace_in_runs(paragraph, f"FOOTER {section_idx} PARA {para_idx}", replacement_data)
             
             current_app.logger.info("=== BRUTE FORCE REPLACEMENT COMPLETE ===")
             

@@ -1,0 +1,46 @@
+PS E:\report generator\SERVER> python app.py
+🔧 Initializing SAT Report Generator...
+[2025-09-04 15:52:53,752] INFO in models: Database connection successful
+[2025-09-04 15:52:53,770] INFO in models: Database tables created successfully
+[2025-09-04 15:52:53,809] INFO in models: Default system settings initialized
+[2025-09-04 15:52:53,828] INFO in models: Database initialized successfully
+[2025-09-04 15:52:53,861] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+🔒 HTTPS enabled with password-protected .pfx SSL certificate
+ * Serving Flask app 'app'
+ * Debug mode: off
+[2025-09-04 15:53:07,562] INFO in status: Removed existing file to force fresh generation: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx
+INFO:app:Removed existing file to force fresh generation: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx
+[2025-09-04 15:53:07,582] INFO in status: Generating fresh report for submission 19890bcf-9093-4e33-9079-465e3888d2d8
+INFO:app:Generating fresh report for submission 19890bcf-9093-4e33-9079-465e3888d2d8
+[2025-09-04 15:53:07,839] INFO in status: Opened original SAT_Template.docx to preserve exact formatting: templates/SAT_Template.docx
+INFO:app:Opened original SAT_Template.docx to preserve exact formatting: templates/SAT_Template.docx
+[2025-09-04 15:53:07,918] INFO in status: === BRUTE FORCE REPLACEMENT MODE ===
+INFO:app:=== BRUTE FORCE REPLACEMENT MODE ===
+[2025-09-04 15:53:08,033] INFO in status: === CHECKING FOR MISSING DOCUMENT_TITLE TAG ===
+INFO:app:=== CHECKING FOR MISSING DOCUMENT_TITLE TAG ===
+[2025-09-04 15:53:08,216] INFO in status: Processing paragraphs...
+INFO:app:Processing paragraphs...
+[2025-09-04 15:53:08,251] ERROR in status: Error during report generation: cannot access free variable 'replacement_data' where it is not associated with a value in enclosing scope
+Traceback (most recent call last):
+  File "E:\report generator\SERVER\routes\status.py", line 294, in download_report
+    brute_force_replace_in_runs(paragraph, f"PARAGRAPH {i}")
+  File "E:\report generator\SERVER\routes\status.py", line 239, in brute_force_replace_in_runs
+    for tag, value in replacement_data.items():
+                      ^^^^^^^^^^^^^^^^
+NameError: cannot access free variable 'replacement_data' where it is not associated with a value in enclosing scope. Did you mean: 'replacements_made'?
+ERROR:app:Error during report generation: cannot access free variable 'replacement_data' where it is not associated with a value in enclosing scope
+Traceback (most recent call last):
+  File "E:\report generator\SERVER\routes\status.py", line 294, in download_report
+    brute_force_replace_in_runs(paragraph, f"PARAGRAPH {i}")
+  File "E:\report generator\SERVER\routes\status.py", line 239, in brute_force_replace_in_runs
+    for tag, value in replacement_data.items():
+                      ^^^^^^^^^^^^^^^^
+NameError: cannot access free variable 'replacement_data' where it is not associated with a value in enclosing scope. Did you mean: 'replacements_made'?
