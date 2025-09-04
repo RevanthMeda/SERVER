@@ -1,0 +1,903 @@
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+🔒 HTTPS enabled with password-protected .pfx SSL certificate
+ * Serving Flask app 'app'
+ * Debug mode: off
+[2025-09-04 15:15:22,629] INFO in status: Removed existing file to force fresh generation: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx
+INFO:app:Removed existing file to force fresh generation: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx
+[2025-09-04 15:15:22,634] INFO in status: Generating fresh report for submission 19890bcf-9093-4e33-9079-465e3888d2d8
+INFO:app:Generating fresh report for submission 19890bcf-9093-4e33-9079-465e3888d2d8
+[2025-09-04 15:15:22,679] INFO in status: Opened original SAT_Template.docx to preserve exact formatting: templates/SAT_Template.docx
+INFO:app:Opened original SAT_Template.docx to preserve exact formatting: templates/SAT_Template.docx
+[2025-09-04 15:15:22,693] INFO in status: === COMPREHENSIVE DOCUMENT SCAN ===
+INFO:app:=== COMPREHENSIVE DOCUMENT SCAN ===
+[2025-09-04 15:15:22,806] INFO in status: === END COMPREHENSIVE SCAN ===
+INFO:app:=== END COMPREHENSIVE SCAN ===
+[2025-09-04 15:15:22,809] INFO in status: ==================================================
+INFO:app:==================================================
+[2025-09-04 15:15:22,812] INFO in status: FULL CONTEXT_DATA DUMP:
+INFO:app:FULL CONTEXT_DATA DUMP:
+[2025-09-04 15:15:22,818] INFO in status:   'DOCUMENT_TITLE': 'Test'
+INFO:app:  'DOCUMENT_TITLE': 'Test'
+[2025-09-04 15:15:22,820] INFO in status:   'PROJECT_REFERENCE': 'TEST-123'
+INFO:app:  'PROJECT_REFERENCE': 'TEST-123'
+[2025-09-04 15:15:22,821] INFO in status:   'DOCUMENT_REFERENCE': 'test-doc-12'
+INFO:app:  'DOCUMENT_REFERENCE': 'test-doc-12'
+[2025-09-04 15:15:22,821] INFO in status:   'DATE': '2025-09-02'
+INFO:app:  'DATE': '2025-09-02'
+[2025-09-04 15:15:22,823] INFO in status:   'CLIENT_NAME': 'test'
+INFO:app:  'CLIENT_NAME': 'test'
+[2025-09-04 15:15:22,824] INFO in status:   'REVISION': 'R0'
+INFO:app:  'REVISION': 'R0'
+[2025-09-04 15:15:22,825] INFO in status:   'REVISION_DETAILS': 'test'
+INFO:app:  'REVISION_DETAILS': 'test'
+[2025-09-04 15:15:22,826] INFO in status:   'REVISION_DATE': '2025-09-02'
+INFO:app:  'REVISION_DATE': '2025-09-02'
+[2025-09-04 15:15:22,827] INFO in status:   'PREPARED_BY': 'Revanth'
+INFO:app:  'PREPARED_BY': 'Revanth'
+[2025-09-04 15:15:22,830] INFO in status:   'SIG_PREPARED': ''
+INFO:app:  'SIG_PREPARED': ''
+[2025-09-04 15:15:22,830] INFO in status:   'SIG_PREPARED_BY': ''
+INFO:app:  'SIG_PREPARED_BY': ''
+[2025-09-04 15:15:22,833] INFO in status:   'REVIEWED_BY_TECH_LEAD': 'Jinnu'
+INFO:app:  'REVIEWED_BY_TECH_LEAD': 'Jinnu'
+[2025-09-04 15:15:22,834] INFO in status:   'SIG_REVIEW_TECH': ''
+INFO:app:  'SIG_REVIEW_TECH': ''
+[2025-09-04 15:15:22,836] INFO in status:   'REVIEWED_BY_PM': 'Dazel'
+INFO:app:  'REVIEWED_BY_PM': 'Dazel'
+[2025-09-04 15:15:22,837] INFO in status:   'SIG_REVIEW_PM': ''
+INFO:app:  'SIG_REVIEW_PM': ''
+[2025-09-04 15:15:22,841] INFO in status:   'APPROVED_BY_CLIENT': 'Test'
+INFO:app:  'APPROVED_BY_CLIENT': 'Test'
+[2025-09-04 15:15:22,842] INFO in status:   'SIG_APPROVAL_CLIENT': ''
+INFO:app:  'SIG_APPROVAL_CLIENT': ''
+[2025-09-04 15:15:22,843] INFO in status:   'PURPOSE': '<p style="text-align: left;">Hlo</p>'
+INFO:app:  'PURPOSE': '<p style="text-align: left;">Hlo</p>'
+[2025-09-04 15:15:22,844] INFO in status:   'SCOPE': '<p style="text-align: left;"><b><i><u>Hlo</u></i></b></p>'
+INFO:app:  'SCOPE': '<p style="text-align: left;"><b><i><u>Hlo</u></i></b></p>'
+[2025-09-04 15:15:22,845] INFO in status:   'PRE_TEST_REQUIREMENTS': '[{'Item': '', 'Test': '', 'Method_Test_Steps': '', 'Acceptance_Criteria': '', 'Result': '', 'Punch_Item': '', 'Verified_by': '', 'Comment': ''}]'
+INFO:app:  'PRE_TEST_REQUIREMENTS': '[{'Item': '', 'Test': '', 'Method_Test_Steps': '', 'Acceptance_Criteria': '', 'Result': '', 'Punch_Item': '', 'Verified_by': '', 'Comment': ''}]'
+[2025-09-04 15:15:22,847] INFO in status:   'KEY_COMPONENTS': '[{'S.no': '', 'Model': '', 'Description': '', 'Remarks': ''}]'
+INFO:app:  'KEY_COMPONENTS': '[{'S.no': '', 'Model': '', 'Description': '', 'Remarks': ''}]'
+[2025-09-04 15:15:22,850] INFO in status:   'IP_RECORDS': '[{'Device_Name': '', 'IP_Address': '', 'Comment': ''}]'
+INFO:app:  'IP_RECORDS': '[{'Device_Name': '', 'IP_Address': '', 'Comment': ''}]'
+[2025-09-04 15:15:22,851] INFO in status:   'RELATED_DOCUMENTS': '[{'Document_Reference': '', 'Document_Title': ''}]'
+INFO:app:  'RELATED_DOCUMENTS': '[{'Document_Reference': '', 'Document_Title': ''}]'
+[2025-09-04 15:15:22,852] INFO in status:   'PRE_APPROVALS': '[]'
+INFO:app:  'PRE_APPROVALS': '[]'
+[2025-09-04 15:15:22,853] INFO in status:   'POST_APPROVALS': '[]'
+INFO:app:  'POST_APPROVALS': '[]'
+[2025-09-04 15:15:22,854] INFO in status:   'SIGNAL_LISTS': '[{'S. No.': '', 'Rack No.': '', 'Module Position': '', 'Signal TAG': '', 'Signal Description': '', 'Result': '', 'Punch Item': '', 'Verified By': '', 'Comment': ''}]'
+INFO:app:  'SIGNAL_LISTS': '[{'S. No.': '', 'Rack No.': '', 'Module Position': '', 'Signal TAG': '', 'Signal Description': '', 'Result': '', 'Punch Item': '', 'Verified By': '', 'Comment': ''}]'
+[2025-09-04 15:15:22,854] INFO in status:   'ANALOGUE_LISTS': '[{'S. No.': '', 'Rack No.': '', 'Module Position': '', 'Signal TAG': '', 'Signal Description': '', 'Result': '', 'Punch Item': '', 'Verified By': '', 'Comment': ''}]'
+INFO:app:  'ANALOGUE_LISTS': '[{'S. No.': '', 'Rack No.': '', 'Module Position': '', 'Signal TAG': '', 'Signal Description': '', 'Result': '', 'Punch Item': '', 'Verified By': '', 'Comment': ''}]'
+[2025-09-04 15:15:22,855] INFO in status:   'MODBUS_DIGITAL_LISTS': '[{'Address': '', 'Description': '', 'Remarks': '', 'Result': '', 'Punch Item': '', 'Verified By': '', 'Comment': ''}]'
+INFO:app:  'MODBUS_DIGITAL_LISTS': '[{'Address': '', 'Description': '', 'Remarks': '', 'Result': '', 'Punch Item': '', 'Verified By': '', 'Comment': ''}]'
+[2025-09-04 15:15:22,856] INFO in status:   'MODBUS_ANALOGUE_LISTS': '[{' Address': '', 'Description': '', 'Range': '', 'Result': '', 'Punch Item': '', 'Verified By': '', 'Comment': ''}]'
+INFO:app:  'MODBUS_ANALOGUE_LISTS': '[{' Address': '', 'Description': '', 'Range': '', 'Result': '', 'Punch Item': '', 'Verified By': '', 'Comment': ''}]'
+[2025-09-04 15:15:22,857] INFO in status:   'DATA_VALIDATION': '[{'Tag': '', 'Range': '', 'SCADA Value': '', 'HMI Value': ''}]'
+INFO:app:  'DATA_VALIDATION': '[{'Tag': '', 'Range': '', 'SCADA Value': '', 'HMI Value': ''}]'
+[2025-09-04 15:15:22,858] INFO in status:   'PROCESS_TEST': '[{'Item': '', 'Action': '', 'Expected / Required Result': '', ' Pass/Fail ': '', ' Comments ': ''}]'
+INFO:app:  'PROCESS_TEST': '[{'Item': '', 'Action': '', 'Expected / Required Result': '', ' Pass/Fail ': '', ' Comments ': ''}]'
+[2025-09-04 15:15:22,859] INFO in status:   'SCADA_VERIFICATION': '[{'Task': '', 'Expected Result': '', 'Pass/Fail': '', 'Comments': ''}]'
+INFO:app:  'SCADA_VERIFICATION': '[{'Task': '', 'Expected Result': '', 'Pass/Fail': '', 'Comments': ''}]'
+[2025-09-04 15:15:22,863] INFO in status:   'TRENDS_TESTING': '[{'Trend': '', 'Expected Behavior': '', 'Pass/Fail': '', 'Comments': ''}]'
+INFO:app:  'TRENDS_TESTING': '[{'Trend': '', 'Expected Behavior': '', 'Pass/Fail': '', 'Comments': ''}]'
+[2025-09-04 15:15:22,864] INFO in status:   'SCADA_IMAGES': '[]'
+INFO:app:  'SCADA_IMAGES': '[]'
+[2025-09-04 15:15:22,865] INFO in status:   'TRENDS_IMAGES': '[]'
+INFO:app:  'TRENDS_IMAGES': '[]'
+[2025-09-04 15:15:22,875] INFO in status:   'ALARM_IMAGES': '[]'
+INFO:app:  'ALARM_IMAGES': '[]'
+[2025-09-04 15:15:22,878] INFO in status:   'ALARM_LIST': '[{'Alarm Type': '', ' Expected / Required Result': '', ' Pass/Fail ': '', ' Comments ': ''}]'
+INFO:app:  'ALARM_LIST': '[{'Alarm Type': '', ' Expected / Required Result': '', ' Pass/Fail ': '', ' Comments ': ''}]'
+[2025-09-04 15:15:22,884] INFO in status:   'SIG_APPROVER_1': ''
+INFO:app:  'SIG_APPROVER_1': ''
+[2025-09-04 15:15:22,886] INFO in status:   'SIG_APPROVER_2': ''
+INFO:app:  'SIG_APPROVER_2': ''
+[2025-09-04 15:15:22,892] INFO in status:   'SIG_APPROVER_3': ''
+INFO:app:  'SIG_APPROVER_3': ''
+[2025-09-04 15:15:22,894] INFO in status:   'approver_1_email': 'jchacko@cully.ie'
+INFO:app:  'approver_1_email': 'jchacko@cully.ie'
+[2025-09-04 15:15:22,895] INFO in status:   'approver_2_email': 'dlewis@cully.ie'
+INFO:app:  'approver_2_email': 'dlewis@cully.ie'
+[2025-09-04 15:15:22,895] INFO in status:   'approver_3_email': ''
+INFO:app:  'approver_3_email': ''
+[2025-09-04 15:15:22,896] INFO in status: ==================================================
+INFO:app:==================================================
+[2025-09-04 15:15:22,902] INFO in status: DOCUMENT_TITLE RAW: Test
+INFO:app:DOCUMENT_TITLE RAW: Test
+[2025-09-04 15:15:22,905] INFO in status: DOCUMENT_TITLE TYPE: <class 'str'>
+INFO:app:DOCUMENT_TITLE TYPE: <class 'str'>
+[2025-09-04 15:15:22,907] INFO in status: DOCUMENT_TITLE REPR: 'Test'
+INFO:app:DOCUMENT_TITLE REPR: 'Test'
+[2025-09-04 15:15:22,913] INFO in status: DOCUMENT_TITLE LENGTH: 4
+INFO:app:DOCUMENT_TITLE LENGTH: 4
+[2025-09-04 15:15:22,916] INFO in status: Final DOCUMENT_TITLE value: 'Test'
+INFO:app:Final DOCUMENT_TITLE value: 'Test'
+[2025-09-04 15:15:22,917] INFO in status: Final DOCUMENT_REFERENCE value: 'test-doc-12'
+INFO:app:Final DOCUMENT_REFERENCE value: 'test-doc-12'
+[2025-09-04 15:15:22,919] INFO in status: Final REVISION value: 'R0'
+INFO:app:Final REVISION value: 'R0'
+[2025-09-04 15:15:22,921] INFO in status: Final PROJECT_REFERENCE value: 'TEST-123'
+INFO:app:Final PROJECT_REFERENCE value: 'TEST-123'
+[2025-09-04 15:15:22,934] INFO in status: REPLACED '{{ PURPOSE }}' with '<p style="text-align: left;">Hlo</p>' in text
+INFO:app:REPLACED '{{ PURPOSE }}' with '<p style="text-align: left;">Hlo</p>' in text
+[2025-09-04 15:15:22,937] INFO in status: SUCCESSFULLY CLEANED: '{{ PURPOSE }}...' -> '<p style="text-align: left;">Hlo</p>...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ PURPOSE }}...' -> '<p style="text-align: left;">Hlo</p>...'
+[2025-09-04 15:15:22,939] INFO in status: RUN REPLACEMENT: '{{ PURPOSE }}...' -> '<p style="text-align: left;">Hlo</p>...'
+INFO:app:RUN REPLACEMENT: '{{ PURPOSE }}...' -> '<p style="text-align: left;">Hlo</p>...'
+[2025-09-04 15:15:22,942] INFO in status: Para 5: RUNS PROCESSED
+INFO:app:Para 5: RUNS PROCESSED
+[2025-09-04 15:15:22,949] INFO in status: REPLACED '{{ SCOPE }}' with '<p style="text-align: left;"><b><i><u>Hlo</u></i></b></p>' in text
+INFO:app:REPLACED '{{ SCOPE }}' with '<p style="text-align: left;"><b><i><u>Hlo</u></i></b></p>' in text
+[2025-09-04 15:15:22,950] INFO in status: SUCCESSFULLY CLEANED: '{{ SCOPE }}...' -> '<p style="text-align: left;"><b><i><u>Hlo</u></i><...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ SCOPE }}...' -> '<p style="text-align: left;"><b><i><u>Hlo</u></i><...'
+[2025-09-04 15:15:22,951] INFO in status: RUN REPLACEMENT: '{{ SCOPE }}...' -> '<p style="text-align: left;"><b><i><u>Hlo</u></i><...'
+INFO:app:RUN REPLACEMENT: '{{ SCOPE }}...' -> '<p style="text-align: left;"><b><i><u>Hlo</u></i><...'
+[2025-09-04 15:15:22,954] INFO in status: Para 7: RUNS PROCESSED
+INFO:app:Para 7: RUNS PROCESSED
+[2025-09-04 15:15:22,980] INFO in status: RUN REPLACEMENT: '{% for image in SCADA_IMAGES %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for image in SCADA_IMAGES %}...' -> '...'
+[2025-09-04 15:15:22,982] INFO in status: Para 23: RUNS PROCESSED
+INFO:app:Para 23: RUNS PROCESSED
+[2025-09-04 15:15:22,985] INFO in status: SUCCESSFULLY CLEANED: '{{ image }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ image }}...' -> '...'
+[2025-09-04 15:15:22,986] INFO in status: RUN REPLACEMENT: '{{ image }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ image }}...' -> '...'
+[2025-09-04 15:15:22,987] INFO in status: Para 24: RUNS PROCESSED
+INFO:app:Para 24: RUNS PROCESSED
+[2025-09-04 15:15:22,988] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:22,990] INFO in status: Para 25: RUNS PROCESSED
+INFO:app:Para 25: RUNS PROCESSED
+[2025-09-04 15:15:23,011] INFO in status: RUN REPLACEMENT: '{% for image in TRENDS_IMAGES %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for image in TRENDS_IMAGES %}...' -> '...'
+[2025-09-04 15:15:23,016] INFO in status: Para 27: RUNS PROCESSED
+INFO:app:Para 27: RUNS PROCESSED
+[2025-09-04 15:15:23,025] INFO in status: SUCCESSFULLY CLEANED: '{{ image }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ image }}...' -> '...'
+[2025-09-04 15:15:23,029] INFO in status: RUN REPLACEMENT: '{{ image }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ image }}...' -> '...'
+[2025-09-04 15:15:23,037] INFO in status: Para 28: RUNS PROCESSED
+INFO:app:Para 28: RUNS PROCESSED
+[2025-09-04 15:15:23,039] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,040] INFO in status: Para 29: RUNS PROCESSED
+INFO:app:Para 29: RUNS PROCESSED
+[2025-09-04 15:15:23,045] INFO in status: RUN REPLACEMENT: '{% for image in ALARM_IMAGES %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for image in ALARM_IMAGES %}...' -> '...'
+[2025-09-04 15:15:23,047] INFO in status: Para 31: RUNS PROCESSED
+INFO:app:Para 31: RUNS PROCESSED
+[2025-09-04 15:15:23,049] INFO in status: SUCCESSFULLY CLEANED: '{{ image }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ image }}...' -> '...'
+[2025-09-04 15:15:23,050] INFO in status: RUN REPLACEMENT: '{{ image }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ image }}...' -> '...'
+[2025-09-04 15:15:23,058] INFO in status: Para 32: RUNS PROCESSED
+INFO:app:Para 32: RUNS PROCESSED
+[2025-09-04 15:15:23,069] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,071] INFO in status: Para 33: RUNS PROCESSED
+INFO:app:Para 33: RUNS PROCESSED
+[2025-09-04 15:15:23,076] INFO in status: REPLACED '{{ PROJECT_REFERENCE }}' with 'TEST-123' in text
+INFO:app:REPLACED '{{ PROJECT_REFERENCE }}' with 'TEST-123' in text
+[2025-09-04 15:15:23,077] INFO in status: SUCCESSFULLY CLEANED: '{{ PROJECT_REFERENCE }}...' -> 'TEST-123...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ PROJECT_REFERENCE }}...' -> 'TEST-123...'
+[2025-09-04 15:15:23,078] INFO in status: RUN REPLACEMENT: '{{ PROJECT_REFERENCE }}...' -> 'TEST-123...'
+INFO:app:RUN REPLACEMENT: '{{ PROJECT_REFERENCE }}...' -> 'TEST-123...'
+[2025-09-04 15:15:23,079] INFO in status: Table 0 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 0 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,082] INFO in status: FOUND TARGET TAG: '{{ DOCUMENT_REFERENCE }}...'
+INFO:app:FOUND TARGET TAG: '{{ DOCUMENT_REFERENCE }}...'
+[2025-09-04 15:15:23,086] INFO in status: REPLACED '{{ DOCUMENT_REFERENCE }}' with 'test-doc-12' in text
+INFO:app:REPLACED '{{ DOCUMENT_REFERENCE }}' with 'test-doc-12' in text
+[2025-09-04 15:15:23,088] INFO in status: SUCCESSFULLY CLEANED: '{{ DOCUMENT_REFERENCE }}...' -> 'test-doc-12...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ DOCUMENT_REFERENCE }}...' -> 'test-doc-12...'
+[2025-09-04 15:15:23,089] INFO in status: RUN REPLACEMENT: '{{ DOCUMENT_REFERENCE }}...' -> 'test-doc-12...'
+INFO:app:RUN REPLACEMENT: '{{ DOCUMENT_REFERENCE }}...' -> 'test-doc-12...'
+[2025-09-04 15:15:23,090] INFO in status: Table 0 Row 2 Cell 1: RUNS PROCESSED
+INFO:app:Table 0 Row 2 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,093] INFO in status: REPLACED '{{ DATE }}' with '2025-09-02' in text
+INFO:app:REPLACED '{{ DATE }}' with '2025-09-02' in text
+[2025-09-04 15:15:23,097] INFO in status: SUCCESSFULLY CLEANED: '{{ DATE }}...' -> '2025-09-02...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ DATE }}...' -> '2025-09-02...'
+[2025-09-04 15:15:23,100] INFO in status: RUN REPLACEMENT: '{{ DATE }}...' -> '2025-09-02...'
+INFO:app:RUN REPLACEMENT: '{{ DATE }}...' -> '2025-09-02...'
+[2025-09-04 15:15:23,104] INFO in status: Table 0 Row 3 Cell 1: RUNS PROCESSED
+INFO:app:Table 0 Row 3 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,109] INFO in status: REPLACED '{{ CLIENT_NAME }}' with 'test' in text
+INFO:app:REPLACED '{{ CLIENT_NAME }}' with 'test' in text
+[2025-09-04 15:15:23,110] INFO in status: SUCCESSFULLY CLEANED: '{{ CLIENT_NAME }}...' -> 'test...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ CLIENT_NAME }}...' -> 'test...'
+[2025-09-04 15:15:23,110] INFO in status: RUN REPLACEMENT: '{{ CLIENT_NAME }}...' -> 'test...'
+INFO:app:RUN REPLACEMENT: '{{ CLIENT_NAME }}...' -> 'test...'
+[2025-09-04 15:15:23,112] INFO in status: Table 0 Row 4 Cell 1: RUNS PROCESSED
+INFO:app:Table 0 Row 4 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,114] INFO in status: FOUND TARGET TAG: '{{ REVISION }}...'
+INFO:app:FOUND TARGET TAG: '{{ REVISION }}...'
+[2025-09-04 15:15:23,116] INFO in status: REPLACED '{{ REVISION }}' with 'R0' in text
+INFO:app:REPLACED '{{ REVISION }}' with 'R0' in text
+[2025-09-04 15:15:23,121] INFO in status: SUCCESSFULLY CLEANED: '{{ REVISION }}...' -> 'R0...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ REVISION }}...' -> 'R0...'
+[2025-09-04 15:15:23,121] INFO in status: RUN REPLACEMENT: '{{ REVISION }}...' -> 'R0...'
+INFO:app:RUN REPLACEMENT: '{{ REVISION }}...' -> 'R0...'
+[2025-09-04 15:15:23,123] INFO in status: Table 0 Row 5 Cell 1: RUNS PROCESSED
+INFO:app:Table 0 Row 5 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,126] INFO in status: REPLACED '{{ PREPARED_BY }}' with 'Revanth' in text
+INFO:app:REPLACED '{{ PREPARED_BY }}' with 'Revanth' in text
+[2025-09-04 15:15:23,128] INFO in status: SUCCESSFULLY CLEANED: '{{ PREPARED_BY }}...' -> 'Revanth...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ PREPARED_BY }}...' -> 'Revanth...'
+[2025-09-04 15:15:23,130] INFO in status: RUN REPLACEMENT: '{{ PREPARED_BY }}...' -> 'Revanth...'
+INFO:app:RUN REPLACEMENT: '{{ PREPARED_BY }}...' -> 'Revanth...'
+[2025-09-04 15:15:23,133] INFO in status: Table 1 Row 0 Cell 1: RUNS PROCESSED
+INFO:app:Table 1 Row 0 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,139] INFO in status: SUCCESSFULLY CLEANED: '{{ SIG_PREPARED }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ SIG_PREPARED }}...' -> '...'
+[2025-09-04 15:15:23,144] INFO in status: RUN REPLACEMENT: '{{ SIG_PREPARED }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ SIG_PREPARED }}...' -> '...'
+[2025-09-04 15:15:23,146] INFO in status: Table 1 Row 0 Cell 2: RUNS PROCESSED
+INFO:app:Table 1 Row 0 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,150] INFO in status: SUCCESSFULLY CLEANED: '{{ PREPARER_DATE }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ PREPARER_DATE }}...' -> '...'
+[2025-09-04 15:15:23,150] INFO in status: RUN REPLACEMENT: '{{ PREPARER_DATE }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ PREPARER_DATE }}...' -> '...'
+[2025-09-04 15:15:23,151] INFO in status: Table 1 Row 0 Cell 2: RUNS PROCESSED
+INFO:app:Table 1 Row 0 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,154] INFO in status: REPLACED '{{ REVIEWED_BY_TECH_LEAD }}' with 'Jinnu' in text
+INFO:app:REPLACED '{{ REVIEWED_BY_TECH_LEAD }}' with 'Jinnu' in text
+[2025-09-04 15:15:23,155] INFO in status: SUCCESSFULLY CLEANED: '{{ REVIEWED_BY_TECH_LEAD }}...' -> 'Jinnu...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ REVIEWED_BY_TECH_LEAD }}...' -> 'Jinnu...'
+[2025-09-04 15:15:23,158] INFO in status: RUN REPLACEMENT: '{{ REVIEWED_BY_TECH_LEAD }}...' -> 'Jinnu...'
+INFO:app:RUN REPLACEMENT: '{{ REVIEWED_BY_TECH_LEAD }}...' -> 'Jinnu...'
+[2025-09-04 15:15:23,160] INFO in status: Table 1 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 1 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,162] INFO in status: SUCCESSFULLY CLEANED: '{{ SIG_REVIEW_TECH }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ SIG_REVIEW_TECH }}...' -> '...'
+[2025-09-04 15:15:23,163] INFO in status: RUN REPLACEMENT: '{{ SIG_REVIEW_TECH }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ SIG_REVIEW_TECH }}...' -> '...'
+[2025-09-04 15:15:23,164] INFO in status: Table 1 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 1 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,165] INFO in status: SUCCESSFULLY CLEANED: '{{ TECH_LEAD_DATE }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ TECH_LEAD_DATE }}...' -> '...'
+[2025-09-04 15:15:23,169] INFO in status: RUN REPLACEMENT: '{{ TECH_LEAD_DATE }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ TECH_LEAD_DATE }}...' -> '...'
+[2025-09-04 15:15:23,173] INFO in status: Table 1 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 1 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,182] INFO in status: REPLACED '{{ REVIEWED_BY_PM }}' with 'Dazel' in text
+INFO:app:REPLACED '{{ REVIEWED_BY_PM }}' with 'Dazel' in text
+[2025-09-04 15:15:23,183] INFO in status: SUCCESSFULLY CLEANED: '{{ REVIEWED_BY_PM }}...' -> 'Dazel...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ REVIEWED_BY_PM }}...' -> 'Dazel...'
+[2025-09-04 15:15:23,184] INFO in status: RUN REPLACEMENT: '{{ REVIEWED_BY_PM }}...' -> 'Dazel...'
+INFO:app:RUN REPLACEMENT: '{{ REVIEWED_BY_PM }}...' -> 'Dazel...'
+[2025-09-04 15:15:23,185] INFO in status: Table 1 Row 2 Cell 1: RUNS PROCESSED
+INFO:app:Table 1 Row 2 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,187] INFO in status: SUCCESSFULLY CLEANED: '{{ SIG_REVIEW_PM }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ SIG_REVIEW_PM }}...' -> '...'
+[2025-09-04 15:15:23,187] INFO in status: RUN REPLACEMENT: '{{ SIG_REVIEW_PM }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ SIG_REVIEW_PM }}...' -> '...'
+[2025-09-04 15:15:23,189] INFO in status: Table 1 Row 2 Cell 2: RUNS PROCESSED
+INFO:app:Table 1 Row 2 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,192] INFO in status: SUCCESSFULLY CLEANED: '{{ PM_DATE }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ PM_DATE }}...' -> '...'
+[2025-09-04 15:15:23,194] INFO in status: RUN REPLACEMENT: '{{ PM_DATE }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ PM_DATE }}...' -> '...'
+[2025-09-04 15:15:23,195] INFO in status: Table 1 Row 2 Cell 2: RUNS PROCESSED
+INFO:app:Table 1 Row 2 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,199] INFO in status: REPLACED '{{ APPROVED_BY_CLIENT }}' with 'Test' in text
+INFO:app:REPLACED '{{ APPROVED_BY_CLIENT }}' with 'Test' in text
+[2025-09-04 15:15:23,201] INFO in status: SUCCESSFULLY CLEANED: '{{ APPROVED_BY_CLIENT }}...' -> 'Test...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ APPROVED_BY_CLIENT }}...' -> 'Test...'
+[2025-09-04 15:15:23,203] INFO in status: RUN REPLACEMENT: '{{ APPROVED_BY_CLIENT }}...' -> 'Test...'
+INFO:app:RUN REPLACEMENT: '{{ APPROVED_BY_CLIENT }}...' -> 'Test...'
+[2025-09-04 15:15:23,205] INFO in status: Table 1 Row 3 Cell 1: RUNS PROCESSED
+INFO:app:Table 1 Row 3 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,207] INFO in status: SUCCESSFULLY CLEANED: '{{ SIG_APPROVAL_CLIENT }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ SIG_APPROVAL_CLIENT }}...' -> '...'
+[2025-09-04 15:15:23,208] INFO in status: RUN REPLACEMENT: '{{ SIG_APPROVAL_CLIENT }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ SIG_APPROVAL_CLIENT }}...' -> '...'
+[2025-09-04 15:15:23,214] INFO in status: Table 1 Row 3 Cell 2: RUNS PROCESSED
+INFO:app:Table 1 Row 3 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,220] INFO in status: FOUND TARGET TAG: '{{ REVISION }}...'
+INFO:app:FOUND TARGET TAG: '{{ REVISION }}...'
+[2025-09-04 15:15:23,232] INFO in status: REPLACED '{{ REVISION }}' with 'R0' in text
+INFO:app:REPLACED '{{ REVISION }}' with 'R0' in text
+[2025-09-04 15:15:23,236] INFO in status: SUCCESSFULLY CLEANED: '{{ REVISION }}...' -> 'R0...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ REVISION }}...' -> 'R0...'
+[2025-09-04 15:15:23,239] INFO in status: RUN REPLACEMENT: '{{ REVISION }}...' -> 'R0...'
+INFO:app:RUN REPLACEMENT: '{{ REVISION }}...' -> 'R0...'
+[2025-09-04 15:15:23,241] INFO in status: Table 2 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 2 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,246] INFO in status: FOUND TARGET TAG: '{{REVISION_DETAILS}}...'
+INFO:app:FOUND TARGET TAG: '{{REVISION_DETAILS}}...'
+[2025-09-04 15:15:23,248] INFO in status: REPLACED '{{REVISION_DETAILS}}' with 'test' in text
+INFO:app:REPLACED '{{REVISION_DETAILS}}' with 'test' in text
+[2025-09-04 15:15:23,255] INFO in status: SUCCESSFULLY CLEANED: '{{REVISION_DETAILS}}...' -> 'test...'
+INFO:app:SUCCESSFULLY CLEANED: '{{REVISION_DETAILS}}...' -> 'test...'
+[2025-09-04 15:15:23,261] INFO in status: RUN REPLACEMENT: '{{REVISION_DETAILS}}...' -> 'test...'
+INFO:app:RUN REPLACEMENT: '{{REVISION_DETAILS}}...' -> 'test...'
+[2025-09-04 15:15:23,262] INFO in status: Table 2 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 2 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,264] INFO in status: FOUND TARGET TAG: '{{REVISION_DATE}}...'
+INFO:app:FOUND TARGET TAG: '{{REVISION_DATE}}...'
+[2025-09-04 15:15:23,265] INFO in status: REPLACED '{{REVISION_DATE}}' with '2025-09-02' in text
+INFO:app:REPLACED '{{REVISION_DATE}}' with '2025-09-02' in text
+[2025-09-04 15:15:23,266] INFO in status: SUCCESSFULLY CLEANED: '{{REVISION_DATE}}...' -> '2025-09-02...'
+INFO:app:SUCCESSFULLY CLEANED: '{{REVISION_DATE}}...' -> '2025-09-02...'
+[2025-09-04 15:15:23,267] INFO in status: RUN REPLACEMENT: '{{REVISION_DATE}}...' -> '2025-09-02...'
+INFO:app:RUN REPLACEMENT: '{{REVISION_DATE}}...' -> '2025-09-02...'
+[2025-09-04 15:15:23,269] INFO in status: Table 2 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 2 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,286] INFO in status: SUCCESSFULLY CLEANED: '{% for item in RELATED_DOCUMENTS %}{{ item.Documen...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for item in RELATED_DOCUMENTS %}{{ item.Documen...' -> '...'
+[2025-09-04 15:15:23,294] INFO in status: RUN REPLACEMENT: '{% for item in RELATED_DOCUMENTS %}{{ item.Documen...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for item in RELATED_DOCUMENTS %}{{ item.Documen...' -> '...'
+[2025-09-04 15:15:23,296] INFO in status: Table 4 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 4 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,298] INFO in status: SUCCESSFULLY CLEANED: '{{ item.Document_Title }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ item.Document_Title }}...' -> '...'
+[2025-09-04 15:15:23,300] INFO in status: RUN REPLACEMENT: '{{ item.Document_Title }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ item.Document_Title }}...' -> '...'
+[2025-09-04 15:15:23,301] INFO in status: Table 4 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 4 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,303] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,304] INFO in status: Table 4 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 4 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,318] INFO in status: SUCCESSFULLY CLEANED: '{% for row in PRE_APPROVALS%}{{row['Print_Name’] }...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in PRE_APPROVALS%}{{row['Print_Name’] }...' -> '...'
+[2025-09-04 15:15:23,324] INFO in status: RUN REPLACEMENT: '{% for row in PRE_APPROVALS%}{{row['Print_Name’] }...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in PRE_APPROVALS%}{{row['Print_Name’] }...' -> '...'
+[2025-09-04 15:15:23,326] INFO in status: Table 5 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 5 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,329] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Signature'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Signature'] }}...' -> '...'
+[2025-09-04 15:15:23,331] INFO in status: RUN REPLACEMENT: '{{ row['Signature'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Signature'] }}...' -> '...'
+[2025-09-04 15:15:23,332] INFO in status: Table 5 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 5 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,337] INFO in status: SUCCESSFULLY CLEANED: '{{row['Date'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{row['Date'] }}...' -> '...'
+[2025-09-04 15:15:23,338] INFO in status: RUN REPLACEMENT: '{{row['Date'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{row['Date'] }}...' -> '...'
+[2025-09-04 15:15:23,341] INFO in status: Table 5 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 5 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,346] INFO in status: SUCCESSFULLY CLEANED: '{{row['Initial']}}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{row['Initial']}}...' -> '...'
+[2025-09-04 15:15:23,354] INFO in status: RUN REPLACEMENT: '{{row['Initial']}}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{row['Initial']}}...' -> '...'
+[2025-09-04 15:15:23,356] INFO in status: Table 5 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 5 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:23,358] INFO in status: SUCCESSFULLY CLEANED: '{{row['Company']}}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{row['Company']}}...' -> '...'
+[2025-09-04 15:15:23,359] INFO in status: RUN REPLACEMENT: '{{row['Company']}}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{row['Company']}}...' -> '...'
+[2025-09-04 15:15:23,362] INFO in status: Table 5 Row 1 Cell 4: RUNS PROCESSED
+INFO:app:Table 5 Row 1 Cell 4: RUNS PROCESSED
+[2025-09-04 15:15:23,364] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,365] INFO in status: Table 5 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 5 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,379] INFO in status: SUCCESSFULLY CLEANED: '{% for row in POST_APPROVALS%}{{row['Print_Name’] ...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in POST_APPROVALS%}{{row['Print_Name’] ...' -> '...'
+[2025-09-04 15:15:23,386] INFO in status: RUN REPLACEMENT: '{% for row in POST_APPROVALS%}{{row['Print_Name’] ...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in POST_APPROVALS%}{{row['Print_Name’] ...' -> '...'
+[2025-09-04 15:15:23,389] INFO in status: Table 6 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 6 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,395] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Signature'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Signature'] }}...' -> '...'
+[2025-09-04 15:15:23,396] INFO in status: RUN REPLACEMENT: '{{ row['Signature'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Signature'] }}...' -> '...'
+[2025-09-04 15:15:23,397] INFO in status: Table 6 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 6 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,408] INFO in status: SUCCESSFULLY CLEANED: '{{row['Date'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{row['Date'] }}...' -> '...'
+[2025-09-04 15:15:23,412] INFO in status: RUN REPLACEMENT: '{{row['Date'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{row['Date'] }}...' -> '...'
+[2025-09-04 15:15:23,414] INFO in status: Table 6 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 6 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,417] INFO in status: SUCCESSFULLY CLEANED: '{{row['Initial']}}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{row['Initial']}}...' -> '...'
+[2025-09-04 15:15:23,418] INFO in status: RUN REPLACEMENT: '{{row['Initial']}}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{row['Initial']}}...' -> '...'
+[2025-09-04 15:15:23,419] INFO in status: Table 6 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 6 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:23,422] INFO in status: SUCCESSFULLY CLEANED: '{{row['Company']}}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{row['Company']}}...' -> '...'
+[2025-09-04 15:15:23,424] INFO in status: RUN REPLACEMENT: '{{row['Company']}}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{row['Company']}}...' -> '...'
+[2025-09-04 15:15:23,425] INFO in status: Table 6 Row 1 Cell 4: RUNS PROCESSED
+INFO:app:Table 6 Row 1 Cell 4: RUNS PROCESSED
+[2025-09-04 15:15:23,427] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,430] INFO in status: Table 6 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 6 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,443] INFO in status: SUCCESSFULLY CLEANED: '{% for row in PRE_TEST_REQUIREMENTS %}{{ row['Item...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in PRE_TEST_REQUIREMENTS %}{{ row['Item...' -> '...'
+[2025-09-04 15:15:23,448] INFO in status: RUN REPLACEMENT: '{% for row in PRE_TEST_REQUIREMENTS %}{{ row['Item...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in PRE_TEST_REQUIREMENTS %}{{ row['Item...' -> '...'
+[2025-09-04 15:15:23,449] INFO in status: Table 7 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 7 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,451] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Test'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Test'] }}...' -> '...'
+[2025-09-04 15:15:23,453] INFO in status: RUN REPLACEMENT: '{{ row['Test'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Test'] }}...' -> '...'
+[2025-09-04 15:15:23,454] INFO in status: Table 7 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 7 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,456] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Method/Test Steps'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Method/Test Steps'] }}...' -> '...'
+[2025-09-04 15:15:23,458] INFO in status: RUN REPLACEMENT: '{{ row['Method/Test Steps'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Method/Test Steps'] }}...' -> '...'
+[2025-09-04 15:15:23,460] INFO in status: Table 7 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 7 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,465] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Acceptance Criteria'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Acceptance Criteria'] }}...' -> '...'
+[2025-09-04 15:15:23,466] INFO in status: RUN REPLACEMENT: '{{ row['Acceptance Criteria'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Acceptance Criteria'] }}...' -> '...'
+[2025-09-04 15:15:23,468] INFO in status: Table 7 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 7 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:23,474] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Result'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Result'] }}...' -> '...'
+[2025-09-04 15:15:23,476] INFO in status: RUN REPLACEMENT: '{{ row['Result'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Result'] }}...' -> '...'
+[2025-09-04 15:15:23,476] INFO in status: Table 7 Row 1 Cell 4: RUNS PROCESSED
+INFO:app:Table 7 Row 1 Cell 4: RUNS PROCESSED
+[2025-09-04 15:15:23,478] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Punch Item'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,479] INFO in status: RUN REPLACEMENT: '{{ row['Punch Item'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,480] INFO in status: Table 7 Row 1 Cell 5: RUNS PROCESSED
+INFO:app:Table 7 Row 1 Cell 5: RUNS PROCESSED
+[2025-09-04 15:15:23,484] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Verified by'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Verified by'] }}...' -> '...'
+[2025-09-04 15:15:23,485] INFO in status: RUN REPLACEMENT: '{{ row['Verified by'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Verified by'] }}...' -> '...'
+[2025-09-04 15:15:23,486] INFO in status: Table 7 Row 1 Cell 6: RUNS PROCESSED
+INFO:app:Table 7 Row 1 Cell 6: RUNS PROCESSED
+[2025-09-04 15:15:23,489] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Comment'] }}
+
+...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Comment'] }}
+
+...' -> '...'
+[2025-09-04 15:15:23,490] INFO in status: RUN REPLACEMENT: '{{ row['Comment'] }}
+
+...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Comment'] }}
+
+...' -> '...'
+[2025-09-04 15:15:23,491] INFO in status: Table 7 Row 1 Cell 7: RUNS PROCESSED
+INFO:app:Table 7 Row 1 Cell 7: RUNS PROCESSED
+[2025-09-04 15:15:23,498] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,501] INFO in status: Table 7 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 7 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,524] INFO in status: SUCCESSFULLY CLEANED: '{% for row in KEY_COMPONENTS %}{{ row['S_no'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in KEY_COMPONENTS %}{{ row['S_no'] }}...' -> '...'
+[2025-09-04 15:15:23,527] INFO in status: RUN REPLACEMENT: '{% for row in KEY_COMPONENTS %}{{ row['S_no'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in KEY_COMPONENTS %}{{ row['S_no'] }}...' -> '...'
+[2025-09-04 15:15:23,531] INFO in status: Table 8 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 8 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,534] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Model'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Model'] }}...' -> '...'
+[2025-09-04 15:15:23,538] INFO in status: RUN REPLACEMENT: '{{ row['Model'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Model'] }}...' -> '...'
+[2025-09-04 15:15:23,541] INFO in status: Table 8 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 8 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,545] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Description'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Description'] }}...' -> '...'
+[2025-09-04 15:15:23,547] INFO in status: RUN REPLACEMENT: '{{ row['Description'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Description'] }}...' -> '...'
+[2025-09-04 15:15:23,548] INFO in status: Table 8 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 8 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,550] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Remarks'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Remarks'] }}...' -> '...'
+[2025-09-04 15:15:23,550] INFO in status: RUN REPLACEMENT: '{{ row['Remarks'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Remarks'] }}...' -> '...'
+[2025-09-04 15:15:23,551] INFO in status: Table 8 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 8 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:23,553] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,557] INFO in status: Table 8 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 8 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,564] INFO in status: SUCCESSFULLY CLEANED: '{% for row in IP_RECORDS %}{{ row['Device_Name'] }...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in IP_RECORDS %}{{ row['Device_Name'] }...' -> '...'
+[2025-09-04 15:15:23,565] INFO in status: RUN REPLACEMENT: '{% for row in IP_RECORDS %}{{ row['Device_Name'] }...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in IP_RECORDS %}{{ row['Device_Name'] }...' -> '...'
+[2025-09-04 15:15:23,568] INFO in status: Table 9 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 9 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,571] INFO in status: SUCCESSFULLY CLEANED: '{{ row['IP_Address'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['IP_Address'] }}...' -> '...'
+[2025-09-04 15:15:23,572] INFO in status: RUN REPLACEMENT: '{{ row['IP_Address'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['IP_Address'] }}...' -> '...'
+[2025-09-04 15:15:23,573] INFO in status: Table 9 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 9 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,576] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,579] INFO in status: RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,580] INFO in status: Table 9 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 9 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,582] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,584] INFO in status: Table 9 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 9 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,611] INFO in status: SUCCESSFULLY CLEANED: '{% for row in SIGNAL_LISTS %}{{ row['S. No.'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in SIGNAL_LISTS %}{{ row['S. No.'] }}...' -> '...'
+[2025-09-04 15:15:23,613] INFO in status: RUN REPLACEMENT: '{% for row in SIGNAL_LISTS %}{{ row['S. No.'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in SIGNAL_LISTS %}{{ row['S. No.'] }}...' -> '...'
+[2025-09-04 15:15:23,614] INFO in status: Table 10 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 10 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,616] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Rack No.'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Rack No.'] }}...' -> '...'
+[2025-09-04 15:15:23,624] INFO in status: RUN REPLACEMENT: '{{ row['Rack No.'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Rack No.'] }}...' -> '...'
+[2025-09-04 15:15:23,630] INFO in status: Table 10 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 10 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,632] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Module Position'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Module Position'] }}...' -> '...'
+[2025-09-04 15:15:23,633] INFO in status: RUN REPLACEMENT: '{{ row['Module Position'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Module Position'] }}...' -> '...'
+[2025-09-04 15:15:23,634] INFO in status: Table 10 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 10 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,636] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Signal TAG'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Signal TAG'] }}...' -> '...'
+[2025-09-04 15:15:23,637] INFO in status: RUN REPLACEMENT: '{{ row['Signal TAG'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Signal TAG'] }}...' -> '...'
+[2025-09-04 15:15:23,639] INFO in status: Table 10 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 10 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:23,641] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Signal Description'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Signal Description'] }}...' -> '...'
+[2025-09-04 15:15:23,642] INFO in status: RUN REPLACEMENT: '{{ row['Signal Description'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Signal Description'] }}...' -> '...'
+[2025-09-04 15:15:23,645] INFO in status: Table 10 Row 1 Cell 4: RUNS PROCESSED
+INFO:app:Table 10 Row 1 Cell 4: RUNS PROCESSED
+[2025-09-04 15:15:23,652] INFO in status: SUCCESSFULLY CLEANED: '{{ row[‘Result'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row[‘Result'] }}...' -> '...'
+[2025-09-04 15:15:23,667] INFO in status: RUN REPLACEMENT: '{{ row[‘Result'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row[‘Result'] }}...' -> '...'
+[2025-09-04 15:15:23,671] INFO in status: Table 10 Row 1 Cell 5: RUNS PROCESSED
+INFO:app:Table 10 Row 1 Cell 5: RUNS PROCESSED
+[2025-09-04 15:15:23,673] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Punch Item'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,675] INFO in status: RUN REPLACEMENT: '{{ row['Punch Item'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,676] INFO in status: Table 10 Row 1 Cell 6: RUNS PROCESSED
+INFO:app:Table 10 Row 1 Cell 6: RUNS PROCESSED
+[2025-09-04 15:15:23,678] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Verified By'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Verified By'] }}...' -> '...'
+[2025-09-04 15:15:23,680] INFO in status: RUN REPLACEMENT: '{{ row['Verified By'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Verified By'] }}...' -> '...'
+[2025-09-04 15:15:23,683] INFO in status: Table 10 Row 1 Cell 7: RUNS PROCESSED
+INFO:app:Table 10 Row 1 Cell 7: RUNS PROCESSED
+[2025-09-04 15:15:23,688] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,691] INFO in status: RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,701] INFO in status: Table 10 Row 1 Cell 8: RUNS PROCESSED
+INFO:app:Table 10 Row 1 Cell 8: RUNS PROCESSED
+[2025-09-04 15:15:23,704] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,706] INFO in status: Table 10 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 10 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,728] INFO in status: SUCCESSFULLY CLEANED: '{% for row in ANALOGUE_LISTS %}{{ row['S. No.'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in ANALOGUE_LISTS %}{{ row['S. No.'] }}...' -> '...'
+[2025-09-04 15:15:23,732] INFO in status: RUN REPLACEMENT: '{% for row in ANALOGUE_LISTS %}{{ row['S. No.'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in ANALOGUE_LISTS %}{{ row['S. No.'] }}...' -> '...'
+[2025-09-04 15:15:23,736] INFO in status: Table 11 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 11 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,738] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Rack No.'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Rack No.'] }}...' -> '...'
+[2025-09-04 15:15:23,740] INFO in status: RUN REPLACEMENT: '{{ row['Rack No.'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Rack No.'] }}...' -> '...'
+[2025-09-04 15:15:23,740] INFO in status: Table 11 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 11 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,746] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Module Position'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Module Position'] }}...' -> '...'
+[2025-09-04 15:15:23,751] INFO in status: RUN REPLACEMENT: '{{ row['Module Position'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Module Position'] }}...' -> '...'
+[2025-09-04 15:15:23,755] INFO in status: Table 11 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 11 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,757] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Signal TAG'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Signal TAG'] }}...' -> '...'
+[2025-09-04 15:15:23,758] INFO in status: RUN REPLACEMENT: '{{ row['Signal TAG'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Signal TAG'] }}...' -> '...'
+[2025-09-04 15:15:23,761] INFO in status: Table 11 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 11 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:23,763] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Signal Description'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Signal Description'] }}...' -> '...'
+[2025-09-04 15:15:23,763] INFO in status: RUN REPLACEMENT: '{{ row['Signal Description'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Signal Description'] }}...' -> '...'
+[2025-09-04 15:15:23,765] INFO in status: Table 11 Row 1 Cell 4: RUNS PROCESSED
+INFO:app:Table 11 Row 1 Cell 4: RUNS PROCESSED
+[2025-09-04 15:15:23,767] INFO in status: SUCCESSFULLY CLEANED: '{{ row[‘Result'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row[‘Result'] }}...' -> '...'
+[2025-09-04 15:15:23,768] INFO in status: RUN REPLACEMENT: '{{ row[‘Result'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row[‘Result'] }}...' -> '...'
+[2025-09-04 15:15:23,771] INFO in status: Table 11 Row 1 Cell 5: RUNS PROCESSED
+INFO:app:Table 11 Row 1 Cell 5: RUNS PROCESSED
+[2025-09-04 15:15:23,775] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Punch Item'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,777] INFO in status: RUN REPLACEMENT: '{{ row['Punch Item'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,778] INFO in status: Table 11 Row 1 Cell 6: RUNS PROCESSED
+INFO:app:Table 11 Row 1 Cell 6: RUNS PROCESSED
+[2025-09-04 15:15:23,780] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Verified By'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Verified By'] }}...' -> '...'
+[2025-09-04 15:15:23,782] INFO in status: RUN REPLACEMENT: '{{ row['Verified By'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Verified By'] }}...' -> '...'
+[2025-09-04 15:15:23,784] INFO in status: Table 11 Row 1 Cell 7: RUNS PROCESSED
+INFO:app:Table 11 Row 1 Cell 7: RUNS PROCESSED
+[2025-09-04 15:15:23,786] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,789] INFO in status: RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,793] INFO in status: Table 11 Row 1 Cell 8: RUNS PROCESSED
+INFO:app:Table 11 Row 1 Cell 8: RUNS PROCESSED
+[2025-09-04 15:15:23,796] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,803] INFO in status: Table 11 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 11 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,821] INFO in status: SUCCESSFULLY CLEANED: '{% for row in MODBUS_DIGITAL_LISTS %}{{ row['Addre...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in MODBUS_DIGITAL_LISTS %}{{ row['Addre...' -> '...'
+[2025-09-04 15:15:23,826] INFO in status: RUN REPLACEMENT: '{% for row in MODBUS_DIGITAL_LISTS %}{{ row['Addre...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in MODBUS_DIGITAL_LISTS %}{{ row['Addre...' -> '...'
+[2025-09-04 15:15:23,832] INFO in status: Table 12 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 12 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,836] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Description'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Description'] }}...' -> '...'
+[2025-09-04 15:15:23,838] INFO in status: RUN REPLACEMENT: '{{ row['Description'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Description'] }}...' -> '...'
+[2025-09-04 15:15:23,842] INFO in status: Table 12 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 12 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,846] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Remarks'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Remarks'] }}...' -> '...'
+[2025-09-04 15:15:23,847] INFO in status: RUN REPLACEMENT: '{{ row['Remarks'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Remarks'] }}...' -> '...'
+[2025-09-04 15:15:23,848] INFO in status: Table 12 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 12 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,851] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Result'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Result'] }}...' -> '...'
+[2025-09-04 15:15:23,853] INFO in status: RUN REPLACEMENT: '{{ row['Result'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Result'] }}...' -> '...'
+[2025-09-04 15:15:23,855] INFO in status: Table 12 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 12 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:23,857] INFO in status: SUCCESSFULLY CLEANED: '{{ row[‘Punch Item'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row[‘Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,858] INFO in status: RUN REPLACEMENT: '{{ row[‘Punch Item'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row[‘Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,862] INFO in status: Table 12 Row 1 Cell 4: RUNS PROCESSED
+INFO:app:Table 12 Row 1 Cell 4: RUNS PROCESSED
+[2025-09-04 15:15:23,863] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Verified By'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Verified By'] }}...' -> '...'
+[2025-09-04 15:15:23,864] INFO in status: RUN REPLACEMENT: '{{ row['Verified By'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Verified By'] }}...' -> '...'
+[2025-09-04 15:15:23,865] INFO in status: Table 12 Row 1 Cell 5: RUNS PROCESSED
+INFO:app:Table 12 Row 1 Cell 5: RUNS PROCESSED
+[2025-09-04 15:15:23,869] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,872] INFO in status: RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,876] INFO in status: Table 12 Row 1 Cell 6: RUNS PROCESSED
+INFO:app:Table 12 Row 1 Cell 6: RUNS PROCESSED
+[2025-09-04 15:15:23,881] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,885] INFO in status: Table 12 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 12 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,907] INFO in status: SUCCESSFULLY CLEANED: '{% for row in MODBUS_ANALOGUE_LISTS %}{{ row[' Add...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in MODBUS_ANALOGUE_LISTS %}{{ row[' Add...' -> '...'
+[2025-09-04 15:15:23,907] INFO in status: RUN REPLACEMENT: '{% for row in MODBUS_ANALOGUE_LISTS %}{{ row[' Add...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in MODBUS_ANALOGUE_LISTS %}{{ row[' Add...' -> '...'
+[2025-09-04 15:15:23,911] INFO in status: Table 13 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 13 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,914] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Description'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Description'] }}...' -> '...'
+[2025-09-04 15:15:23,915] INFO in status: RUN REPLACEMENT: '{{ row['Description'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Description'] }}...' -> '...'
+[2025-09-04 15:15:23,917] INFO in status: Table 13 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 13 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,920] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Range'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Range'] }}...' -> '...'
+[2025-09-04 15:15:23,923] INFO in status: RUN REPLACEMENT: '{{ row['Range'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Range'] }}...' -> '...'
+[2025-09-04 15:15:23,926] INFO in status: Table 13 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 13 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,928] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Result'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Result'] }}...' -> '...'
+[2025-09-04 15:15:23,937] INFO in status: RUN REPLACEMENT: '{{ row['Result'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Result'] }}...' -> '...'
+[2025-09-04 15:15:23,938] INFO in status: Table 13 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 13 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:23,940] INFO in status: SUCCESSFULLY CLEANED: '{{ row[‘Punch Item'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row[‘Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,941] INFO in status: RUN REPLACEMENT: '{{ row[‘Punch Item'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row[‘Punch Item'] }}...' -> '...'
+[2025-09-04 15:15:23,943] INFO in status: Table 13 Row 1 Cell 4: RUNS PROCESSED
+INFO:app:Table 13 Row 1 Cell 4: RUNS PROCESSED
+[2025-09-04 15:15:23,945] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Verified By'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Verified By'] }}...' -> '...'
+[2025-09-04 15:15:23,947] INFO in status: RUN REPLACEMENT: '{{ row['Verified By'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Verified By'] }}...' -> '...'
+[2025-09-04 15:15:23,948] INFO in status: Table 13 Row 1 Cell 5: RUNS PROCESSED
+INFO:app:Table 13 Row 1 Cell 5: RUNS PROCESSED
+[2025-09-04 15:15:23,950] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,951] INFO in status: RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Comment'] }}...' -> '...'
+[2025-09-04 15:15:23,952] INFO in status: Table 13 Row 1 Cell 6: RUNS PROCESSED
+INFO:app:Table 13 Row 1 Cell 6: RUNS PROCESSED
+[2025-09-04 15:15:23,955] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,958] INFO in status: Table 13 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 13 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,972] INFO in status: SUCCESSFULLY CLEANED: '{% for row in DATA_VALIDATION%}{{ row['Tag'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in DATA_VALIDATION%}{{ row['Tag'] }}...' -> '...'
+[2025-09-04 15:15:23,973] INFO in status: RUN REPLACEMENT: '{% for row in DATA_VALIDATION%}{{ row['Tag'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in DATA_VALIDATION%}{{ row['Tag'] }}...' -> '...'
+[2025-09-04 15:15:23,975] INFO in status: Table 14 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 14 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:23,977] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Range'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Range'] }}...' -> '...'
+[2025-09-04 15:15:23,979] INFO in status: RUN REPLACEMENT: '{{ row['Range'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Range'] }}...' -> '...'
+[2025-09-04 15:15:23,980] INFO in status: Table 14 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 14 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:23,983] INFO in status: SUCCESSFULLY CLEANED: '{{ row['SCADA Value'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['SCADA Value'] }}...' -> '...'
+[2025-09-04 15:15:23,985] INFO in status: RUN REPLACEMENT: '{{ row['SCADA Value'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['SCADA Value'] }}...' -> '...'
+[2025-09-04 15:15:23,987] INFO in status: Table 14 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 14 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:23,991] INFO in status: SUCCESSFULLY CLEANED: '{{ row['HMI Value'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['HMI Value'] }}...' -> '...'
+[2025-09-04 15:15:23,991] INFO in status: RUN REPLACEMENT: '{{ row['HMI Value'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['HMI Value'] }}...' -> '...'
+[2025-09-04 15:15:23,996] INFO in status: Table 14 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 14 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:23,998] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:23,999] INFO in status: Table 14 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 14 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:24,009] INFO in status: SUCCESSFULLY CLEANED: '{% for row in PROCESS_TEST%}{{ row['Item'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in PROCESS_TEST%}{{ row['Item'] }}...' -> '...'
+[2025-09-04 15:15:24,018] INFO in status: RUN REPLACEMENT: '{% for row in PROCESS_TEST%}{{ row['Item'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in PROCESS_TEST%}{{ row['Item'] }}...' -> '...'
+[2025-09-04 15:15:24,020] INFO in status: Table 15 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 15 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:24,026] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Action'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Action'] }}...' -> '...'
+[2025-09-04 15:15:24,030] INFO in status: RUN REPLACEMENT: '{{ row['Action'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Action'] }}...' -> '...'
+[2025-09-04 15:15:24,037] INFO in status: Table 15 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 15 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:24,042] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Expected / Required Result'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Expected / Required Result'] }}...' -> '...'
+[2025-09-04 15:15:24,043] INFO in status: RUN REPLACEMENT: '{{ row['Expected / Required Result'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Expected / Required Result'] }}...' -> '...'
+[2025-09-04 15:15:24,044] INFO in status: Table 15 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 15 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:24,048] INFO in status: SUCCESSFULLY CLEANED: '{{ row[' Pass/Fail '] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row[' Pass/Fail '] }}...' -> '...'
+[2025-09-04 15:15:24,050] INFO in status: RUN REPLACEMENT: '{{ row[' Pass/Fail '] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row[' Pass/Fail '] }}...' -> '...'
+[2025-09-04 15:15:24,052] INFO in status: Table 15 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 15 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:24,060] INFO in status: SUCCESSFULLY CLEANED: '{{ row[' Comments '] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row[' Comments '] }}...' -> '...'
+[2025-09-04 15:15:24,065] INFO in status: RUN REPLACEMENT: '{{ row[' Comments '] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row[' Comments '] }}...' -> '...'
+[2025-09-04 15:15:24,069] INFO in status: Table 15 Row 1 Cell 4: RUNS PROCESSED
+INFO:app:Table 15 Row 1 Cell 4: RUNS PROCESSED
+[2025-09-04 15:15:24,072] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:24,073] INFO in status: Table 15 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 15 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:24,080] INFO in status: SUCCESSFULLY CLEANED: '{% for row in SCADA_VERIFICATION %}{{ row['Task'] ...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in SCADA_VERIFICATION %}{{ row['Task'] ...' -> '...'
+[2025-09-04 15:15:24,083] INFO in status: RUN REPLACEMENT: '{% for row in SCADA_VERIFICATION %}{{ row['Task'] ...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in SCADA_VERIFICATION %}{{ row['Task'] ...' -> '...'
+[2025-09-04 15:15:24,101] INFO in status: Table 16 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 16 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:24,106] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Expected Result'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Expected Result'] }}...' -> '...'
+[2025-09-04 15:15:24,110] INFO in status: RUN REPLACEMENT: '{{ row['Expected Result'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Expected Result'] }}...' -> '...'
+[2025-09-04 15:15:24,112] INFO in status: Table 16 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 16 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:24,119] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Pass/Fail'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Pass/Fail'] }}...' -> '...'
+[2025-09-04 15:15:24,142] INFO in status: RUN REPLACEMENT: '{{ row['Pass/Fail'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Pass/Fail'] }}...' -> '...'
+[2025-09-04 15:15:24,166] INFO in status: Table 16 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 16 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:24,174] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Comments'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Comments'] }}...' -> '...'
+[2025-09-04 15:15:24,178] INFO in status: RUN REPLACEMENT: '{{ row['Comments'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Comments'] }}...' -> '...'
+[2025-09-04 15:15:24,180] INFO in status: Table 16 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 16 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:24,182] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:24,183] INFO in status: Table 16 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 16 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:24,188] INFO in status: SUCCESSFULLY CLEANED: '{% for row in TRENDS_TESTING %}{{ row['Trend'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in TRENDS_TESTING %}{{ row['Trend'] }}...' -> '...'
+[2025-09-04 15:15:24,189] INFO in status: RUN REPLACEMENT: '{% for row in TRENDS_TESTING %}{{ row['Trend'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in TRENDS_TESTING %}{{ row['Trend'] }}...' -> '...'
+[2025-09-04 15:15:24,203] INFO in status: Table 17 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 17 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:24,218] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Expected Behavior'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Expected Behavior'] }}...' -> '...'
+[2025-09-04 15:15:24,233] INFO in status: RUN REPLACEMENT: '{{ row['Expected Behavior'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Expected Behavior'] }}...' -> '...'
+[2025-09-04 15:15:24,240] INFO in status: Table 17 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 17 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:24,246] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Pass/Fail'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Pass/Fail'] }}...' -> '...'
+[2025-09-04 15:15:24,249] INFO in status: RUN REPLACEMENT: '{{ row['Pass/Fail'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Pass/Fail'] }}...' -> '...'
+[2025-09-04 15:15:24,252] INFO in status: Table 17 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 17 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:24,255] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Comments'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Comments'] }}...' -> '...'
+[2025-09-04 15:15:24,257] INFO in status: RUN REPLACEMENT: '{{ row['Comments'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Comments'] }}...' -> '...'
+[2025-09-04 15:15:24,259] INFO in status: Table 17 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 17 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:24,263] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:24,264] INFO in status: Table 17 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 17 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:24,270] INFO in status: SUCCESSFULLY CLEANED: '{% for row in ALARM_LIST%}{{ row['Alarm Type'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{% for row in ALARM_LIST%}{{ row['Alarm Type'] }}...' -> '...'
+[2025-09-04 15:15:24,274] INFO in status: RUN REPLACEMENT: '{% for row in ALARM_LIST%}{{ row['Alarm Type'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% for row in ALARM_LIST%}{{ row['Alarm Type'] }}...' -> '...'
+[2025-09-04 15:15:24,277] INFO in status: Table 18 Row 1 Cell 0: RUNS PROCESSED
+INFO:app:Table 18 Row 1 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:24,279] INFO in status: SUCCESSFULLY CLEANED: '{{ row['Expected / Required Result'] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row['Expected / Required Result'] }}...' -> '...'
+[2025-09-04 15:15:24,282] INFO in status: RUN REPLACEMENT: '{{ row['Expected / Required Result'] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row['Expected / Required Result'] }}...' -> '...'
+[2025-09-04 15:15:24,284] INFO in status: Table 18 Row 1 Cell 1: RUNS PROCESSED
+INFO:app:Table 18 Row 1 Cell 1: RUNS PROCESSED
+[2025-09-04 15:15:24,286] INFO in status: SUCCESSFULLY CLEANED: '{{ row[' Pass/Fail '] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row[' Pass/Fail '] }}...' -> '...'
+[2025-09-04 15:15:24,287] INFO in status: RUN REPLACEMENT: '{{ row[' Pass/Fail '] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row[' Pass/Fail '] }}...' -> '...'
+[2025-09-04 15:15:24,289] INFO in status: Table 18 Row 1 Cell 2: RUNS PROCESSED
+INFO:app:Table 18 Row 1 Cell 2: RUNS PROCESSED
+[2025-09-04 15:15:24,294] INFO in status: SUCCESSFULLY CLEANED: '{{ row[' Comments '] }}...' -> '...'
+INFO:app:SUCCESSFULLY CLEANED: '{{ row[' Comments '] }}...' -> '...'
+[2025-09-04 15:15:24,297] INFO in status: RUN REPLACEMENT: '{{ row[' Comments '] }}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{{ row[' Comments '] }}...' -> '...'
+[2025-09-04 15:15:24,300] INFO in status: Table 18 Row 1 Cell 3: RUNS PROCESSED
+INFO:app:Table 18 Row 1 Cell 3: RUNS PROCESSED
+[2025-09-04 15:15:24,303] INFO in status: RUN REPLACEMENT: '{% endfor %}...' -> '...'
+INFO:app:RUN REPLACEMENT: '{% endfor %}...' -> '...'
+[2025-09-04 15:15:24,307] INFO in status: Table 18 Row 2 Cell 0: RUNS PROCESSED
+INFO:app:Table 18 Row 2 Cell 0: RUNS PROCESSED
+[2025-09-04 15:15:24,373] INFO in status: Replaced template tags in document, tables, headers, and footers
+INFO:app:Replaced template tags in document, tables, headers, and footers
+[2025-09-04 15:15:24,377] INFO in status: Original template structure and formatting preserved
+INFO:app:Original template structure and formatting preserved
+[2025-09-04 15:15:24,419] INFO in status: Template document saved to memory buffer: 148653 bytes
+INFO:app:Template document saved to memory buffer: 148653 bytes
+[2025-09-04 15:15:24,422] INFO in status: SAT template document written to file: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx
+INFO:app:SAT template document written to file: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx
+[2025-09-04 15:15:24,424] INFO in status: Document verified: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx (148653 bytes)
+INFO:app:Document verified: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx (148653 bytes)
+[2025-09-04 15:15:24,425] INFO in status: Document saved successfully: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx (148653 bytes)
+INFO:app:Document saved successfully: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx (148653 bytes)
+[2025-09-04 15:15:24,425] INFO in status: Fresh report generated: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx
+INFO:app:Fresh report generated: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx
+[2025-09-04 15:15:24,427] INFO in status: Serving file: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx as SAT_TEST-123.docx
+INFO:app:Serving file: E:\report generator\SERVER\outputs\SAT_Report_19890bcf-9093-4e33-9079-465e3888d2d8_Final.docx as SAT_TEST-123.docx
+[2025-09-04 15:15:24,428] INFO in status: Testing direct file serve without modifications
+INFO:app:Testing direct file serve without modifications
+[2025-09-04 15:15:24,567] INFO in status: Server verification: Document has 108 paragraphs and can be opened
+INFO:app:Server verification: Document has 108 paragraphs and can be opened
+[2025-09-04 15:15:24,570] INFO in status: Read 148653 bytes from file
+INFO:app:Read 148653 bytes from file
+[2025-09-04 15:15:24,571] INFO in status: Serving SAT_TEST-123.docx from memory (148653 bytes)
+INFO:app:Serving SAT_TEST-123.docx from memory (148653 bytes)

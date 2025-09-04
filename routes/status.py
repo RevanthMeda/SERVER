@@ -215,36 +215,46 @@ def download_report(submission_id):
             doc = Document(template_file)
             current_app.logger.info(f"Opened original SAT_Template.docx to preserve exact formatting: {template_file}")
             
-            # COMPREHENSIVE SCAN - Find where DOCUMENT_TITLE is hiding
-            current_app.logger.info("=== COMPREHENSIVE DOCUMENT SCAN ===")
+            # COMPREHENSIVE SCAN - Find ALL template tags that exist
+            current_app.logger.info("=== FINDING ALL TEMPLATE TAGS ===")
             
-            # Scan ALL paragraphs for DOCUMENT_TITLE
+            # Find ALL {{ }} tags in the document
+            all_tags = set()
+            
+            # Check paragraphs
             for i, paragraph in enumerate(doc.paragraphs):
-                if 'DOCUMENT_TITLE' in paragraph.text:
-                    current_app.logger.info(f"DOCUMENT_TITLE FOUND IN PARAGRAPH {i}: '{paragraph.text}'")
+                if '{{' in paragraph.text and '}}' in paragraph.text:
+                    current_app.logger.info(f"TEMPLATE TAG IN PARAGRAPH {i}: '{paragraph.text}'")
+                    all_tags.add(paragraph.text.strip())
+                elif 'DOCUMENT' in paragraph.text:
+                    current_app.logger.info(f"'DOCUMENT' TEXT IN PARAGRAPH {i}: '{paragraph.text}'")
             
-            # Scan ALL tables for DOCUMENT_TITLE  
+            # Check tables  
             for table_idx, table in enumerate(doc.tables):
                 for row_idx, row in enumerate(table.rows):
                     for cell_idx, cell in enumerate(row.cells):
-                        if 'DOCUMENT_TITLE' in cell.text:
-                            current_app.logger.info(f"DOCUMENT_TITLE FOUND IN TABLE {table_idx} ROW {row_idx} CELL {cell_idx}: '{cell.text}'")
+                        if '{{' in cell.text and '}}' in cell.text:
+                            current_app.logger.info(f"TEMPLATE TAG IN TABLE {table_idx} ROW {row_idx} CELL {cell_idx}: '{cell.text}'")
+                            all_tags.add(cell.text.strip())
+                        elif 'DOCUMENT' in cell.text:
+                            current_app.logger.info(f"'DOCUMENT' TEXT IN TABLE {table_idx} ROW {row_idx} CELL {cell_idx}: '{cell.text}'")
             
-            # Scan headers and footers
+            # Check headers and footers
             for section_idx, section in enumerate(doc.sections):
-                # Check header
                 if hasattr(section, 'header'):
                     for para_idx, paragraph in enumerate(section.header.paragraphs):
-                        if 'DOCUMENT_TITLE' in paragraph.text:
-                            current_app.logger.info(f"DOCUMENT_TITLE FOUND IN HEADER {section_idx} PARA {para_idx}: '{paragraph.text}'")
+                        if '{{' in paragraph.text and '}}' in paragraph.text:
+                            current_app.logger.info(f"TEMPLATE TAG IN HEADER {section_idx} PARA {para_idx}: '{paragraph.text}'")
+                            all_tags.add(paragraph.text.strip())
                             
-                # Check footer  
                 if hasattr(section, 'footer'):
                     for para_idx, paragraph in enumerate(section.footer.paragraphs):
-                        if 'DOCUMENT_TITLE' in paragraph.text:
-                            current_app.logger.info(f"DOCUMENT_TITLE FOUND IN FOOTER {section_idx} PARA {para_idx}: '{paragraph.text}'")
+                        if '{{' in paragraph.text and '}}' in paragraph.text:
+                            current_app.logger.info(f"TEMPLATE TAG IN FOOTER {section_idx} PARA {para_idx}: '{paragraph.text}'")
+                            all_tags.add(paragraph.text.strip())
             
-            current_app.logger.info("=== END COMPREHENSIVE SCAN ===")
+            current_app.logger.info(f"ALL UNIQUE TAGS FOUND: {sorted(list(all_tags))}")
+            current_app.logger.info("=== END TAG SCAN ===")
             
             # AGGRESSIVE DEBUG: Print EVERYTHING + DOCUMENT_TITLE specific check
             current_app.logger.info("="*50)
