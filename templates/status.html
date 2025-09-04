@@ -304,6 +304,52 @@
               {% else %}
               <p><strong>Signature:</strong> <span style="color: #6c757d; font-style: italic;">No signature provided</span></p>
               {% endif %}
+
+              <!-- Add approval interface if current user can approve this stage -->
+              {% if approval.status == 'pending' and current_user.email == approval.approver_email %}
+              <div class="approval-actions" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid var(--cully-primary);">
+                <h4 style="color: var(--cully-primary); margin-bottom: 16px;">
+                  <i class="fa fa-pen-to-square"></i> Your Approval Required
+                </h4>
+                
+                <form id="approvalForm{{ approval.stage }}" method="post" action="/approve/{{ submission_id }}/{{ approval.stage }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
+                  
+                  <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="approver_name{{ approval.stage }}" style="display: block; margin-bottom: 5px; font-weight: 600;">Your Name:</label>
+                    <input type="text" id="approver_name{{ approval.stage }}" name="approver_name" class="form-control" value="{{ current_user.full_name }}" required style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px;">
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="approval_comment{{ approval.stage }}" style="display: block; margin-bottom: 5px; font-weight: 600;">Comments:</label>
+                    <textarea id="approval_comment{{ approval.stage }}" name="approval_comment" class="form-control" rows="3" placeholder="Add your comments (optional)" style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;"></textarea>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 600;">Digital Signature:</label>
+                    <div style="border: 2px solid #ddd; border-radius: 8px; background: white;">
+                      <canvas id="signatureCanvas{{ approval.stage }}" width="400" height="150" style="display: block; cursor: crosshair; border-radius: 6px;"></canvas>
+                    </div>
+                    <div style="margin-top: 8px; display: flex; gap: 10px;">
+                      <button type="button" onclick="clearSignature({{ approval.stage }})" style="background: #6c757d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                        <i class="fa fa-eraser"></i> Clear
+                      </button>
+                      <small style="color: #666; line-height: 2;">Draw your signature above</small>
+                    </div>
+                    <input type="hidden" id="signature_data{{ approval.stage }}" name="signature_data" />
+                  </div>
+
+                  <div style="display: flex; gap: 12px; margin-top: 20px;">
+                    <button type="button" onclick="submitApproval({{ approval.stage }}, 'approved')" style="background: var(--cully-primary); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                      <i class="fa fa-check"></i> Approve
+                    </button>
+                    <button type="button" onclick="submitApproval({{ approval.stage }}, 'rejected')" style="background: #dc3545; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                      <i class="fa fa-times"></i> Reject
+                    </button>
+                  </div>
+                </form>
+              </div>
+              {% endif %}
             </div>
           </div>
           {% endfor %}
@@ -414,6 +460,128 @@
         closeRevokeModal();
       }
     }
+
+    // Signature pad functionality
+    const signaturePads = {};
+
+    function initSignaturePad(stage) {
+      const canvas = document.getElementById(`signatureCanvas${stage}`);
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+
+      function draw(e) {
+        if (!isDrawing) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        lastX = x;
+        lastY = y;
+      }
+
+      canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        lastX = e.clientX - rect.left;
+        lastY = e.clientY - rect.top;
+      });
+
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', () => isDrawing = false);
+      canvas.addEventListener('mouseout', () => isDrawing = false);
+
+      // Touch support for mobile
+      canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        lastX = touch.clientX - rect.left;
+        lastY = touch.clientY - rect.top;
+        isDrawing = true;
+      });
+
+      canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (!isDrawing) return;
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        lastX = x;
+        lastY = y;
+      });
+
+      canvas.addEventListener('touchend', () => isDrawing = false);
+
+      signaturePads[stage] = { canvas, ctx };
+    }
+
+    function clearSignature(stage) {
+      const pad = signaturePads[stage];
+      if (pad) {
+        pad.ctx.clearRect(0, 0, pad.canvas.width, pad.canvas.height);
+        document.getElementById(`signature_data${stage}`).value = '';
+      }
+    }
+
+    function submitApproval(stage, action) {
+      const canvas = document.getElementById(`signatureCanvas${stage}`);
+      const form = document.getElementById(`approvalForm${stage}`);
+      
+      if (!canvas || !form) {
+        alert('Error: Missing form elements');
+        return;
+      }
+
+      // Check if signature is provided (for approval only)
+      if (action === 'approved') {
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const hasSignature = imageData.data.some(channel => channel !== 0);
+        
+        if (!hasSignature) {
+          alert('Please provide your signature before approving.');
+          return;
+        }
+
+        // Convert canvas to base64
+        const signatureData = canvas.toDataURL('image/png');
+        document.getElementById(`signature_data${stage}`).value = signatureData;
+      }
+
+      // Submit the form
+      form.submit();
+    }
+
+    // Initialize signature pads when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Find all signature canvases and initialize them
+      const canvases = document.querySelectorAll('[id^="signatureCanvas"]');
+      canvases.forEach(canvas => {
+        const stage = canvas.id.replace('signatureCanvas', '');
+        initSignaturePad(parseInt(stage));
+      });
+    });
   </script>
 
   <style>

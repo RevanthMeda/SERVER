@@ -59,6 +59,19 @@ def approve_submission(submission_id, stage):
             current_stage["timestamp"] = datetime.datetime.now().isoformat()
             current_stage["approver_name"] = request.form.get("approver_name", "")
             
+            # Map to Word template fields for Automation Manager (stage 1)
+            if stage == 1:
+                # Update submission data context with Word template fields
+                ctx = submission_data.get("context", {})
+                ctx["REVIEWED_BY_TECH_LEAD"] = current_stage["approver_name"]
+                ctx["TECH_LEAD_DATE"] = datetime.datetime.now().strftime('%Y-%m-%d')
+                
+                # Store signature filename for Word template
+                if current_stage.get("signature"):
+                    ctx["SIG_REVIEW_TECH"] = current_stage["signature"]
+                
+                submission_data["context"] = ctx
+            
             # Create notification for submitter
             from utils import create_status_update_notification
             try:
@@ -84,6 +97,31 @@ def approve_submission(submission_id, stage):
             # Save changes
             submissions[submission_id] = submission_data
             save_submissions(submissions)
+            
+            # Also update the database Report record
+            try:
+                from models import db, Report, SATReport
+                report = Report.query.get(submission_id)
+                if report:
+                    # Update the database with new approval data
+                    report.approvals_json = json.dumps(approvals)
+                    
+                    # Update SAT report data with Word template fields
+                    sat_report = SATReport.query.filter_by(report_id=submission_id).first()
+                    if sat_report:
+                        import json as json_module
+                        try:
+                            stored_data = json_module.loads(sat_report.data_json)
+                            stored_data["context"] = submission_data.get("context", {})
+                            sat_report.data_json = json_module.dumps(stored_data)
+                            db.session.commit()
+                            current_app.logger.info(f"Updated database with approval data for submission {submission_id}")
+                        except Exception as e:
+                            current_app.logger.error(f"Error updating SAT report data: {e}")
+                            db.session.rollback()
+                    
+            except Exception as e:
+                current_app.logger.error(f"Error updating database: {e}")
 
             # Determine if this is the PM approval (stage 2)
             # After PM approves, we finalize the document and send to client
