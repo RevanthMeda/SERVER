@@ -105,10 +105,18 @@ def download_report(submission_id):
             flash('Invalid submission ID.', 'error')
             return redirect(url_for('dashboard.home'))
 
-        # Check if we already have a generated file first (bypass database if needed)
+        # FORCE REGENERATION - Skip existing file check to create fresh clean document
         permanent_path = os.path.join(current_app.config['OUTPUT_DIR'], f'SAT_Report_{submission_id}_Final.docx')
         
+        # Remove existing file if it exists to force fresh generation
         if os.path.exists(permanent_path):
+            try:
+                os.remove(permanent_path)
+                current_app.logger.info(f"Removed existing file to force fresh generation: {permanent_path}")
+            except Exception as e:
+                current_app.logger.warning(f"Could not remove existing file: {e}")
+        
+        if False:  # DISABLED - Always regenerate for now
             current_app.logger.info(f"Found existing report file: {permanent_path}")
             try:
                 # Try to get document title from database, but don't fail if database is down
@@ -207,75 +215,24 @@ def download_report(submission_id):
             # Create a fresh template instance to avoid cached issues
             doc = DocxTemplate(template_file)
 
+            # TEMPORARILY DISABLE ALL IMAGES TO FIX CORRUPTION
             # Process signatures from stored data
             SIG_PREPARED = ""
-            if context_data.get("prepared_signature"):
-                sig_path = os.path.join(current_app.config['SIGNATURES_FOLDER'], context_data["prepared_signature"])
-                if os.path.exists(sig_path):
-                    try:
-                        SIG_PREPARED = InlineImage(doc, sig_path, width=Mm(40))
-                    except Exception as e:
-                        current_app.logger.error(f"Error loading signature: {e}")
+            # Commenting out signature processing to isolate corruption issue
+            # if context_data.get("prepared_signature"):
+            #     sig_path = os.path.join(current_app.config['SIGNATURES_FOLDER'], context_data["prepared_signature"])
+            #     if os.path.exists(sig_path):
+            #         try:
+            #             SIG_PREPARED = InlineImage(doc, sig_path, width=Mm(40))
+            #         except Exception as e:
+            #             current_app.logger.error(f"Error loading signature: {e}")
 
-            # Process stored images
-            def load_stored_images(url_list, max_width_mm=150):
-                """Load stored images from URLs"""
-                image_objects = []
-                upload_dir = os.path.join(current_app.config['UPLOAD_ROOT'], submission_id)
-
-                if not os.path.exists(upload_dir):
-                    current_app.logger.warning(f"Upload directory not found: {upload_dir}")
-                    return image_objects
-
-                for url in url_list:
-                    try:
-                        # Extract filename from URL
-                        filename = url.split('/')[-1]
-                        image_path = os.path.join(upload_dir, filename)
-
-                        if os.path.exists(image_path):
-                            try:
-                                from PIL import Image
-                                with Image.open(image_path) as img:
-                                    w, h = img.size
-
-                                # Calculate scale to fit max width
-                                scale = min(1, max_width_mm / (w * 0.264583))
-
-                                image_objects.append(
-                                    InlineImage(doc, image_path,
-                                        width=Mm(w * 0.264583 * scale),
-                                        height=Mm(h * 0.264583 * scale)
-                                    )
-                                )
-                            except Exception as e:
-                                current_app.logger.error(f"Error processing stored image {filename}: {e}")
-                                # Add default size if image processing fails
-                                try:
-                                    image_objects.append(
-                                        InlineImage(doc, image_path, width=Mm(100), height=Mm(80))
-                                    )
-                                except Exception as e2:
-                                    current_app.logger.error(f"Failed to add image with default size: {e2}")
-                        else:
-                            current_app.logger.warning(f"Image file not found: {image_path}")
-                    except Exception as e:
-                        current_app.logger.error(f"Error loading stored image from {url}: {e}")
-
-                return image_objects
-
-            # Load stored images safely
-            try:
-                scada_urls = json.loads(sat_report.scada_image_urls) if sat_report.scada_image_urls else []
-                trends_urls = json.loads(sat_report.trends_image_urls) if sat_report.trends_image_urls else []
-                alarm_urls = json.loads(sat_report.alarm_image_urls) if sat_report.alarm_image_urls else []
-            except Exception as json_error:
-                current_app.logger.error(f"Error parsing image URLs: {json_error}")
-                scada_urls = trends_urls = alarm_urls = []
-
-            scada_image_objects = load_stored_images(scada_urls)
-            trends_image_objects = load_stored_images(trends_urls)
-            alarm_image_objects = load_stored_images(alarm_urls)
+            # DISABLE IMAGE PROCESSING TEMPORARILY
+            scada_image_objects = []
+            trends_image_objects = []
+            alarm_image_objects = []
+            
+            current_app.logger.info("Images disabled for corruption testing")
 
             # Build context for template rendering
             render_context = dict(context_data)
@@ -297,34 +254,14 @@ def download_report(submission_id):
                 permanent_dir = current_app.config['OUTPUT_DIR']
                 os.makedirs(permanent_dir, exist_ok=True)
                 
-                # Save document and create a clean copy
+                # SIMPLIFIED SAVE WITHOUT CLEANING TO ISOLATE ISSUE
                 try:
-                    # First save to temporary file
-                    temp_doc_path = permanent_path + '.temp'
-                    doc.save(temp_doc_path)
-                    current_app.logger.info(f"Initial document save completed: {temp_doc_path}")
-                    
-                    # Now create a clean copy by re-opening and re-saving with python-docx
-                    # This removes any DocxTemplate artifacts and creates a clean Word document
-                    from docx import Document
-                    clean_doc = Document(temp_doc_path)
-                    clean_doc.save(permanent_path)
-                    
-                    # Remove temp file
-                    if os.path.exists(temp_doc_path):
-                        os.remove(temp_doc_path)
-                        
-                    current_app.logger.info(f"Clean document created: {permanent_path}")
+                    # Direct save without cleaning to test if cleaning process causes corruption
+                    doc.save(permanent_path)
+                    current_app.logger.info(f"Document saved directly: {permanent_path}")
                     
                 except Exception as save_error:
                     current_app.logger.error(f"Document save failed: {save_error}")
-                    # Clean up temp file if it exists
-                    temp_path = permanent_path + '.temp'
-                    if os.path.exists(temp_path):
-                        try:
-                            os.remove(temp_path)
-                        except:
-                            pass
                     raise Exception(f"Failed to save document: {save_error}")
                 
                 # Verify file was created and has reasonable size
