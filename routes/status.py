@@ -282,13 +282,23 @@ def download_report(submission_id):
             current_app.logger.info(f"Final PROJECT_REFERENCE value: '{replacement_data['PROJECT_REFERENCE']}'")
             
             def clean_text(text):
-                """Clean template text by replacing tags and removing empty Jinja2 blocks"""
+                """Clean template text by first removing Jinja2, then replacing tags"""
                 if not text.strip():
                     return text
                 
                 original_text = text
+                import re
                 
-                # AGGRESSIVE replacement - try every possible tag format
+                # FIRST: Remove all Jinja2 template syntax BEFORE doing replacements
+                # Remove {% for %} ... {% endfor %} blocks (most common issue)
+                text = re.sub(r'{%\s*for\s+[^%]*%}.*?{%\s*endfor\s*%}', '', text, flags=re.DOTALL)
+                
+                # Remove standalone {% %} blocks
+                text = re.sub(r'{%\s*endfor\s*%}', '', text)
+                text = re.sub(r'{%\s*for\s+[^%]*%}', '', text)
+                text = re.sub(r'{%\s*[^%]*\s*%}', '', text)
+                
+                # SECOND: Replace template tags with actual values
                 for tag, value in replacement_data.items():
                     if value:  # Only replace if we have a value
                         patterns_to_try = [
@@ -303,26 +313,18 @@ def download_report(submission_id):
                                 text = text.replace(pattern, str(value))
                                 current_app.logger.info(f"REPLACED '{pattern}' with '{value}' in text")
                 
-                # Log if we still have template tags after replacement
-                if '{{' in text and text != original_text:
-                    current_app.logger.info(f"STILL HAS TAGS after replacement: '{text[:100]}...'")
-                elif '{{' in text:
-                    current_app.logger.info(f"NO REPLACEMENT MADE for text with tags: '{text[:100]}...'")
-                
-                # Remove Jinja2 template syntax (more aggressive)
-                import re
-                
-                # Remove {% for %} ... {% endfor %} blocks
-                text = re.sub(r'{%\s*for\s+[^%]*%}.*?{%\s*endfor\s*%}', '', text, flags=re.DOTALL)
-                
-                # Remove remaining {{ }} placeholders only if they're empty
+                # THIRD: Remove any remaining empty template tags
                 text = re.sub(r'{{\s*[^}]*\s*}}', '', text)
                 
-                # Remove {% %} blocks
-                text = re.sub(r'{%\s*[^%]*\s*%}', '', text)
-                
-                # Clean up extra whitespace
+                # FOURTH: Clean up extra whitespace
                 text = re.sub(r'\n\s*\n\s*\n', '\n\n', text)
+                text = text.strip()
+                
+                # Log results
+                if '{{' in text and text != original_text:
+                    current_app.logger.info(f"STILL HAS TAGS after replacement: '{text[:100]}...'")
+                elif '{{' in original_text and '{{' not in text:
+                    current_app.logger.info(f"SUCCESSFULLY CLEANED: '{original_text[:50]}...' -> '{text[:50]}...'")
                 
                 return text
             
@@ -334,8 +336,12 @@ def download_report(submission_id):
                 
                 # Get full text from all runs
                 full_text = ''.join(run.text for run in paragraph.runs)
-                if not full_text or '{{' not in full_text:
+                if not full_text or ('{{' not in full_text and '{%' not in full_text):
                     return False
+                
+                # Debug: Show what we found
+                if any(tag in full_text for tag in ['DOCUMENT_TITLE', 'DOCUMENT_REFERENCE', 'REVISION']):
+                    current_app.logger.info(f"FOUND TARGET TAG: '{full_text[:100]}...'")
                 
                 # Clean the full text
                 new_full_text = clean_text(full_text)
