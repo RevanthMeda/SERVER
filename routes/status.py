@@ -273,8 +273,18 @@ def download_report(submission_id):
                 permanent_dir = current_app.config['OUTPUT_DIR']
                 os.makedirs(permanent_dir, exist_ok=True)
                 
-                # Save the document
-                doc.save(permanent_path)
+                # Save the document with proper file integrity checks
+                temp_save_path = permanent_path + '.tmp'
+                doc.save(temp_save_path)
+                
+                # Verify the file was saved completely and has content
+                if os.path.exists(temp_save_path) and os.path.getsize(temp_save_path) > 0:
+                    # Move temp file to final location atomically
+                    import shutil
+                    shutil.move(temp_save_path, permanent_path)
+                    current_app.logger.info(f"Document successfully saved: {permanent_path} ({os.path.getsize(permanent_path)} bytes)")
+                else:
+                    raise Exception("Document save failed - empty or missing file")
                 
                 # Verify the file was created and has content
                 if not os.path.exists(permanent_path) or os.path.getsize(permanent_path) == 0:
@@ -289,13 +299,29 @@ def download_report(submission_id):
 
             current_app.logger.info(f"Fresh report generated: {permanent_path}")
 
-            # Get document title for filename
+            # Get document title for filename (sanitize for compatibility)
             doc_title = context_data.get("DOCUMENT_TITLE", "SAT_Report")
-            safe_title = "".join(c if c.isalnum() or c in ['_', '-'] else "_" for c in doc_title)
-            download_name = f"{safe_title}_{submission_id}.docx"
+            # More aggressive filename sanitization for better compatibility
+            safe_title = "".join(c if c.isalnum() or c in ['_', '-', ' '] else "_" for c in doc_title[:50])
+            safe_title = safe_title.replace(' ', '_').strip('_')
+            if not safe_title:
+                safe_title = "SAT_Report"
+            download_name = f"{safe_title}_{submission_id[:8]}.docx"
 
-            # Return the file
-            return send_file(permanent_path, as_attachment=True, download_name=download_name)
+            # Verify file exists and has proper size before sending
+            if not os.path.exists(permanent_path) or os.path.getsize(permanent_path) == 0:
+                flash('Error: Generated document is empty or corrupted.', 'error')
+                return redirect(url_for('status.view_status', submission_id=submission_id))
+
+            current_app.logger.info(f"Serving file: {permanent_path} as {download_name}")
+            
+            # Return the file with proper headers for Word compatibility
+            return send_file(
+                permanent_path, 
+                as_attachment=True, 
+                download_name=download_name,
+                mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            )
 
         except Exception as generation_error:
             current_app.logger.error(f"Error during report generation: {generation_error}", exc_info=True)

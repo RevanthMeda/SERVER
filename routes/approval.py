@@ -360,8 +360,19 @@ def approve_submission(submission_id, stage):
                 try:
                     tpl.render(ctx)
                     out = os.path.abspath(current_app.config['OUTPUT_FILE'])
-                    tpl.save(out)
-                    current_app.logger.info(f"Template successfully rendered and saved to: {out}")
+                    
+                    # Save to temporary file first, then move atomically
+                    temp_out = out + '.tmp'
+                    tpl.save(temp_out)
+                    
+                    # Verify file integrity before finalizing
+                    if os.path.exists(temp_out) and os.path.getsize(temp_out) > 0:
+                        import shutil
+                        shutil.move(temp_out, out)
+                        current_app.logger.info(f"Template successfully rendered and saved to: {out} ({os.path.getsize(out)} bytes)")
+                    else:
+                        raise Exception("Document generation failed - empty or missing file")
+                        
                 except Exception as e:
                     current_app.logger.error(f"Error rendering template: {e}", exc_info=True)
                     flash(f"Error generating final document: {str(e)}", "error")
