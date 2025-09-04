@@ -511,7 +511,7 @@
                     <a href="{{ url_for('dashboard.automation_manager') }}" class="nav-link active">
                         <i class="fa fa-home"></i> Dashboard
                     </a>
-                    <a href="{{ url_for('dashboard.automation_manager') }}" class="nav-link">
+                    <a href="{{ url_for('dashboard.reviews') }}" class="nav-link">
                         <i class="fa fa-file-alt"></i> Reviews & Approvals
                     </a>
                     <a href="{{ url_for('reports.new') }}" class="nav-link">
@@ -592,7 +592,7 @@
                         <p>Create a new Site Acceptance Test report for project validation</p>
                     </a>
 
-                    <a href="{{ url_for('dashboard.automation_manager') }}" class="action-card">
+                    <a href="{{ url_for('dashboard.reviews') }}" class="action-card">
                         <div class="action-icon">
                             <i class="fa fa-clipboard-check"></i>
                         </div>
@@ -668,6 +668,11 @@
                     </div>
                 {% endif %}
             </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 24px; color: #6b7280; font-size: 0.875rem; background: white; border-radius: 12px; margin-top: 32px; box-shadow: var(--card-shadow);">
+            <p>Developed by <strong>Revanth Meda</strong> for <strong>Cully Automation</strong></p>
         </div>
     </div>
 </body>

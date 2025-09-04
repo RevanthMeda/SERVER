@@ -904,3 +904,55 @@ def my_reports():
         })
 
     return render_template('my_reports.html', reports=report_list)
+
+@dashboard_bp.route('/reviews')
+@login_required
+@role_required(['Automation Manager', 'Admin'])
+def reviews():
+    """Reviews and Approvals page for Automation Manager"""
+    from models import Report, SATReport
+    import json
+
+    # Get all reports that need approval by this Automation Manager
+    pending_reviews = []
+    try:
+        all_reports = Report.query.all()
+        for report in all_reports:
+            if report.approvals_json:
+                try:
+                    approvals = json.loads(report.approvals_json)
+                    for approval in approvals:
+                        if (approval.get('stage') == 1 and  # Automation Manager stage
+                            approval.get('status') == 'pending'):
+                            
+                            # Get SAT report data for context
+                            sat_report = SATReport.query.filter_by(report_id=report.id).first()
+                            report_data = {}
+                            if sat_report:
+                                try:
+                                    stored_data = json.loads(sat_report.data_json)
+                                    report_data = stored_data.get('context', {})
+                                except json.JSONDecodeError:
+                                    pass
+                            
+                            pending_reviews.append({
+                                'id': report.id,
+                                'document_title': report_data.get('DOCUMENT_TITLE', 'SAT Report'),
+                                'client_name': report_data.get('CLIENT_NAME', ''),
+                                'project_reference': report_data.get('PROJECT_REFERENCE', ''),
+                                'prepared_by': report_data.get('PREPARED_BY', ''),
+                                'user_email': report.user_email,
+                                'created_at': report.created_at,
+                                'updated_at': report.updated_at,
+                                'stage': approval.get('stage'),
+                                'approver_email': approval.get('approver_email')
+                            })
+                            break  # Only add once per report
+                except json.JSONDecodeError:
+                    continue
+    except Exception as e:
+        current_app.logger.error(f"Error getting pending reviews: {e}")
+    
+    return render_template('automation_manager_reviews.html', 
+                         pending_reviews=pending_reviews,
+                         unread_count=0)
