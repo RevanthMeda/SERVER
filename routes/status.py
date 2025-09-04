@@ -215,12 +215,21 @@ def download_report(submission_id):
             doc = Document(template_file)
             current_app.logger.info(f"Opened original SAT_Template.docx to preserve exact formatting: {template_file}")
             
-            # AGGRESSIVE DEBUG: Print EVERYTHING
+            # AGGRESSIVE DEBUG: Print EVERYTHING + DOCUMENT_TITLE specific check
             current_app.logger.info("="*50)
             current_app.logger.info("FULL CONTEXT_DATA DUMP:")
             for key, value in context_data.items():
                 current_app.logger.info(f"  '{key}': '{value}'")
             current_app.logger.info("="*50)
+            
+            # ULTRA DEBUG - Check exact DOCUMENT_TITLE value
+            doc_title_raw = context_data.get('DOCUMENT_TITLE')
+            doc_title_type = type(doc_title_raw)
+            doc_title_repr = repr(doc_title_raw)
+            current_app.logger.info(f"DOCUMENT_TITLE RAW: {doc_title_raw}")
+            current_app.logger.info(f"DOCUMENT_TITLE TYPE: {doc_title_type}")
+            current_app.logger.info(f"DOCUMENT_TITLE REPR: {doc_title_repr}")
+            current_app.logger.info(f"DOCUMENT_TITLE LENGTH: {len(str(doc_title_raw)) if doc_title_raw else 'None'}")
             
             # Create comprehensive mapping with more field variations
             replacement_data = {
@@ -360,10 +369,17 @@ def download_report(submission_id):
                 
                 return True
             
-            # Replace text in paragraphs (preserves all formatting)
+            # Replace text in paragraphs (preserves all formatting) - ULTRA DEBUG
             paragraph_count = 0
             for paragraph in doc.paragraphs:
                 if paragraph.text and paragraph.text.strip():
+                    # ULTRA DEBUG for DOCUMENT_TITLE
+                    if 'DOCUMENT_TITLE' in paragraph.text:
+                        current_app.logger.info(f"PARA DOCUMENT_TITLE FOUND: '{paragraph.text}'")
+                        current_app.logger.info(f"Runs count: {len(paragraph.runs)}")
+                        for i, run in enumerate(paragraph.runs):
+                            current_app.logger.info(f"  Run {i}: '{run.text}'")
+                    
                     # Try run-level replacement first
                     if replace_in_runs(paragraph):
                         current_app.logger.info(f"Para {paragraph_count}: RUNS PROCESSED")
