@@ -215,29 +215,31 @@ def download_report(submission_id):
             doc = Document(template_file)
             current_app.logger.info(f"Opened original SAT_Template.docx to preserve exact formatting: {template_file}")
             
-            # Log the context_data to debug DOCUMENT_TITLE issue
-            current_app.logger.info(f"Context data keys: {list(context_data.keys())}")
-            current_app.logger.info(f"Document title value: '{context_data.get('DOCUMENT_TITLE', 'NOT_FOUND')}'")
+            # Debug: Print all available keys and values
+            current_app.logger.info(f"All context_data keys: {list(context_data.keys())}")
+            for key, value in context_data.items():
+                if key in ['DOCUMENT_TITLE', 'document_title', 'PROJECT_REFERENCE']:
+                    current_app.logger.info(f"Key '{key}': '{value}'")
             
-            # Create mapping of template tags to actual data
+            # Create comprehensive mapping of template tags to actual data
             replacement_data = {
-                'DOCUMENT_TITLE': context_data.get('DOCUMENT_TITLE', ''),
-                'PROJECT_REFERENCE': context_data.get('PROJECT_REFERENCE', ''),
-                'DOCUMENT_REFERENCE': context_data.get('DOCUMENT_REFERENCE', ''),
-                'DATE': context_data.get('DATE', ''),
-                'CLIENT_NAME': context_data.get('CLIENT_NAME', ''),
-                'REVISION': context_data.get('REVISION', ''),
-                'PREPARED_BY': context_data.get('PREPARED_BY', ''),
-                'PREPARER_DATE': context_data.get('PREPARER_DATE', ''),
-                'REVIEWED_BY_TECH_LEAD': context_data.get('REVIEWED_BY_TECH_LEAD', ''),
-                'TECH_LEAD_DATE': context_data.get('TECH_LEAD_DATE', ''),
-                'REVIEWED_BY_PM': context_data.get('REVIEWED_BY_PM', ''),
-                'PM_DATE': context_data.get('PM_DATE', ''),
-                'APPROVED_BY_CLIENT': context_data.get('APPROVED_BY_CLIENT', ''),
-                'PURPOSE': context_data.get('PURPOSE', ''),
-                'SCOPE': context_data.get('SCOPE', ''),
-                'REVISION_DETAILS': context_data.get('REVISION_DETAILS', ''),
-                'REVISION_DATE': context_data.get('REVISION_DATE', ''),
+                'DOCUMENT_TITLE': context_data.get('DOCUMENT_TITLE', context_data.get('document_title', '')),
+                'PROJECT_REFERENCE': context_data.get('PROJECT_REFERENCE', context_data.get('project_reference', '')),
+                'DOCUMENT_REFERENCE': context_data.get('DOCUMENT_REFERENCE', context_data.get('document_reference', '')),
+                'DATE': context_data.get('DATE', context_data.get('date', '')),
+                'CLIENT_NAME': context_data.get('CLIENT_NAME', context_data.get('client_name', '')),
+                'REVISION': context_data.get('REVISION', context_data.get('revision', '')),
+                'PREPARED_BY': context_data.get('PREPARED_BY', context_data.get('prepared_by', '')),
+                'PREPARER_DATE': context_data.get('PREPARER_DATE', context_data.get('preparer_date', '')),
+                'REVIEWED_BY_TECH_LEAD': context_data.get('REVIEWED_BY_TECH_LEAD', context_data.get('reviewed_by_tech_lead', '')),
+                'TECH_LEAD_DATE': context_data.get('TECH_LEAD_DATE', context_data.get('tech_lead_date', '')),
+                'REVIEWED_BY_PM': context_data.get('REVIEWED_BY_PM', context_data.get('reviewed_by_pm', '')),
+                'PM_DATE': context_data.get('PM_DATE', context_data.get('pm_date', '')),
+                'APPROVED_BY_CLIENT': context_data.get('APPROVED_BY_CLIENT', context_data.get('approved_by_client', '')),
+                'PURPOSE': context_data.get('PURPOSE', context_data.get('purpose', '')),
+                'SCOPE': context_data.get('SCOPE', context_data.get('scope', '')),
+                'REVISION_DETAILS': context_data.get('REVISION_DETAILS', context_data.get('revision_details', '')),
+                'REVISION_DATE': context_data.get('REVISION_DATE', context_data.get('revision_date', '')),
                 # Add signature placeholders
                 'SIG_PREPARED': '',
                 'SIG_REVIEW_TECH': '',
@@ -245,54 +247,65 @@ def download_report(submission_id):
                 'SIG_APPROVAL_CLIENT': ''
             }
             
+            current_app.logger.info(f"Final DOCUMENT_TITLE value: '{replacement_data['DOCUMENT_TITLE']}'")
+            current_app.logger.info(f"Final PROJECT_REFERENCE value: '{replacement_data['PROJECT_REFERENCE']}'")
+            
             def clean_text(text):
                 """Clean template text by replacing tags and removing empty Jinja2 blocks"""
-                # Replace simple template tags
+                if not text.strip():
+                    return text
+                    
+                # Replace simple template tags with all variations
                 for tag, value in replacement_data.items():
-                    text = text.replace('{{ ' + tag + ' }}', str(value) if value else '')
-                    text = text.replace('{{' + tag + '}}', str(value) if value else '')
+                    replacements = [
+                        f'{{{{ {tag} }}}}',  # {{ TAG }}
+                        f'{{{{{tag}}}}}',    # {{TAG}}
+                        f'{{{{  {tag}  }}}}' # {{  TAG  }}
+                    ]
+                    for pattern in replacements:
+                        text = text.replace(pattern, str(value) if value else '')
                 
-                # Remove empty Jinja2 loop blocks (when no data exists)
+                # Remove Jinja2 template syntax (more aggressive)
                 import re
-                # Remove entire {% for %} blocks when they contain only template tags
-                jinja_patterns = [
-                    r'{% for row in PRE_TEST_REQUIREMENTS %}.*?{% endfor %}',
-                    r'{% for row in KEY_COMPONENTS %}.*?{% endfor %}',
-                    r'{% for row in IP_RECORDS %}.*?{% endfor %}',
-                    r'{% for row in SIGNAL_LISTS %}.*?{% endfor %}',
-                    r'{% for row in ANALOGUE_LISTS %}.*?{% endfor %}',
-                    r'{% for row in MODBUS_DIGITAL_LISTS %}.*?{% endfor %}',
-                    r'{% for row in MODBUS_ANALOGUE_LISTS %}.*?{% endfor %}',
-                    r'{% for row in DATA_VALIDATION %}.*?{% endfor %}',
-                    r'{% for row in PROCESS_TEST %}.*?{% endfor %}',
-                    r'{% for row in SCADA_VERIFICATION %}.*?{% endfor %}',
-                    r'{% for row in TRENDS_TESTING %}.*?{% endfor %}',
-                    r'{% for row in ALARM_LIST %}.*?{% endfor %}',
-                    r'{% for row in PRE_APPROVALS %}.*?{% endfor %}',
-                    r'{% for row in POST_APPROVALS %}.*?{% endfor %}',
-                    r'{% for item in RELATED_DOCUMENTS %}.*?{% endfor %}',
-                    r'{% for image in SCADA_IMAGES %}.*?{% endfor %}',
-                    r'{% for image in TRENDS_IMAGES %}.*?{% endfor %}',
-                    r'{% for image in ALARM_IMAGES %}.*?{% endfor %}'
-                ]
                 
-                for pattern in jinja_patterns:
-                    text = re.sub(pattern, '', text, flags=re.DOTALL)
+                # Remove {% for %} ... {% endfor %} blocks
+                text = re.sub(r'{%\s*for\s+[^%]*%}.*?{%\s*endfor\s*%}', '', text, flags=re.DOTALL)
+                
+                # Remove remaining {{ }} placeholders
+                text = re.sub(r'{{\s*[^}]*\s*}}', '', text)
+                
+                # Remove {% %} blocks
+                text = re.sub(r'{%\s*[^%]*\s*%}', '', text)
+                
+                # Clean up extra whitespace
+                text = re.sub(r'\n\s*\n\s*\n', '\n\n', text)
                 
                 return text
             
             # Replace text in paragraphs (preserves all formatting)
+            paragraph_count = 0
             for paragraph in doc.paragraphs:
-                if paragraph.text:
-                    paragraph.text = clean_text(paragraph.text)
+                if paragraph.text and paragraph.text.strip():
+                    old_text = paragraph.text
+                    new_text = clean_text(paragraph.text)
+                    if old_text != new_text:
+                        current_app.logger.info(f"Para {paragraph_count}: '{old_text[:50]}...' -> '{new_text[:50]}...'")
+                        paragraph.text = new_text
+                    paragraph_count += 1
             
             # Replace text in tables (preserves table formatting)
+            table_count = 0
             for table in doc.tables:
-                for row in table.rows:
-                    for cell in row.cells:
-                        for paragraph in cell.paragraphs:
-                            if paragraph.text:
-                                paragraph.text = clean_text(paragraph.text)
+                for row_idx, row in enumerate(table.rows):
+                    for cell_idx, cell in enumerate(row.cells):
+                        for para_idx, paragraph in enumerate(cell.paragraphs):
+                            if paragraph.text and paragraph.text.strip():
+                                old_text = paragraph.text
+                                new_text = clean_text(paragraph.text)
+                                if old_text != new_text:
+                                    current_app.logger.info(f"Table {table_count} Row {row_idx} Cell {cell_idx}: '{old_text[:30]}...' -> '{new_text[:30]}...'")
+                                    paragraph.text = new_text
+                table_count += 1
             
             current_app.logger.info("Replaced template tags while preserving exact formatting")
 
