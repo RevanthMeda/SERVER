@@ -215,46 +215,86 @@ def download_report(submission_id):
             doc = Document(template_file)
             current_app.logger.info(f"Opened original SAT_Template.docx to preserve exact formatting: {template_file}")
             
-            # COMPREHENSIVE SCAN - Find ALL template tags that exist
-            current_app.logger.info("=== FINDING ALL TEMPLATE TAGS ===")
+            # BRUTE FORCE APPROACH - Replace tags everywhere without detection
+            current_app.logger.info("=== BRUTE FORCE REPLACEMENT MODE ===")
             
-            # Find ALL {{ }} tags in the document
-            all_tags = set()
+            def brute_force_replace_in_runs(paragraph, location_info=""):
+                """Aggressively replace template tags in paragraph runs"""
+                if not paragraph.runs:
+                    return False
+                
+                # Get full text from all runs
+                full_text = ''.join(run.text for run in paragraph.runs)
+                if not full_text.strip():
+                    return False
+                
+                # Log original text if it contains template-like content
+                if '{{' in full_text or 'DOCUMENT' in full_text:
+                    current_app.logger.info(f"PROCESSING {location_info}: '{full_text[:100]}...'")
+                
+                # Apply replacement data directly
+                new_text = full_text
+                replacements_made = 0
+                
+                for tag, value in replacement_data.items():
+                    if value:  # Only replace if we have a value
+                        tag_patterns = [
+                            f'{{{{ {tag} }}}}',
+                            f'{{{{{tag}}}}}', 
+                            f'{{{{  {tag}  }}}}',
+                            f'{{{{ {tag}}}}}',
+                            f'{{{{{tag} }}}}'
+                        ]
+                        
+                        for pattern in tag_patterns:
+                            if pattern in new_text:
+                                new_text = new_text.replace(pattern, str(value))
+                                replacements_made += 1
+                                current_app.logger.info(f"BRUTE FORCE REPLACED '{pattern}' with '{value}' in {location_info}")
+                
+                # Clean Jinja2 syntax
+                import re
+                new_text = re.sub(r'{%\s*for\s+[^%]*%}.*?{%\s*endfor\s*%}', '', new_text, flags=re.DOTALL)
+                new_text = re.sub(r'{%\s*endfor\s*%}', '', new_text)
+                new_text = re.sub(r'{%\s*for\s+[^%]*%}', '', new_text)
+                new_text = re.sub(r'{{\s*[^}]*\s*}}', '', new_text)
+                
+                # Apply changes if any replacements were made
+                if new_text != full_text or replacements_made > 0:
+                    # Clear all runs and set new text
+                    for run in paragraph.runs:
+                        run.clear()
+                    if new_text.strip():
+                        paragraph.add_run(new_text.strip())
+                    
+                    current_app.logger.info(f"UPDATED {location_info}: '{full_text[:50]}...' -> '{new_text[:50]}...'")
+                    return True
+                    
+                return False
             
-            # Check paragraphs
+            # Apply brute force replacement to EVERYTHING
+            current_app.logger.info("Processing paragraphs...")
             for i, paragraph in enumerate(doc.paragraphs):
-                if '{{' in paragraph.text and '}}' in paragraph.text:
-                    current_app.logger.info(f"TEMPLATE TAG IN PARAGRAPH {i}: '{paragraph.text}'")
-                    all_tags.add(paragraph.text.strip())
-                elif 'DOCUMENT' in paragraph.text:
-                    current_app.logger.info(f"'DOCUMENT' TEXT IN PARAGRAPH {i}: '{paragraph.text}'")
+                brute_force_replace_in_runs(paragraph, f"PARAGRAPH {i}")
             
-            # Check tables  
+            current_app.logger.info("Processing tables...")
             for table_idx, table in enumerate(doc.tables):
                 for row_idx, row in enumerate(table.rows):
                     for cell_idx, cell in enumerate(row.cells):
-                        if '{{' in cell.text and '}}' in cell.text:
-                            current_app.logger.info(f"TEMPLATE TAG IN TABLE {table_idx} ROW {row_idx} CELL {cell_idx}: '{cell.text}'")
-                            all_tags.add(cell.text.strip())
-                        elif 'DOCUMENT' in cell.text:
-                            current_app.logger.info(f"'DOCUMENT' TEXT IN TABLE {table_idx} ROW {row_idx} CELL {cell_idx}: '{cell.text}'")
+                        for para_idx, paragraph in enumerate(cell.paragraphs):
+                            brute_force_replace_in_runs(paragraph, f"TABLE {table_idx} ROW {row_idx} CELL {cell_idx}")
             
-            # Check headers and footers
+            current_app.logger.info("Processing headers and footers...")
             for section_idx, section in enumerate(doc.sections):
                 if hasattr(section, 'header'):
                     for para_idx, paragraph in enumerate(section.header.paragraphs):
-                        if '{{' in paragraph.text and '}}' in paragraph.text:
-                            current_app.logger.info(f"TEMPLATE TAG IN HEADER {section_idx} PARA {para_idx}: '{paragraph.text}'")
-                            all_tags.add(paragraph.text.strip())
-                            
+                        brute_force_replace_in_runs(paragraph, f"HEADER {section_idx} PARA {para_idx}")
+                        
                 if hasattr(section, 'footer'):
                     for para_idx, paragraph in enumerate(section.footer.paragraphs):
-                        if '{{' in paragraph.text and '}}' in paragraph.text:
-                            current_app.logger.info(f"TEMPLATE TAG IN FOOTER {section_idx} PARA {para_idx}: '{paragraph.text}'")
-                            all_tags.add(paragraph.text.strip())
+                        brute_force_replace_in_runs(paragraph, f"FOOTER {section_idx} PARA {para_idx}")
             
-            current_app.logger.info(f"ALL UNIQUE TAGS FOUND: {sorted(list(all_tags))}")
-            current_app.logger.info("=== END TAG SCAN ===")
+            current_app.logger.info("=== BRUTE FORCE REPLACEMENT COMPLETE ===")
             
             # AGGRESSIVE DEBUG: Print EVERYTHING + DOCUMENT_TITLE specific check
             current_app.logger.info("="*50)
@@ -410,81 +450,8 @@ def download_report(submission_id):
                 
                 return True
             
-            # Replace text in paragraphs (preserves all formatting) - ULTRA DEBUG
-            paragraph_count = 0
-            for paragraph in doc.paragraphs:
-                if paragraph.text and paragraph.text.strip():
-                    # ULTRA DEBUG for DOCUMENT_TITLE
-                    if 'DOCUMENT_TITLE' in paragraph.text:
-                        current_app.logger.info(f"PARA DOCUMENT_TITLE FOUND: '{paragraph.text}'")
-                        current_app.logger.info(f"Runs count: {len(paragraph.runs)}")
-                        for i, run in enumerate(paragraph.runs):
-                            current_app.logger.info(f"  Run {i}: '{run.text}'")
-                    
-                    # Try run-level replacement first
-                    if replace_in_runs(paragraph):
-                        current_app.logger.info(f"Para {paragraph_count}: RUNS PROCESSED")
-                    elif '{{' in paragraph.text:
-                        current_app.logger.info(f"Para {paragraph_count} UNCHANGED but has template tags: '{paragraph.text[:50]}...'")
-                    paragraph_count += 1
-            
-            # Replace text in tables (preserves table formatting) - ENHANCED FOR DOCUMENT_TITLE
-            table_count = 0
-            for table in doc.tables:
-                for row_idx, row in enumerate(table.rows):
-                    for cell_idx, cell in enumerate(row.cells):
-                        # Check cell text directly
-                        cell_text = cell.text
-                        if 'DOCUMENT_TITLE' in cell_text:
-                            current_app.logger.info(f"FOUND DOCUMENT_TITLE IN TABLE {table_count} ROW {row_idx} CELL {cell_idx}: '{cell_text}'")
-                        
-                        for para_idx, paragraph in enumerate(cell.paragraphs):
-                            if paragraph.text and paragraph.text.strip():
-                                # Special handling for DOCUMENT_TITLE
-                                if 'DOCUMENT_TITLE' in paragraph.text:
-                                    current_app.logger.info(f"DOCUMENT_TITLE PARAGRAPH: '{paragraph.text}'")
-                                    # Try direct replacement
-                                    old_text = paragraph.text
-                                    new_text = old_text.replace('{{ DOCUMENT_TITLE }}', replacement_data.get('DOCUMENT_TITLE', ''))
-                                    new_text = new_text.replace('{{DOCUMENT_TITLE}}', replacement_data.get('DOCUMENT_TITLE', ''))
-                                    new_text = new_text.replace('{{ DOCUMENT_TITLE}}', replacement_data.get('DOCUMENT_TITLE', ''))
-                                    new_text = new_text.replace('{{DOCUMENT_TITLE }}', replacement_data.get('DOCUMENT_TITLE', ''))
-                                    if new_text != old_text:
-                                        paragraph.text = new_text
-                                        current_app.logger.info(f"DIRECT DOCUMENT_TITLE REPLACEMENT: '{old_text}' -> '{new_text}'")
-                                        continue
-                                
-                                # Try run-level replacement for table cells too
-                                if replace_in_runs(paragraph):
-                                    current_app.logger.info(f"Table {table_count} Row {row_idx} Cell {cell_idx}: RUNS PROCESSED")
-                                elif '{{' in paragraph.text:
-                                    current_app.logger.info(f"Table {table_count} Row {row_idx} Cell {cell_idx} UNCHANGED: '{paragraph.text[:30]}...'")
-                table_count += 1
-            
-            # Process headers and footers (Word documents can have these)
-            header_footer_count = 0
-            for section in doc.sections:
-                # Process headers
-                if hasattr(section, 'header'):
-                    for paragraph in section.header.paragraphs:
-                        if paragraph.text and paragraph.text.strip():
-                            if replace_in_runs(paragraph):
-                                current_app.logger.info(f"Header {header_footer_count}: RUNS PROCESSED")
-                            elif '{{' in paragraph.text:
-                                current_app.logger.info(f"Header {header_footer_count} UNCHANGED: '{paragraph.text[:30]}...'")
-                
-                # Process footers
-                if hasattr(section, 'footer'):
-                    for paragraph in section.footer.paragraphs:
-                        if paragraph.text and paragraph.text.strip():
-                            if replace_in_runs(paragraph):
-                                current_app.logger.info(f"Footer {header_footer_count}: RUNS PROCESSED")
-                            elif '{{' in paragraph.text:
-                                current_app.logger.info(f"Footer {header_footer_count} UNCHANGED: '{paragraph.text[:30]}...'")
-                
-                header_footer_count += 1
-            
-            current_app.logger.info("Replaced template tags in document, tables, headers, and footers")
+            # BRUTE FORCE MODE COMPLETE - Skip the old processing since we did it above
+            current_app.logger.info("Skipping old processing - brute force replacement already completed")
 
             # Render template with field tags using FIXED approach
             try:
