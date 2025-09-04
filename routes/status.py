@@ -218,106 +218,8 @@ def download_report(submission_id):
             # BRUTE FORCE APPROACH - Replace tags everywhere without detection
             current_app.logger.info("=== BRUTE FORCE REPLACEMENT MODE ===")
             
-            def brute_force_replace_in_runs(paragraph, location_info="", replacement_dict=None):
-                """Aggressively replace template tags in paragraph runs"""
-                if not paragraph.runs or not replacement_dict:
-                    return False
-                
-                # Get full text from all runs
-                full_text = ''.join(run.text for run in paragraph.runs)
-                if not full_text.strip():
-                    return False
-                
-                # Log original text if it contains template-like content
-                if '{{' in full_text or 'DOCUMENT' in full_text:
-                    current_app.logger.info(f"PROCESSING {location_info}: '{full_text[:100]}...'")
-                
-                # Apply replacement data directly
-                new_text = full_text
-                replacements_made = 0
-                
-                for tag, value in replacement_dict.items():
-                    if value:  # Only replace if we have a value
-                        tag_patterns = [
-                            f'{{{{ {tag} }}}}',
-                            f'{{{{{tag}}}}}', 
-                            f'{{{{  {tag}  }}}}',
-                            f'{{{{ {tag}}}}}',
-                            f'{{{{{tag} }}}}'
-                        ]
-                        
-                        for pattern in tag_patterns:
-                            if pattern in new_text:
-                                new_text = new_text.replace(pattern, str(value))
-                                replacements_made += 1
-                                current_app.logger.info(f"BRUTE FORCE REPLACED '{pattern}' with '{value}' in {location_info}")
-                
-                # Clean Jinja2 syntax
-                import re
-                new_text = re.sub(r'{%\s*for\s+[^%]*%}.*?{%\s*endfor\s*%}', '', new_text, flags=re.DOTALL)
-                new_text = re.sub(r'{%\s*endfor\s*%}', '', new_text)
-                new_text = re.sub(r'{%\s*for\s+[^%]*%}', '', new_text)
-                new_text = re.sub(r'{{\s*[^}]*\s*}}', '', new_text)
-                
-                # Apply changes if any replacements were made
-                if new_text != full_text or replacements_made > 0:
-                    # Clear all runs and set new text
-                    for run in paragraph.runs:
-                        run.clear()
-                    if new_text.strip():
-                        paragraph.add_run(new_text.strip())
-                    
-                    current_app.logger.info(f"UPDATED {location_info}: '{full_text[:50]}...' -> '{new_text[:50]}...'")
-                    return True
-                    
-                return False
-            
-            # FIRST: Fix missing DOCUMENT_TITLE tag in template
-            current_app.logger.info("=== CHECKING FOR MISSING DOCUMENT_TITLE TAG ===")
-            
-            # Look for Document Title row and add missing tag if needed
-            for table_idx, table in enumerate(doc.tables):
-                for row_idx, row in enumerate(table.rows):
-                    if len(row.cells) >= 2:
-                        left_cell = row.cells[0].text.strip()
-                        right_cell = row.cells[1].text.strip()
-                        
-                        # If left cell says "Document Title" and right cell is empty, add the tag
-                        if 'Document Title' in left_cell and not right_cell:
-                            current_app.logger.info(f"FOUND EMPTY DOCUMENT TITLE CELL - Adding {{ DOCUMENT_TITLE }} tag")
-                            row.cells[1].text = '{{ DOCUMENT_TITLE }}'
-                            current_app.logger.info(f"ADDED MISSING TAG to TABLE {table_idx} ROW {row_idx}")
-            
-            # Apply brute force replacement to EVERYTHING
-            current_app.logger.info("Processing paragraphs...")
-            for i, paragraph in enumerate(doc.paragraphs):
-                brute_force_replace_in_runs(paragraph, f"PARAGRAPH {i}", replacement_data)
-            
-            current_app.logger.info("Processing tables...")
-            for table_idx, table in enumerate(doc.tables):
-                for row_idx, row in enumerate(table.rows):
-                    for cell_idx, cell in enumerate(row.cells):
-                        for para_idx, paragraph in enumerate(cell.paragraphs):
-                            brute_force_replace_in_runs(paragraph, f"TABLE {table_idx} ROW {row_idx} CELL {cell_idx}", replacement_data)
-            
-            current_app.logger.info("Processing headers and footers...")
-            for section_idx, section in enumerate(doc.sections):
-                if hasattr(section, 'header'):
-                    for para_idx, paragraph in enumerate(section.header.paragraphs):
-                        brute_force_replace_in_runs(paragraph, f"HEADER {section_idx} PARA {para_idx}", replacement_data)
-                        
-                if hasattr(section, 'footer'):
-                    for para_idx, paragraph in enumerate(section.footer.paragraphs):
-                        brute_force_replace_in_runs(paragraph, f"FOOTER {section_idx} PARA {para_idx}", replacement_data)
-            
-            current_app.logger.info("=== BRUTE FORCE REPLACEMENT COMPLETE ===")
-            
-            # AGGRESSIVE DEBUG: Print EVERYTHING + DOCUMENT_TITLE specific check
-            current_app.logger.info("="*50)
-            current_app.logger.info("FULL CONTEXT_DATA DUMP:")
-            for key, value in context_data.items():
-                current_app.logger.info(f"  '{key}': '{value}'")
-            current_app.logger.info("="*50)
+            # FIRST: Create replacement data BEFORE using it
+            current_app.logger.info("=== CREATING REPLACEMENT DATA ===")
             
             # ULTRA DEBUG - Check exact DOCUMENT_TITLE value
             doc_title_raw = context_data.get('DOCUMENT_TITLE')
@@ -386,6 +288,107 @@ def download_report(submission_id):
             current_app.logger.info(f"Final DOCUMENT_REFERENCE value: '{replacement_data['DOCUMENT_REFERENCE']}'")
             current_app.logger.info(f"Final REVISION value: '{replacement_data['REVISION']}'")
             current_app.logger.info(f"Final PROJECT_REFERENCE value: '{replacement_data['PROJECT_REFERENCE']}'")
+            
+            def brute_force_replace_in_runs(paragraph, location_info="", replacement_dict=None):
+                """Aggressively replace template tags in paragraph runs"""
+                if not paragraph.runs or not replacement_dict:
+                    return False
+                
+                # Get full text from all runs
+                full_text = ''.join(run.text for run in paragraph.runs)
+                if not full_text.strip():
+                    return False
+                
+                # Log original text if it contains template-like content
+                if '{{' in full_text or 'DOCUMENT' in full_text:
+                    current_app.logger.info(f"PROCESSING {location_info}: '{full_text[:100]}...'")
+                
+                # Apply replacement data directly
+                new_text = full_text
+                replacements_made = 0
+                
+                for tag, value in replacement_dict.items():
+                    if value:  # Only replace if we have a value
+                        tag_patterns = [
+                            f'{{{{ {tag} }}}}',
+                            f'{{{{{tag}}}}}', 
+                            f'{{{{  {tag}  }}}}',
+                            f'{{{{ {tag}}}}}',
+                            f'{{{{{tag} }}}}'
+                        ]
+                        
+                        for pattern in tag_patterns:
+                            if pattern in new_text:
+                                new_text = new_text.replace(pattern, str(value))
+                                replacements_made += 1
+                                current_app.logger.info(f"BRUTE FORCE REPLACED '{pattern}' with '{value}' in {location_info}")
+                
+                # Clean Jinja2 syntax
+                import re
+                new_text = re.sub(r'{%\s*for\s+[^%]*%}.*?{%\s*endfor\s*%}', '', new_text, flags=re.DOTALL)
+                new_text = re.sub(r'{%\s*endfor\s*%}', '', new_text)
+                new_text = re.sub(r'{%\s*for\s+[^%]*%}', '', new_text)
+                new_text = re.sub(r'{{\s*[^}]*\s*}}', '', new_text)
+                
+                # Apply changes if any replacements were made
+                if new_text != full_text or replacements_made > 0:
+                    # Clear all runs and set new text
+                    for run in paragraph.runs:
+                        run.clear()
+                    if new_text.strip():
+                        paragraph.add_run(new_text.strip())
+                    
+                    current_app.logger.info(f"UPDATED {location_info}: '{full_text[:50]}...' -> '{new_text[:50]}...'")
+                    return True
+                    
+                return False
+            
+            # STEP 2: Fix missing DOCUMENT_TITLE tag in template
+            current_app.logger.info("=== CHECKING FOR MISSING DOCUMENT_TITLE TAG ===")
+            
+            # Look for Document Title row and add missing tag if needed
+            for table_idx, table in enumerate(doc.tables):
+                for row_idx, row in enumerate(table.rows):
+                    if len(row.cells) >= 2:
+                        left_cell = row.cells[0].text.strip()
+                        right_cell = row.cells[1].text.strip()
+                        
+                        # If left cell says "Document Title" and right cell is empty, add the tag
+                        if 'Document Title' in left_cell and not right_cell:
+                            current_app.logger.info(f"FOUND EMPTY DOCUMENT TITLE CELL - Adding {{ DOCUMENT_TITLE }} tag")
+                            row.cells[1].text = '{{ DOCUMENT_TITLE }}'
+                            current_app.logger.info(f"ADDED MISSING TAG to TABLE {table_idx} ROW {row_idx}")
+            
+            # STEP 3: Apply brute force replacement to EVERYTHING
+            current_app.logger.info("Processing paragraphs...")
+            for i, paragraph in enumerate(doc.paragraphs):
+                brute_force_replace_in_runs(paragraph, f"PARAGRAPH {i}", replacement_data)
+            
+            current_app.logger.info("Processing tables...")
+            for table_idx, table in enumerate(doc.tables):
+                for row_idx, row in enumerate(table.rows):
+                    for cell_idx, cell in enumerate(row.cells):
+                        for para_idx, paragraph in enumerate(cell.paragraphs):
+                            brute_force_replace_in_runs(paragraph, f"TABLE {table_idx} ROW {row_idx} CELL {cell_idx}", replacement_data)
+            
+            current_app.logger.info("Processing headers and footers...")
+            for section_idx, section in enumerate(doc.sections):
+                if hasattr(section, 'header'):
+                    for para_idx, paragraph in enumerate(section.header.paragraphs):
+                        brute_force_replace_in_runs(paragraph, f"HEADER {section_idx} PARA {para_idx}", replacement_data)
+                        
+                if hasattr(section, 'footer'):
+                    for para_idx, paragraph in enumerate(section.footer.paragraphs):
+                        brute_force_replace_in_runs(paragraph, f"FOOTER {section_idx} PARA {para_idx}", replacement_data)
+            
+            current_app.logger.info("=== BRUTE FORCE REPLACEMENT COMPLETE ===")
+            
+            # AGGRESSIVE DEBUG: Print EVERYTHING + DOCUMENT_TITLE specific check
+            current_app.logger.info("="*50)
+            current_app.logger.info("FULL CONTEXT_DATA DUMP:")
+            for key, value in context_data.items():
+                current_app.logger.info(f"  '{key}': '{value}'")
+            current_app.logger.info("="*50)
             
             def clean_text(text):
                 """Clean template text by first removing Jinja2, then replacing tags"""
