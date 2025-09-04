@@ -21,7 +21,34 @@ def approve_submission(submission_id, stage):
     """Handle approval workflow for a submission"""
     try:
         submissions = load_submissions()
-        submission_data = submissions.get(submission_id)
+        
+        # Fix: Ensure submissions is a dictionary, not a list
+        if isinstance(submissions, list):
+            current_app.logger.error(f"Submissions loaded as list instead of dict: {type(submissions)}")
+            # Try to load from database instead
+            try:
+                from models import db, Report, SATReport
+                report = Report.query.get(submission_id)
+                if report:
+                    sat_report = SATReport.query.filter_by(report_id=submission_id).first()
+                    if sat_report and sat_report.data_json:
+                        import json as json_module
+                        submission_data = json_module.loads(sat_report.data_json)
+                        current_app.logger.info(f"Loaded submission data from database for {submission_id}")
+                    else:
+                        current_app.logger.error(f"No SAT report data found for {submission_id}")
+                        flash("Submission data not found", "error")
+                        return redirect(url_for('main.index'))
+                else:
+                    current_app.logger.error(f"No report found for {submission_id}")
+                    flash("Submission not found", "error")
+                    return redirect(url_for('main.index'))
+            except Exception as e:
+                current_app.logger.error(f"Error loading from database: {e}")
+                flash("Error loading submission data", "error")
+                return redirect(url_for('main.index'))
+        else:
+            submission_data = submissions.get(submission_id)
         
         if not submission_data:
             flash("Submission not found", "error")

@@ -1,0 +1,113 @@
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:40:40] "←[32mGET /dashboard/admin HTTP/1.1←[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:40:40] "←[32mGET /dashboard/ HTTP/1.1←[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:40:40] "GET /dashboard/engineer HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:40:40] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:40:40] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:11] "GET /reports/new HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:11] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:11] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:11] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:12] "GET /reports/new/sat/full HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:12] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:12] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:12] "GET /static/Cully_Watermark.jpg HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:12] "GET /static/js/form.js HTTP/1.1" 200 -
+[2025-09-04 10:41:13,169] INFO in app: Found 4 total users
+INFO:app:Found 4 total users
+[2025-09-04 10:41:13,395] INFO in app: Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:13] "←[33mGET /static/img/favicon.ico HTTP/1.1←[0m" 404 -
+INFO:app:Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:41:13] "GET /api/get-users-by-role HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:42:51] "GET /refresh_csrf HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'E:\\report generator\\SERVER\\routes\\approval.py', reloading
+INFO:werkzeug: * Restarting with stat
+🔧 Initializing SAT Report Generator...
+[2025-09-04 10:45:53,292] INFO in models: Database connection successful
+[2025-09-04 10:45:53,315] INFO in models: Database tables created successfully
+[2025-09-04 10:45:53,349] INFO in models: Default system settings initialized
+[2025-09-04 10:45:53,349] INFO in models: Database initialized successfully
+[2025-09-04 10:45:53,350] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+ℹ️  Running in HTTP mode - SSL certificates not found
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 273-260-108
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:08] "GET /refresh_csrf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:11] "GET /status/19890bcf-9093-4e33-9079-465e3888d2d8 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:11] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:11] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+[2025-09-04 10:46:19,009] ERROR in approval: Error in approve_submission: 'list' object has no attribute 'get'
+Traceback (most recent call last):
+  File "E:\report generator\SERVER\routes\approval.py", line 24, in approve_submission
+    submission_data = submissions.get(submission_id)
+                      ^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'get'
+ERROR:app:Error in approve_submission: 'list' object has no attribute 'get'
+Traceback (most recent call last):
+  File "E:\report generator\SERVER\routes\approval.py", line 24, in approve_submission
+    submission_data = submissions.get(submission_id)
+                      ^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'get'
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:19] "←[32mPOST /approve/19890bcf-9093-4e33-9079-465e3888d2d8/1 HTTP/1.1←[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:19] "←[32mGET / HTTP/1.1←[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:19] "←[32mGET /dashboard/ HTTP/1.1←[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:19] "GET /dashboard/automation_manager HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:19] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:19] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:20] "GET /refresh_csrf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:31] "←[32mGET /auth/logout HTTP/1.1←[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:31] "GET /auth/welcome HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:31] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:31] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:33] "GET /auth/register HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:33] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:33] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:46] "GET /auth/welcome HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:46] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:46] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:48] "GET /auth/login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:48] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:48] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:52] "←[32mPOST /auth/login HTTP/1.1←[0m" 302 -
+[2025-09-04 10:46:53,030] INFO in dashboard: Admin dashboard: Found 1 total reports
+INFO:app:Admin dashboard: Found 1 total reports
+[2025-09-04 10:46:53,043] INFO in dashboard: Admin dashboard: Processing 1 recent reports
+INFO:app:Admin dashboard: Processing 1 recent reports
+[2025-09-04 10:46:53,045] DEBUG in dashboard: Could not get SAT data for report 19890bcf-9093-4e33-9079-465e3888d2d8: name 'SATReport' is not defined
+DEBUG:app:Could not get SAT data for report 19890bcf-9093-4e33-9079-465e3888d2d8: name 'SATReport' is not defined
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:53] "GET /dashboard/admin HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:53] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:53] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:46:53] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:47:02] "GET /dashboard/user-management HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:47:02] "←[36mGET /static/css/form.css HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:47:02] "←[36mGET /static/cully.png HTTP/1.1←[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:47:02] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:47:32] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:48:02] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:48:32] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:49:02] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:49:33] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:50:03] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:50:33] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:51:13] "GET /refresh_csrf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:51:34] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:51:53] "GET /refresh_csrf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:52:03] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:52:33] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:53:34] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:53:41] "GET /refresh_csrf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:54:02] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:54:32] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:55:02] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:55:32] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:56:02] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:56:32] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:57:02] "GET /dashboard/db-status HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 10:57:32] "GET /dashboard/db-status HTTP/1.1" 200 -
