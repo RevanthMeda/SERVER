@@ -12,18 +12,16 @@ dashboard_bp = Blueprint('dashboard', __name__)
 def home():
     """Role-based dashboard home"""
     role = current_user.role
-    current_app.logger.error(f"🔍 Dashboard role check - User: {current_user.email}, Role: '{role}', Length: {len(role)}")
 
     if role == 'Admin':
         return redirect(url_for('dashboard.admin'))
     elif role == 'Engineer':
         return redirect(url_for('dashboard.engineer'))
-    elif role == 'TM':
-        return redirect(url_for('dashboard.tm'))
+    elif role == 'Automation Manager':
+        return redirect(url_for('dashboard.automation_manager'))
     elif role == 'PM':
         return redirect(url_for('dashboard.pm'))
     else:
-        current_app.logger.error(f"❌ UNRECOGNIZED ROLE: '{role}' for user {current_user.email}")
         flash('Invalid role. Contact your administrator.', 'error')
         return redirect(url_for('auth.logout'))
 
@@ -175,10 +173,10 @@ def engineer():
 
     return render_template('engineer_dashboard.html', stats=stats, unread_count=unread_count)
 
-@dashboard_bp.route('/tm')
-@role_required(['TM'])
-def tm():
-    """Technical Manager dashboard"""
+@dashboard_bp.route('/automation_manager')
+@role_required(['Automation Manager'])
+def automation_manager():
+    """Automation Manager dashboard"""
     from models import Report, Notification
     import json
 
@@ -189,13 +187,13 @@ def tm():
             read=False
         ).count()
     except Exception as e:
-        current_app.logger.warning(f"Could not get unread count for TM: {e}")
+        current_app.logger.warning(f"Could not get unread count for Automation Manager: {e}")
         unread_count = 0
 
-    # Get reports count for TM
+    # Get reports count for Automation Manager
     reports_count = Report.query.filter_by(status='pending_review').count()
 
-    # Get pending approvals assigned to current TM
+    # Get pending approvals assigned to current Automation Manager
     # Since approvals are stored as JSON in Report.approvals_json, we need to check those
     pending_approvals = 0
     try:
@@ -211,7 +209,7 @@ def tm():
                 except json.JSONDecodeError:
                     continue
     except Exception as e:
-        current_app.logger.warning(f"Could not count pending approvals for TM: {e}")
+        current_app.logger.warning(f"Could not count pending approvals for Automation Manager: {e}")
         pending_approvals = 0
 
     # Get approved reports count
@@ -224,14 +222,14 @@ def tm():
         current_app.logger.warning(f"Database connection test failed: {e}")
         db_status = False
 
-    return render_template('tm_dashboard.html',
+    return render_template('automation_manager_dashboard.html',
                          unread_count=unread_count,
                          reports_count=reports_count,
                          pending_approvals=pending_approvals,
                          approved_reports_count=approved_reports_count,
                          db_status=db_status)
 
-    # Get team reports count (reports under TM's review)
+    # Get team reports count (reports under Automation Manager's review)
     team_reports_count = Report.query.filter_by(status='pending_review').count()
 
     # Get recent pending reports for display
@@ -252,7 +250,7 @@ def tm():
             report.document_title = 'Untitled Report'
             report.project_reference = 'N/A'
 
-    return render_template('tm_dashboard.html',
+    return render_template('automation_manager_dashboard.html',
                          reports_count=reports_count,
                          pending_approvals=pending_approvals,
                          approved_reports=approved_reports_count,

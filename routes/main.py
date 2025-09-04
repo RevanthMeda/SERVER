@@ -22,7 +22,7 @@ def edit_submission(submission_id):
     if current_user.role == 'Admin':
         can_edit = True  # Admin can edit any report
     elif current_user.role == 'Engineer' and current_user.email == report.user_email:
-        # Engineers can edit their own reports until approved by TM
+        # Engineers can edit their own reports until approved by Automation Manager
         if report.approvals_json:
             try:
                 approvals = json.loads(report.approvals_json)
@@ -32,8 +32,8 @@ def edit_submission(submission_id):
                 can_edit = True  # If can't parse approvals, allow edit
         else:
             can_edit = True
-    elif current_user.role == 'TM':
-        # TM can edit reports until approved by PM
+    elif current_user.role == 'Automation Manager':
+        # Automation Manager can edit reports until approved by PM
         if report.approvals_json:
             try:
                 approvals = json.loads(report.approvals_json)

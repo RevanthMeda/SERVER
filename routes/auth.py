@@ -93,8 +93,8 @@ def login():
                         return redirect(url_for('dashboard.admin'))
                     elif user.role == 'Engineer':
                         return redirect(url_for('dashboard.engineer'))
-                    elif user.role == 'TM':
-                        return redirect(url_for('dashboard.tm'))
+                    elif user.role == 'Automation Manager':
+                        return redirect(url_for('dashboard.automation_manager'))
                     elif user.role == 'PM':
                         return redirect(url_for('dashboard.pm'))
                     else:

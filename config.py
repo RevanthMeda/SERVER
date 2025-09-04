@@ -97,7 +97,7 @@ class Config:
     DEFAULT_APPROVERS = [
         {
             "stage": 1,
-            "title": "Technical Manager",
+            "title": "Automation Manager",
             "approver_email": "tm@cullyautomation.com"
         },
         {

@@ -93,7 +93,7 @@ def create_app(config_name='default'):
             users_by_role = {
                 'Admin': [],
                 'Engineer': [],
-                'TM': [],
+                'Automation Manager': [],
                 'PM': []
             }
 
@@ -108,13 +108,13 @@ def create_app(config_name='default'):
                     users_by_role['Admin'].append(user_data)
                 elif user.role == 'Engineer':
                     users_by_role['Engineer'].append(user_data)
-                elif user.role in ['TM', 'Technical Manager', 'Tech Manager', 'Automation Manager']:
-                    users_by_role['TM'].append(user_data)
+                elif user.role in ['Automation Manager']:
+                    users_by_role['Automation Manager'].append(user_data)
                 elif user.role in ['PM', 'Project Manager', 'Project_Manager']:
                     users_by_role['PM'].append(user_data)
 
             app.logger.info(f"Found {len(users)} total users")
-            app.logger.info(f"Users by role: TM={len(users_by_role['TM'])}, PM={len(users_by_role['PM'])}, Admin={len(users_by_role['Admin'])}, Engineer={len(users_by_role['Engineer'])}")
+            app.logger.info(f"Users by role: Automation Manager={len(users_by_role['Automation Manager'])}, PM={len(users_by_role['PM'])}, Admin={len(users_by_role['Admin'])}, Engineer={len(users_by_role['Engineer'])}")
 
             return jsonify({'success': True, 'users': users_by_role})
         except Exception as e:

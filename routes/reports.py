@@ -18,14 +18,14 @@ def new():
 
 @reports_bp.route('/new/sat')
 @login_required
-@role_required(['Engineer', 'TM', 'Admin'])
+@role_required(['Engineer', 'Automation Manager', 'Admin'])
 def new_sat():
     """SAT report creation"""
     return redirect(url_for('reports.new_sat_full'))
 
 @reports_bp.route('/new/sat/full')
 @login_required
-@role_required(['Engineer', 'TM', 'Admin'])
+@role_required(['Engineer', 'Automation Manager', 'Admin'])
 def new_sat_full():
     """Full SAT report form"""
     try:

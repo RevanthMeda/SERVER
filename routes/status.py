@@ -64,11 +64,11 @@ def view_status(submission_id):
     if current_user.role == 'Admin':
         can_edit = True  # Admin can edit any report
     elif current_user.role == 'Engineer' and current_user.email == report.user_email:
-        # Engineers can edit their own reports until approved by TM
+        # Engineers can edit their own reports until approved by Automation Manager
         tm_approved = any(a.get("status") == "approved" and a.get("stage") == 1 for a in approvals)
         can_edit = not tm_approved
-    elif current_user.role == 'TM':
-        # TM can edit reports until approved by PM
+    elif current_user.role == 'Automation Manager':
+        # Automation Manager can edit reports until approved by PM
         pm_approved = any(a.get("status") == "approved" and a.get("stage") == 2 for a in approvals)
         can_edit = not pm_approved
 
