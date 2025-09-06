@@ -290,55 +290,37 @@ def download_report(submission_id):
             current_app.logger.info(f"Final PROJECT_REFERENCE value: '{replacement_data['PROJECT_REFERENCE']}'")
             
             def brute_force_replace_in_runs(paragraph, location_info="", replacement_dict=None):
-                """Aggressively replace template tags in paragraph runs"""
+                """Efficiently replace template tags in paragraph runs"""
                 if not paragraph.runs or not replacement_dict:
                     return False
                 
                 # Get full text from all runs
                 full_text = ''.join(run.text for run in paragraph.runs)
-                if not full_text.strip():
+                if not full_text.strip() or '{{' not in full_text:
                     return False
                 
-                # Log original text if it contains template-like content
-                if '{{' in full_text or 'DOCUMENT' in full_text:
-                    current_app.logger.info(f"PROCESSING {location_info}: '{full_text[:100]}...'")
-                
-                # Apply replacement data directly
+                # Apply replacement data directly - SIMPLIFIED
                 new_text = full_text
                 replacements_made = 0
                 
                 for tag, value in replacement_dict.items():
-                    if value:  # Only replace if we have a value
-                        tag_patterns = [
-                            f'{{{{ {tag} }}}}',
-                            f'{{{{{tag}}}}}', 
-                            f'{{{{  {tag}  }}}}',
-                            f'{{{{ {tag}}}}}',
-                            f'{{{{{tag} }}}}'
-                        ]
-                        
-                        for pattern in tag_patterns:
-                            if pattern in new_text:
-                                new_text = new_text.replace(pattern, str(value))
-                                replacements_made += 1
-                                current_app.logger.info(f"BRUTE FORCE REPLACED '{pattern}' with '{value}' in {location_info}")
+                    if value and f'{{ {tag} }}' in new_text:  # Simple pattern only
+                        new_text = new_text.replace(f'{{ {tag} }}', str(value))
+                        replacements_made += 1
+                        current_app.logger.info(f"REPLACED '{{ {tag} }}' with '{value}' in {location_info}")
                 
-                # Clean Jinja2 syntax
+                # Quick Jinja2 cleanup
                 import re
                 new_text = re.sub(r'{%\s*for\s+[^%]*%}.*?{%\s*endfor\s*%}', '', new_text, flags=re.DOTALL)
-                new_text = re.sub(r'{%\s*endfor\s*%}', '', new_text)
-                new_text = re.sub(r'{%\s*for\s+[^%]*%}', '', new_text)
+                new_text = re.sub(r'{%\s*endfor\s*%}|{%\s*for\s+[^%]*%}', '', new_text)
                 new_text = re.sub(r'{{\s*[^}]*\s*}}', '', new_text)
                 
-                # Apply changes if any replacements were made
-                if new_text != full_text or replacements_made > 0:
-                    # Clear all runs and set new text
+                # Apply changes efficiently
+                if replacements_made > 0 or new_text != full_text:
                     for run in paragraph.runs:
                         run.clear()
                     if new_text.strip():
                         paragraph.add_run(new_text.strip())
-                    
-                    current_app.logger.info(f"UPDATED {location_info}: '{full_text[:50]}...' -> '{new_text[:50]}...'")
                     return True
                     
                 return False
@@ -346,84 +328,57 @@ def download_report(submission_id):
             # STEP 2: Add missing invisible tags that aren't visible without Office
             current_app.logger.info("=== ADDING MISSING INVISIBLE TAGS ===")
             
-            # Look for Document Title row and add missing tag if needed
+            # Look for Document Title row and add missing tag if needed - OPTIMIZED
             for table_idx, table in enumerate(doc.tables):
                 for row_idx, row in enumerate(table.rows):
                     if len(row.cells) >= 2:
                         left_cell = row.cells[0].text.strip()
                         right_cell = row.cells[1].text.strip()
                         
-                        current_app.logger.info(f"CHECKING TABLE {table_idx} ROW {row_idx}: LEFT='{left_cell}' RIGHT='{right_cell}'")
-                        
-                        # If left cell says "Document Title" and right cell is empty, add the missing tag
+                        # Only process Document Title rows
                         if 'Document Title' in left_cell and not right_cell:
-                            current_app.logger.info(f"FOUND EMPTY DOCUMENT TITLE CELL - Adding {{ DOCUMENT_TITLE }} tag")
                             row.cells[1].text = '{{ DOCUMENT_TITLE }}'
                             current_app.logger.info(f"ADDED MISSING DOCUMENT_TITLE TAG to TABLE {table_idx} ROW {row_idx}")
-                        elif 'Document Title' in left_cell:
-                            current_app.logger.info(f"FOUND DOCUMENT TITLE ROW but right cell has content: '{right_cell}'")
+                            break  # Found it, no need to continue
             
-            # Add missing footer tags that are invisible without Office
+            # Add missing footer tags - OPTIMIZED
             current_app.logger.info("=== ADDING MISSING FOOTER TAGS ===")
-            for section_idx, section in enumerate(doc.sections):
-                if hasattr(section, 'footer'):
-                    footer = section.footer
-                    # Add footer table if it doesn't exist
-                    if len(footer.tables) == 0:
-                        current_app.logger.info(f"CREATING FOOTER TABLE in section {section_idx}")
-                        # Create a simple footer table for document info
-                        footer_table = footer.add_table(rows=1, cols=3)
-                        footer_table.cell(0, 0).text = '{{ DOCUMENT_REFERENCE }}'
-                        footer_table.cell(0, 1).text = 'Page'
-                        footer_table.cell(0, 2).text = '{{ REVISION }}'
-                        current_app.logger.info(f"ADDED FOOTER TABLE with DOCUMENT_REFERENCE and REVISION tags")
-                    else:
-                        # Check existing footer tables for missing tags
-                        for table_idx, table in enumerate(footer.tables):
-                            current_app.logger.info(f"CHECKING FOOTER TABLE {table_idx} in section {section_idx}")
-                            for row_idx, row in enumerate(table.rows):
-                                for cell_idx, cell in enumerate(row.cells):
-                                    cell_text = cell.text.strip()
-                                    current_app.logger.info(f"FOOTER TABLE {table_idx} ROW {row_idx} CELL {cell_idx}: '{cell_text}'")
-                                    
-                                    # Add missing footer tags if cells are empty
-                                    if not cell_text and cell_idx == 0:  # First cell - document reference
-                                        cell.text = '{{ DOCUMENT_REFERENCE }}'
-                                        current_app.logger.info(f"ADDED DOCUMENT_REFERENCE tag to footer")
-                                    elif not cell_text and cell_idx == 2:  # Last cell - revision
-                                        cell.text = '{{ REVISION }}'
-                                        current_app.logger.info(f"ADDED REVISION tag to footer")
+            for section in doc.sections:
+                if hasattr(section, 'footer') and len(section.footer.tables) == 0:
+                    footer_table = section.footer.add_table(rows=1, cols=3)
+                    footer_table.cell(0, 0).text = '{{ DOCUMENT_REFERENCE }}'
+                    footer_table.cell(0, 1).text = 'Page'
+                    footer_table.cell(0, 2).text = '{{ REVISION }}'
+                    current_app.logger.info(f"ADDED FOOTER TABLE with missing tags")
             
-            # STEP 3: Apply brute force replacement to EVERYTHING
-            current_app.logger.info("Processing paragraphs...")
-            for i, paragraph in enumerate(doc.paragraphs):
-                brute_force_replace_in_runs(paragraph, f"PARAGRAPH {i}", replacement_data)
+            # STEP 3: Apply optimized replacement to essential parts only
+            current_app.logger.info("Processing document efficiently...")
             
-            current_app.logger.info("Processing tables...")
-            for table_idx, table in enumerate(doc.tables):
-                for row_idx, row in enumerate(table.rows):
-                    for cell_idx, cell in enumerate(row.cells):
-                        for para_idx, paragraph in enumerate(cell.paragraphs):
-                            brute_force_replace_in_runs(paragraph, f"TABLE {table_idx} ROW {row_idx} CELL {cell_idx}", replacement_data)
+            # Process paragraphs quickly
+            for paragraph in doc.paragraphs:
+                brute_force_replace_in_runs(paragraph, "PARAGRAPH", replacement_data)
             
-            current_app.logger.info("Processing headers and footers...")
-            for section_idx, section in enumerate(doc.sections):
+            # Process tables efficiently
+            for table in doc.tables:
+                for row in table.rows:
+                    for cell in row.cells:
+                        for paragraph in cell.paragraphs:
+                            brute_force_replace_in_runs(paragraph, "TABLE", replacement_data)
+            
+            # Process headers and footers efficiently
+            for section in doc.sections:
                 if hasattr(section, 'header'):
-                    for para_idx, paragraph in enumerate(section.header.paragraphs):
-                        brute_force_replace_in_runs(paragraph, f"HEADER {section_idx} PARA {para_idx}", replacement_data)
+                    for paragraph in section.header.paragraphs:
+                        brute_force_replace_in_runs(paragraph, "HEADER", replacement_data)
                         
                 if hasattr(section, 'footer'):
-                    for para_idx, paragraph in enumerate(section.footer.paragraphs):
-                        brute_force_replace_in_runs(paragraph, f"FOOTER {section_idx} PARA {para_idx}", replacement_data)
+                    for paragraph in section.footer.paragraphs:
+                        brute_force_replace_in_runs(paragraph, "FOOTER", replacement_data)
             
             current_app.logger.info("=== BRUTE FORCE REPLACEMENT COMPLETE ===")
             
-            # AGGRESSIVE DEBUG: Print EVERYTHING + DOCUMENT_TITLE specific check
-            current_app.logger.info("="*50)
-            current_app.logger.info("FULL CONTEXT_DATA DUMP:")
-            for key, value in context_data.items():
-                current_app.logger.info(f"  '{key}': '{value}'")
-            current_app.logger.info("="*50)
+            # Essential data logging only
+            current_app.logger.info(f"Processing complete. Key fields: DOCUMENT_TITLE='{replacement_data.get('DOCUMENT_TITLE')}', DOCUMENT_REFERENCE='{replacement_data.get('DOCUMENT_REFERENCE')}', REVISION='{replacement_data.get('REVISION')}'")
             
             def clean_text(text):
                 """Clean template text by first removing Jinja2, then replacing tags"""
