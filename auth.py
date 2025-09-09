@@ -18,40 +18,54 @@ def init_auth(app):
     login_manager.login_message_category = 'info'
 
 def login_required(f):
-    """Require login and active status"""
+    """Require login and active status - enforce session validity"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
+            flash('Please log in to access this page.', 'info')
+            session.clear()  # Clear any stale session data
             return redirect(url_for('auth.login'))
         if not current_user.is_active:
             flash('Your account is not active. Contact your administrator.', 'error')
+            session.clear()  # Clear session for inactive users
             return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
     return decorated_function
 
 def admin_required(f):
-    """Require admin role"""
+    """Require admin role with strict session enforcement"""
     @wraps(f)
+    @login_required  # Enforce login_required first
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated or current_user.role != 'Admin':
             flash('Access denied. Admin privileges required.', 'error')
-            return redirect(url_for('dashboard.home'))
+            session.clear()
+            return redirect(url_for('auth.welcome'))
         return f(*args, **kwargs)
     return decorated_function
 
 def role_required(allowed_roles):
-    """Require specific roles"""
+    """Require specific roles with strict session enforcement"""
     def decorator(f):
         @wraps(f)
+        @login_required  # Enforce login_required first
         def decorated_function(*args, **kwargs):
+            # Double-check authentication (belt and suspenders approach)
             if not current_user.is_authenticated:
-                return redirect(url_for('auth.login'))
+                session.clear()
+                return redirect(url_for('auth.welcome'))
+            
+            # Check if user is active
             if not current_user.is_active:
                 flash('Your account is not active. Contact your administrator.', 'error')
-                return redirect(url_for('auth.login'))
+                session.clear()
+                return redirect(url_for('auth.welcome'))
+            
+            # Check role permissions
             if current_user.role not in allowed_roles:
                 flash(f'Access denied. Required roles: {", ".join(allowed_roles)}', 'error')
-                return redirect(url_for('dashboard.home'))
+                return redirect(url_for('auth.welcome'))
+            
             return f(*args, **kwargs)
         return decorated_function
     return decorator
