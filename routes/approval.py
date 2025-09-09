@@ -74,11 +74,38 @@ def approve_submission(submission_id, stage):
                 header, b64 = sig_data.split(",", 1)
                 data = base64.b64decode(b64)
                 fn = f"{submission_id}_{stage}.png"
-                path = os.path.join(current_app.config['SIGNATURES_FOLDER'], fn)
-                with open(path, "wb") as img:
-                    img.write(data)
-                # record just the filename so later we can load & embed it
-                current_stage["signature"] = fn
+                
+                # Ensure signatures folder exists
+                sig_folder = current_app.config.get('SIGNATURES_FOLDER', 'static/signatures')
+                if not os.path.exists(sig_folder):
+                    os.makedirs(sig_folder, exist_ok=True)
+                
+                path = os.path.join(sig_folder, fn)
+                
+                # Try to remove existing file if it exists (might be locked)
+                try:
+                    if os.path.exists(path):
+                        os.remove(path)
+                except Exception as e:
+                    current_app.logger.warning(f"Could not remove existing signature file: {e}")
+                
+                # Write the new signature file
+                try:
+                    with open(path, "wb") as img:
+                        img.write(data)
+                    # record just the filename so later we can load & embed it
+                    current_stage["signature"] = fn
+                except PermissionError as e:
+                    current_app.logger.error(f"Permission error saving signature: {e}")
+                    # Try alternative location in temp folder
+                    import tempfile
+                    temp_path = os.path.join(tempfile.gettempdir(), fn)
+                    with open(temp_path, "wb") as img:
+                        img.write(data)
+                    current_stage["signature"] = temp_path
+                except Exception as e:
+                    current_app.logger.error(f"Error saving signature: {e}")
+                    flash("Could not save signature, but approval will continue", "warning")
 
             # Capture approval comment and mark as approved
             current_stage["comment"] = request.form.get("approval_comment", "")

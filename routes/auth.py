@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app, session, make_response
 from flask_login import login_user, logout_user, current_user
 from models import db, User
 from auth import login_required
@@ -120,8 +120,19 @@ def logout():
     """User logout - fully clear session to prevent back button access"""
     logout_user()
     session.clear()  # Purge all session data completely
+    session.permanent = False  # Ensure session is not permanent
     flash('You have been logged out successfully.', 'success')
-    return redirect(url_for('auth.welcome'))
+    
+    # Create response with cache control headers to prevent back button access
+    response = make_response(redirect(url_for('auth.welcome')))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    
+    # Clear any session cookies
+    response.set_cookie('session', '', expires=0)
+    
+    return response
 
 @auth_bp.route('/pending')
 def pending_approval():
