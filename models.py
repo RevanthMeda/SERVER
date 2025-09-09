@@ -186,6 +186,26 @@ class ReportTemplate(db.Model):
     def __repr__(self):
         return f'<ReportTemplate {self.name} v{self.version}>'
 
+class UserAnalytics(db.Model):
+    """Track user performance metrics and KPIs"""
+    __tablename__ = 'user_analytics'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_email = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    reports_created = db.Column(db.Integer, default=0)
+    reports_approved = db.Column(db.Integer, default=0)
+    reports_rejected = db.Column(db.Integer, default=0)
+    avg_completion_time = db.Column(db.Float, default=0.0)  # in hours
+    approval_cycle_time = db.Column(db.Float, default=0.0)  # in hours
+    on_time_percentage = db.Column(db.Float, default=100.0)
+    
+    # JSON field for additional custom metrics
+    custom_metrics = db.Column(db.Text, nullable=True)
+    
+    def __repr__(self):
+        return f'<UserAnalytics {self.user_email} - {self.date}>'
+
 def init_db(app):
     """Initialize database with proper error handling"""
     try:
