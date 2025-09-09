@@ -190,6 +190,7 @@ def engineer():
 
 @dashboard_bp.route('/automation_manager')
 @role_required(['Automation Manager'])
+@no_cache
 def automation_manager():
     """Automation Manager dashboard"""
     from models import Report, Notification
@@ -276,6 +277,7 @@ def automation_manager():
 
 @dashboard_bp.route('/pm')
 @role_required(['PM'])
+@no_cache
 def pm():
     """Project Manager dashboard"""
     from models import Report, Notification
