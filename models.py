@@ -265,6 +265,60 @@ class Webhook(db.Model):
     def __repr__(self):
         return f'<Webhook {self.name} - {self.event_type}>'
 
+class SavedSearch(db.Model):
+    """Store saved search filters for quick access"""
+    __tablename__ = 'saved_searches'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    user_email = db.Column(db.String(120), nullable=False)
+    filters_json = db.Column(db.Text, nullable=False)  # JSON of search criteria
+    is_public = db.Column(db.Boolean, default=False)  # Share with team
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_used = db.Column(db.DateTime, nullable=True)
+    use_count = db.Column(db.Integer, default=0)
+    
+    def __repr__(self):
+        return f'<SavedSearch {self.name} by {self.user_email}>'
+
+class AuditLog(db.Model):
+    """Comprehensive audit logging for compliance"""
+    __tablename__ = 'audit_logs'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user_email = db.Column(db.String(120), nullable=False)
+    user_name = db.Column(db.String(100), nullable=False)
+    action = db.Column(db.String(50), nullable=False)  # login, logout, create, update, delete, approve, reject
+    entity_type = db.Column(db.String(50), nullable=False)  # report, user, template, etc.
+    entity_id = db.Column(db.String(100), nullable=True)
+    details = db.Column(db.Text, nullable=True)  # JSON for additional details
+    ip_address = db.Column(db.String(45), nullable=True)
+    user_agent = db.Column(db.String(200), nullable=True)
+    success = db.Column(db.Boolean, default=True)
+    
+    def __repr__(self):
+        return f'<AuditLog {self.action} by {self.user_email} at {self.timestamp}>'
+
+class ReportArchive(db.Model):
+    """Archive old reports based on retention policies"""
+    __tablename__ = 'report_archives'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    original_report_id = db.Column(db.String(36), nullable=False)
+    report_type = db.Column(db.String(20), nullable=False)
+    document_title = db.Column(db.String(200), nullable=False)
+    project_reference = db.Column(db.String(100), nullable=False)
+    client_name = db.Column(db.String(100), nullable=False)
+    archived_data = db.Column(db.Text, nullable=False)  # Compressed JSON
+    archived_by = db.Column(db.String(120), nullable=False)
+    archived_at = db.Column(db.DateTime, default=datetime.utcnow)
+    retention_until = db.Column(db.DateTime, nullable=False)
+    file_paths_json = db.Column(db.Text, nullable=True)  # Paths to archived files
+    
+    def __repr__(self):
+        return f'<ReportArchive {self.original_report_id} - {self.document_title}>'
+
 def init_db(app):
     """Initialize database with proper error handling"""
     try:

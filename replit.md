@@ -13,13 +13,14 @@ Preferred communication style: Simple, everyday language.
 - **UI Framework**: Custom CSS with Font Awesome icons and Google Fonts (Inter)
 - **JavaScript**: Vanilla JavaScript for form interactions, signature pad integration, and CSRF token management
 - **Responsive Design**: Mobile-first approach with adaptive layouts for different screen sizes
+- **Real-time Features**: Comment system with @mentions, live collaboration indicators
 
 ## Backend Architecture
 - **Web Framework**: Flask 2.2.3 with modular blueprint structure
 - **Authentication**: Flask-Login with password hashing using Werkzeug
-- **Security**: CSRF protection via Flask-WTF, role-based access control decorators
+- **Security**: CSRF protection via Flask-WTF, role-based access control decorators, 30-minute session timeout
 - **Database ORM**: SQLAlchemy for database operations and migrations
-- **Session Management**: Server-side sessions with configurable timeouts
+- **Session Management**: Server-side sessions with automatic timeout and complete clearing on logout
 
 ## Database Design
 - **User Management**: Users table with roles (Admin, Engineer, TM, PM), status tracking, and password hashing
@@ -41,13 +42,16 @@ Preferred communication style: Simple, everyday language.
 - **Engineer Role**: Create and edit reports until Technical Manager approval
 - **Technical Manager Role**: Review and approve engineer submissions
 - **Project Manager Role**: Final approval and client document preparation
-- **Admin Role**: Complete system oversight, user management, and configuration
+- **Admin Role**: Complete system oversight, user management, configuration, bulk operations, and audit logs
+- **Automation Manager Role**: Manage templates, workflows, and system integrations
 
 ## Security Features
 - **Password Security**: Werkzeug password hashing with salt
 - **CSRF Protection**: Token-based protection for all form submissions
-- **Session Security**: HTTP-only cookies with configurable expiration
+- **Session Security**: HTTP-only cookies with 30-minute timeout, complete session clearing on logout
 - **Input Validation**: Server-side validation for all user inputs
+- **Audit Logging**: Comprehensive tracking of all user actions for compliance
+- **Role-Based Access**: Granular permissions for different user roles
 
 # Production Deployment Configuration
 

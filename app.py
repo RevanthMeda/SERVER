@@ -199,6 +199,9 @@ def create_app(config_name='default'):
         from routes.compare import compare_bp
         from routes.webhooks import webhooks_bp
         from routes.collaboration import collaboration_bp
+        from routes.search import search_bp
+        from routes.bulk import bulk_bp
+        from routes.audit import audit_bp
 
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
@@ -212,6 +215,9 @@ def create_app(config_name='default'):
         app.register_blueprint(compare_bp, url_prefix='/compare')
         app.register_blueprint(webhooks_bp, url_prefix='/webhooks')
         app.register_blueprint(collaboration_bp, url_prefix='/collaboration')
+        app.register_blueprint(search_bp, url_prefix='/search')
+        app.register_blueprint(bulk_bp, url_prefix='/bulk')
+        app.register_blueprint(audit_bp, url_prefix='/audit')
 
     register_blueprints()
 
