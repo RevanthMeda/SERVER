@@ -122,6 +122,11 @@ class FDSReport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     report_id = db.Column(db.String(36), db.ForeignKey('reports.id'), nullable=False, unique=True)
     data_json = db.Column(db.Text, nullable=False)
+    
+    # FDS specific fields
+    functional_requirements = db.Column(db.Text, nullable=True)
+    process_description = db.Column(db.Text, nullable=True)
+    control_philosophy = db.Column(db.Text, nullable=True)
 
 class HDSReport(db.Model):
     __tablename__ = 'hds_reports'
@@ -129,6 +134,11 @@ class HDSReport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     report_id = db.Column(db.String(36), db.ForeignKey('reports.id'), nullable=False, unique=True)
     data_json = db.Column(db.Text, nullable=False)
+    
+    # HDS specific fields
+    system_description = db.Column(db.Text, nullable=True)
+    hardware_components = db.Column(db.Text, nullable=True)  # JSON array
+    network_architecture = db.Column(db.Text, nullable=True)
 
 class SiteSurveyReport(db.Model):
     __tablename__ = 'site_survey_reports'
@@ -150,6 +160,31 @@ class FATReport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     report_id = db.Column(db.String(36), db.ForeignKey('reports.id'), nullable=False, unique=True)
     data_json = db.Column(db.Text, nullable=False)
+    
+    # FAT specific fields
+    test_location = db.Column(db.String(200), nullable=True)
+    test_equipment = db.Column(db.Text, nullable=True)  # JSON array
+    acceptance_criteria = db.Column(db.Text, nullable=True)
+
+class ReportTemplate(db.Model):
+    """Store and manage report templates with versioning"""
+    __tablename__ = 'report_templates'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    type = db.Column(db.String(20), nullable=False)  # SAT, FDS, HDS, FAT, etc.
+    version = db.Column(db.String(10), nullable=False, default='1.0')
+    description = db.Column(db.Text, nullable=True)
+    template_file = db.Column(db.String(200), nullable=True)  # Path to docx template
+    fields_json = db.Column(db.Text, nullable=True)  # JSON array of required fields
+    created_by = db.Column(db.String(120), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    is_active = db.Column(db.Boolean, default=True)
+    usage_count = db.Column(db.Integer, default=0)
+    
+    def __repr__(self):
+        return f'<ReportTemplate {self.name} v{self.version}>'
 
 def init_db(app):
     """Initialize database with proper error handling"""

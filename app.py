@@ -195,6 +195,7 @@ def create_app(config_name='default'):
         from routes.main import main_bp
         from routes.approval import approval_bp
         from routes.status import status_bp
+        from routes.templates import templates_bp
 
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
@@ -204,6 +205,7 @@ def create_app(config_name='default'):
         app.register_blueprint(main_bp)
         app.register_blueprint(approval_bp, url_prefix='/approve')
         app.register_blueprint(status_bp, url_prefix='/status')
+        app.register_blueprint(templates_bp, url_prefix='/templates')
 
     register_blueprints()
 
