@@ -1,9 +1,21 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app, make_response
 from flask_login import login_required, current_user
 from auth import admin_required, role_required
 from models import db, User, Report, Notification, SystemSettings, SATReport, test_db_connection
 from utils import get_unread_count
 import json
+from functools import wraps
+
+def no_cache(f):
+    """Decorator to prevent caching of routes"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        response = make_response(f(*args, **kwargs))
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
+    return decorated_function
 
 dashboard_bp = Blueprint('dashboard', __name__)
 
@@ -27,6 +39,7 @@ def home():
 
 @dashboard_bp.route('/admin')
 @admin_required
+@no_cache
 def admin():
     """Admin dashboard"""
     from models import Report, Notification
@@ -127,6 +140,7 @@ def admin():
 
 @dashboard_bp.route('/engineer')
 @role_required(['Engineer'])
+@no_cache
 def engineer():
     """Engineer dashboard"""
     from models import Report, Notification
