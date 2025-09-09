@@ -21,8 +21,14 @@ dashboard_bp = Blueprint('dashboard', __name__)
 
 @dashboard_bp.route('/')
 @login_required
+@no_cache
 def home():
     """Role-based dashboard home"""
+    # Double-check authentication at route level
+    if not current_user.is_authenticated:
+        session.clear()
+        return redirect(url_for('auth.welcome'))
+    
     role = current_user.role
 
     if role == 'Admin':

@@ -60,6 +60,14 @@ def create_app(config_name='default'):
         # Make session permanent for timeout management
         session.permanent = True
         
+        # Check if user is trying to access protected pages without valid session
+        if request.endpoint and request.endpoint not in ['auth.login', 'auth.register', 'auth.welcome', 'static', 'index', 'refresh_csrf', 'health']:
+            if not current_user.is_authenticated:
+                # Clear any stale session data
+                session.clear()
+                session.permanent = False
+                # Don't process further, will be redirected by login_required
+        
         token = generate_csrf()
         g.csrf_token = token
         
@@ -80,10 +88,14 @@ def create_app(config_name='default'):
                 httponly=False, samesite='Lax', secure=app.config.get('USE_HTTPS', False)
             )
         
-        # Prevent caching of protected pages - prevents back button access after logout
-        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, private'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '0'
+        # Aggressive cache prevention for ALL HTML pages to prevent back button access
+        if 'text/html' in response.content_type:
+            response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+            response.headers['Pragma'] = 'no-cache'
+            response.headers['Expires'] = '-1'
+            # Additional headers to prevent caching
+            response.headers['Vary'] = 'Cookie'
+            response.headers['X-Cache'] = 'no-cache'
         
         # Enforce HTTPS security headers
         if app.config.get('USE_HTTPS', False):
