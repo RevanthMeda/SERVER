@@ -196,6 +196,9 @@ def create_app(config_name='default'):
         from routes.approval import approval_bp
         from routes.status import status_bp
         from routes.templates import templates_bp
+        from routes.compare import compare_bp
+        from routes.webhooks import webhooks_bp
+        from routes.collaboration import collaboration_bp
 
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
@@ -206,6 +209,9 @@ def create_app(config_name='default'):
         app.register_blueprint(approval_bp, url_prefix='/approve')
         app.register_blueprint(status_bp, url_prefix='/status')
         app.register_blueprint(templates_bp, url_prefix='/templates')
+        app.register_blueprint(compare_bp, url_prefix='/compare')
+        app.register_blueprint(webhooks_bp, url_prefix='/webhooks')
+        app.register_blueprint(collaboration_bp, url_prefix='/collaboration')
 
     register_blueprints()
 

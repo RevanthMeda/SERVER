@@ -206,6 +206,65 @@ class UserAnalytics(db.Model):
     def __repr__(self):
         return f'<UserAnalytics {self.user_email} - {self.date}>'
 
+class ReportVersion(db.Model):
+    """Track document versions and changes"""
+    __tablename__ = 'report_versions'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    report_id = db.Column(db.String(36), db.ForeignKey('reports.id'), nullable=False)
+    version_number = db.Column(db.String(10), nullable=False)  # R0, R1, R2, etc.
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_by = db.Column(db.String(120), nullable=False)
+    change_summary = db.Column(db.Text, nullable=True)
+    data_snapshot = db.Column(db.Text, nullable=False)  # JSON snapshot of report data
+    file_path = db.Column(db.String(200), nullable=True)  # Path to generated document
+    is_current = db.Column(db.Boolean, default=False)
+    
+    def __repr__(self):
+        return f'<ReportVersion {self.report_id} - {self.version_number}>'
+
+class ReportComment(db.Model):
+    """Comments and collaboration on reports"""
+    __tablename__ = 'report_comments'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    report_id = db.Column(db.String(36), db.ForeignKey('reports.id'), nullable=False)
+    user_email = db.Column(db.String(120), nullable=False)
+    user_name = db.Column(db.String(100), nullable=False)
+    comment_text = db.Column(db.Text, nullable=False)
+    field_reference = db.Column(db.String(100), nullable=True)  # Which field/section comment refers to
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    is_resolved = db.Column(db.Boolean, default=False)
+    resolved_by = db.Column(db.String(120), nullable=True)
+    resolved_at = db.Column(db.DateTime, nullable=True)
+    parent_comment_id = db.Column(db.Integer, db.ForeignKey('report_comments.id'), nullable=True)
+    mentions_json = db.Column(db.Text, nullable=True)  # JSON array of mentioned users
+    
+    # Self-referential relationship for comment threads
+    replies = db.relationship('ReportComment', backref=db.backref('parent', remote_side=[id]))
+    
+    def __repr__(self):
+        return f'<ReportComment {self.id} on {self.report_id}>'
+
+class Webhook(db.Model):
+    """Store webhook configurations for workflow automation"""
+    __tablename__ = 'webhooks'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    url = db.Column(db.String(500), nullable=False)
+    event_type = db.Column(db.String(50), nullable=False)  # submission, approval, rejection, completion
+    is_active = db.Column(db.Boolean, default=True)
+    headers_json = db.Column(db.Text, nullable=True)  # JSON for custom headers
+    created_by = db.Column(db.String(120), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_triggered = db.Column(db.DateTime, nullable=True)
+    trigger_count = db.Column(db.Integer, default=0)
+    
+    def __repr__(self):
+        return f'<Webhook {self.name} - {self.event_type}>'
+
 def init_db(app):
     """Initialize database with proper error handling"""
     try:
