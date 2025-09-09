@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app, session
 from flask_login import login_user, logout_user, current_user
 from models import db, User
 from auth import login_required
@@ -117,8 +117,9 @@ def login():
 @auth_bp.route('/logout')
 @login_required
 def logout():
-    """User logout"""
+    """User logout - fully clear session to prevent back button access"""
     logout_user()
+    session.clear()  # Purge all session data completely
     flash('You have been logged out successfully.', 'success')
     return redirect(url_for('auth.welcome'))
 
