@@ -202,6 +202,8 @@ def create_app(config_name='default'):
         from routes.search import search_bp
         from routes.bulk import bulk_bp
         from routes.audit import audit_bp
+        from routes.api import api_bp
+        from routes.analytics import analytics_bp
 
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
@@ -218,6 +220,8 @@ def create_app(config_name='default'):
         app.register_blueprint(search_bp, url_prefix='/search')
         app.register_blueprint(bulk_bp, url_prefix='/bulk')
         app.register_blueprint(audit_bp, url_prefix='/audit')
+        app.register_blueprint(api_bp, url_prefix='/api')
+        app.register_blueprint(analytics_bp, url_prefix='/analytics')
 
     register_blueprints()
 
