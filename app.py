@@ -57,16 +57,43 @@ def create_app(config_name='default'):
     # Add CSRF token to g for access in templates and manage session
     @app.before_request
     def add_csrf_token():
-        # Make session permanent for timeout management
-        session.permanent = True
+        # Force session validation on EVERY request
+        from flask import abort
+        import time
         
-        # Check if user is trying to access protected pages without valid session
-        if request.endpoint and request.endpoint not in ['auth.login', 'auth.register', 'auth.welcome', 'static', 'index', 'refresh_csrf', 'health']:
+        # Add timestamp to prevent caching
+        g.request_time = time.time()
+        
+        # List of public endpoints that don't require authentication
+        public_endpoints = ['auth.login', 'auth.register', 'auth.welcome', 'auth.logout', 
+                          'auth.forgot_password', 'auth.reset_password', 'static', 
+                          'index', 'refresh_csrf', 'health', 'check_auth']
+        
+        # Check if this is a protected endpoint
+        if request.endpoint and request.endpoint not in public_endpoints:
+            # This is a protected endpoint - verify authentication
             if not current_user.is_authenticated:
-                # Clear any stale session data
+                # User is not authenticated - clear session and abort
                 session.clear()
                 session.permanent = False
-                # Don't process further, will be redirected by login_required
+                
+                # Return 401 for AJAX requests
+                if request.is_json or 'application/json' in request.headers.get('Accept', ''):
+                    abort(401)
+                
+                # Redirect to welcome for regular requests
+                return redirect(url_for('auth.welcome'))
+            
+            # Additional check: verify session validity
+            if 'user_id' not in session:
+                # Session is invalid - force logout
+                from flask_login import logout_user
+                logout_user()
+                session.clear()
+                return redirect(url_for('auth.welcome'))
+        
+        # Make session permanent for timeout management
+        session.permanent = True
         
         token = generate_csrf()
         g.csrf_token = token
@@ -82,20 +109,24 @@ def create_app(config_name='default'):
     # Inject CSRF token into all responses and add security headers
     @app.after_request
     def set_csrf_cookie(response):
+        import time
+        
         if response.mimetype == 'text/html' and hasattr(g, 'csrf_token'):
             response.set_cookie(
                 'csrf_token', g.csrf_token,
                 httponly=False, samesite='Lax', secure=app.config.get('USE_HTTPS', False)
             )
         
-        # Aggressive cache prevention for ALL HTML pages to prevent back button access
-        if 'text/html' in response.content_type:
-            response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
-            response.headers['Pragma'] = 'no-cache'
-            response.headers['Expires'] = '-1'
-            # Additional headers to prevent caching
-            response.headers['Vary'] = 'Cookie'
-            response.headers['X-Cache'] = 'no-cache'
+        # EXTREME cache prevention for ALL pages
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0, s-maxage=0, proxy-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        response.headers['Last-Modified'] = time.strftime('%a, %d %b %Y %H:%M:%S GMT')
+        response.headers['Vary'] = '*'
+        response.headers['X-Cache'] = 'BYPASS'
+        
+        # Add unique ETag to force revalidation
+        response.headers['ETag'] = f'"{time.time()}"'
         
         # Enforce HTTPS security headers
         if app.config.get('USE_HTTPS', False):

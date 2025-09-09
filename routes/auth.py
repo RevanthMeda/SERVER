@@ -85,7 +85,10 @@ def login():
                     flash('Your account has been disabled. Please contact an administrator.', 'error')
                     return render_template('login.html')
                 elif user.status == 'Active':
-                    login_user(user, remember=True)
+                    login_user(user, remember=False)  # Don't remember user
+                    session['user_id'] = user.id  # Store user ID in session
+                    session['authenticated'] = True  # Mark as authenticated
+                    session.permanent = False  # Don't make session permanent
                     flash('Login successful!', 'success')
 
                     # Role-based dashboard redirect
@@ -118,19 +121,41 @@ def login():
 @login_required
 def logout():
     """User logout - fully clear session to prevent back button access"""
+    # Clear Flask-Login session
     logout_user()
-    session.clear()  # Purge all session data completely
-    session.permanent = False  # Ensure session is not permanent
+    
+    # Clear ALL session data
+    session.clear()
+    session.permanent = False
+    
+    # Invalidate session keys
+    if 'user_id' in session:
+        del session['user_id']
+    if 'authenticated' in session:
+        del session['authenticated']
+    
+    # Force new session
+    session.modified = True
+    
     flash('You have been logged out successfully.', 'success')
     
-    # Create response with cache control headers to prevent back button access
+    # Create response with aggressive cache control
     response = make_response(redirect(url_for('auth.welcome')))
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, private'
+    
+    # Aggressive cache prevention headers
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     
-    # Clear any session cookies
-    response.set_cookie('session', '', expires=0)
+    # Clear ALL cookies
+    response.set_cookie('session', '', expires=0, max_age=0, path='/')
+    response.set_cookie('sat_session', '', expires=0, max_age=0, path='/')
+    response.set_cookie('csrf_token', '', expires=0, max_age=0, path='/')
+    
+    # Delete session cookie with the same parameters it was set with
+    response.set_cookie(current_app.config.get('SESSION_COOKIE_NAME', 'session'), 
+                       '', expires=0, max_age=0, path='/',
+                       httponly=True, samesite='Lax')
     
     return response
 
