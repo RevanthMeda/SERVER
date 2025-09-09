@@ -1,0 +1,76 @@
+Enforce Proper Session Expiry and Prevent “Back Button” Access
+To ensure users are logged out automatically after inactivity and cannot access protected pages via the browser Back button after logging out, implement these four changes:
+
+1. Configure Session Timeout
+In your Flask config (e.g. config.py), set a short permanent session lifetime and require login freshness:
+
+python
+from datetime import timedelta
+
+class Config:
+    # ...
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)   # Auto-logout after 30 min inactivity
+    REMEMBER_COOKIE_DURATION = timedelta(minutes=30)     # “Remember me” expiry
+    SESSION_REFRESH_EACH_REQUEST = True                  # Refresh expiry on every request
+In app.py, enable permanent sessions:
+
+python
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+2. Invalidate Session on Logout
+In your logout route, fully clear the session and call logout_user():
+
+python
+from flask_login import logout_user
+from flask import session
+
+@auth_bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    session.clear()                # Purge all session data
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('auth.welcome'))
+3. Prevent Caching of Protected Pages
+Add headers to disable browser caching on all authenticated responses so the Back button can’t reload sensitive pages:
+
+python
+@app.after_request
+def add_security_headers(response):
+    # Existing security headers...
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, private'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+4. Enforce Login on Every Protected View
+Ensure every blueprint or route requiring authentication uses @login_required and checks for active session:
+
+python
+from flask_login import current_user
+
+def role_required(role):
+    def decorator(f):
+        @wraps(f)
+        @login_required
+        def wrapped(*args, **kwargs):
+            if not current_user.is_active or current_user.role != role:
+                return redirect(url_for('auth.welcome'))
+            return f(*args, **kwargs)
+        return wrapped
+    return decorator
+Apply to your dashboards:
+
+python
+@dashboard_bp.route('/home')
+@role_required('Engineer')
+def home():
+    # ...
+Result
+Idle Timeout will auto-logout users after 30 minutes.
+
+Logout completely clears session data.
+
+No-Cache Headers prevent access via Back button after logout.
+
+Strict Login Enforcement ensures only authenticated, active users reach protected pages.

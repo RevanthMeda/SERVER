@@ -131,8 +131,11 @@ class Config:
     SESSION_COOKIE_HTTPONLY = True  # Standard security
     SESSION_COOKIE_SAMESITE = 'Lax'  # Allow cross-site cookies for external domain access
     SESSION_COOKIE_DOMAIN = None  # Let Flask handle domain automatically
-    # Remove filesystem sessions - use standard Flask sessions
-    PERMANENT_SESSION_LIFETIME = int(os.getenv('PERMANENT_SESSION_LIFETIME', '86400'))  # 24 hours to match CSRF
+    
+    # Session Management - Auto-logout after 30 minutes of inactivity
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)  # Auto-logout after 30 min inactivity
+    REMEMBER_COOKIE_DURATION = timedelta(minutes=30)  # "Remember me" expiry
+    SESSION_REFRESH_EACH_REQUEST = True  # Refresh expiry on every request
 
     @staticmethod
     def init_app(app):
@@ -159,7 +162,8 @@ class ProductionConfig(Config):
     WTF_CSRF_ENABLED = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Strict'
-    PERMANENT_SESSION_LIFETIME = 7200  # 2 hours
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)  # Auto-logout after 30 min inactivity
+    REMEMBER_COOKIE_DURATION = timedelta(minutes=30)  # "Remember me" expiry
     
     # Production database (use PostgreSQL)
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or f'sqlite:///{os.path.join(Config.BASE_DIR, "instance", "sat_reports_prod.db")}'
