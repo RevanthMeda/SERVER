@@ -3,7 +3,7 @@ import sys
 import signal
 import logging
 import traceback
-from flask import Flask, g, request, render_template, jsonify, make_response, redirect, url_for
+from flask import Flask, g, request, render_template, jsonify, make_response, redirect, url_for, session
 from flask_wtf.csrf import CSRFProtect, generate_csrf, CSRFError
 from flask_login import current_user, login_required
 from config import Config, config
@@ -54,9 +54,12 @@ def create_app(config_name='default'):
     logging.basicConfig(level=logging.CRITICAL)
     logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
-    # Add CSRF token to g for access in templates
+    # Add CSRF token to g for access in templates and manage session
     @app.before_request
     def add_csrf_token():
+        # Make session permanent for timeout management
+        session.permanent = True
+        
         token = generate_csrf()
         g.csrf_token = token
         
@@ -68,7 +71,7 @@ def create_app(config_name='default'):
     
     # Performance optimization - remove slow session checks
 
-    # Inject CSRF token into all responses
+    # Inject CSRF token into all responses and add security headers
     @app.after_request
     def set_csrf_cookie(response):
         if response.mimetype == 'text/html' and hasattr(g, 'csrf_token'):
@@ -76,6 +79,12 @@ def create_app(config_name='default'):
                 'csrf_token', g.csrf_token,
                 httponly=False, samesite='Lax', secure=app.config.get('USE_HTTPS', False)
             )
+        
+        # Prevent caching of protected pages - prevents back button access after logout
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, private'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        
         # Enforce HTTPS security headers
         if app.config.get('USE_HTTPS', False):
             response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
