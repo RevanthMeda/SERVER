@@ -1,0 +1,84 @@
+Next High-Impact Features Roadmap
+Building on your solid SAT Report Generator foundation, here are the next major features to elevate the platform into a full-fledged enterprise solution:
+
+Real-Time Collaboration & Comments
+
+Inline commenting on reports with @mentions
+
+Live presence indicators and change tracking
+
+Comment resolution workflows
+
+Advanced AI-Assisted Form Filling
+
+Auto-populate test tables from PLC tag exports
+
+Natural language prompts to generate “Purpose” and “Scope” text
+
+Intelligent suggestions for test procedures based on past projects
+
+Multi-Report Support & Template Library
+
+Add FDS, HDS, Commissioning, and FAT report types
+
+Centralized template manager with versioning and audit trails
+
+Template preview and cloning for rapid project setup
+
+Role-Specific Analytics & KPIs
+
+Engineer productivity metrics (reports created, average completion time)
+
+Approval cycle time tracking for TM and PM roles
+
+Dashboard widgets for overdue reviews and bottleneck alerts
+
+Mobile App Enhancements
+
+Offline form editing with automatic sync when back online
+
+Photo, video, and geo-tagged site data capture
+
+Push notifications for pending approvals
+
+Integration with Automation Systems
+
+Direct import of I/O configurations from ABB Automation Builder
+
+Automated generation of test rows from PLC tag lists
+
+OPC UA data ingestion for live test result archiving
+
+Workflow Automation & Webhooks
+
+Custom triggers (e.g., “on submission,” “on approval”) to invoke external APIs
+
+Webhook endpoints for project management tools (Jira, Asana)
+
+Scheduled report exports via email or SFTP
+
+Document Comparison & Version Diff
+
+Side-by-side comparison of revisions with change highlights
+
+Approval history timeline showing who signed what and when
+
+PDF watermarking of superseded versions
+
+Single Sign-On (SSO) & Enterprise Security
+
+SAML or OAuth2 integration with corporate identity providers
+
+Role-based feature toggles and permission hierarchies
+
+Audit log dashboard for security and compliance reviews
+
+White-Label & Multi-Tenant Support
+
+Custom branding per client (logos, color schemes, templates)
+
+Data isolation and permissions per tenant
+
+Usage-based billing and subscription management
+
+Implement these features in phases—prioritize those that deliver the greatest ROI and unblock core user workflows first. This roadmap will transform your SAT Report Generator into a comprehensive, AI-powered documentation platform that stands out in the industrial automation market.
