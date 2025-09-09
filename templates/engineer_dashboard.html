@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Engineer Dashboard - Cully Report Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -882,5 +885,40 @@
             <p>Developed by <strong>Revanth Meda</strong> for <strong>Cully Automation</strong></p>
         </div>
     </div>
+    
+    <script>
+        // Force authentication check on page load
+        {% if not current_user.is_authenticated %}
+            window.location.replace('/welcome');
+        {% endif %}
+        
+        // Detect if page was accessed via back button after logout
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                // Page was restored from cache
+                fetch('/api/check-auth', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                }).then(response => {
+                    if (!response.ok) {
+                        // Not authenticated - redirect to welcome
+                        window.location.replace('/welcome');
+                    }
+                }).catch(() => {
+                    // Error checking auth - redirect to be safe
+                    window.location.replace('/welcome');
+                });
+            }
+        });
+        
+        // Disable page caching
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                names.forEach(name => {
+                    caches.delete(name);
+                });
+            });
+        }
+    </script>
 </body>
 </html>

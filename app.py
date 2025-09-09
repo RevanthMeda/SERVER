@@ -115,6 +115,15 @@ def create_app(config_name='default'):
         """Refresh CSRF token via AJAX"""
         return jsonify({'csrf_token': generate_csrf()})
 
+    # API endpoint to check authentication status
+    @app.route('/api/check-auth')
+    def check_auth():
+        """Check if user is authenticated"""
+        if current_user.is_authenticated:
+            return jsonify({'authenticated': True}), 200
+        else:
+            return jsonify({'authenticated': False}), 401
+    
     # API endpoint for getting users by role
     @app.route('/api/get-users-by-role')
     @login_required

@@ -43,6 +43,41 @@
         {% block content %}{% endblock %}
     </main>
 
+    <script>
+        // Session validation - check if user is authenticated
+        {% if current_user.is_authenticated %}
+            // User is logged in - normal operation
+        {% else %}
+            // User is not authenticated - force redirect if on protected page
+            if (window.location.pathname !== '/' && 
+                window.location.pathname !== '/login' && 
+                window.location.pathname !== '/register' && 
+                window.location.pathname !== '/welcome' &&
+                window.location.pathname !== '/forgot-password') {
+                // Force reload to server to check authentication
+                window.location.replace('/welcome');
+            }
+        {% endif %}
+        
+        // Prevent back button after logout
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                // Page was loaded from cache (back button)
+                {% if not current_user.is_authenticated %}
+                    // Force redirect to welcome if not authenticated
+                    window.location.replace('/welcome');
+                {% else %}
+                    // Force server check for authentication
+                    window.location.reload(true);
+                {% endif %}
+            }
+        });
+        
+        // Clear any cached form data on load
+        if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
