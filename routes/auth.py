@@ -3,6 +3,8 @@ from flask_login import login_user, logout_user, current_user
 from models import db, User
 from auth import login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from session_manager import session_manager
+import time
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -85,11 +87,20 @@ def login():
                     flash('Your account has been disabled. Please contact an administrator.', 'error')
                     return render_template('login.html')
                 elif user.status == 'Active':
-                    login_user(user, remember=False)  # Don't remember user
+                    # Create a new tracked session
+                    session_id = session_manager.create_session(user.id)
+                    
+                    # Login the user with Flask-Login
+                    login_user(user, remember=False, fresh=True)  # Don't remember user, mark as fresh
+                    
+                    # Additional session tracking
                     session['user_id'] = user.id  # Store user ID in session
                     session['authenticated'] = True  # Mark as authenticated
+                    session['login_time'] = time.time()  # Track login time
                     session.permanent = False  # Don't make session permanent
+                    
                     flash('Login successful!', 'success')
+                    current_app.logger.info(f"User {user.email} logged in with session {session_id}")
 
                     # Role-based dashboard redirect
                     if user.role == 'Admin':
@@ -121,41 +132,55 @@ def login():
 @login_required
 def logout():
     """User logout - fully clear session to prevent back button access"""
+    # Get session ID before clearing
+    session_id = session.get('session_id')
+    user_email = current_user.email if current_user.is_authenticated else 'unknown'
+    
+    # Revoke the session on server side FIRST
+    session_manager.revoke_session(session_id)
+    current_app.logger.info(f"Session {session_id} revoked for user {user_email}")
+    
     # Clear Flask-Login session
     logout_user()
     
-    # Clear ALL session data
+    # Clear ALL session data multiple times to ensure it's gone
     session.clear()
     session.permanent = False
     
-    # Invalidate session keys
-    if 'user_id' in session:
-        del session['user_id']
-    if 'authenticated' in session:
-        del session['authenticated']
+    # Double-clear critical keys
+    for key in ['user_id', 'authenticated', 'session_id', 'login_time', 'last_activity', 'created_at']:
+        session.pop(key, None)
     
-    # Force new session
+    # Force new session generation
     session.modified = True
+    session.new = True
     
     flash('You have been logged out successfully.', 'success')
     
     # Create response with aggressive cache control
     response = make_response(redirect(url_for('auth.welcome')))
     
-    # Aggressive cache prevention headers
-    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    # Maximum aggressive cache prevention headers
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0, s-maxage=0, proxy-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
+    response.headers['Clear-Site-Data'] = '"cache", "cookies", "storage"'  # Clear everything
     
-    # Clear ALL cookies
-    response.set_cookie('session', '', expires=0, max_age=0, path='/')
-    response.set_cookie('sat_session', '', expires=0, max_age=0, path='/')
-    response.set_cookie('csrf_token', '', expires=0, max_age=0, path='/')
+    # Clear ALL possible cookies with various configurations
+    cookie_configs = [
+        {'name': 'session', 'domain': None},
+        {'name': 'sat_session', 'domain': None},
+        {'name': 'csrf_token', 'domain': None},
+        {'name': current_app.config.get('SESSION_COOKIE_NAME', 'session'), 'domain': None},
+        {'name': 'remember_token', 'domain': None},
+    ]
     
-    # Delete session cookie with the same parameters it was set with
-    response.set_cookie(current_app.config.get('SESSION_COOKIE_NAME', 'session'), 
-                       '', expires=0, max_age=0, path='/',
-                       httponly=True, samesite='Lax')
+    for config in cookie_configs:
+        # Clear with multiple approaches
+        response.set_cookie(config['name'], '', expires=0, max_age=0, path='/',
+                          httponly=True, samesite='Lax', secure=False)
+        response.set_cookie(config['name'], 'deleted', expires=0, max_age=0, path='/',
+                          httponly=True, samesite='Lax', secure=False)
     
     return response
 

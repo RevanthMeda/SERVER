@@ -33,3 +33,4 @@ greenlet
 pywin32>=307; sys_platform == 'win32'
 cryptography
 docx
+flask-session

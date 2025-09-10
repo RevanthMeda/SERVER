@@ -5,9 +5,11 @@ import logging
 import traceback
 from flask import Flask, g, request, render_template, jsonify, make_response, redirect, url_for, session
 from flask_wtf.csrf import CSRFProtect, generate_csrf, CSRFError
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required, logout_user
+from flask_session import Session
 from config import Config, config
 from middleware import init_security_middleware
+from session_manager import session_manager
 
 # Initialize CSRF protection globally
 csrf = CSRFProtect()
@@ -16,6 +18,7 @@ csrf = CSRFProtect()
 try:
     from models import db, User, init_db
     from auth import init_auth
+    from session_manager import session_manager
     # Lazy import blueprints to reduce startup time
 except ImportError as e:
     print(f"❌ Import error: {e}")
@@ -36,6 +39,20 @@ def create_app(config_name='default'):
     
     # Initialize extensions
     csrf.init_app(app)
+    
+    # Configure server-side sessions
+    app.config['SESSION_TYPE'] = 'filesystem'
+    app.config['SESSION_FILE_DIR'] = 'instance/flask_session'
+    app.config['SESSION_PERMANENT'] = False
+    app.config['SESSION_USE_SIGNER'] = True
+    app.config['SESSION_KEY_PREFIX'] = 'sat:'
+    app.config['SESSION_COOKIE_NAME'] = 'sat_session'
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    app.config['SESSION_COOKIE_SECURE'] = app.config.get('USE_HTTPS', False)
+    
+    # Initialize Flask-Session for server-side session storage
+    Session(app)
 
     # Initialize database and auth
     try:
@@ -71,7 +88,23 @@ def create_app(config_name='default'):
         
         # Check if this is a protected endpoint
         if request.endpoint and request.endpoint not in public_endpoints:
-            # This is a protected endpoint - verify authentication
+            # This is a protected endpoint - verify session is valid
+            if not session_manager.is_session_valid():
+                # Session is revoked or expired - force logout
+                from flask_login import logout_user
+                logout_user()
+                session.clear()
+                session.permanent = False
+                
+                # Return 401 for AJAX requests
+                if request.is_json or 'application/json' in request.headers.get('Accept', ''):
+                    return jsonify({'error': 'Session expired', 'authenticated': False}), 401
+                
+                # Redirect to welcome for regular requests
+                flash('Your session has expired. Please log in again.', 'info')
+                return redirect(url_for('auth.welcome'))
+            
+            # Verify authentication
             if not current_user.is_authenticated:
                 # User is not authenticated - clear session and abort
                 session.clear()
@@ -79,21 +112,30 @@ def create_app(config_name='default'):
                 
                 # Return 401 for AJAX requests
                 if request.is_json or 'application/json' in request.headers.get('Accept', ''):
-                    abort(401)
+                    return jsonify({'error': 'Not authenticated', 'authenticated': False}), 401
                 
                 # Redirect to welcome for regular requests
                 return redirect(url_for('auth.welcome'))
             
-            # Additional check: verify session validity
-            if 'user_id' not in session:
+            # Additional check: verify session validity with user_id
+            if 'user_id' not in session or session.get('user_id') != current_user.id:
                 # Session is invalid - force logout
                 from flask_login import logout_user
+                session_manager.revoke_session()
                 logout_user()
                 session.clear()
                 return redirect(url_for('auth.welcome'))
         
-        # Make session permanent for timeout management
-        session.permanent = True
+        # For public endpoints, still check if a logged-in user's session is valid
+        elif current_user.is_authenticated and not session_manager.is_session_valid():
+            # User appears logged in but session is invalid - force logout
+            from flask_login import logout_user
+            logout_user()
+            session.clear()
+            session.permanent = False
+        
+        # Make session non-permanent to avoid persistence
+        session.permanent = False
         
         token = generate_csrf()
         g.csrf_token = token
@@ -149,11 +191,16 @@ def create_app(config_name='default'):
     # API endpoint to check authentication status
     @app.route('/api/check-auth')
     def check_auth():
-        """Check if user is authenticated"""
+        """Check if user is authenticated and session is valid"""
+        # First check if session is valid
+        if not session_manager.is_session_valid():
+            return jsonify({'authenticated': False, 'reason': 'Session invalid or expired'}), 401
+        
+        # Then check Flask-Login authentication
         if current_user.is_authenticated:
-            return jsonify({'authenticated': True}), 200
+            return jsonify({'authenticated': True, 'user': current_user.email}), 200
         else:
-            return jsonify({'authenticated': False}), 401
+            return jsonify({'authenticated': False, 'reason': 'Not logged in'}), 401
     
     # API endpoint for getting users by role
     @app.route('/api/get-users-by-role')

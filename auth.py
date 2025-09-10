@@ -3,11 +3,36 @@ from functools import wraps
 from flask import redirect, url_for, flash, session, request
 from flask_login import LoginManager, current_user
 from models import User
+from session_manager import session_manager
 
 login_manager = LoginManager()
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Load user only if session is valid and not revoked"""
+    # Check if session is valid before loading user
+    if not session_manager.is_session_valid():
+        # Session is revoked or expired
+        session.clear()
+        return None
+    
+    # Check if we have a valid session_id
+    session_id = session.get('session_id')
+    if not session_id:
+        # No session ID means no valid session
+        return None
+    
+    # Double-check session is not revoked
+    if session_manager.is_session_revoked(session_id):
+        session.clear()
+        return None
+    
+    # Verify user_id matches session
+    stored_user_id = session.get('user_id')
+    if stored_user_id is None or stored_user_id != int(user_id):
+        session.clear()
+        return None
+    
     return User.query.get(int(user_id))
 
 def init_auth(app):
@@ -21,6 +46,12 @@ def login_required(f):
     """Require login and active status - enforce session validity"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        # First check if session is valid
+        if not session_manager.is_session_valid():
+            flash('Your session has expired. Please log in again.', 'info')
+            session.clear()
+            return redirect(url_for('auth.login'))
+        
         if not current_user.is_authenticated:
             flash('Please log in to access this page.', 'info')
             session.clear()  # Clear any stale session data
