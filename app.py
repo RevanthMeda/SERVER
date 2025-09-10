@@ -3,7 +3,7 @@ import sys
 import signal
 import logging
 import traceback
-from flask import Flask, g, request, render_template, jsonify, make_response, redirect, url_for, session
+from flask import Flask, g, request, render_template, jsonify, make_response, redirect, url_for, session, flash
 from flask_wtf.csrf import CSRFProtect, generate_csrf, CSRFError
 from flask_login import current_user, login_required, logout_user
 from flask_session import Session

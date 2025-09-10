@@ -3321,7 +3321,12 @@
         console.log('Module lookup response:', data);
 
         if (data.success && data.module) {
-          currentModuleSpec = data.module;
+          // Store module spec with company and model info
+          currentModuleSpec = {
+            ...data.module,
+            company: company,
+            model: model
+          };
           displayModuleSpecs(data.module);
 
           let message = `Found ${company} ${model} specifications`;
@@ -3376,9 +3381,9 @@
     function addModule() {
       const company = document.getElementById('module_company').value;
       const model = document.getElementById('module_model').value;
-      const rackNo = document.getElementById('module_rack').value;
-      const slotNo = document.getElementById('module_position').value;
-      const startSno = document.getElementById('module_starting_sno').value;
+      const rackNo = parseInt(document.getElementById('module_rack').value) || 0;
+      const slotNo = parseInt(document.getElementById('module_position').value) || 1;
+      const startSno = parseInt(document.getElementById('module_starting_sno').value) || 1;
 
       if (!company || !model) {
         showStatusMessage('Please select a company and enter a module model', 'warning');
@@ -3402,8 +3407,10 @@
 
       const moduleConfig = {
         ...moduleSpec,
+        company: company,
+        model: model,
         rack_no: rackNo,
-        slot_no: slotNo,
+        position: slotNo,  // API expects 'position' not 'slot_no'
         start_sno: startSno,
         id: Date.now()
       };

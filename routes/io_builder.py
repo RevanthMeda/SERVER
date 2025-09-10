@@ -228,8 +228,8 @@ def module_lookup():
         if not vendor or not model:
             return jsonify({'success': False, 'message': 'Vendor and model are required'}), 400
 
-        # Try to find in database first
-        module = IOModule.query.filter_by(vendor=vendor, model=model).first()
+        # Try to find in database first using ModuleSpec model
+        module = ModuleSpec.query.filter_by(company=vendor, model=model).first()
 
         if module:
             current_app.logger.info(f"Found module in database: {vendor} {model}")
@@ -241,25 +241,67 @@ def module_lookup():
                     'digital_outputs': module.digital_outputs,
                     'analog_inputs': module.analog_inputs,
                     'analog_outputs': module.analog_outputs,
-                    'total_channels': module.total_channels
+                    'voltage_range': module.voltage_range,
+                    'current_range': module.current_range
                 },
                 'source': 'database'
             })
 
-        # If not found in database, try to fetch from online
-        module_info = fetch_module_from_online(vendor, model)
+        # Try to find in comprehensive module database
+        module_db = get_comprehensive_module_database()
+        
+        # Check various key patterns
+        test_keys = [
+            f"{vendor}_{model}",
+            model,
+            f"{vendor}_{model.replace('-', '_')}",
+            f"{vendor}_{model.replace(' ', '_')}"
+        ]
+        
+        for key in test_keys:
+            if key in module_db:
+                module_info = module_db[key]
+                current_app.logger.info(f"Found module in comprehensive database: {key}")
+                
+                # Save to database for future use
+                new_module = ModuleSpec(
+                    company=vendor,
+                    model=model,
+                    description=module_info.get('description', ''),
+                    digital_inputs=module_info.get('digital_inputs', 0),
+                    digital_outputs=module_info.get('digital_outputs', 0),
+                    analog_inputs=module_info.get('analog_inputs', 0),
+                    analog_outputs=module_info.get('analog_outputs', 0),
+                    voltage_range=module_info.get('voltage_range'),
+                    current_range=module_info.get('current_range'),
+                    verified=module_info.get('verified', False)
+                )
+                
+                db.session.add(new_module)
+                db.session.commit()
+                
+                return jsonify({
+                    'success': True,
+                    'module': module_info,
+                    'source': 'database'
+                })
+
+        # If not found in databases, try web lookup
+        module_info = attempt_web_lookup(vendor, model)
 
         if module_info:
             # Save to database for future use
-            new_module = IOModule(
-                vendor=vendor,
+            new_module = ModuleSpec(
+                company=vendor,
                 model=model,
                 description=module_info.get('description', ''),
                 digital_inputs=module_info.get('digital_inputs', 0),
                 digital_outputs=module_info.get('digital_outputs', 0),
                 analog_inputs=module_info.get('analog_inputs', 0),
                 analog_outputs=module_info.get('analog_outputs', 0),
-                total_channels=module_info.get('total_channels', 0)
+                voltage_range=module_info.get('voltage_range'),
+                current_range=module_info.get('current_range'),
+                verified=False
             )
 
             db.session.add(new_module)
@@ -269,7 +311,7 @@ def module_lookup():
             return jsonify({
                 'success': True,
                 'module': module_info,
-                'source': 'online'
+                'source': 'web'
             })
 
         return jsonify({'success': False, 'message': f'Module {vendor} {model} not found'}), 404
@@ -447,80 +489,104 @@ def generate_io_table():
         if not data:
             return jsonify({'success': False, 'message': 'No data provided'}), 400
 
-        digital_inputs = data.get('digital_inputs', 0)
-        digital_outputs = data.get('digital_outputs', 0)
-        analog_inputs = data.get('analog_inputs', 0)
-        analog_outputs = data.get('analog_outputs', 0)
-        starting_sno = data.get('starting_sno', 1)
-        rack_no = data.get('rack_no', 0)
-        position = data.get('position', 1)
+        # Handle modules array from JavaScript
+        modules = data.get('modules', [])
+        if not modules:
+            return jsonify({'success': False, 'message': 'No modules configured'}), 400
 
-        io_data = {
+        tables = {
             'digital_inputs': [],
             'digital_outputs': [],
             'analog_inputs': [],
             'analog_outputs': []
         }
 
-        current_sno = starting_sno
+        current_sno = 1
+        
+        # Process each module
+        for module_idx, module in enumerate(modules):
+            rack_no = module.get('rack_no', module_idx)
+            position = module.get('position', module_idx + 1)
+            module_name = f"{module.get('company', '')} {module.get('model', '')}"
+            
+            # Generate Digital Inputs
+            digital_inputs = module.get('digital_inputs', 0)
+            for i in range(digital_inputs):
+                tables['digital_inputs'].append({
+                    'sno': current_sno,
+                    'rack_no': rack_no,
+                    'module_position': position,
+                    'slot_no': position,
+                    'signal_tag': f'DI_{rack_no:02d}_{position:02d}_{i+1:02d}',
+                    'signal_description': f'{module_name} - Digital Input {i+1}',
+                    'channel': i+1
+                })
+                current_sno += 1
 
-        # Generate Digital Inputs
-        for i in range(digital_inputs):
-            io_data['digital_inputs'].append({
-                'sno': current_sno,
-                'tag': f'DI_{rack_no:02d}_{position:02d}_{i+1:02d}',
-                'description': f'Digital Input {i+1}',
-                'rack': rack_no,
-                'slot': position,
-                'channel': i+1
-            })
-            current_sno += 1
+            # Generate Digital Outputs
+            digital_outputs = module.get('digital_outputs', 0)
+            for i in range(digital_outputs):
+                tables['digital_outputs'].append({
+                    'sno': current_sno,
+                    'rack_no': rack_no,
+                    'module_position': position,
+                    'slot_no': position,
+                    'signal_tag': f'DO_{rack_no:02d}_{position:02d}_{i+1:02d}',
+                    'signal_description': f'{module_name} - Digital Output {i+1}',
+                    'channel': i+1
+                })
+                current_sno += 1
 
-        # Generate Digital Outputs
-        for i in range(digital_outputs):
-            io_data['digital_outputs'].append({
-                'sno': current_sno,
-                'tag': f'DO_{rack_no:02d}_{position:02d}_{i+1:02d}',
-                'description': f'Digital Output {i+1}',
-                'rack': rack_no,
-                'slot': position,
-                'channel': i+1
-            })
-            current_sno += 1
+            # Generate Analog Inputs
+            analog_inputs = module.get('analog_inputs', 0)
+            for i in range(analog_inputs):
+                tables['analog_inputs'].append({
+                    'sno': current_sno,
+                    'rack_no': rack_no,
+                    'module_position': position,
+                    'slot_no': position,
+                    'signal_tag': f'AI_{rack_no:02d}_{position:02d}_{i+1:02d}',
+                    'signal_description': f'{module_name} - Analog Input {i+1}',
+                    'range': module.get('current_range', '4-20mA'),
+                    'units': 'mA',
+                    'channel': i+1
+                })
+                current_sno += 1
 
-        # Generate Analog Inputs
-        for i in range(analog_inputs):
-            io_data['analog_inputs'].append({
-                'sno': current_sno,
-                'tag': f'AI_{rack_no:02d}_{position:02d}_{i+1:02d}',
-                'description': f'Analog Input {i+1}',
-                'rack': rack_no,
-                'slot': position,
-                'channel': i+1,
-                'range': '4-20mA',
-                'units': 'mA'
-            })
-            current_sno += 1
+            # Generate Analog Outputs
+            analog_outputs = module.get('analog_outputs', 0)
+            for i in range(analog_outputs):
+                tables['analog_outputs'].append({
+                    'sno': current_sno,
+                    'rack_no': rack_no,
+                    'module_position': position,
+                    'slot_no': position,
+                    'signal_tag': f'AO_{rack_no:02d}_{position:02d}_{i+1:02d}',
+                    'signal_description': f'{module_name} - Analog Output {i+1}',
+                    'range': module.get('current_range', '4-20mA'),
+                    'units': 'mA',
+                    'channel': i+1
+                })
+                current_sno += 1
 
-        # Generate Analog Outputs
-        for i in range(analog_outputs):
-            io_data['analog_outputs'].append({
-                'sno': current_sno,
-                'tag': f'AO_{rack_no:02d}_{position:02d}_{i+1:02d}',
-                'description': f'Analog Output {i+1}',
-                'rack': rack_no,
-                'slot': position,
-                'channel': i+1,
-                'range': '4-20mA',
-                'units': 'mA'
-            })
-            current_sno += 1
+        # Calculate summary
+        summary = {
+            'total_points': current_sno - 1,
+            'digital_inputs': len(tables['digital_inputs']),
+            'digital_outputs': len(tables['digital_outputs']),
+            'analog_inputs': len(tables['analog_inputs']),
+            'analog_outputs': len(tables['analog_outputs'])
+        }
 
-        return jsonify({'success': True, 'io_data': io_data})
+        return jsonify({
+            'success': True, 
+            'tables': tables,
+            'summary': summary
+        })
 
     except Exception as e:
         current_app.logger.error(f"Error generating I/O table: {str(e)}")
-        return jsonify({'success': False, 'message': 'Error generating I/O table'}), 500
+        return jsonify({'success': False, 'error': str(e), 'message': 'Error generating I/O table'}), 500
 
 @io_builder_bp.route('/api/save-custom-module', methods=['POST'])
 @login_required
