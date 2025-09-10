@@ -1,0 +1,134 @@
+E:\report generator\SERVER>python app.py
+🔧 Initializing SAT Report Generator...
+[2025-09-10 20:07:18,349] INFO in models: Database connection successful
+[2025-09-10 20:07:18,376] INFO in models: Database tables created successfully
+[2025-09-10 20:07:18,428] INFO in models: Default system settings initialized
+[2025-09-10 20:07:18,429] INFO in models: Database initialized successfully
+[2025-09-10 20:07:18,431] INFO in app: Database and auth initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+🔒 HTTPS enabled with password-protected .pfx SSL certificate
+ * Serving Flask app 'app'
+ * Debug mode: off
+[2025-09-10 20:07:38,429] INFO in auth: User rmeda@cully.ie logged in with session 2ae4158ba35d16107308982b9952040736dcf55207e2d248fd476f9ddbc67331
+INFO:app:User rmeda@cully.ie logged in with session 2ae4158ba35d16107308982b9952040736dcf55207e2d248fd476f9ddbc67331
+[2025-09-10 20:07:49,620] INFO in app: Found 4 total users
+INFO:app:Found 4 total users
+[2025-09-10 20:07:49,625] INFO in app: Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+INFO:app:Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+[2025-09-10 20:08:18,334] INFO in main: Generate request from: 172.16.18.21
+INFO:app:Generate request from: 172.16.18.21
+[2025-09-10 20:08:18,338] INFO in main: Request headers: Host: automation-reports.mobilehmi.org:5000
+Connection: keep-alive
+Content-Length: 3428
+Sec-Ch-Ua-Platform: "Windows"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+Sec-Ch-Ua: "Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary3AVZXNEZYw1A95he
+Sec-Ch-Ua-Mobile: ?0
+Accept: */*
+Origin: https://automation-reports.mobilehmi.org:5000
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://automation-reports.mobilehmi.org:5000/reports/new/sat/full
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Cookie: sat_session=gDKaRWUlCi-2S36eCmEe3knru-f28QyVB1mmS-YBT38.ReQopglpCsEEMpY4xL7tuqxSOfI; csrf_token=IjNmN2Y1OTAyNTQzYTVkMTYzN2Q5MWVlMTI4ODQ3M2U2YjAzNzNmNmQi.aMHalQ.Jws1whKm4nVOnwB6qC-By5SSNg0
+
+
+INFO:app:Request headers: Host: automation-reports.mobilehmi.org:5000
+Connection: keep-alive
+Content-Length: 3428
+Sec-Ch-Ua-Platform: "Windows"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+Sec-Ch-Ua: "Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary3AVZXNEZYw1A95he
+Sec-Ch-Ua-Mobile: ?0
+Accept: */*
+Origin: https://automation-reports.mobilehmi.org:5000
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://automation-reports.mobilehmi.org:5000/reports/new/sat/full
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Cookie: sat_session=gDKaRWUlCi-2S36eCmEe3knru-f28QyVB1mmS-YBT38.ReQopglpCsEEMpY4xL7tuqxSOfI; csrf_token=IjNmN2Y1OTAyNTQzYTVkMTYzN2Q5MWVlMTI4ODQ3M2U2YjAzNzNmNmQi.aMHalQ.Jws1whKm4nVOnwB6qC-By5SSNg0
+
+
+[2025-09-10 20:08:18,342] INFO in main: Request form data keys: ['csrf_token', 'submission_id', 'document_title', 'project_reference', 'document_reference', 'date', 'client_name', 'revision', 'revision_details', 'revision_date', 'user_email', 'prepared_by', 'reviewed_by_tech_lead', 'reviewed_by_pm', 'approved_by_client', 'approver_1_name_select', 'approver_1_name', 'approver_1_email', 'approver_2_name_select', 'approver_2_name', 'approver_2_email', 'purpose', 'scope', 'removed_scada_screenshots', 'removed_trends_screenshots', 'removed_alarm_screenshots', 'sig_prepared_data']
+INFO:app:Request form data keys: ['csrf_token', 'submission_id', 'document_title', 'project_reference', 'document_reference', 'date', 'client_name', 'revision', 'revision_details', 'revision_date', 'user_email', 'prepared_by', 'reviewed_by_tech_lead', 'reviewed_by_pm', 'approved_by_client', 'approver_1_name_select', 'approver_1_name', 'approver_1_email', 'approver_2_name_select', 'approver_2_name', 'approver_2_email', 'purpose', 'scope', 'removed_scada_screenshots', 'removed_trends_screenshots', 'removed_alarm_screenshots', 'sig_prepared_data']
+[2025-09-10 20:08:19,165] INFO in main: Generate request from: 172.16.18.21
+INFO:app:Generate request from: 172.16.18.21
+[2025-09-10 20:08:19,175] INFO in main: Request headers: Host: automation-reports.mobilehmi.org:5000
+Connection: keep-alive
+Content-Length: 3428
+Cache-Control: max-age=0
+Sec-Ch-Ua: "Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Windows"
+Origin: https://automation-reports.mobilehmi.org:5000
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundarymbARpIGGUkkPy22L
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: https://automation-reports.mobilehmi.org:5000/reports/new/sat/full
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Cookie: sat_session=gDKaRWUlCi-2S36eCmEe3knru-f28QyVB1mmS-YBT38.ReQopglpCsEEMpY4xL7tuqxSOfI; csrf_token=IjNmN2Y1OTAyNTQzYTVkMTYzN2Q5MWVlMTI4ODQ3M2U2YjAzNzNmNmQi.aMHalQ.Jws1whKm4nVOnwB6qC-By5SSNg0
+
+
+INFO:app:Request headers: Host: automation-reports.mobilehmi.org:5000
+Connection: keep-alive
+Content-Length: 3428
+Cache-Control: max-age=0
+Sec-Ch-Ua: "Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Windows"
+Origin: https://automation-reports.mobilehmi.org:5000
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundarymbARpIGGUkkPy22L
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: https://automation-reports.mobilehmi.org:5000/reports/new/sat/full
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Cookie: sat_session=gDKaRWUlCi-2S36eCmEe3knru-f28QyVB1mmS-YBT38.ReQopglpCsEEMpY4xL7tuqxSOfI; csrf_token=IjNmN2Y1OTAyNTQzYTVkMTYzN2Q5MWVlMTI4ODQ3M2U2YjAzNzNmNmQi.aMHalQ.Jws1whKm4nVOnwB6qC-By5SSNg0
+
+
+[2025-09-10 20:08:19,185] INFO in main: Request form data keys: ['csrf_token', 'submission_id', 'document_title', 'project_reference', 'document_reference', 'date', 'client_name', 'revision', 'revision_details', 'revision_date', 'user_email', 'prepared_by', 'reviewed_by_tech_lead', 'reviewed_by_pm', 'approved_by_client', 'approver_1_name_select', 'approver_1_name', 'approver_1_email', 'approver_2_name_select', 'approver_2_name', 'approver_2_email', 'purpose', 'scope', 'removed_scada_screenshots', 'removed_trends_screenshots', 'removed_alarm_screenshots', 'sig_prepared_data']
+INFO:app:Request form data keys: ['csrf_token', 'submission_id', 'document_title', 'project_reference', 'document_reference', 'date', 'client_name', 'revision', 'revision_details', 'revision_date', 'user_email', 'prepared_by', 'reviewed_by_tech_lead', 'reviewed_by_pm', 'approved_by_client', 'approver_1_name_select', 'approver_1_name', 'approver_1_email', 'approver_2_name_select', 'approver_2_name', 'approver_2_email', 'purpose', 'scope', 'removed_scada_screenshots', 'removed_trends_screenshots', 'removed_alarm_screenshots', 'sig_prepared_data']
+[2025-09-10 20:08:19,597] INFO in main: Version incremented to: R1
+INFO:app:Version incremented to: R1
+[2025-09-10 20:08:20,085] INFO in main: Document saved to temp path: C:\Users\LOCALA~1\AppData\Local\Temp\2\SAT_Report_20250910_200819.docx
+INFO:app:Document saved to temp path: C:\Users\LOCALA~1\AppData\Local\Temp\2\SAT_Report_20250910_200819.docx
+[2025-09-10 20:08:20,345] INFO in main: Also copied report to outputs: E:\report generator\SERVER\outputs\SAT_Report_Final.docx
+INFO:app:Also copied report to outputs: E:\report generator\SERVER\outputs\SAT_Report_Final.docx
+Would send edit link to rmeda@cully.ie: de26128d-eeb6-424d-a3f9-9065dcaaa304
+[2025-09-10 20:08:20,353] INFO in main: Email sent successfully to rmeda@cully.ie
+INFO:app:Email sent successfully to rmeda@cully.ie
+[2025-09-10 20:08:21,099] INFO in main: Document saved to temp path: C:\Users\LOCALA~1\AppData\Local\Temp\2\SAT_Report_20250910_200820.docx
+INFO:app:Document saved to temp path: C:\Users\LOCALA~1\AppData\Local\Temp\2\SAT_Report_20250910_200820.docx
+[2025-09-10 20:08:21,214] INFO in main: Also copied report to outputs: E:\report generator\SERVER\outputs\SAT_Report_Final.docx
+INFO:app:Also copied report to outputs: E:\report generator\SERVER\outputs\SAT_Report_Final.docx
+Would send edit link to rmeda@cully.ie: de26128d-eeb6-424d-a3f9-9065dcaaa304
+[2025-09-10 20:08:21,266] INFO in main: Email sent successfully to rmeda@cully.ie
+INFO:app:Email sent successfully to rmeda@cully.ie
+[2025-09-10 20:08:25,881] INFO in app: Found 4 total users
+INFO:app:Found 4 total users
+[2025-09-10 20:08:26,147] INFO in app: Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+INFO:app:Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1

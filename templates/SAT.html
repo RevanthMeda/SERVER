@@ -3360,6 +3360,7 @@
     }
 
     function displayModuleSpecs(module) {
+      // Display the specifications
       document.getElementById('spec_description').textContent = module.description || 'No description';
       document.getElementById('spec_di').textContent = module.digital_inputs || 0;
       document.getElementById('spec_do').textContent = module.digital_outputs || 0;
@@ -3370,7 +3371,15 @@
                    (module.analog_inputs || 0) + (module.analog_outputs || 0);
       document.getElementById('spec_total').textContent = total;
 
+      // Also populate the manual input fields for user convenience
+      document.getElementById('manual_di').value = module.digital_inputs || 0;
+      document.getElementById('manual_do').value = module.digital_outputs || 0;
+      document.getElementById('manual_ai').value = module.analog_inputs || 0;
+      document.getElementById('manual_ao').value = module.analog_outputs || 0;
+
+      // Show both the spec display and manual override section
       document.getElementById('module_spec_display').classList.remove('hidden');
+      document.getElementById('manual_override').classList.remove('hidden');
     }
 
     function showManualOverride() {
@@ -3390,20 +3399,18 @@
         return;
       }
 
-      let moduleSpec = currentModuleSpec;
-
-      // If no spec found, use manual values
-      if (!moduleSpec) {
-        moduleSpec = {
-          company: company,
-          model: model,
-          digital_inputs: parseInt(document.getElementById('manual_di').value) || 0,
-          digital_outputs: parseInt(document.getElementById('manual_do').value) || 0,
-          analog_inputs: parseInt(document.getElementById('manual_ai').value) || 0,
-          analog_outputs: parseInt(document.getElementById('manual_ao').value) || 0,
-          description: `${company} ${model} - Manual Entry`
-        };
-      }
+      // Always use the values from manual input fields (they may have been edited)
+      let moduleSpec = {
+        company: company,
+        model: model,
+        digital_inputs: parseInt(document.getElementById('manual_di').value) || 0,
+        digital_outputs: parseInt(document.getElementById('manual_do').value) || 0,
+        analog_inputs: parseInt(document.getElementById('manual_ai').value) || 0,
+        analog_outputs: parseInt(document.getElementById('manual_ao').value) || 0,
+        description: currentModuleSpec ? currentModuleSpec.description : `${company} ${model} - Manual Entry`,
+        voltage_range: currentModuleSpec ? currentModuleSpec.voltage_range : '24 VDC',
+        current_range: currentModuleSpec ? currentModuleSpec.current_range : '4-20mA'
+      };
 
       const moduleConfig = {
         ...moduleSpec,

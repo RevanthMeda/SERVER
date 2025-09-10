@@ -222,14 +222,20 @@ def module_lookup():
         if not data:
             return jsonify({'success': False, 'message': 'No data provided'}), 400
 
-        vendor = data.get('vendor', '').strip().upper()
+        # Accept both vendor and company field names for compatibility
+        vendor = data.get('company', data.get('vendor', '')).strip().upper()
         model = data.get('model', '').strip().upper()
 
-        if not vendor or not model:
-            return jsonify({'success': False, 'message': 'Vendor and model are required'}), 400
+        # Allow searching by model only if vendor is not provided
+        if not model:
+            return jsonify({'success': False, 'message': 'Model is required'}), 400
 
         # Try to find in database first using ModuleSpec model
-        module = ModuleSpec.query.filter_by(company=vendor, model=model).first()
+        if vendor:
+            module = ModuleSpec.query.filter_by(company=vendor, model=model).first()
+        else:
+            # If no vendor specified, search by model only (case-insensitive)
+            module = ModuleSpec.query.filter(ModuleSpec.model.ilike(f'%{model}%')).first()
 
         if module:
             current_app.logger.info(f"Found module in database: {vendor} {model}")
@@ -250,35 +256,47 @@ def module_lookup():
         # Try to find in comprehensive module database
         module_db = get_comprehensive_module_database()
         
-        # Check various key patterns
-        test_keys = [
-            f"{vendor}_{model}",
+        # Check various key patterns with case-insensitive matching
+        test_keys = []
+        if vendor:
+            test_keys.extend([
+                f"{vendor}_{model}",
+                f"{vendor.upper()}_{model.upper()}",
+                f"{vendor}_{model.replace('-', '_')}",
+                f"{vendor}_{model.replace(' ', '_')}"
+            ])
+        # Always check model alone for flexibility
+        test_keys.extend([
             model,
-            f"{vendor}_{model.replace('-', '_')}",
-            f"{vendor}_{model.replace(' ', '_')}"
-        ]
+            model.upper(),
+            model.replace('-', '_'),
+            model.replace(' ', '_')
+        ])
         
+        # Also check with case-insensitive matching
         for key in test_keys:
+            # Direct key match
             if key in module_db:
                 module_info = module_db[key]
                 current_app.logger.info(f"Found module in comprehensive database: {key}")
                 
-                # Save to database for future use
-                new_module = ModuleSpec(
-                    company=vendor,
-                    model=model,
-                    description=module_info.get('description', ''),
-                    digital_inputs=module_info.get('digital_inputs', 0),
-                    digital_outputs=module_info.get('digital_outputs', 0),
-                    analog_inputs=module_info.get('analog_inputs', 0),
-                    analog_outputs=module_info.get('analog_outputs', 0),
-                    voltage_range=module_info.get('voltage_range'),
-                    current_range=module_info.get('current_range'),
-                    verified=module_info.get('verified', False)
-                )
-                
-                db.session.add(new_module)
-                db.session.commit()
+                # Save to database for future use if vendor is provided
+                if vendor:
+                    new_module = ModuleSpec(
+                        company=vendor,
+                        model=model,
+                        description=module_info.get('description', ''),
+                        digital_inputs=module_info.get('digital_inputs', 0),
+                        digital_outputs=module_info.get('digital_outputs', 0),
+                        analog_inputs=module_info.get('analog_inputs', 0),
+                        analog_outputs=module_info.get('analog_outputs', 0),
+                        voltage_range=module_info.get('voltage_range'),
+                        current_range=module_info.get('current_range'),
+                        verified=module_info.get('verified', False)
+                    )
+                    
+                    db.session.add(new_module)
+                    db.session.commit()
                 
                 return jsonify({
                     'success': True,
@@ -286,8 +304,22 @@ def module_lookup():
                     'source': 'database'
                 })
 
-        # If not found in databases, try web lookup
-        module_info = attempt_web_lookup(vendor, model)
+        # If not found in databases, try partial matching in comprehensive database
+        # Check for partial matches (case-insensitive)
+        for db_key, db_module in module_db.items():
+            if model.upper() in db_key.upper() or db_key.upper() in model.upper():
+                current_app.logger.info(f"Found partial match in comprehensive database: {db_key}")
+                return jsonify({
+                    'success': True,
+                    'module': db_module,
+                    'source': 'database'
+                })
+        
+        # If still not found and vendor is provided, try web lookup
+        if vendor:
+            module_info = attempt_web_lookup(vendor, model)
+        else:
+            module_info = None
 
         if module_info:
             # Save to database for future use
@@ -314,7 +346,10 @@ def module_lookup():
                 'source': 'web'
             })
 
-        return jsonify({'success': False, 'message': f'Module {vendor} {model} not found'}), 404
+        if vendor:
+            return jsonify({'success': False, 'message': f'Module {vendor} {model} not found'}), 404
+        else:
+            return jsonify({'success': False, 'message': f'Module {model} not found'}), 404
 
     except Exception as e:
         current_app.logger.error(f"Error in module lookup: {str(e)}")
