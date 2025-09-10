@@ -31,6 +31,7 @@ greenlet
 
 # Windows compatibility (conditional)
 pywin32>=307; sys_platform == 'win32'
+
+# Security and session management
 cryptography
-docx
 flask-session
