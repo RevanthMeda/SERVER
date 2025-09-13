@@ -301,40 +301,7 @@ class ReportArchive(db.Model):
     def __repr__(self):
         return f'<ReportArchive {self.original_report_id} - {self.document_title}>'
 
-class APIKey(db.Model):
-    """API keys for external integrations"""
-    __tablename__ = 'api_keys'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    key = db.Column(db.String(64), unique=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    user_email = db.Column(db.String(120), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    last_used = db.Column(db.DateTime, nullable=True)
-    expires_at = db.Column(db.DateTime, nullable=True)
-    is_active = db.Column(db.Boolean, default=True)
-    permissions_json = db.Column(db.Text, nullable=True)  # JSON array of allowed endpoints
-    rate_limit = db.Column(db.Integer, default=1000)  # Requests per hour
-    
-    def __repr__(self):
-        return f'<APIKey {self.name} - {self.key[:8]}...>'
 
-class APIUsage(db.Model):
-    """Track API usage for rate limiting and analytics"""
-    __tablename__ = 'api_usage'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    api_key_id = db.Column(db.Integer, db.ForeignKey('api_keys.id'), nullable=False)
-    endpoint = db.Column(db.String(200), nullable=False)
-    method = db.Column(db.String(10), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    response_code = db.Column(db.Integer, nullable=True)
-    response_time_ms = db.Column(db.Integer, nullable=True)
-    ip_address = db.Column(db.String(45), nullable=True)
-    
-    def __repr__(self):
-        return f'<APIUsage {self.endpoint} at {self.timestamp}>'
 
 class ScheduledReport(db.Model):
     """Scheduled report generation tasks"""

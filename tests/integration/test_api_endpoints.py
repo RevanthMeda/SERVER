@@ -4,7 +4,8 @@ Integration tests for API endpoints.
 import pytest
 import json
 from flask import url_for
-from models import db, Report, SATReport, User, APIKey
+from models import db, Report, SATReport, User
+from api.security import APIKey
 from tests.factories import UserFactory, ReportFactory, SATReportFactory
 
 
