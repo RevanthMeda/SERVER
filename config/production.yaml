@@ -1,0 +1,84 @@
+# Production environment configuration
+debug: false
+environment: "production"
+port: 5000
+
+# Database (PostgreSQL recommended for production)
+database:
+  uri: "postgresql://user:password@localhost/sat_reports"
+  pool_size: 20
+  pool_timeout: 30
+  pool_recycle: 3600
+
+# Security (strict for production)
+security:
+  csrf_enabled: true
+  csrf_time_limit: 3600  # 1 hour
+  allowed_domains:
+    - "automation-reports.mobilehmi.org"
+  block_ip_access: true
+  rate_limiting:
+    enabled: true
+    default_limit: "500 per hour"
+
+# Session (secure for production)
+session:
+  cookie_secure: true
+  cookie_httponly: true
+  cookie_samesite: "Strict"
+  timeout: 1800  # 30 minutes
+  permanent_lifetime: 1800
+
+# Logging (less verbose in production)
+logging:
+  level: "WARNING"
+  handlers:
+    - "file"
+  max_bytes: 52428800  # 50MB
+  backup_count: 10
+
+# Features
+features:
+  email_notifications: true
+  pdf_export: true
+  api_enabled: true
+  metrics_enabled: true
+  backup_enabled: true
+  audit_logging: true
+
+# API (stricter limits)
+api:
+  rate_limiting:
+    anonymous: "50 per hour"
+    authenticated: "500 per hour"
+    api_key: "2000 per hour"
+
+# Monitoring
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+    port: 9090
+
+# Backup (frequent in production)
+backup:
+  enabled: true
+  schedule: "daily"
+  time: "02:00"
+  retention_days: 90
+  compression: true
+
+# Cache (Redis recommended for production)
+cache:
+  enabled: true
+  type: "redis"
+  redis_url: "redis://localhost:6379/0"
+  default_timeout: 600  # 10 minutes
+  max_entries: 10000
+
+# SSL/HTTPS
+ssl:
+  enabled: true
+  cert_path: "ssl/cert.pem"
+  key_path: "ssl/key.pem"
+  redirect_http: true

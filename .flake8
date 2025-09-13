@@ -1,0 +1,62 @@
+[flake8]
+# Base configuration
+max-line-length = 127
+max-complexity = 10
+statistics = True
+count = True
+
+# Error codes to ignore
+extend-ignore = 
+    E203,  # whitespace before ':'
+    W503,  # line break before binary operator
+    E501,  # line too long (handled by black)
+    F401,  # imported but unused (in __init__.py files)
+
+# Files and directories to exclude
+exclude = 
+    .git,
+    __pycache__,
+    build,
+    dist,
+    .eggs,
+    *.egg-info,
+    .venv,
+    .tox,
+    migrations,
+    node_modules,
+    .pytest_cache,
+    .mypy_cache
+
+# Per-file ignores
+per-file-ignores =
+    __init__.py:F401,F403
+    tests/*:S101,S106,F401,F811
+    conftest.py:F401,F811
+    **/migrations/*:E501,F401
+
+# Enable specific error codes
+select = E,W,F,C,N
+
+# Import order settings (for flake8-import-order)
+import-order-style = google
+application-import-names = app,api,models,routes,utils,config,database,monitoring,security,tasks,cache
+
+# Docstring settings (for flake8-docstrings)
+docstring-convention = google
+ignore-decorators = @property,@staticmethod,@classmethod
+
+# Complexity settings
+max-cognitive-complexity = 12
+
+# Naming conventions (for pep8-naming)
+classmethod-decorators = classmethod
+staticmethod-decorators = staticmethod
+
+# Security settings (for flake8-bandit)
+# These are handled by bandit directly
+
+# Bugbear settings (for flake8-bugbear)
+extend-immutable-calls = frozenset,tuple
+
+# Comprehensions settings (for flake8-comprehensions)
+# No specific settings needed

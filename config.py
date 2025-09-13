@@ -137,6 +137,28 @@ class Config:
 
     # Feature Flags
     ENABLE_EMAIL_NOTIFICATIONS = os.getenv('ENABLE_EMAIL_NOTIFICATIONS', 'True').lower() == 'true'
+    
+    # Redis caching configuration
+    REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
+    REDIS_PORT = int(os.environ.get('REDIS_PORT', '6379'))
+    REDIS_DB = int(os.environ.get('REDIS_DB', '0'))
+    REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
+    REDIS_SSL = os.environ.get('REDIS_SSL', 'false').lower() == 'true'
+    REDIS_SSL_CERT_REQS = os.environ.get('REDIS_SSL_CERT_REQS', 'required')
+    REDIS_SSL_CA_CERTS = os.environ.get('REDIS_SSL_CA_CERTS')
+    REDIS_SSL_CERTFILE = os.environ.get('REDIS_SSL_CERTFILE')
+    REDIS_SSL_KEYFILE = os.environ.get('REDIS_SSL_KEYFILE')
+    REDIS_SOCKET_TIMEOUT = int(os.environ.get('REDIS_SOCKET_TIMEOUT', '5'))
+    REDIS_SOCKET_CONNECT_TIMEOUT = int(os.environ.get('REDIS_SOCKET_CONNECT_TIMEOUT', '5'))
+    REDIS_SOCKET_KEEPALIVE = os.environ.get('REDIS_SOCKET_KEEPALIVE', 'true').lower() == 'true'
+    REDIS_MAX_CONNECTIONS = int(os.environ.get('REDIS_MAX_CONNECTIONS', '50'))
+    REDIS_REQUIRED = os.environ.get('REDIS_REQUIRED', 'false').lower() == 'true'
+    
+    # Cache timeout settings (in seconds)
+    CACHE_DEFAULT_TIMEOUT = int(os.environ.get('CACHE_DEFAULT_TIMEOUT', '3600'))  # 1 hour
+    SESSION_CACHE_TIMEOUT = int(os.environ.get('SESSION_CACHE_TIMEOUT', '86400'))  # 24 hours
+    API_CACHE_TIMEOUT = int(os.environ.get('API_CACHE_TIMEOUT', '300'))  # 5 minutes
+    QUERY_CACHE_TIMEOUT = int(os.environ.get('QUERY_CACHE_TIMEOUT', '600'))  # 10 minutes
 
     # Security Settings - Updated for HTTPS
     SESSION_COOKIE_SECURE = True  # Require HTTPS for session cookies

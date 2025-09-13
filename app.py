@@ -8,6 +8,7 @@ from flask_wtf.csrf import CSRFProtect, generate_csrf, CSRFError
 from flask_login import current_user, login_required, logout_user
 from flask_session import Session
 from config import Config, config
+from config import init_config_system, init_secrets_management
 from middleware import init_security_middleware
 from session_manager import session_manager
 
@@ -31,6 +32,22 @@ def create_app(config_name='default'):
     # Load configuration based on environment
     config_class = config.get(config_name, config['default'])
     app.config.from_object(config_class)
+    
+    # Initialize hierarchical configuration system
+    try:
+        config_manager = init_config_system(app)
+        app.logger.info("Hierarchical configuration system initialized")
+    except Exception as e:
+        app.logger.error(f"Failed to initialize config system: {e}")
+        # Continue with basic config if hierarchical config fails
+    
+    # Initialize secrets management system
+    try:
+        secrets_manager = init_secrets_management(app)
+        app.logger.info("Secrets management system initialized")
+    except Exception as e:
+        app.logger.error(f"Failed to initialize secrets management: {e}")
+        # Continue without secrets management if it fails
     
     # Initialize production security middleware
     # Temporarily disabled for remote access testing
@@ -61,7 +78,104 @@ def create_app(config_name='default'):
             app.logger.warning("Database initialization returned False")
 
         init_auth(app)
-        app.logger.info("Database and auth initialized")
+        
+        # Initialize migration system
+        from database import (
+            init_migrations, init_database_performance, 
+            init_connection_pooling, init_backup_system
+        )
+        from database.cli import register_db_commands
+        migration_manager = init_migrations(app)
+        register_db_commands(app)
+        
+        # Register task management CLI commands
+        try:
+            from tasks.cli import tasks
+            app.cli.add_command(tasks)
+            app.logger.info("Task management CLI commands registered")
+        except Exception as e:
+            app.logger.error(f"Failed to register task CLI commands: {e}")
+        
+        # Initialize performance optimizations
+        init_connection_pooling(app)
+        init_database_performance(app)
+        
+        # Initialize backup system
+        init_backup_system(app)
+        
+        # Initialize Redis caching system
+        try:
+            from cache.redis_client import init_cache
+            from cache.session_store import RedisSessionInterface, SessionManager
+            
+            # Initialize cache system
+            init_cache(app)
+            
+            # Replace Flask-Session with Redis session interface if Redis is available
+            if hasattr(app, 'cache') and app.cache.redis_client.is_available():
+                app.session_interface = RedisSessionInterface(
+                    redis_client=app.cache.redis_client,
+                    key_prefix='session:',
+                    use_signer=True,
+                    permanent=True
+                )
+                app.session_manager = SessionManager(
+                    app.cache.redis_client,
+                    key_prefix='session:'
+                )
+                app.logger.info("Redis session storage initialized")
+            else:
+                app.logger.warning("Redis not available, using filesystem sessions")
+            
+            # Initialize cache monitoring
+            from cache.monitoring import init_cache_monitoring
+            init_cache_monitoring(app)
+            
+            app.logger.info("Cache system initialized successfully")
+        except Exception as e:
+            app.logger.error(f"Failed to initialize cache system: {e}")
+            # Continue without caching if it fails
+        
+        # Initialize query caching system
+        try:
+            from database.query_cache import init_query_cache
+            
+            # Initialize query cache with Redis client
+            if hasattr(app, 'cache') and app.cache.redis_client.is_available():
+                query_cache_manager = init_query_cache(app.cache.redis_client, db)
+                app.query_cache = query_cache_manager
+                app.logger.info("Query caching system initialized")
+            else:
+                app.logger.warning("Redis not available, query caching disabled")
+        except Exception as e:
+            app.logger.error(f"Failed to initialize query caching: {e}")
+        
+        # Initialize CDN integration
+        try:
+            from cache.flask_cdn import create_cdn_extension
+            
+            # Create and initialize CDN extension
+            cdn_extension = create_cdn_extension(app)
+            app.cdn_extension = cdn_extension
+            
+            app.logger.info("CDN integration initialized")
+        except Exception as e:
+            app.logger.error(f"Failed to initialize CDN integration: {e}")
+        
+        # Initialize background task processing with Celery
+        try:
+            from tasks.celery_app import init_celery
+            
+            # Initialize Celery for background tasks
+            celery_app = init_celery(app)
+            app.celery = celery_app
+            
+            app.logger.info("Background task processing (Celery) initialized")
+        except Exception as e:
+            app.logger.error(f"Failed to initialize background task processing: {e}")
+            # Continue without background tasks if it fails
+        
+        app.logger.info("Database, auth, migrations, performance, backup, and cache systems initialized")
     except Exception as e:
         app.logger.error(f"Failed to initialize database or auth: {e}")
         traceback.print_exc()
@@ -301,8 +415,13 @@ def create_app(config_name='default'):
         from routes.search import search_bp
         from routes.bulk import bulk_bp
         from routes.audit import audit_bp
-        from routes.api import api_bp
         from routes.analytics import analytics_bp
+        
+        # Import new RESTful API
+        from api import api_bp as restful_api_bp
+        
+        # Import legacy API (will be deprecated)
+        from routes.api import api_bp as legacy_api_bp
 
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
@@ -319,8 +438,24 @@ def create_app(config_name='default'):
         app.register_blueprint(search_bp, url_prefix='/search')
         app.register_blueprint(bulk_bp, url_prefix='/bulk')
         app.register_blueprint(audit_bp, url_prefix='/audit')
-        app.register_blueprint(api_bp, url_prefix='/api')
         app.register_blueprint(analytics_bp, url_prefix='/analytics')
+        
+        # Register new RESTful API at /api/v1
+        app.register_blueprint(restful_api_bp)
+        
+        # Register legacy API at /api/legacy (for backward compatibility)
+        app.register_blueprint(legacy_api_bp, url_prefix='/api/legacy')
+        
+        # Register CDN management blueprint if CDN extension is available
+        if hasattr(app, 'cdn_extension') and app.cdn_extension:
+            try:
+                from cache.flask_cdn import CDNBlueprint
+                cdn_blueprint_manager = CDNBlueprint(app.cdn_extension)
+                cdn_bp = cdn_blueprint_manager.create_blueprint()
+                app.register_blueprint(cdn_bp)
+                app.logger.info("CDN management blueprint registered")
+            except Exception as e:
+                app.logger.error(f"Failed to register CDN blueprint: {e}")
 
     register_blueprints()
 
