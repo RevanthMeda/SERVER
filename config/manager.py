@@ -34,6 +34,10 @@ class ConfigSource:
 class ConfigValidationSchema(Schema):
     """Schema for validating configuration structure."""
     
+    class Meta:
+        # Allow unknown fields to be passed through
+        unknown = 'INCLUDE'
+    
     # Application settings
     app_name = fields.Str(load_default='SAT Report Generator')
     port = fields.Int(validate=validate.Range(min=1, max=65535), load_default=5000)
@@ -86,6 +90,17 @@ class ConfigValidationSchema(Schema):
         'api_enabled': True,
         'metrics_enabled': True
     })
+    
+    # Additional fields that may be present in the config
+    api = fields.Dict(load_default={})
+    ssl = fields.Dict(load_default={})
+    backup = fields.Dict(load_default={})
+    approvers = fields.List(fields.Dict(), load_default=[])
+    monitoring = fields.Dict(load_default={})
+    cache = fields.Dict(load_default={})
+    security = fields.Dict(load_default={})
+    session = fields.Dict(load_default={})
+    templates = fields.Dict(load_default={})
 
 
 class ConfigFileWatcher(FileSystemEventHandler):

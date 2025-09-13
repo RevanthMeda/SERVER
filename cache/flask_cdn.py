@@ -7,6 +7,10 @@ import logging
 from typing import Dict, Any, Optional
 from flask import Flask, current_app, g, request, url_for
 try:
+    import click
+except ImportError:
+    click = None
+try:
     from jinja2 import Markup
 except ImportError:
     from markupsafe import Markup
@@ -162,6 +166,11 @@ class FlaskCDN:
     def _register_cli_commands(self, app: Flask):
         """Register CDN CLI commands."""
         
+        # Only register CLI commands if click is available
+        if click is None or not hasattr(app, 'cli'):
+            logger.warning("Flask CLI or click not available, skipping CDN CLI commands")
+            return
+        
         @app.cli.group()
         def cdn():
             """CDN management commands."""
@@ -211,7 +220,7 @@ class FlaskCDN:
                 print(f"Error: {results['error']}")
         
         @cdn.command()
-        @app.cli.argument('paths', nargs=-1)
+        @click.argument('paths', nargs=-1)
         def invalidate(paths):
             """Invalidate CDN cache for specified paths."""
             if not self.cdn_manager or not self.cdn_manager.is_enabled():

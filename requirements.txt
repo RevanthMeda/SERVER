@@ -73,3 +73,25 @@ faker>=13.0.0
 coverage>=6.0.0
 reportlab>=3.6.0  # For PDF testing
 Pillow>=8.0.0     # For image testing
+boto3
+celery
+click
+docx
+flask-login
+flask-session
+flask-sqlalchemy
+flask-wtf
+marshmallow
+python-dotenv
+PyYAML
+redis
+watchdog
+flask-migrate
+flask-restx
+psutil
+PyJWT
+schedule
+pyotp
+qrcode[pil]
+bleach
+structlog

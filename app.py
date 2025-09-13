@@ -106,10 +106,15 @@ def create_app(config_name='default'):
         # Register task management CLI commands
         try:
             from tasks.cli import tasks
-            app.cli.add_command(tasks)
-            app.logger.info("Task management CLI commands registered")
+            if hasattr(app, 'cli'):
+                app.cli.add_command(tasks)
+                app.logger.info("Task management CLI commands registered")
+            else:
+                app.logger.warning("Flask CLI not available, skipping task CLI registration")
+        except ImportError as e:
+            app.logger.warning(f"Task CLI commands not available (Celery not installed): {e}")
         except Exception as e:
-            app.logger.error(f"Failed to register task CLI commands: {e}")
+            app.logger.warning(f"Failed to register task CLI commands (optional feature): {e}")
         
         # Initialize performance optimizations
         init_connection_pooling(app)
@@ -174,21 +179,44 @@ def create_app(config_name='default'):
             app.cdn_extension = cdn_extension
             
             app.logger.info("CDN integration initialized")
+        except ImportError as e:
+            app.logger.warning(f"CDN integration not available (missing dependencies): {e}")
+            app.cdn_extension = None
+        except AttributeError as e:
+            # Handle Flask CLI issues with AppGroup
+            app.logger.warning(f"CDN integration skipped (Flask CLI issue): {e}")
+            app.cdn_extension = None
         except Exception as e:
-            app.logger.error(f"Failed to initialize CDN integration: {e}")
+            app.logger.warning(f"CDN integration disabled (optional feature): {e}")
+            app.cdn_extension = None
         
         # Initialize background task processing with Celery
         try:
-            from tasks.celery_app import init_celery
+            # Check if Redis is available first
+            redis_available = False
+            if hasattr(app, 'cache') and hasattr(app.cache, 'redis_client'):
+                redis_available = app.cache.redis_client.is_available()
             
-            # Initialize Celery for background tasks
-            celery_app = init_celery(app)
-            app.celery = celery_app
-            
-            app.logger.info("Background task processing (Celery) initialized")
+            if redis_available:
+                from tasks.celery_app import init_celery
+                
+                # Initialize Celery for background tasks
+                celery_app = init_celery(app)
+                app.celery = celery_app
+                
+                app.logger.info("Background task processing (Celery) initialized")
+            else:
+                app.logger.warning("Background task processing disabled (Redis not available)")
+                app.celery = None
+        except ImportError as e:
+            app.logger.warning(f"Background task processing not available (Celery not installed): {e}")
+            app.celery = None
+        except AttributeError as e:
+            app.logger.warning(f"Background task processing disabled (Celery initialization issue): {e}")
+            app.celery = None
         except Exception as e:
-            app.logger.error(f"Failed to initialize background task processing: {e}")
-            # Continue without background tasks if it fails
+            app.logger.warning(f"Background task processing disabled (optional feature): {e}")
+            app.celery = None
         
         app.logger.info("Database, auth, migrations, performance, backup, and cache systems initialized")
     except Exception as e:
