@@ -114,12 +114,10 @@ class ErrorResponse:
 def register_error_handlers(api):
     """Register error handlers with Flask-RESTX API."""
     
-    @api.errorhandler(ValidationError)
     def handle_validation_error(error):
         """Handle Marshmallow validation errors."""
         return ErrorResponse.validation_error(error.messages)
     
-    @api.errorhandler(APIError)
     def handle_api_error(error):
         """Handle custom API errors."""
         return ErrorResponse.format_error(
@@ -128,32 +126,32 @@ def register_error_handlers(api):
             details=error.payload
         )
     
-    @api.errorhandler(404)
+    # Register error handlers
+    api.errorhandler(ValidationError)(handle_validation_error)
+    api.errorhandler(APIError)(handle_api_error)
+    
     def handle_not_found(error):
         """Handle 404 errors."""
         return ErrorResponse.not_found_error()
     
-    @api.errorhandler(403)
+    api.errorhandler(404)(handle_not_found)
+    
     def handle_forbidden(error):
         """Handle 403 errors."""
         return ErrorResponse.authorization_error()
     
-    @api.errorhandler(401)
     def handle_unauthorized(error):
         """Handle 401 errors."""
         return ErrorResponse.authentication_error()
     
-    @api.errorhandler(409)
     def handle_conflict(error):
         """Handle 409 errors."""
         return ErrorResponse.conflict_error()
     
-    @api.errorhandler(429)
     def handle_rate_limit(error):
         """Handle 429 errors."""
         return ErrorResponse.rate_limit_error()
     
-    @api.errorhandler(500)
     def handle_internal_error(error):
         """Handle 500 errors."""
         # Log the error
@@ -162,7 +160,6 @@ def register_error_handlers(api):
         
         return ErrorResponse.internal_error()
     
-    @api.errorhandler(Exception)
     def handle_unexpected_error(error):
         """Handle unexpected errors."""
         # Log the error
@@ -170,6 +167,14 @@ def register_error_handlers(api):
         current_app.logger.error(traceback.format_exc())
         
         return ErrorResponse.internal_error()
+    
+    # Register remaining error handlers
+    api.errorhandler(403)(handle_forbidden)
+    api.errorhandler(401)(handle_unauthorized)
+    api.errorhandler(409)(handle_conflict)
+    api.errorhandler(429)(handle_rate_limit)
+    api.errorhandler(500)(handle_internal_error)
+    api.errorhandler(Exception)(handle_unexpected_error)
 
 
 # Flask-RESTX error models for documentation

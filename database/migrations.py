@@ -3,6 +3,7 @@ Database migration management for SAT Report Generator.
 """
 import os
 import sys
+import click
 from flask import current_app
 from flask_migrate import Migrate, init, migrate, upgrade, downgrade, revision, stamp
 from models import db
@@ -56,7 +57,7 @@ class MigrationManager:
                 sys.exit(1)
         
         @self.app.cli.command('create-migration')
-        @self.app.cli.option('--message', '-m', help='Migration message')
+        @click.option('--message', '-m', help='Migration message')
         def create_migration_command(message):
             """Create a new migration."""
             try:
@@ -67,7 +68,7 @@ class MigrationManager:
                 sys.exit(1)
         
         @self.app.cli.command('upgrade-db')
-        @self.app.cli.option('--revision', '-r', help='Target revision')
+        @click.option('--revision', '-r', help='Target revision')
         def upgrade_db_command(revision):
             """Upgrade database to latest or specified revision."""
             try:
@@ -78,7 +79,7 @@ class MigrationManager:
                 sys.exit(1)
         
         @self.app.cli.command('downgrade-db')
-        @self.app.cli.option('--revision', '-r', help='Target revision')
+        @click.option('--revision', '-r', help='Target revision')
         def downgrade_db_command(revision):
             """Downgrade database to specified revision."""
             try:
