@@ -8,7 +8,7 @@ import secrets
 import hashlib
 import json
 
-api_bp = Blueprint('api', __name__)
+api_bp = Blueprint('legacy_api', __name__)
 
 def require_api_key(f):
     """Decorator to require API key authentication"""
