@@ -125,6 +125,10 @@ def approve_submission(submission_id, stage):
                     ctx["SIG_REVIEW_TECH"] = current_stage["signature"]
                 
                 submission_data["context"] = ctx
+                
+                # Mark as approved and lock permanently when Automation Manager approves
+                submission_data["status"] = "APPROVED"
+                submission_data["locked"] = True
             
             # Create notification for submitter
             from utils import create_status_update_notification
@@ -155,10 +159,23 @@ def approve_submission(submission_id, stage):
             # Also update the database Report record
             try:
                 from models import db, Report, SATReport
+                import json as json_module
                 report = Report.query.get(submission_id)
                 if report:
                     # Update the database with new approval data
-                    report.approvals_json = json.dumps(approvals)
+                    report.approvals_json = json_module.dumps(approvals)
+                    
+                    # When Automation Manager (stage 1) approves, lock report permanently
+                    if stage == 1:
+                        report.locked = True
+                        report.status = 'APPROVED'
+                        report.approved_at = datetime.datetime.utcnow()
+                        report.approved_by = current_stage.get("approver_email", current_stage.get("approver_name", ""))
+                        current_app.logger.info(f"Automation Manager approved report {submission_id} - locking permanently")
+                    
+                    # Commit Report changes immediately to ensure database is updated
+                    db.session.commit()
+                    current_app.logger.info(f"Successfully updated Report database record for {submission_id}, locked={report.locked}, status={report.status}")
                     
                     # Update SAT report data with Word template fields
                     sat_report = SATReport.query.filter_by(report_id=submission_id).first()
@@ -169,13 +186,16 @@ def approve_submission(submission_id, stage):
                             stored_data["context"] = submission_data.get("context", {})
                             sat_report.data_json = json_module.dumps(stored_data)
                             db.session.commit()
-                            current_app.logger.info(f"Updated database with approval data for submission {submission_id}")
+                            current_app.logger.info(f"Updated SAT report data with approval context for submission {submission_id}")
                         except Exception as e:
                             current_app.logger.error(f"Error updating SAT report data: {e}")
                             db.session.rollback()
+                else:
+                    current_app.logger.error(f"Report {submission_id} not found in database for approval update")
                     
             except Exception as e:
                 current_app.logger.error(f"Error updating database: {e}")
+                db.session.rollback()
 
             # Determine if this is the PM approval (stage 2)
             # After PM approves, we finalize the document and send to client

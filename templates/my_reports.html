@@ -436,6 +436,21 @@
             background: #cce7ff;
             color: #004085;
         }
+        
+        .status-DRAFT {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .status-PENDING {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-APPROVED {
+            background: #d1fae5;
+            color: #065f46;
+        }
 
         /* Action Buttons */
         .action-buttons {
@@ -483,6 +498,41 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
             color: white;
+        }
+        
+        .btn-edit {
+            background: linear-gradient(135deg, var(--admin-warning), #d97706);
+            color: white;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+        }
+        
+        .btn-edit:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+            color: white;
+        }
+        
+        .badge-editable {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 4px 8px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-locked {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 4px 8px;
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
         }
 
         .date-text {
@@ -749,16 +799,27 @@
                                     </td>
                                     <td>
                                         <span class="status-badge status-{{ report.status }}">
-                                            {% if report.status == 'pending' %}
+                                            {% if report.status == 'pending' or report.status == 'PENDING' %}
                                                 <i class="fas fa-clock"></i> Pending
-                                            {% elif report.status == 'approved' %}
+                                            {% elif report.status == 'approved' or report.status == 'APPROVED' %}
                                                 <i class="fas fa-check"></i> Approved
-                                            {% elif report.status == 'rejected' %}
+                                            {% elif report.status == 'rejected' or report.status == 'REJECTED' %}
                                                 <i class="fas fa-times"></i> Rejected
+                                            {% elif report.status == 'draft' or report.status == 'DRAFT' %}
+                                                <i class="fas fa-pencil-alt"></i> Draft
                                             {% elif report.status == 'partially_approved' %}
                                                 <i class="fas fa-hourglass-half"></i> Partial
                                             {% endif %}
                                         </span>
+                                        {% if not report.locked and report.status in ['DRAFT', 'PENDING'] and report.user_email == current_user.email %}
+                                        <span class="badge-editable" title="You can edit this report until it's approved">
+                                            <i class="fas fa-unlock"></i> Editable
+                                        </span>
+                                        {% elif report.locked %}
+                                        <span class="badge-locked" title="This report is locked and cannot be edited">
+                                            <i class="fas fa-lock"></i> Locked
+                                        </span>
+                                        {% endif %}
                                     </td>
                                     <td>
                                         <div class="date-text">{{ report.created_at.strftime('%Y-%m-%d') }}</div>
@@ -773,6 +834,13 @@
                                                 <i class="fas fa-eye"></i>
                                                 View
                                             </a>
+                                            {% if not report.locked and report.status in ['DRAFT', 'PENDING'] and report.user_email == current_user.email %}
+                                            <a href="{{ url_for('edit.edit_report', report_id=report.id) }}" 
+                                               class="btn-small btn-edit">
+                                                <i class="fas fa-edit"></i>
+                                                Edit
+                                            </a>
+                                            {% endif %}
                                             <a href="{{ url_for('status.download_report', submission_id=report.id) }}" 
                                                class="btn-small btn-download">
                                                 <i class="fas fa-download"></i>

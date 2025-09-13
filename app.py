@@ -474,6 +474,7 @@ def create_app(config_name='default'):
         from routes.bulk import bulk_bp
         from routes.audit import audit_bp
         from routes.analytics import analytics_bp
+        from routes.edit import edit_bp
         
         # Import new RESTful API
         from api import api_bp as restful_api_bp
@@ -497,6 +498,7 @@ def create_app(config_name='default'):
         app.register_blueprint(bulk_bp, url_prefix='/bulk')
         app.register_blueprint(audit_bp, url_prefix='/audit')
         app.register_blueprint(analytics_bp, url_prefix='/analytics')
+        app.register_blueprint(edit_bp, url_prefix='/edit')
         
         # Register new RESTful API at /api/v1
         app.register_blueprint(restful_api_bp)

@@ -83,6 +83,12 @@ class Report(db.Model):
     locked = db.Column(db.Boolean, default=False)
     approvals_json = db.Column(db.Text, nullable=True)  # JSON string for approval workflow
     approval_notification_sent = db.Column(db.Boolean, default=False)
+    
+    # New fields for edit tracking
+    submitted_at = db.Column(db.DateTime, nullable=True)  # When engineer submits to Automation Manager
+    approved_at = db.Column(db.DateTime, nullable=True)  # When finally approved by Automation Manager
+    approved_by = db.Column(db.String(120), nullable=True)  # Email of the approver
+    edit_count = db.Column(db.Integer, default=0)  # Number of edits made
 
     # Relationships
     sat_report = db.relationship('SATReport', backref='parent_report', uselist=False, cascade='all, delete-orphan')
@@ -574,6 +580,28 @@ class ModuleSpec(db.Model):
             'total_channels': self.get_total_channels(),
             'verified': self.verified
         }
+
+class ReportEdit(db.Model):
+    """Audit trail for report edits"""
+    __tablename__ = 'report_edits'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    report_id = db.Column(db.String(36), db.ForeignKey('reports.id'), nullable=False)
+    editor_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    editor_email = db.Column(db.String(120), nullable=False)  # Store email for reference
+    before_json = db.Column(db.Text, nullable=True)  # Previous data state
+    after_json = db.Column(db.Text, nullable=False)  # New data state
+    changes_summary = db.Column(db.Text, nullable=True)  # Human-readable summary of changes
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    version_before = db.Column(db.String(10), nullable=True)  # e.g., R0
+    version_after = db.Column(db.String(10), nullable=True)  # e.g., R1
+    
+    # Relationships
+    report = db.relationship('Report', backref='edit_history')
+    editor = db.relationship('User', backref='report_edits')
+    
+    def __repr__(self):
+        return f'<ReportEdit {self.report_id} by {self.editor_email} at {self.created_at}>'
 
 class Notification(db.Model):
     __tablename__ = 'notifications'
