@@ -12,7 +12,7 @@ from datetime import datetime
 from models import db
 from security.authentication import enhanced_login_required
 from security.validation import FileUploadSchema, validate_request_data, InputValidator
-from security.audit import audit_logger
+from security.audit import get_audit_logger
 from monitoring.logging_config import audit_logger as app_logger
 
 # Create namespace
@@ -176,7 +176,7 @@ class FileUploadResource(Resource):
         file_metadata, error = file_manager.save_file(file, report_id)
         
         if error:
-            audit_logger.log_security_event(
+            get_audit_logger().log_security_event(
                 'file_upload_failed',
                 severity='medium',
                 details={'error': error, 'filename': file.filename}
@@ -184,7 +184,7 @@ class FileUploadResource(Resource):
             return {'message': error}, 400
         
         # Log successful upload
-        audit_logger.log_data_access(
+        get_audit_logger().log_data_access(
             action='create',
             resource_type='file',
             resource_id=file_metadata['file_id'],
@@ -222,7 +222,7 @@ class FileResource(Resource):
             return {'message': 'File not found'}, 404
         
         # Log file access
-        audit_logger.log_data_access(
+        get_audit_logger().log_data_access(
             action='read',
             resource_type='file',
             resource_id=file_id,
@@ -248,7 +248,7 @@ class FileResource(Resource):
         # Delete file
         if file_manager.delete_file(file_id, report_id):
             # Log file deletion
-            audit_logger.log_data_access(
+            get_audit_logger().log_data_access(
                 action='delete',
                 resource_type='file',
                 resource_id=file_id,

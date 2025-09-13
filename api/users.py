@@ -9,7 +9,7 @@ from marshmallow import Schema, fields as ma_fields, ValidationError
 from models import User, db
 from security.authentication import enhanced_login_required
 from security.validation import validate_request_data, rate_limit_check
-from security.audit import audit_data_access, audit_logger
+from security.audit import audit_data_access, get_audit_logger
 from monitoring.logging_config import audit_logger as app_logger
 from cache.decorators import cached, cache_response, invalidate_cache_pattern
 from datetime import timedelta
@@ -178,7 +178,7 @@ class UserResource(Resource):
         db.session.commit()
         
         # Log the update
-        audit_logger.log_data_access(
+        get_audit_logger().log_data_access(
             action='update',
             resource_type='user',
             resource_id=user_id,
@@ -214,7 +214,7 @@ class UserResource(Resource):
         db.session.commit()
         
         # Log the deletion
-        audit_logger.log_data_access(
+        get_audit_logger().log_data_access(
             action='delete',
             resource_type='user',
             resource_id=user_id,
@@ -245,7 +245,7 @@ class UserApprovalResource(Resource):
         db.session.commit()
         
         # Log the approval
-        audit_logger.log_data_access(
+        get_audit_logger().log_data_access(
             action='update',
             resource_type='user',
             resource_id=user_id,
@@ -276,7 +276,7 @@ class UserRejectionResource(Resource):
         db.session.commit()
         
         # Log the rejection
-        audit_logger.log_data_access(
+        get_audit_logger().log_data_access(
             action='delete',
             resource_type='user',
             resource_id=user_id,

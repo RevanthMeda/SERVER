@@ -10,7 +10,7 @@ import os
 from models import Report, SATReport, User, db
 from security.authentication import enhanced_login_required, role_required_api
 from security.validation import validate_request_data
-from security.audit import audit_report_action, audit_logger
+from security.audit import audit_report_action, get_audit_logger
 from api.security import require_auth, security_headers
 from api.schemas import (
     report_schema, reports_schema, report_create_schema, 
@@ -161,7 +161,7 @@ class ReportsListResource(Resource):
             reports_data = reports_schema.dump(pagination.items)
             
             # Log data access
-            audit_logger.log_data_access(
+            get_audit_logger().log_data_access(
                 action='read',
                 resource_type='report',
                 details={
@@ -248,7 +248,7 @@ class ReportResource(Resource):
             return {'message': 'Access denied'}, 403
         
         # Log data access
-        audit_logger.log_data_access(
+        get_audit_logger().log_data_access(
             action='read',
             resource_type='report',
             resource_id=report_id
@@ -379,7 +379,7 @@ class ReportApprovalResource(Resource):
         db.session.commit()
         
         # Log the approval action
-        audit_logger.log_report_event(
+        get_audit_logger().log_report_event(
             action=action,
             report_id=report_id,
             details={

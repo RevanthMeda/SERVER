@@ -420,7 +420,13 @@ class DataEncryption:
             self.cipher_suite = Fernet(encryption_key)
             
         except Exception as e:
-            current_app.logger.error(f"Failed to initialize encryption: {str(e)}")
+            # Handle case where we're outside application context
+            try:
+                current_app.logger.error(f"Failed to initialize encryption: {str(e)}")
+            except RuntimeError:
+                # Outside application context, use basic logging
+                import logging
+                logging.getLogger(__name__).error(f"Failed to initialize encryption: {str(e)}")
             self.cipher_suite = None
     
     def encrypt(self, data: str) -> str:
@@ -512,10 +518,31 @@ class ComplianceManager:
             return {'status': 'error', 'message': str(e)}
 
 
-# Global instances
-audit_logger = AuditLogger()
-compliance_manager = ComplianceManager()
-data_encryption = DataEncryption()
+# Global instances - lazy loaded
+audit_logger = None
+compliance_manager = None
+data_encryption = None
+
+def get_audit_logger():
+    """Get or create audit logger instance."""
+    global audit_logger
+    if audit_logger is None:
+        audit_logger = AuditLogger()
+    return audit_logger
+
+def get_compliance_manager():
+    """Get or create compliance manager instance."""
+    global compliance_manager
+    if compliance_manager is None:
+        compliance_manager = ComplianceManager()
+    return compliance_manager
+
+def get_data_encryption():
+    """Get or create data encryption instance."""
+    global data_encryption
+    if data_encryption is None:
+        data_encryption = DataEncryption()
+    return data_encryption
 
 
 # Decorators for automatic audit logging

@@ -11,7 +11,7 @@ from collections import defaultdict, deque
 from flask import request, jsonify, current_app, g
 from flask_login import current_user
 from models import db, User
-from security.audit import audit_logger, AuditEventType, AuditSeverity
+from security.audit import get_audit_logger, AuditEventType, AuditSeverity
 
 
 class APIKey(db.Model):
@@ -260,14 +260,14 @@ class JWTManager:
             return payload
             
         except jwt.ExpiredSignatureError:
-            audit_logger.log_security_event(
+            get_audit_logger().log_security_event(
                 'token_expired',
                 severity='low',
                 details={'token_type': 'jwt'}
             )
             return None
         except jwt.InvalidTokenError as e:
-            audit_logger.log_security_event(
+            get_audit_logger().log_security_event(
                 'invalid_token',
                 severity='medium',
                 details={'error': str(e), 'token_type': 'jwt'}
@@ -320,7 +320,7 @@ class APISecurityManager:
             if api_key_record:
                 # Check expiration
                 if api_key_record.expires_at and api_key_record.expires_at < datetime.utcnow():
-                    audit_logger.log_security_event(
+                    get_audit_logger().log_security_event(
                         'expired_api_key',
                         severity='medium',
                         details={'api_key_id': api_key_record.id}
@@ -391,7 +391,7 @@ def require_auth(permissions=None):
             
             # Check rate limiting first
             if security_manager.rate_limiter.is_rate_limited():
-                audit_logger.log_security_event(
+                get_audit_logger().log_security_event(
                     'rate_limit_exceeded',
                     severity='medium',
                     details={
@@ -422,7 +422,7 @@ def require_auth(permissions=None):
             # Authenticate request
             user = security_manager.authenticate_request()
             if not user:
-                audit_logger.log_security_event(
+                get_audit_logger().log_security_event(
                     'unauthorized_access',
                     severity='medium',
                     details={
@@ -441,7 +441,7 @@ def require_auth(permissions=None):
             
             # Check permissions if specified
             if permissions and not security_manager.check_permissions(permissions):
-                audit_logger.log_security_event(
+                get_audit_logger().log_security_event(
                     'insufficient_permissions',
                     severity='medium',
                     user_id=user.id,
@@ -515,7 +515,7 @@ def require_api_key(permissions=None):
             ).first()
             
             if not api_key_record:
-                audit_logger.log_security_event(
+                get_audit_logger().log_security_event(
                     'invalid_api_key',
                     severity='high',
                     details={

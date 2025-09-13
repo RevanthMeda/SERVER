@@ -16,7 +16,7 @@ from security.validation import (
     UserRegistrationSchema, validate_request_data,
     rate_limit_check, csrf_protect
 )
-from security.audit import audit_logger, AuditEventType, AuditSeverity
+from security.audit import get_audit_logger, AuditEventType, AuditSeverity
 from monitoring.logging_config import audit_logger as app_logger
 
 # Create namespace
@@ -75,7 +75,7 @@ class LoginResource(Resource):
         # Rate limiting check
         identifier = request.remote_addr
         if rate_limiter.is_rate_limited(identifier, 5, 300):
-            audit_logger.log_authentication_event(
+            get_audit_logger().log_authentication_event(
                 AuditEventType.LOGIN_FAILURE,
                 details={'reason': 'rate_limited', 'ip': request.remote_addr}
             )
@@ -96,7 +96,7 @@ class LoginResource(Resource):
         
         if not user or not check_password_hash(user.password_hash, password):
             rate_limiter.record_attempt(identifier)
-            audit_logger.log_authentication_event(
+            get_audit_logger().log_authentication_event(
                 AuditEventType.LOGIN_FAILURE,
                 user_id=user.id if user else None,
                 success=False,
@@ -107,7 +107,7 @@ class LoginResource(Resource):
         # Check if user is active
         if not user.is_active:
             rate_limiter.record_attempt(identifier)
-            audit_logger.log_authentication_event(
+            get_audit_logger().log_authentication_event(
                 AuditEventType.LOGIN_FAILURE,
                 user_id=user.id,
                 success=False,
@@ -122,7 +122,7 @@ class LoginResource(Resource):
             
             if not MFAManager.verify_totp(user.mfa_secret, mfa_token):
                 rate_limiter.record_attempt(identifier)
-                audit_logger.log_authentication_event(
+                get_audit_logger().log_authentication_event(
                     AuditEventType.LOGIN_FAILURE,
                     user_id=user.id,
                     success=False,
@@ -140,7 +140,7 @@ class LoginResource(Resource):
         access_token = JWTManager.generate_token(user.id)
         
         # Log successful login
-        audit_logger.log_authentication_event(
+        get_audit_logger().log_authentication_event(
             AuditEventType.LOGIN_SUCCESS,
             user_id=user.id,
             success=True,
@@ -177,7 +177,7 @@ class LogoutResource(Resource):
         SessionManager.destroy_session()
         
         # Log logout
-        audit_logger.log_authentication_event(
+        get_audit_logger().log_authentication_event(
             AuditEventType.LOGOUT,
             user_id=user_id,
             success=True
@@ -216,7 +216,7 @@ class RegisterResource(Resource):
         db.session.commit()
         
         # Log registration
-        audit_logger.log_authentication_event(
+        get_audit_logger().log_authentication_event(
             AuditEventType.LOGIN_SUCCESS,  # Using closest available event
             user_id=user.id,
             success=True,
@@ -286,7 +286,7 @@ class MFAVerifyResource(Resource):
         db.session.commit()
         
         # Log MFA enabled
-        audit_logger.log_authentication_event(
+        get_audit_logger().log_authentication_event(
             AuditEventType.LOGIN_SUCCESS,  # Using closest available event
             user_id=current_user.id,
             success=True,
@@ -326,7 +326,7 @@ class MFADisableResource(Resource):
         db.session.commit()
         
         # Log MFA disabled
-        audit_logger.log_authentication_event(
+        get_audit_logger().log_authentication_event(
             AuditEventType.LOGIN_SUCCESS,  # Using closest available event
             user_id=current_user.id,
             success=True,
@@ -355,7 +355,7 @@ class PasswordChangeResource(Resource):
         
         # Verify current password
         if not check_password_hash(current_user.password_hash, current_password):
-            audit_logger.log_authentication_event(
+            get_audit_logger().log_authentication_event(
                 AuditEventType.PASSWORD_CHANGE,
                 user_id=current_user.id,
                 success=False,
@@ -378,7 +378,7 @@ class PasswordChangeResource(Resource):
         db.session.commit()
         
         # Log password change
-        audit_logger.log_authentication_event(
+        get_audit_logger().log_authentication_event(
             AuditEventType.PASSWORD_CHANGE,
             user_id=current_user.id,
             success=True

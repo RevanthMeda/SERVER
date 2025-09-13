@@ -9,7 +9,7 @@ from marshmallow import Schema, fields as ma_fields, ValidationError
 from models import db
 from api.security import APIKey, security_manager, require_auth
 from security.authentication import enhanced_login_required, role_required_api
-from security.audit import audit_logger
+from security.audit import get_audit_logger
 from api.errors import APIError, ErrorResponse
 
 # Create namespace
@@ -103,7 +103,7 @@ class APIKeysListResource(Resource):
                 key_data.pop('key_hash', None)
                 keys_data.append(key_data)
             
-            audit_logger.log_data_access(
+            get_audit_logger().log_data_access(
                 action='read',
                 resource_type='api_key',
                 details={'count': len(keys_data)}
@@ -151,7 +151,7 @@ class APIKeysListResource(Resource):
             db.session.commit()
             
             # Log API key creation
-            audit_logger.log_data_access(
+            get_audit_logger().log_data_access(
                 action='create',
                 resource_type='api_key',
                 resource_id=api_key.id,
@@ -196,7 +196,7 @@ class APIKeyResource(Resource):
                 return ErrorResponse.authorization_error()
             
             # Log access
-            audit_logger.log_data_access(
+            get_audit_logger().log_data_access(
                 action='read',
                 resource_type='api_key',
                 resource_id=key_id
@@ -235,7 +235,7 @@ class APIKeyResource(Resource):
             db.session.commit()
             
             # Log update
-            audit_logger.log_data_access(
+            get_audit_logger().log_data_access(
                 action='update',
                 resource_type='api_key',
                 resource_id=key_id,
@@ -268,7 +268,7 @@ class APIKeyResource(Resource):
             db.session.commit()
             
             # Log deletion
-            audit_logger.log_data_access(
+            get_audit_logger().log_data_access(
                 action='delete',
                 resource_type='api_key',
                 resource_id=key_id,
@@ -307,7 +307,7 @@ class APIKeyRegenerateResource(Resource):
             db.session.commit()
             
             # Log regeneration
-            audit_logger.log_data_access(
+            get_audit_logger().log_data_access(
                 action='update',
                 resource_type='api_key',
                 resource_id=key_id,
