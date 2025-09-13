@@ -7,8 +7,16 @@ from flask import Flask, g, request, render_template, jsonify, make_response, re
 from flask_wtf.csrf import CSRFProtect, generate_csrf, CSRFError
 from flask_login import current_user, login_required, logout_user
 from flask_session import Session
+import sys
+import os
+# Add the current directory to Python path to avoid import conflicts
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Import from config.py file (not config/ directory)
 import config as config_module
-from config import Config
+Config = config_module.Config
+
+# Import from config/ directory
 from config.manager import init_config_system
 from config.secrets import init_secrets_management
 from middleware import init_security_middleware
