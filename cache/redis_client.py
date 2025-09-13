@@ -65,11 +65,12 @@ class RedisClient:
             logger.info("Redis connection established successfully")
             
         except redis.ConnectionError as e:
-            logger.error(f"Failed to connect to Redis: {e}")
-            if app.config.get('REDIS_REQUIRED', True):
+            # Redis is optional - log at debug level unless required
+            if app.config.get('REDIS_REQUIRED', False):
+                logger.error(f"Failed to connect to Redis: {e}")
                 raise
             else:
-                logger.warning("Redis not available, caching disabled")
+                logger.debug(f"Redis not available: {e} - caching disabled")
                 self.redis_client = None
         except Exception as e:
             logger.error(f"Unexpected error connecting to Redis: {e}")

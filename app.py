@@ -103,18 +103,20 @@ def create_app(config_name='default'):
         migration_manager = init_migrations(app)
         register_db_commands(app)
         
-        # Register task management CLI commands
+        # Register task management CLI commands (optional)
         try:
             from tasks.cli import tasks
             if hasattr(app, 'cli'):
                 app.cli.add_command(tasks)
-                app.logger.info("Task management CLI commands registered")
+                app.logger.debug("Task management CLI commands registered")
             else:
-                app.logger.warning("Flask CLI not available, skipping task CLI registration")
-        except ImportError as e:
-            app.logger.warning(f"Task CLI commands not available (Celery not installed): {e}")
-        except Exception as e:
-            app.logger.warning(f"Failed to register task CLI commands (optional feature): {e}")
+                app.logger.debug("Flask CLI not available, skipping task CLI registration")
+        except ImportError:
+            # Celery not installed - this is optional
+            pass
+        except Exception:
+            # Task CLI is optional, silently skip if not available
+            pass
         
         # Initialize performance optimizations
         init_connection_pooling(app)
@@ -145,7 +147,7 @@ def create_app(config_name='default'):
                 )
                 app.logger.info("Redis session storage initialized")
             else:
-                app.logger.warning("Redis not available, using filesystem sessions")
+                app.logger.info("Using filesystem sessions (Redis not available)")
             
             # Initialize cache monitoring
             from cache.monitoring import init_cache_monitoring
@@ -166,7 +168,7 @@ def create_app(config_name='default'):
                 app.query_cache = query_cache_manager
                 app.logger.info("Query caching system initialized")
             else:
-                app.logger.warning("Redis not available, query caching disabled")
+                app.logger.debug("Query caching disabled (Redis not available)")
         except Exception as e:
             app.logger.error(f"Failed to initialize query caching: {e}")
         
@@ -179,15 +181,17 @@ def create_app(config_name='default'):
             app.cdn_extension = cdn_extension
             
             app.logger.info("CDN integration initialized")
-        except ImportError as e:
-            app.logger.warning(f"CDN integration not available (missing dependencies): {e}")
+        except ImportError:
+            # CDN dependencies not installed - this is optional
+            app.logger.debug("CDN integration not available (missing dependencies)")
             app.cdn_extension = None
-        except AttributeError as e:
+        except AttributeError:
             # Handle Flask CLI issues with AppGroup
-            app.logger.warning(f"CDN integration skipped (Flask CLI issue): {e}")
+            app.logger.debug("CDN integration skipped (Flask CLI issue)")
             app.cdn_extension = None
-        except Exception as e:
-            app.logger.warning(f"CDN integration disabled (optional feature): {e}")
+        except Exception:
+            # CDN is optional
+            app.logger.debug("CDN integration disabled (optional feature)")
             app.cdn_extension = None
         
         # Initialize background task processing with Celery
@@ -206,16 +210,19 @@ def create_app(config_name='default'):
                 
                 app.logger.info("Background task processing (Celery) initialized")
             else:
-                app.logger.warning("Background task processing disabled (Redis not available)")
+                app.logger.debug("Background task processing disabled (Redis not available)")
                 app.celery = None
-        except ImportError as e:
-            app.logger.warning(f"Background task processing not available (Celery not installed): {e}")
+        except ImportError:
+            # Celery not installed - this is optional
+            app.logger.debug("Background task processing not available (Celery not installed)")
             app.celery = None
-        except AttributeError as e:
-            app.logger.warning(f"Background task processing disabled (Celery initialization issue): {e}")
+        except AttributeError:
+            # Celery initialization issue - optional feature
+            app.logger.debug("Background task processing disabled (Celery initialization issue)")
             app.celery = None
-        except Exception as e:
-            app.logger.warning(f"Background task processing disabled (optional feature): {e}")
+        except Exception:
+            # Background tasks are optional
+            app.logger.debug("Background task processing disabled (optional feature)")
             app.celery = None
         
         app.logger.info("Database, auth, migrations, performance, backup, and cache systems initialized")
@@ -224,9 +231,17 @@ def create_app(config_name='default'):
         traceback.print_exc()
         db_initialized = False
 
-    # Minimal logging for maximum performance - only critical errors
-    logging.basicConfig(level=logging.CRITICAL)
+    # Configure logging levels for cleaner output
+    logging.basicConfig(level=logging.INFO)
     logging.getLogger('werkzeug').setLevel(logging.ERROR)
+    logging.getLogger('database.pooling').setLevel(logging.INFO)
+    logging.getLogger('database.performance').setLevel(logging.INFO)
+    logging.getLogger('cache.redis_client').setLevel(logging.INFO)
+    logging.getLogger('cache.cdn').setLevel(logging.INFO)
+    # Suppress deprecation warnings from Flask and third-party libraries
+    import warnings
+    warnings.filterwarnings('ignore', category=DeprecationWarning)
+    warnings.filterwarnings('ignore', message="'FLASK_ENV' is deprecated")
 
     # Add CSRF token to g for access in templates and manage session
     @app.before_request

@@ -1,0 +1,61 @@
+E:\report generator\SERVER>python app.py
+🔧 Initializing SAT Report Generator...
+[2025-09-13 11:29:03,291] INFO in app: Hierarchical configuration system initialized
+Generated new master key for local secrets. Store this securely!
+[2025-09-13 11:29:03,402] INFO in app: Secrets management system initialized
+[2025-09-13 11:29:03,631] INFO in models: Database connection successful
+[2025-09-13 11:29:03,654] INFO in models: Database tables created successfully
+[2025-09-13 11:29:03,707] INFO in models: Default system settings initialized
+[2025-09-13 11:29:03,707] INFO in models: Database initialized successfully
+[2025-09-13 11:29:04,204] WARNING in app: Failed to register task CLI commands (optional feature): 'NoneType' object has no attribute 'task'
+WARNING:app:Failed to register task CLI commands (optional feature): 'NoneType' object has no attribute 'task'
+INFO:database.pooling:Created optimized database engine for development
+INFO:database.pooling:Pool configuration: {'poolclass': <class 'sqlalchemy.pool.impl.QueuePool'>, 'pool_pre_ping': True, 'pool_recycle': 1800, 'max_overflow': 4, 'echo': True, 'pool_size': 10, 'pool_timeout': 10, 'connect_args': {'connect_timeout': 10, 'application_name': 'sat_report_generator_dev'}}
+ERROR:database.pooling:Failed to initialize connection pooling: property 'engine' of 'SQLAlchemy' object has no setter
+INFO:database.performance:Database performance monitoring enabled
+INFO:database.query_analyzer:Query analysis monitoring enabled
+INFO:database.performance:Query analysis monitoring enabled
+WARNING:database.performance:Redis not available for query caching
+INFO:database.performance:Index already exists: idx_reports_user_status
+INFO:database.performance:Index already exists: idx_reports_created_at
+INFO:database.performance:Index already exists: idx_reports_type_status
+INFO:database.performance:Index already exists: idx_audit_timestamp_user
+INFO:database.performance:Index already exists: idx_audit_entity
+INFO:database.performance:Index already exists: idx_api_usage_timestamp
+INFO:database.performance:Index already exists: idx_api_usage_key_timestamp
+INFO:database.performance:Index already exists: idx_notifications_user_read
+INFO:database.performance:Index already exists: idx_notifications_created_at
+INFO:database.performance:Index already exists: idx_users_status_role
+INFO:database.performance:Index already exists: idx_sat_reports_report_id
+INFO:database.performance:Database performance optimizations initialized
+INFO:database.backup:Database backup system initialized
+ERROR:cache.redis_client:Failed to connect to Redis: Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+WARNING:cache.redis_client:Redis not available, caching disabled
+INFO:cache.redis_client:Cache system initialized successfully
+[2025-09-13 11:29:08,568] WARNING in app: Redis not available, using filesystem sessions
+WARNING:app:Redis not available, using filesystem sessions
+[2025-09-13 11:29:08,570] INFO in app: Cache system initialized successfully
+INFO:app:Cache system initialized successfully
+[2025-09-13 11:29:08,571] WARNING in app: Redis not available, query caching disabled
+WARNING:app:Redis not available, query caching disabled
+INFO:cache.cdn:CDN disabled or not configured
+INFO:cache.flask_cdn:Flask CDN extension initialized
+[2025-09-13 11:29:08,799] INFO in app: CDN integration initialized
+INFO:app:CDN integration initialized
+[2025-09-13 11:29:08,801] WARNING in app: Background task processing disabled (Redis not available)
+WARNING:app:Background task processing disabled (Redis not available)
+[2025-09-13 11:29:08,802] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
+INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-09-13 11:29:10,053] INFO in app: CDN management blueprint registered
+INFO:app:CDN management blueprint registered
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+🔒 HTTPS enabled with password-protected .pfx SSL certificate
+ * Serving Flask app 'app'
+ * Debug mode: off

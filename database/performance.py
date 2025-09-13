@@ -905,7 +905,7 @@ def init_database_performance(app):
             cache_manager = init_query_cache(redis_client.redis_client, db)
             logger.info("Query result caching initialized with Redis")
         else:
-            logger.warning("Redis not available for query caching")
+            logger.debug("Query caching disabled (Redis not available)")
     except ImportError as e:
         logger.warning(f"Query cache not available: {e}")
     

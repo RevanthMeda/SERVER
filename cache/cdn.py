@@ -51,7 +51,8 @@ class CDNManager:
             logger.info("AWS CloudFront client initialized successfully")
             
         except (NoCredentialsError, ClientError) as e:
-            logger.warning(f"Failed to initialize AWS clients: {e}")
+            # AWS credentials are optional - CDN will be disabled if not configured
+            logger.debug(f"AWS clients not configured: {e}")
             self.enabled = False
     
     def is_enabled(self) -> bool:

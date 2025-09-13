@@ -467,9 +467,22 @@ def init_connection_pooling(app):
     try:
         optimized_engine = pool_manager.create_optimized_engine(database_uri, environment)
         
-        # Replace the default engine
+        # Store optimized engine for later use
+        # Instead of trying to set db.engine directly (which is read-only),
+        # we'll store it in the app context for use by the database
         from models import db
-        db.engine = optimized_engine
+        
+        # Store the optimized engine in the app's extensions
+        app.extensions['optimized_engine'] = optimized_engine
+        
+        # Update the SQLAlchemy configuration with optimized settings
+        # The engine will be created with these settings when db.init_app() is called
+        pool_config = pool_manager.get_optimal_pool_config(database_uri, environment)
+        
+        # Apply pool configuration to SQLAlchemy config
+        app.config.update({
+            'SQLALCHEMY_ENGINE_OPTIONS': pool_config
+        })
         
         logger.info("Database connection pooling optimized")
         
@@ -482,11 +495,13 @@ def init_connection_pooling(app):
                 while True:
                     time.sleep(300)  # Check every 5 minutes
                     try:
-                        health = pool_manager.health_check(db.engine)
-                        if health['status'] != 'healthy':
-                            logger.warning(f"Pool health check: {health['status']}")
-                            for issue in health['issues']:
-                                logger.warning(f"Pool issue: {issue}")
+                        # Use the actual engine from db after it's initialized
+                        if hasattr(db, 'engine') and db.engine:
+                            health = pool_manager.health_check(db.engine)
+                            if health['status'] != 'healthy':
+                                logger.warning(f"Pool health check: {health['status']}")
+                                for issue in health['issues']:
+                                    logger.warning(f"Pool issue: {issue}")
                     except Exception as e:
                         logger.error(f"Health check error: {e}")
             
