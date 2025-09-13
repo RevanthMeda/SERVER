@@ -274,7 +274,7 @@ class ReportResource(Resource):
     @reports_ns.expect(report_update_model)
     @reports_ns.marshal_with(report_model)
     @enhanced_login_required
-    @validate_request_data(ReportUpdateSchema)
+    @validate_request_data(report_update_schema)
     @audit_report_action('update')
     def put(self, report_id):
         """Update report."""
