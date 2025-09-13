@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, current_app, send_file
 from flask_login import login_required, current_user
-from models import db, Report, SATReport, AuditLog, ReportArchive
+from models import db, Report, SATReport, ReportArchive
+from security.audit import AuditLog
 from auth import role_required
 from datetime import datetime, timedelta
 import json

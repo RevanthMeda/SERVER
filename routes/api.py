@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
-from models import db, Report, SATReport, User, APIKey, APIUsage, AuditLog
+from models import db, Report, SATReport, User, APIKey, APIUsage
+from security.audit import AuditLog
 from functools import wraps
 from datetime import datetime, timedelta
 import secrets

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, current_app
 from flask_login import login_required, current_user
-from models import db, Report, User, UserAnalytics, APIUsage, AuditLog
+from models import db, Report, User, UserAnalytics, APIUsage
+from security.audit import AuditLog
 from auth import role_required
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
