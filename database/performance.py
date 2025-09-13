@@ -852,7 +852,7 @@ class DatabaseMaintenanceManager:
             # Clean up old audit logs (keep 1 year)
             cutoff_date = datetime.utcnow() - timedelta(days=365)
             
-            from models import APIUsage
+            from api.security import APIUsage
             from security.audit import AuditLog
             
             # Clean audit logs
