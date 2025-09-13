@@ -8,6 +8,7 @@ import click
 from flask import Flask
 from flask.cli import with_appcontext
 from datetime import datetime
+from sqlalchemy import text
 
 # Add the current directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -349,8 +350,9 @@ def analyze_performance(env, table):
                     foreign_keys = inspector.get_foreign_keys(table_name)
                     
                     # Count records
-                    result = db.engine.execute(f"SELECT COUNT(*) FROM {table_name}")
-                    record_count = result.scalar()
+                    with db.engine.connect() as conn:
+                        result = conn.execute(text(f"SELECT COUNT(*) FROM {table_name}"))
+                        record_count = result.scalar()
                     
                     click.echo(f"\n📊 Table: {table_name}")
                     click.echo(f"   Records: {record_count:,}")

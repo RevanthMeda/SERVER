@@ -281,24 +281,6 @@ class SavedSearch(db.Model):
     def __repr__(self):
         return f'<SavedSearch {self.name} by {self.user_email}>'
 
-class AuditLog(db.Model):
-    """Comprehensive audit logging for compliance"""
-    __tablename__ = 'audit_logs'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    user_email = db.Column(db.String(120), nullable=False)
-    user_name = db.Column(db.String(100), nullable=False)
-    action = db.Column(db.String(50), nullable=False)  # login, logout, create, update, delete, approve, reject
-    entity_type = db.Column(db.String(50), nullable=False)  # report, user, template, etc.
-    entity_id = db.Column(db.String(100), nullable=True)
-    details = db.Column(db.Text, nullable=True)  # JSON for additional details
-    ip_address = db.Column(db.String(45), nullable=True)
-    user_agent = db.Column(db.String(200), nullable=True)
-    success = db.Column(db.Boolean, default=True)
-    
-    def __repr__(self):
-        return f'<AuditLog {self.action} by {self.user_email} at {self.timestamp}>'
 
 class ReportArchive(db.Model):
     """Archive old reports based on retention policies"""

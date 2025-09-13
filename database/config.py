@@ -3,6 +3,7 @@ Database configuration for different environments.
 """
 import os
 from urllib.parse import quote_plus
+from sqlalchemy import text
 
 
 class DatabaseConfig:
@@ -173,8 +174,8 @@ class DatabaseHealthCheck:
                 db.engine.connect().close()
                 
                 # Test query execution
-                result = db.engine.execute('SELECT 1')
-                result.close()
+                with db.engine.connect() as conn:
+                    result = conn.execute(text('SELECT 1'))
                 
                 return True, "Database connection healthy"
                 
@@ -281,8 +282,9 @@ class DatabaseOptimizer:
                 LIMIT %s
                 """
                 
-                result = db.engine.execute(query, (limit,))
-                slow_queries = result.fetchall()
+                with db.engine.connect() as conn:
+                    result = conn.execute(text(query), {'limit': limit})
+                    slow_queries = result.fetchall()
                 
                 return True, slow_queries
                 

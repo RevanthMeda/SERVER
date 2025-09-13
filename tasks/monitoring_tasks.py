@@ -7,6 +7,7 @@ from typing import Dict, Any, List
 from datetime import datetime, timedelta
 from celery import current_task
 from flask import current_app
+from sqlalchemy import text
 from .celery_app import celery_app
 
 logger = logging.getLogger(__name__)
@@ -179,7 +180,8 @@ def health_check_task(self) -> Dict[str, Any]:
             from database.pooling import get_pool_metrics
             
             # Test database connection
-            db.engine.execute('SELECT 1').close()
+            with db.engine.connect() as conn:
+                conn.execute(text('SELECT 1'))
             
             # Check pool health
             pool_metrics = get_pool_metrics()

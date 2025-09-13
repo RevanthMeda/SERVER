@@ -38,11 +38,9 @@ class RedisClient:
             'socket_connect_timeout': app.config.get('REDIS_SOCKET_CONNECT_TIMEOUT', 5),
             'socket_keepalive': app.config.get('REDIS_SOCKET_KEEPALIVE', True),
             'socket_keepalive_options': app.config.get('REDIS_SOCKET_KEEPALIVE_OPTIONS', {}),
-            'connection_pool_kwargs': {
-                'max_connections': app.config.get('REDIS_MAX_CONNECTIONS', 50),
-                'retry_on_timeout': True,
-                'health_check_interval': 30
-            },
+            'max_connections': app.config.get('REDIS_MAX_CONNECTIONS', 50),
+            'retry_on_timeout': True,
+            'health_check_interval': 30,
             'decode_responses': True,
             'encoding': 'utf-8'
         }

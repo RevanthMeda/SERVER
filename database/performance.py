@@ -291,7 +291,9 @@ class DatabaseIndexManager:
                 )
                 
                 if not index_exists:
-                    db.engine.execute(text(index['sql']))
+                    with db.engine.connect() as conn:
+                        conn.execute(text(index['sql']))
+                        conn.commit()
                     created_indexes.append(index['name'])
                     logger.info(f"Created index: {index['name']}")
                 else:
@@ -797,12 +799,16 @@ class DatabaseMaintenanceManager:
             
             if 'sqlite' in db_uri:
                 # SQLite VACUUM
-                db.engine.execute(text('VACUUM'))
+                with db.engine.connect() as conn:
+                    conn.execute(text('VACUUM'))
+                    conn.commit()
                 logger.info("SQLite database vacuumed")
                 
             elif 'postgresql' in db_uri:
                 # PostgreSQL VACUUM ANALYZE
-                db.engine.execute(text('VACUUM ANALYZE'))
+                with db.engine.connect() as conn:
+                    conn.execute(text('VACUUM ANALYZE'))
+                    conn.commit()
                 logger.info("PostgreSQL database vacuumed and analyzed")
                 
             return True
@@ -819,12 +825,16 @@ class DatabaseMaintenanceManager:
             
             if 'postgresql' in db_uri:
                 # PostgreSQL ANALYZE
-                db.engine.execute(text('ANALYZE'))
+                with db.engine.connect() as conn:
+                    conn.execute(text('ANALYZE'))
+                    conn.commit()
                 logger.info("PostgreSQL statistics updated")
                 
             elif 'sqlite' in db_uri:
                 # SQLite ANALYZE
-                db.engine.execute(text('ANALYZE'))
+                with db.engine.connect() as conn:
+                    conn.execute(text('ANALYZE'))
+                    conn.commit()
                 logger.info("SQLite statistics updated")
                 
             return True

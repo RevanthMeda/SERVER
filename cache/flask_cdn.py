@@ -6,7 +6,10 @@ import os
 import logging
 from typing import Dict, Any, Optional
 from flask import Flask, current_app, g, request, url_for
-from jinja2 import Markup
+try:
+    from jinja2 import Markup
+except ImportError:
+    from markupsafe import Markup
 
 from .cdn import CDNManager, AssetVersionManager, init_cdn
 

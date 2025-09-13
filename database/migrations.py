@@ -9,6 +9,7 @@ from flask_migrate import Migrate, init, migrate, upgrade, downgrade, revision, 
 from models import db
 from datetime import datetime
 import logging
+from sqlalchemy import text
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -363,8 +364,9 @@ class MigrationValidator:
                 inspector = db.inspect(db.engine)
                 for table_name in inspector.get_table_names():
                     try:
-                        result = db.engine.execute(f"SELECT COUNT(*) FROM {table_name}")
-                        count = result.scalar()
+                        with db.engine.connect() as conn:
+                            result = conn.execute(text(f"SELECT COUNT(*) FROM {table_name}"))
+                            count = result.scalar()
                         table_counts[table_name] = count
                     except Exception as e:
                         logger.warning(f"Could not count records in table {table_name}: {e}")
