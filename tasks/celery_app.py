@@ -90,7 +90,7 @@ def make_celery(app: Flask) -> Celery:
                     'interval_max': 300,
                 }
             }
-        }
+        },
         
         # Worker settings
         worker_prefetch_multiplier=1,
