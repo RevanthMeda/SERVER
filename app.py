@@ -9,12 +9,17 @@ from flask_login import current_user, login_required, logout_user
 from flask_session import Session
 import sys
 import os
-# Add the current directory to Python path to avoid import conflicts
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import importlib.util
 
-# Import from config.py file (not config/ directory)
-import config as config_module
+# Import Config directly from config.py file
+config_file_path = os.path.join(os.path.dirname(__file__), 'config.py')
+spec = importlib.util.spec_from_file_location("config_module", config_file_path)
+config_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(config_module)
+
+# Now we can access Config and config from the file
 Config = config_module.Config
+config = config_module.config
 
 # Import from config/ directory
 from config.manager import init_config_system
@@ -40,7 +45,7 @@ def create_app(config_name='default'):
     app = Flask(__name__)
     
     # Load configuration based on environment
-    config_class = config_module.config.get(config_name, config_module.config['default'])
+    config_class = config.get(config_name, config['default'])
     app.config.from_object(config_class)
     
     # Initialize hierarchical configuration system
