@@ -64,8 +64,8 @@ class APIKeyCreateSchema(Schema):
     """Schema for API key creation."""
     name = ma_fields.Str(required=True, validate=lambda x: 3 <= len(x.strip()) <= 100)
     description = ma_fields.Str(validate=lambda x: len(x.strip()) <= 500)
-    permissions = ma_fields.List(ma_fields.Str(), missing=list)
-    rate_limit = ma_fields.Int(validate=lambda x: 1 <= x <= 100000, missing=1000)
+    permissions = ma_fields.List(ma_fields.Str(), load_default=list)
+    rate_limit = ma_fields.Int(validate=lambda x: 1 <= x <= 100000, load_default=1000)
     expires_in_days = ma_fields.Int(validate=lambda x: 1 <= x <= 3650)  # Max 10 years
 
 class APIKeyUpdateSchema(Schema):

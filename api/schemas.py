@@ -25,11 +25,11 @@ class BaseSchema(Schema):
 class PaginationSchema(BaseSchema):
     """Schema for pagination parameters."""
     
-    page = fields.Integer(missing=1, validate=lambda x: x >= 1)
-    per_page = fields.Integer(missing=20, validate=lambda x: 1 <= x <= 100)
-    search = fields.String(missing='')
-    sort_by = fields.String(missing='created_at')
-    sort_order = fields.String(missing='desc', validate=lambda x: x in ['asc', 'desc'])
+    page = fields.Integer(load_default=1, validate=lambda x: x >= 1)
+    per_page = fields.Integer(load_default=20, validate=lambda x: 1 <= x <= 100)
+    search = fields.String(load_default='')
+    sort_by = fields.String(load_default='created_at')
+    sort_order = fields.String(load_default='desc', validate=lambda x: x in ['asc', 'desc'])
 
 
 class UserSchema(BaseSchema):
@@ -80,7 +80,7 @@ class LoginSchema(BaseSchema):
     
     email = fields.Email(required=True)
     password = fields.String(required=True, load_only=True)
-    remember_me = fields.Boolean(missing=False)
+    remember_me = fields.Boolean(load_default=False)
     mfa_token = fields.String()
 
 

@@ -35,18 +35,18 @@ class ConfigValidationSchema(Schema):
     """Schema for validating configuration structure."""
     
     # Application settings
-    app_name = fields.Str(missing='SAT Report Generator')
-    port = fields.Int(validate=validate.Range(min=1, max=65535), missing=5000)
-    debug = fields.Bool(missing=False)
-    environment = fields.Str(validate=validate.OneOf(['development', 'testing', 'staging', 'production']), missing='development')
+    app_name = fields.Str(load_default='SAT Report Generator')
+    port = fields.Int(validate=validate.Range(min=1, max=65535), load_default=5000)
+    debug = fields.Bool(load_default=False)
+    environment = fields.Str(validate=validate.OneOf(['development', 'testing', 'staging', 'production']), load_default='development')
     
     # Security settings
     secret_key = fields.Str(required=True, validate=validate.Length(min=32))
-    session_timeout = fields.Int(validate=validate.Range(min=300, max=86400), missing=1800)  # 5 min to 24 hours
-    csrf_enabled = fields.Bool(missing=True)
+    session_timeout = fields.Int(validate=validate.Range(min=300, max=86400), load_default=1800)  # 5 min to 24 hours
+    csrf_enabled = fields.Bool(load_default=True)
     
     # Database settings
-    database = fields.Dict(missing=lambda: {
+    database = fields.Dict(load_default=lambda: {
         'uri': 'sqlite:///instance/database.db',
         'pool_size': 10,
         'pool_timeout': 30,
@@ -54,7 +54,7 @@ class ConfigValidationSchema(Schema):
     })
     
     # Email settings
-    email = fields.Dict(missing=lambda: {
+    email = fields.Dict(load_default=lambda: {
         'smtp_server': 'localhost',
         'smtp_port': 587,
         'use_tls': True,
@@ -64,14 +64,14 @@ class ConfigValidationSchema(Schema):
     })
     
     # File upload settings
-    uploads = fields.Dict(missing=lambda: {
+    uploads = fields.Dict(load_default=lambda: {
         'max_file_size': 16777216,  # 16MB
         'allowed_extensions': ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx'],
         'upload_path': 'static/uploads'
     })
     
     # Logging settings
-    logging = fields.Dict(missing=lambda: {
+    logging = fields.Dict(load_default=lambda: {
         'level': 'INFO',
         'format': '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]',
         'file': 'logs/app.log',
@@ -80,7 +80,7 @@ class ConfigValidationSchema(Schema):
     })
     
     # Feature flags
-    features = fields.Dict(missing=lambda: {
+    features = fields.Dict(load_default=lambda: {
         'email_notifications': True,
         'pdf_export': False,
         'api_enabled': True,
