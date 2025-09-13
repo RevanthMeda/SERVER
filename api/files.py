@@ -51,8 +51,13 @@ class FileManager:
     """File management utilities."""
     
     def __init__(self):
-        self.upload_folder = current_app.config.get('UPLOAD_FOLDER', 'uploads')
-        self.max_file_size = current_app.config.get('MAX_FILE_SIZE', 16 * 1024 * 1024)  # 16MB
+        try:
+            self.upload_folder = current_app.config.get('UPLOAD_FOLDER', 'uploads')
+            self.max_file_size = current_app.config.get('MAX_FILE_SIZE', 16 * 1024 * 1024)  # 16MB
+        except RuntimeError:
+            # Outside application context, use defaults
+            self.upload_folder = 'uploads'
+            self.max_file_size = 16 * 1024 * 1024  # 16MB
         self.allowed_extensions = {
             'png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'xlsx', 'txt', 'csv'
         }
@@ -154,8 +159,15 @@ class FileManager:
         return False
 
 
-# Global file manager instance
-file_manager = FileManager()
+# Global file manager instance - lazy loaded
+file_manager = None
+
+def get_file_manager():
+    """Get or create file manager instance."""
+    global file_manager
+    if file_manager is None:
+        file_manager = FileManager()
+    return file_manager
 
 
 @files_ns.route('/upload')
@@ -173,7 +185,7 @@ class FileUploadResource(Resource):
         report_id = request.form.get('report_id')
         
         # Save file
-        file_metadata, error = file_manager.save_file(file, report_id)
+        file_metadata, error = get_file_manager().save_file(file, report_id)
         
         if error:
             get_audit_logger().log_security_event(
@@ -216,7 +228,7 @@ class FileResource(Resource):
         report_id = request.args.get('report_id')
         
         # Get file path
-        file_path = file_manager.get_file_path(file_id, report_id)
+        file_path = get_file_manager().get_file_path(file_id, report_id)
         
         if not file_path or not os.path.exists(file_path):
             return {'message': 'File not found'}, 404
@@ -241,12 +253,12 @@ class FileResource(Resource):
         report_id = request.args.get('report_id')
         
         # Check if file exists
-        file_path = file_manager.get_file_path(file_id, report_id)
+        file_path = get_file_manager().get_file_path(file_id, report_id)
         if not file_path or not os.path.exists(file_path):
             return {'message': 'File not found'}, 404
         
         # Delete file
-        if file_manager.delete_file(file_id, report_id):
+        if get_file_manager().delete_file(file_id, report_id):
             # Log file deletion
             get_audit_logger().log_data_access(
                 action='delete',
@@ -278,7 +290,7 @@ class FilesListResource(Resource):
         files_data = []
         
         # Scan upload directory
-        upload_path = os.path.join(current_app.root_path, file_manager.upload_folder)
+        upload_path = os.path.join(current_app.root_path, get_file_manager().upload_folder)
         if report_id:
             upload_path = os.path.join(upload_path, 'reports', str(report_id))
         
@@ -336,7 +348,7 @@ class FileValidationResource(Resource):
             return {'valid': False, 'error': error}, 200
         
         # Validate file type
-        is_valid, error = file_manager.is_allowed_file(filename, file_type)
+        is_valid, error = get_file_manager().is_allowed_file(filename, file_type)
         if not is_valid:
             return {'valid': False, 'error': error}, 200
         
@@ -362,7 +374,7 @@ class FileStatsResource(Resource):
         total_size = 0
         file_types = {}
         
-        upload_path = os.path.join(current_app.root_path, file_manager.upload_folder)
+        upload_path = os.path.join(current_app.root_path, get_file_manager().upload_folder)
         
         if os.path.exists(upload_path):
             for root, dirs, files in os.walk(upload_path):
@@ -382,6 +394,6 @@ class FileStatsResource(Resource):
             'total_size_bytes': total_size,
             'total_size_mb': round(total_size / (1024 * 1024), 2),
             'file_types': file_types,
-            'allowed_extensions': list(file_manager.allowed_extensions),
-            'max_file_size_mb': file_manager.max_file_size // (1024 * 1024)
+            'allowed_extensions': list(get_file_manager().allowed_extensions),
+            'max_file_size_mb': get_file_manager().max_file_size // (1024 * 1024)
         }, 200
