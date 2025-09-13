@@ -359,6 +359,21 @@ def init_db(app):
             except Exception as table_error:
                 app.logger.error(f"Error creating tables: {table_error}")
                 return False
+            
+            # Run critical migration to add missing columns
+            try:
+                from database.fix_missing_columns import ensure_database_ready
+                app.logger.info("Running critical database migration to fix missing columns...")
+                migration_success = ensure_database_ready(app, db)
+                if migration_success:
+                    app.logger.info("✓ Critical database migration completed successfully")
+                else:
+                    app.logger.warning("Database migration had issues but continuing...")
+            except ImportError:
+                app.logger.warning("Migration script not found, skipping column check")
+            except Exception as migration_error:
+                app.logger.error(f"Migration error: {migration_error}")
+                # Continue anyway as the app might still work
 
             # Create default admin user if it doesn't exist
             try:

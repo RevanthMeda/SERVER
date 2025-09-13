@@ -1,0 +1,1250 @@
+E:\report generator\SERVER>python app.py
+🔧 Initializing SAT Report Generator...
+[2025-09-13 12:04:25,875] INFO in app: Hierarchical configuration system initialized
+Generated new master key for local secrets. Store this securely!
+[2025-09-13 12:04:25,972] INFO in app: Secrets management system initialized
+[2025-09-13 12:04:26,181] INFO in models: Database connection successful
+[2025-09-13 12:04:26,252] INFO in models: Database tables created successfully
+[2025-09-13 12:04:26,312] INFO in models: Default system settings initialized
+[2025-09-13 12:04:26,320] INFO in models: Database initialized successfully
+INFO:database.pooling:Created optimized database engine for development
+INFO:database.pooling:Pool configuration: {'poolclass': <class 'sqlalchemy.pool.impl.QueuePool'>, 'pool_pre_ping': True, 'pool_recycle': 1800, 'max_overflow': 4, 'echo': True, 'pool_size': 10, 'pool_timeout': 10, 'connect_args': {'connect_timeout': 10, 'application_name': 'sat_report_generator_dev'}}
+INFO:database.pooling:Database connection pooling optimized
+INFO:database.performance:Database performance monitoring enabled
+INFO:database.query_analyzer:Query analysis monitoring enabled
+INFO:database.performance:Query analysis monitoring enabled
+INFO:database.performance:Index already exists: idx_reports_user_status
+INFO:database.performance:Index already exists: idx_reports_created_at
+INFO:database.performance:Index already exists: idx_reports_type_status
+INFO:database.performance:Index already exists: idx_audit_timestamp_user
+INFO:database.performance:Index already exists: idx_audit_entity
+INFO:database.performance:Index already exists: idx_api_usage_timestamp
+INFO:database.performance:Index already exists: idx_api_usage_key_timestamp
+INFO:database.performance:Index already exists: idx_notifications_user_read
+INFO:database.performance:Index already exists: idx_notifications_created_at
+INFO:database.performance:Index already exists: idx_users_status_role
+INFO:database.performance:Index already exists: idx_sat_reports_report_id
+INFO:database.performance:Database performance optimizations initialized
+INFO:database.backup:Database backup system initialized
+INFO:cache.redis_client:Cache system initialized successfully
+[2025-09-13 12:04:31,173] INFO in app: Using filesystem sessions (Redis not available)
+INFO:app:Using filesystem sessions (Redis not available)
+[2025-09-13 12:04:31,178] INFO in app: Cache system initialized successfully
+INFO:app:Cache system initialized successfully
+[2025-09-13 12:04:31,179] DEBUG in app: Query caching disabled (Redis not available)
+DEBUG:app:Query caching disabled (Redis not available)
+INFO:cache.cdn:CDN disabled or not configured
+INFO:cache.flask_cdn:Flask CDN extension initialized
+[2025-09-13 12:04:31,400] INFO in app: CDN integration initialized
+INFO:app:CDN integration initialized
+[2025-09-13 12:04:31,402] DEBUG in app: Background task processing disabled (Redis not available)
+DEBUG:app:Background task processing disabled (Redis not available)
+[2025-09-13 12:04:31,404] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
+INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-09-13 12:04:32,696] INFO in app: CDN management blueprint registered
+INFO:app:CDN management blueprint registered
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+🔒 HTTPS enabled with password-protected .pfx SSL certificate
+ * Serving Flask app 'app'
+ * Debug mode: off
+[2025-09-13 12:04:48,463] INFO in auth: User rmeda@cully.ie logged in with session 7460a80e886137b7f8ae11518055aa7ebdc5a2dd5e3aaa5e6d3b2bdae9024155
+INFO:app:User rmeda@cully.ie logged in with session 7460a80e886137b7f8ae11518055aa7ebdc5a2dd5e3aaa5e6d3b2bdae9024155
+[2025-09-13 12:04:48,586] ERROR in app: Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR:app:Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2025-09-13 12:04:50,464] ERROR in app: Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR:app:Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2025-09-13 12:04:52,537] ERROR in app: Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR:app:Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2025-09-13 12:04:53,722] ERROR in app: Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR:app:Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2025-09-13 12:04:59,395] ERROR in app: Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR:app:Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2025-09-13 12:05:04,550] ERROR in app: Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR:app:Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2025-09-13 12:05:32,795] INFO in auth: User rmeda@cully.ie logged in with session 97aa3319d2894da9b65c0b17b8e13c198fed763f2d5f2976a215611fa95f70a9
+INFO:app:User rmeda@cully.ie logged in with session 97aa3319d2894da9b65c0b17b8e13c198fed763f2d5f2976a215611fa95f70a9
+[2025-09-13 12:05:33,134] ERROR in app: Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR:app:Exception on /dashboard/engineer [GET]
+Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 13, in decorated_function
+    response = make_response(f(*args, **kwargs))
+                             ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 166, in engineer
+    user_reports = Report.query.filter_by(user_email=current_user.email).all()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column reports.submitted_at does not exist
+LINE 1: ...ation_sent AS reports_approval_notification_sent, reports.su...
+                                                             ^
+
+[SQL: SELECT reports.id AS reports_id, reports.type AS reports_type, reports.status AS reports_status, reports.document_title AS reports_document_title, reports.document_reference AS reports_document_reference, reports.project_reference AS reports_project_reference, reports.client_name AS reports_client_name, reports.revision AS reports_revision, reports.prepared_by AS reports_prepared_by, reports.user_email AS reports_user_email, reports.version AS reports_version, reports.created_at AS reports_created_at, reports.updated_at AS reports_updated_at, reports.locked AS reports_locked, reports.approvals_json AS reports_approvals_json, reports.approval_notification_sent AS reports_approval_notification_sent, reports.submitted_at AS reports_submitted_at, reports.approved_at AS reports_approved_at, reports.approved_by AS reports_approved_by, reports.edit_count AS reports_edit_count
+FROM reports
+WHERE reports.user_email = %(user_email_1)s]
+[parameters: {'user_email_1': 'rmeda@cully.ie'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
