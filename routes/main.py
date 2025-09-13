@@ -99,8 +99,9 @@ def setup_approval_workflow_db(report, approver_emails):
             "signature": None
         })
 
-    # Lock the report if there are approvers
-    locked = len(valid_emails) > 0
+    # Reports should NOT be locked when pending approval
+    # They should only be locked when approved
+    locked = False
     return approvals, locked
 
 def send_approval_link(email, submission_id, stage):
