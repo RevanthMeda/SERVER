@@ -873,20 +873,26 @@
                 }, 5000);
             };
         });
-    </script>osition: fixed;
-                    top: 20px;
-                    right: 20px;
-                    padding: 16px 24px;
-                    border-radius: 12px;
-                    color: white;
-                    font-weight: 600;
-                    z-index: 1000;
-                    transform: translateX(100%);
-                    transition: transform 0.3s ease;
-                    ${type === 'success' ? 'background: linear-gradient(135deg, #10b981, #059669);' : 'background: linear-gradient(135deg, #ef4444, #dc2626);'}
-                    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-                `;
-                notification.textContent = message;
+
+        // Common notification function
+        window.showNotification = function(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 12px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                ${type === 'success' ? 'background: linear-gradient(135deg, #10b981, #059669);' : 'background: linear-gradient(135deg, #ef4444, #dc2626);'}
+                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            `;
+            notification.textContent = message;
 
                 document.body.appendChild(notification);
 
