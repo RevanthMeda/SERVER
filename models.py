@@ -329,7 +329,7 @@ class ScheduledReport(db.Model):
         return f'<ScheduledReport {self.name} - {self.schedule_type}>'
 
 def init_db(app):
-    """Initialize database with proper error handling"""
+    """Initialize database with proper error handling - optimized"""
     try:
         # Ensure instance directory exists
         instance_dir = os.path.join(app.config.get('BASE_DIR', os.getcwd()), 'instance')
@@ -341,39 +341,40 @@ def init_db(app):
             # Test database connection
             try:
                 db.engine.connect().close()
-                app.logger.info("Database connection successful")
+                app.logger.debug("Database connection successful")  # Reduced logging level
             except Exception as conn_error:
                 app.logger.error(f"Database connection failed: {conn_error}")
                 # Try to create the database file and directories
                 try:
                     db.create_all()
                     app.logger.info("Database file created successfully")
+                    return True  # Return early if we created database
                 except Exception as create_error:
                     app.logger.error(f"Could not create database: {create_error}")
                     return False
 
-            # Create all tables
+            # Only create tables if they don't exist - check first!
             try:
-                db.create_all()
-                app.logger.info("Database tables created successfully")
+                inspector = db.inspect(db.engine)
+                existing_tables = inspector.get_table_names()
+                
+                if not existing_tables or len(existing_tables) == 0:
+                    db.create_all()
+                    app.logger.info("Database tables created successfully")
+                else:
+                    app.logger.debug(f"Database tables already exist: {len(existing_tables)} tables found")
             except Exception as table_error:
-                app.logger.error(f"Error creating tables: {table_error}")
+                app.logger.error(f"Error checking/creating tables: {table_error}")
                 return False
             
-            # Run critical migration to add missing columns
-            try:
-                from database.fix_missing_columns import ensure_database_ready
-                app.logger.info("Running critical database migration to fix missing columns...")
-                migration_success = ensure_database_ready(app, db)
-                if migration_success:
-                    app.logger.info("✓ Critical database migration completed successfully")
-                else:
-                    app.logger.warning("Database migration had issues but continuing...")
-            except ImportError:
-                app.logger.warning("Migration script not found, skipping column check")
-            except Exception as migration_error:
-                app.logger.error(f"Migration error: {migration_error}")
-                # Continue anyway as the app might still work
+            # Skip migration check on every startup - only run when needed
+            # This migration is now handled via CLI commands
+            # Comment out for performance - migration should be run manually
+            # try:
+            #     from database.fix_missing_columns import ensure_database_ready
+            #     migration_success = ensure_database_ready(app, db)
+            # except Exception:
+            #     pass
 
             # Create default admin user if it doesn't exist
             try:

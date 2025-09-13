@@ -9,12 +9,12 @@ from sqlalchemy import text
 class DatabaseConfig:
     """Base database configuration."""
     
-    # Connection pool settings
+    # Connection pool settings - optimized for performance
     SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_size': 10,
-        'pool_timeout': 20,
-        'pool_recycle': -1,
-        'max_overflow': 0,
+        'pool_size': 5,  # Reduced from 10
+        'pool_timeout': 15,  # Reduced from 20
+        'pool_recycle': 1800,  # 30 minutes instead of -1
+        'max_overflow': 2,  # Allow some overflow connections
         'pool_pre_ping': True,  # Verify connections before use
     }
     
@@ -38,9 +38,9 @@ class DevelopmentDatabaseConfig(DatabaseConfig):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(os.path.dirname(os.path.dirname(__file__)), 'instance', 'database.db')
     
-    # Enable query logging in development
-    SQLALCHEMY_ECHO = True
-    SQLALCHEMY_RECORD_QUERIES = True
+    # Disable query logging by default for performance
+    SQLALCHEMY_ECHO = False  # Changed from True
+    SQLALCHEMY_RECORD_QUERIES = False  # Changed from True
     
     # Smaller connection pool for development
     SQLALCHEMY_ENGINE_OPTIONS = {
@@ -104,12 +104,12 @@ class ProductionDatabaseConfig(DatabaseConfig):
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_RECORD_QUERIES = False
     
-    # Optimized connection pool for production
+    # Optimized connection pool for production - reduced for performance
     SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_size': 20,
-        'pool_timeout': 30,
-        'pool_recycle': 3600,  # Recycle connections every hour
-        'max_overflow': 10,
+        'pool_size': 8,  # Reduced from 20
+        'pool_timeout': 20,  # Reduced from 30
+        'pool_recycle': 1800,  # 30 minutes instead of 1 hour
+        'max_overflow': 5,  # Reduced from 10
         'pool_pre_ping': True,
         'connect_args': {
             'connect_timeout': 30,
@@ -130,12 +130,12 @@ class StagingDatabaseConfig(ProductionDatabaseConfig):
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_RECORD_QUERIES = True
     
-    # Smaller connection pool for staging
+    # Smaller connection pool for staging - optimized
     SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_size': 10,
-        'pool_timeout': 20,
-        'pool_recycle': 3600,
-        'max_overflow': 5,
+        'pool_size': 5,  # Reduced from 10
+        'pool_timeout': 15,  # Reduced from 20
+        'pool_recycle': 1800,  # 30 minutes instead of 1 hour
+        'max_overflow': 2,  # Reduced from 5
         'pool_pre_ping': True,
         'connect_args': {
             'connect_timeout': 30,

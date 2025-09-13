@@ -63,15 +63,15 @@ class ConnectionPoolManager:
         elif 'postgresql' in database_uri:
             # PostgreSQL configuration
             if environment == 'production':
-                # Production settings
-                pool_size = min(20, cpu_count * 2)
-                max_overflow = min(10, cpu_count)
+                # Production settings - optimized for performance
+                pool_size = min(10, cpu_count + 4)  # Reduced from 20
+                max_overflow = min(5, cpu_count)    # Reduced from 10
                 
                 config.update({
                     'pool_size': pool_size,
                     'max_overflow': max_overflow,
-                    'pool_timeout': 30,
-                    'pool_recycle': 3600,
+                    'pool_timeout': 20,  # Reduced from 30
+                    'pool_recycle': 1800,  # Reduced from 3600 (30 mins instead of 1 hour)
                     'connect_args': {
                         'connect_timeout': 30,
                         'application_name': 'sat_report_generator',
@@ -80,12 +80,12 @@ class ConnectionPoolManager:
                 })
                 
             elif environment == 'staging':
-                # Staging settings
+                # Staging settings - optimized
                 config.update({
-                    'pool_size': 10,
-                    'max_overflow': 5,
-                    'pool_timeout': 20,
-                    'pool_recycle': 3600,
+                    'pool_size': 5,  # Reduced from 10
+                    'max_overflow': 2,  # Reduced from 5
+                    'pool_timeout': 15,  # Reduced from 20
+                    'pool_recycle': 1800,  # Reduced from 3600
                     'connect_args': {
                         'connect_timeout': 20,
                         'application_name': 'sat_report_generator_staging',
@@ -94,13 +94,13 @@ class ConnectionPoolManager:
                 })
                 
             else:
-                # Development settings
+                # Development settings - optimized
                 config.update({
-                    'pool_size': 5,
-                    'max_overflow': 2,
+                    'pool_size': 2,  # Reduced from 5
+                    'max_overflow': 1,  # Reduced from 2
                     'pool_timeout': 10,
-                    'pool_recycle': 1800,
-                    'echo': True,  # Enable query logging in development
+                    'pool_recycle': 900,  # Reduced from 1800 (15 mins)
+                    'echo': False,  # Disable query logging by default for performance
                     'connect_args': {
                         'connect_timeout': 10,
                         'application_name': 'sat_report_generator_dev'
@@ -108,13 +108,13 @@ class ConnectionPoolManager:
                 })
         
         elif 'mysql' in database_uri:
-            # MySQL configuration
+            # MySQL configuration - optimized
             if environment == 'production':
                 config.update({
-                    'pool_size': 15,
-                    'max_overflow': 8,
-                    'pool_timeout': 30,
-                    'pool_recycle': 3600,
+                    'pool_size': 8,  # Reduced from 15
+                    'max_overflow': 4,  # Reduced from 8
+                    'pool_timeout': 20,  # Reduced from 30
+                    'pool_recycle': 1800,  # Reduced from 3600
                     'connect_args': {
                         'connect_timeout': 30,
                         'charset': 'utf8mb4'
@@ -122,10 +122,10 @@ class ConnectionPoolManager:
                 })
             else:
                 config.update({
-                    'pool_size': 5,
-                    'max_overflow': 2,
+                    'pool_size': 3,  # Reduced from 5
+                    'max_overflow': 1,  # Reduced from 2
                     'pool_timeout': 10,
-                    'pool_recycle': 1800,
+                    'pool_recycle': 900,  # Reduced from 1800
                     'connect_args': {
                         'connect_timeout': 10,
                         'charset': 'utf8mb4'

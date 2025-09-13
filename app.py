@@ -118,12 +118,15 @@ def create_app(config_name='default'):
             # Task CLI is optional, silently skip if not available
             pass
         
-        # Initialize performance optimizations
-        init_connection_pooling(app)
-        init_database_performance(app)
-        
-        # Initialize backup system
-        init_backup_system(app)
+        # Initialize performance optimizations only if needed
+        # Skip for development to improve startup time
+        if config_name == 'production':
+            init_connection_pooling(app)
+            init_database_performance(app)
+            # Skip backup system on startup for performance
+            # init_backup_system(app)  # Run manually when needed
+        else:
+            app.logger.debug("Skipping performance initialization in non-production")
         
         # Initialize Redis caching system
         try:
@@ -145,15 +148,15 @@ def create_app(config_name='default'):
                     app.cache.redis_client,
                     key_prefix='session:'
                 )
-                app.logger.info("Redis session storage initialized")
+                app.logger.debug("Redis session storage initialized")  # Reduced log level
             else:
-                app.logger.info("Using filesystem sessions (Redis not available)")
+                app.logger.debug("Using filesystem sessions (Redis not available)")  # Reduced log level
             
             # Initialize cache monitoring
             from cache.monitoring import init_cache_monitoring
             init_cache_monitoring(app)
             
-            app.logger.info("Cache system initialized successfully")
+            app.logger.debug("Cache system initialized successfully")  # Reduced log level
         except Exception as e:
             app.logger.error(f"Failed to initialize cache system: {e}")
             # Continue without caching if it fails
@@ -166,7 +169,7 @@ def create_app(config_name='default'):
             if hasattr(app, 'cache') and app.cache.redis_client.is_available():
                 query_cache_manager = init_query_cache(app.cache.redis_client, db)
                 app.query_cache = query_cache_manager
-                app.logger.info("Query caching system initialized")
+                app.logger.debug("Query caching system initialized")  # Reduced log level
             else:
                 app.logger.debug("Query caching disabled (Redis not available)")
         except Exception as e:
@@ -180,7 +183,7 @@ def create_app(config_name='default'):
             cdn_extension = create_cdn_extension(app)
             app.cdn_extension = cdn_extension
             
-            app.logger.info("CDN integration initialized")
+            app.logger.debug("CDN integration initialized")  # Reduced log level
         except ImportError:
             # CDN dependencies not installed - this is optional
             app.logger.debug("CDN integration not available (missing dependencies)")

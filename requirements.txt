@@ -95,3 +95,4 @@ pyotp
 qrcode[pil]
 bleach
 structlog
+waitress

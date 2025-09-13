@@ -20,7 +20,7 @@ class QueryPerformanceMonitor:
     """Monitor and analyze database query performance."""
     
     def __init__(self):
-        self.slow_queries = deque(maxlen=1000)  # Keep last 1000 slow queries
+        self.slow_queries = deque(maxlen=100)  # Keep last 100 slow queries - reduced from 1000
         self.query_stats = defaultdict(lambda: {
             'count': 0,
             'total_time': 0,
@@ -29,7 +29,7 @@ class QueryPerformanceMonitor:
             'min_time': float('inf')
         })
         self.lock = threading.Lock()
-        self.slow_query_threshold = 1.0  # 1 second
+        self.slow_query_threshold = 2.0  # 2 seconds - increased from 1.0 to reduce noise
     
     def record_query(self, query, duration, params=None):
         """Record query execution statistics."""
@@ -54,7 +54,7 @@ class QueryPerformanceMonitor:
                     'endpoint': getattr(request, 'endpoint', None) if request else None
                 })
                 
-                logger.warning(f"Slow query detected: {duration:.3f}s - {query[:100]}...")
+                logger.debug(f"Slow query detected: {duration:.3f}s - {query[:100]}...")  # Changed to debug level
     
     def _normalize_query(self, query):
         """Normalize query for statistics grouping."""
