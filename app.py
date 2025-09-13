@@ -7,8 +7,10 @@ from flask import Flask, g, request, render_template, jsonify, make_response, re
 from flask_wtf.csrf import CSRFProtect, generate_csrf, CSRFError
 from flask_login import current_user, login_required, logout_user
 from flask_session import Session
-from config import Config, config
-from config import init_config_system, init_secrets_management
+import config as config_module
+from config import Config
+from config.manager import init_config_system
+from config.secrets import init_secrets_management
 from middleware import init_security_middleware
 from session_manager import session_manager
 
@@ -30,7 +32,7 @@ def create_app(config_name='default'):
     app = Flask(__name__)
     
     # Load configuration based on environment
-    config_class = config.get(config_name, config['default'])
+    config_class = config_module.config.get(config_name, config_module.config['default'])
     app.config.from_object(config_class)
     
     # Initialize hierarchical configuration system
