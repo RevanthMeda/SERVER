@@ -633,7 +633,64 @@
                 </div>
             </div>
 
-            <!-- Project Overview -->
+            <!-- Pending Approvals -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fa fa-clock"></i> Pending Final Approvals</h2>
+                </div>
+                {% if pending_reports %}
+                    <div class="table-responsive">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Document</th>
+                                    <th>Project</th>
+                                    <th>Client</th>
+                                    <th>Prepared By</th>
+                                    <th>Technical Review</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for report in pending_reports %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ report.document_title or 'Untitled Report' }}</strong><br>
+                                        <small>ID: {{ report.id[:8] }}...</small>
+                                    </td>
+                                    <td>{{ report.project_reference or 'N/A' }}</td>
+                                    <td>{{ report.client_name or 'N/A' }}</td>
+                                    <td>{{ report.prepared_by or 'N/A' }}</td>
+                                    <td>
+                                        <span class="status-badge status-approved">
+                                            <i class="fa fa-check"></i> Approved
+                                        </span>
+                                    </td>
+                                    <td>{{ report.created_at.strftime('%Y-%m-%d') if report.created_at else 'N/A' }}</td>
+                                    <td>
+                                        <a href="{{ report.approval_url }}" class="btn-view" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                                            <i class="fa fa-stamp"></i> Final Approval
+                                        </a>
+                                        <a href="{{ url_for('status.view_status', submission_id=report.id) }}" class="btn-view" style="margin-left: 8px;">
+                                            <i class="fa fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fa fa-check-circle"></i>
+                        <h3>No Pending Final Approvals</h3>
+                        <p>All reports have been reviewed. Check back later for reports requiring final approval.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Recent Projects -->
             <div class="dashboard-section">
                 <div class="section-header">
                     <h2><i class="fa fa-folder-open"></i> Recent Projects</h2>
@@ -647,12 +704,12 @@
                                     <th>Client</th>
                                     <th>Status</th>
                                     <th>Progress</th>
-                                    <th>Due Date</th>
+                                    <th>Date</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for report in recent_reports %}
+                                {% for report in recent_reports[:5] %}
                                 <tr>
                                     <td>
                                         <strong>{{ report.document_title or 'Untitled Project' }}</strong><br>
@@ -670,7 +727,7 @@
                                         </div>
                                         <small>{% if report.status == 'APPROVED' %}100{% elif report.status == 'PENDING' %}75{% else %}25{% endif %}% Complete</small>
                                     </td>
-                                    <td>{{ report.updated_at.strftime('%Y-%m-%d') }}</td>
+                                    <td>{{ report.updated_at.strftime('%Y-%m-%d') if report.updated_at else 'N/A' }}</td>
                                     <td>
                                         <a href="{{ url_for('status.view_status', submission_id=report.id) }}" class="btn-view">
                                             <i class="fa fa-eye"></i> View

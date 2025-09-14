@@ -189,7 +189,7 @@ def engineer():
 @no_cache
 def automation_manager():
     """Automation Manager dashboard"""
-    from models import Report, Notification
+    from models import Report, Notification, SATReport
     import json
 
     # Get unread notifications count
@@ -202,31 +202,59 @@ def automation_manager():
         current_app.logger.warning(f"Could not get unread count for Automation Manager: {e}")
         unread_count = 0
 
-    # Get reports count for Automation Manager
-    reports_count = Report.query.filter_by(status='pending_review').count()
-
-    # Get pending approvals assigned to current Automation Manager
-    # Since approvals are stored as JSON in Report.approvals_json, we need to check those
+    # Get pending reports for Automation Manager (Stage 1 approval)
+    pending_reports = []
     pending_approvals = 0
+    
     try:
-        all_reports = Report.query.all()
+        # Get all reports with PENDING status
+        all_reports = Report.query.filter_by(status='PENDING').all()
+        current_app.logger.info(f"Automation Manager: Found {len(all_reports)} PENDING reports")
+        
         for report in all_reports:
             if report.approvals_json:
                 try:
                     approvals = json.loads(report.approvals_json)
+                    # Find stage 1 approval for Automation Manager
                     for approval in approvals:
-                        if (approval.get('approver_email') == current_user.email and 
+                        if (approval.get('stage') == 1 and 
+                            approval.get('approver_email') == current_user.email and 
                             approval.get('status') == 'pending'):
+                            
+                            # Get additional data from SAT report
+                            sat_report = SATReport.query.filter_by(report_id=report.id).first()
+                            if sat_report and sat_report.data_json:
+                                try:
+                                    data = json.loads(sat_report.data_json)
+                                    context_data = data.get('context', {})
+                                    report.document_title = context_data.get('DOCUMENT_TITLE', report.document_title or 'Untitled')
+                                    report.project_reference = context_data.get('PROJECT_REFERENCE', report.project_reference or 'N/A')
+                                    report.client_name = context_data.get('CLIENT_NAME', report.client_name or 'N/A')
+                                    report.prepared_by = context_data.get('PREPARED_BY', report.prepared_by or 'N/A')
+                                except:
+                                    pass
+                            
+                            # Add approval stage info
+                            report.approval_stage = 1
+                            report.approval_url = url_for('approval.approve_submission', 
+                                                         submission_id=report.id, 
+                                                         stage=1)
+                            pending_reports.append(report)
                             pending_approvals += 1
+                            current_app.logger.info(f"Found pending approval for AM: Report {report.id}")
+                            break
                 except json.JSONDecodeError:
+                    current_app.logger.warning(f"Could not decode approvals_json for report {report.id}")
                     continue
+        
+        current_app.logger.info(f"Automation Manager has {pending_approvals} pending approvals")
+        
     except Exception as e:
-        current_app.logger.warning(f"Could not count pending approvals for Automation Manager: {e}")
-        pending_approvals = 0
-
+        current_app.logger.error(f"Error getting pending approvals for Automation Manager: {e}")
+    
     # Get approved reports count
-    approved_reports_count = Report.query.filter_by(status='approved').count()
-
+    approved_reports_count = Report.query.filter_by(status='APPROVED').count()
+    
     # Test database connection
     try:
         db_status = test_db_connection()
@@ -236,9 +264,10 @@ def automation_manager():
 
     return render_template('automation_manager_dashboard.html',
                          unread_count=unread_count,
-                         reports_count=reports_count,
+                         reports_count=len(pending_reports),
                          pending_approvals=pending_approvals,
                          approved_reports_count=approved_reports_count,
+                         pending_reports=pending_reports,
                          db_status=db_status)
 
     # Get team reports count (reports under Automation Manager's review)
@@ -271,12 +300,19 @@ def automation_manager():
                          unread_count=unread_count)
 
 
+@dashboard_bp.route('/automation-manager-reviews')
+@role_required(['Automation Manager'])
+@no_cache
+def automation_manager_reviews():
+    """Automation Manager reviews page - alias for dashboard"""
+    return redirect(url_for('dashboard.automation_manager'))
+
 @dashboard_bp.route('/pm')
 @role_required(['PM'])
 @no_cache
 def pm():
     """Project Manager dashboard"""
-    from models import Report, Notification
+    from models import Report, Notification, SATReport
     import json
 
     # Get unread notifications count
@@ -289,34 +325,77 @@ def pm():
         current_app.logger.warning(f"Could not get unread count for PM: {e}")
         unread_count = 0
 
-    # Get basic statistics for PM dashboard
+    # Get pending reports for PM (Stage 2 approval)
+    pending_reports = []
+    pending_deliverables = 0
+    
     try:
-        # For now, show placeholder data - in future this would be filtered by projects the PM manages
-        project_count = 5  # Placeholder
-        pending_deliverables = 3  # Placeholder
-        completed_reports = 12  # Placeholder
-        on_time_percentage = 85  # Placeholder
+        # Get all reports with PENDING status
+        all_reports = Report.query.filter_by(status='PENDING').all()
+        current_app.logger.info(f"PM: Found {len(all_reports)} PENDING reports")
+        
+        for report in all_reports:
+            if report.approvals_json:
+                try:
+                    approvals = json.loads(report.approvals_json)
+                    
+                    # Check if stage 1 is approved (AM approved)
+                    stage1_approved = any(a.get('stage') == 1 and a.get('status') == 'approved' for a in approvals)
+                    
+                    if stage1_approved:
+                        # Find stage 2 approval for PM
+                        for approval in approvals:
+                            if (approval.get('stage') == 2 and 
+                                approval.get('approver_email') == current_user.email and 
+                                approval.get('status') == 'pending'):
+                                
+                                # Get additional data from SAT report
+                                sat_report = SATReport.query.filter_by(report_id=report.id).first()
+                                if sat_report and sat_report.data_json:
+                                    try:
+                                        data = json.loads(sat_report.data_json)
+                                        context_data = data.get('context', {})
+                                        report.document_title = context_data.get('DOCUMENT_TITLE', report.document_title or 'Untitled')
+                                        report.project_reference = context_data.get('PROJECT_REFERENCE', report.project_reference or 'N/A')
+                                        report.client_name = context_data.get('CLIENT_NAME', report.client_name or 'N/A')
+                                        report.prepared_by = context_data.get('PREPARED_BY', report.prepared_by or 'N/A')
+                                    except:
+                                        pass
+                                
+                                # Add approval stage info
+                                report.approval_stage = 2
+                                report.approval_url = url_for('approval.approve_submission', 
+                                                             submission_id=report.id, 
+                                                             stage=2)
+                                pending_reports.append(report)
+                                pending_deliverables += 1
+                                current_app.logger.info(f"Found pending approval for PM: Report {report.id}")
+                                break
+                except json.JSONDecodeError:
+                    current_app.logger.warning(f"Could not decode approvals_json for report {report.id}")
+                    continue
+        
+        current_app.logger.info(f"PM has {pending_deliverables} pending approvals")
+        
+    except Exception as e:
+        current_app.logger.error(f"Error getting pending approvals for PM: {e}")
+    
+    # Calculate PM-specific statistics
+    project_count = Report.query.count()
+    completed_reports = Report.query.filter_by(status='APPROVED').count()
+    on_time_percentage = 85  # Placeholder for now
+    
+    # Get recent reports for PM
+    recent_reports = Report.query.order_by(Report.created_at.desc()).limit(5).all()
 
-        # Get recent reports (placeholder - would be project-specific in real implementation)
-        recent_reports = []
-
-        return render_template('pm_dashboard.html',
+    return render_template('pm_dashboard.html',
                              project_count=project_count,
                              pending_deliverables=pending_deliverables,
                              completed_reports=completed_reports,
                              on_time_percentage=on_time_percentage,
                              recent_reports=recent_reports,
+                             pending_reports=pending_reports,
                              unread_count=unread_count)
-    except Exception as e:
-        # If there's any error, provide default values
-        current_app.logger.error(f"Error in PM dashboard: {e}")
-        return render_template('pm_dashboard.html',
-                             project_count=0,
-                             pending_deliverables=0,
-                             completed_reports=0,
-                             on_time_percentage=0,
-                             recent_reports=[],
-                             unread_count=0)
 
 # Legacy redirects for dashboard routes
 @dashboard_bp.route('/technical-manager')

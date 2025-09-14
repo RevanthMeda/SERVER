@@ -511,7 +511,7 @@
                     <a href="{{ url_for('dashboard.automation_manager') }}" class="nav-link active">
                         <i class="fa fa-home"></i> Dashboard
                     </a>
-                    <a href="{{ url_for('dashboard.reviews') }}" class="nav-link">
+                    <a href="{{ url_for('dashboard.automation_manager_reviews') }}" class="nav-link">
                         <i class="fa fa-file-alt"></i> Reviews & Approvals
                     </a>
                     <a href="{{ url_for('reports.new') }}" class="nav-link">
@@ -592,7 +592,7 @@
                         <p>Create a new Site Acceptance Test report for project validation</p>
                     </a>
 
-                    <a href="{{ url_for('dashboard.reviews') }}" class="action-card">
+                    <a href="{{ url_for('dashboard.automation_manager_reviews') }}" class="action-card">
                         <div class="action-icon">
                             <i class="fa fa-clipboard-check"></i>
                         </div>
@@ -618,41 +618,40 @@
                 </div>
             </div>
 
-            <!-- Recent Activity -->
+            <!-- Pending Approvals -->
             <div class="dashboard-section">
                 <div class="section-header">
-                    <h2><i class="fa fa-history"></i> Recent Activity</h2>
+                    <h2><i class="fa fa-clock"></i> Pending Approvals</h2>
                 </div>
-                {% if recent_reports %}
+                {% if pending_reports %}
                     <div class="table-responsive">
                         <table class="users-table">
                             <thead>
                                 <tr>
                                     <th>Document</th>
                                     <th>Project</th>
-                                    <th>Created By</th>
-                                    <th>Status</th>
+                                    <th>Client</th>
+                                    <th>Prepared By</th>
                                     <th>Date</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for report in recent_reports %}
+                                {% for report in pending_reports %}
                                 <tr>
                                     <td>
                                         <strong>{{ report.document_title or 'Untitled Report' }}</strong><br>
-                                        <small>{{ report.document_reference or 'No reference' }}</small>
+                                        <small>ID: {{ report.id[:8] }}...</small>
                                     </td>
                                     <td>{{ report.project_reference or 'N/A' }}</td>
-                                    <td>{{ report.user_email }}</td>
+                                    <td>{{ report.client_name or 'N/A' }}</td>
+                                    <td>{{ report.prepared_by or 'N/A' }}</td>
+                                    <td>{{ report.created_at.strftime('%Y-%m-%d') if report.created_at else 'N/A' }}</td>
                                     <td>
-                                        <span class="status-badge status-{{ report.status.lower() }}">
-                                            {{ report.status }}
-                                        </span>
-                                    </td>
-                                    <td>{{ report.created_at.strftime('%Y-%m-%d') }}</td>
-                                    <td>
-                                        <a href="{{ url_for('status.view_status', submission_id=report.id) }}" class="btn-view">
+                                        <a href="{{ report.approval_url }}" class="btn-view" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                            <i class="fa fa-check-circle"></i> Review & Approve
+                                        </a>
+                                        <a href="{{ url_for('status.view_status', submission_id=report.id) }}" class="btn-view" style="margin-left: 8px;">
                                             <i class="fa fa-eye"></i> View
                                         </a>
                                     </td>
@@ -663,8 +662,9 @@
                     </div>
                 {% else %}
                     <div class="empty-state">
-                        <h3>No Recent Activity</h3>
-                        <p>No reports have been created yet. Start by creating your first SAT report.</p>
+                        <i class="fa fa-check-circle"></i>
+                        <h3>No Pending Approvals</h3>
+                        <p>All reports have been reviewed. Check back later for new submissions.</p>
                     </div>
                 {% endif %}
             </div>
