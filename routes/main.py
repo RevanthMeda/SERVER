@@ -233,31 +233,8 @@ def sat_form():
     )
 
 @main_bp.route('/edit/<submission_id>')
-@login_required
-def edit_submission(submission_id):
-    """Edit an existing submission"""
-    from models import Report, SATReport
-    import json
-
-    # Check if submission exists and user has permission
-    report = Report.query.filter_by(id=submission_id).first()
-    if not report:
-        flash('Report not found.', 'error')
-        return redirect(url_for('dashboard.home'))
-
-    # Check if user owns this report or is admin
-    if current_user.email != report.user_email and current_user.role != 'Admin':
-        flash('Access denied. You do not have permission to access this page.', 'error')
-        return redirect(url_for('dashboard.home'))
-
-    # Check if submission is locked
-    if report.locked:
-        flash('This submission is locked and cannot be edited.', 'error')
-        return redirect(url_for('status.view_status', submission_id=submission_id))
-
-@main_bp.route('/edit/<submission_id>')
 @login_required  
-def edit_submission_legacy(submission_id):
+def edit_submission(submission_id):
     """Edit an existing submission (if not yet locked)"""
     try:
         from models import Report, SATReport
