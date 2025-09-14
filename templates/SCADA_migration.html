@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SCADA Migration Assessment Report – Cully Automation</title>
+  <title>Site Survey Form – Cully Automation</title>
 
   <!-- CSS Files -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}"/>
@@ -566,8 +566,8 @@
     <div class="admin-header">
       <div class="header-content">
         <div class="header-info">
-          <h1><i class="fas fa-exchange-alt"></i> SCADA Migration Assessment Report</h1>
-          <p>Cork County Council to Cully Automation Cloud SCADA Migration Assessment for Irish Water</p>
+          <h1><i class="fas fa-clipboard-list"></i> Site Survey Form</h1>
+          <p>Comprehensive Site Assessment and Infrastructure Evaluation for Cully Automation</p>
         </div>
         <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
       </div>
@@ -611,7 +611,7 @@
     <div class="horizontal-progress-bar">
       <div class="progress-container">
         {% set steps = [
-          (1, 'Migration Info', 'Project details and approvals'),
+          (1, 'Site Info', 'Site details and basic information'),
           (2, 'Site Survey', 'Site identification & access details'),
           (3, 'Electrical', 'Electrical & panel systems'),
           (4, 'Automation', 'PLC, HMI & control systems'),
@@ -643,18 +643,18 @@
         <!-- Watermark -->
         <img src="{{ url_for('static', filename='Cully_Watermark.jpg') }}" class="watermark" alt="Watermark" />
 
-        <form id="siteSurveyForm" method="POST" action="{{ url_for('main.generate_site_survey') }}" enctype="multipart/form-data" novalidate onsubmit="return handleFormSubmit(event)">
+        <form id="siteSurveyForm" method="POST" action="{{ url_for('main.generate_scada_migration') }}" enctype="multipart/form-data" novalidate onsubmit="return handleFormSubmit(event)">
           <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
           <input type="hidden" name="submission_id" value="{{ submission_id }}"/>
 
-          <!-- Step 1 — Migration Information & Approvals -->
+          <!-- Step 1 — Site Information & Details -->
           <fieldset class="form-step active" id="step-1">
             <div class="step-header">
               <h1 class="step-legend">
                 <i class="fas fa-info-circle"></i>
-                Step 1 — Migration Information & Approvals
+                Step 1 — Site Information & Details
               </h1>
-              <p style="color: #64748b;">Please provide the basic information about your SCADA Migration Assessment report and approval workflow. Fields marked with <span class="required">*</span> are required.</p>
+              <p style="color: #64748b;">Please provide the basic information about your Site Survey report and approval workflow. Fields marked with <span class="required">*</span> are required.</p>
             </div>
 
             <div class="form-section">
@@ -664,7 +664,7 @@
                 <div class="form-group">
                   <label for="document_title">Document Title <span class="required">*</span></label>
                   <input id="document_title" name="document_title" type="text" required
-                         placeholder="e.g. SCADA Migration Assessment Report v1.0" value="{{ submission_data.DOCUMENT_TITLE or '' }}"/>
+                         placeholder="e.g. Site Survey Report v1.0" value="{{ submission_data.DOCUMENT_TITLE or '' }}"/>
                 </div>
 
                 <div class="form-group">
@@ -2521,7 +2521,7 @@
     let currentStep = 1;
 
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('SCADA Migration Assessment initialized');
+      console.log('Site Survey Form initialized');
       initializeForm();
       initializeApprovalDropdowns();
     });
