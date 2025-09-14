@@ -779,6 +779,17 @@ def generate():
         report.revision = context_to_store.get('REVISION', '')
         report.prepared_by = context_to_store.get('PREPARED_BY', '')
         report.updated_at = dt.datetime.utcnow()
+        
+        # CRITICAL: Update status to PENDING when submitted for approval
+        # Only change from DRAFT to PENDING if there are approvers
+        if approvals and len(approvals) > 0:
+            report.status = 'PENDING'
+            current_app.logger.info(f"Report {submission_id} status changed to PENDING (submitted for approval)")
+        else:
+            # No approvers = stays as DRAFT
+            if not report.status or report.status == '':
+                report.status = 'DRAFT'
+            current_app.logger.info(f"Report {submission_id} status remains {report.status} (no approvals)")
 
         # Prepare submission data for storage
         submission_data = {
@@ -917,11 +928,16 @@ def save_progress():
             report = Report(
                 id=submission_id,
                 type='SAT',
-                status='DRAFT',
+                status='DRAFT',  # Always start as DRAFT
                 user_email=current_user.email if hasattr(current_user, 'email') else '',
                 approvals_json='[]'
             )
             db.session.add(report)
+        # IMPORTANT: Ensure status remains DRAFT for save progress (not submission)
+        # Only preserve existing non-draft status if it's already PENDING/APPROVED
+        if not report.status or report.status == '':
+            report.status = 'DRAFT'
+        current_app.logger.info(f"Save progress: Report {submission_id} status is {report.status}")
 
         # Get or create SAT report record
         sat_report = SATReport.query.filter_by(report_id=submission_id).first()
@@ -1024,11 +1040,16 @@ def auto_save_progress():
             report = Report(
                 id=submission_id,
                 type='SAT',
-                status='DRAFT',
+                status='DRAFT',  # Always start as DRAFT
                 user_email=current_user.email if hasattr(current_user, 'email') else '',
                 approvals_json='[]'
             )
             db.session.add(report)
+        # IMPORTANT: Ensure status remains DRAFT for auto-save (not submission)
+        # Only preserve existing non-draft status if it's already PENDING/APPROVED
+        if not report.status or report.status == '':
+            report.status = 'DRAFT'
+        current_app.logger.debug(f"Auto-save: Report {submission_id} status is {report.status}")
 
         # Get or create SAT report record
         sat_report = SATReport.query.filter_by(report_id=submission_id).first()

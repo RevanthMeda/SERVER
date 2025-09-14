@@ -84,10 +84,13 @@ def admin():
         
         # Add basic report info for display
         for report in recent_reports:
-            # Start with basic data
+            # Use the actual status from the database - DO NOT override!
+            if not report.status:
+                report.status = 'DRAFT'  # Default only if somehow missing
+            
+            # Ensure we have a document title
             report.document_title = report.document_title or 'Untitled Report'
             report.project_reference = report.project_reference or 'N/A'
-            report.status = 'draft'
             
             # Try to get enhanced data from SAT report (with timeout protection)
             try:
@@ -103,23 +106,10 @@ def admin():
                 # Silent fail to prevent log spam and hanging
                 pass
 
-            # Determine status from approvals
-            if report.approvals_json:
-                try:
-                    approvals = json.loads(report.approvals_json)
-                    if approvals:
-                        statuses = [a.get("status", "pending") for a in approvals]
-                        if "rejected" in statuses:
-                            report.status = "rejected"
-                        elif all(status == "approved" for status in statuses):
-                            report.status = "approved"
-                        elif any(status == "approved" for status in statuses):
-                            report.status = "partially_approved"
-                        else:
-                            report.status = "pending"
-                except Exception as approval_error:
-                    current_app.logger.debug(f"Could not parse approvals for report {report.id}: {approval_error}")
-                    report.status = "pending"
+            # Keep the actual database status - don't compute it from approvals!
+            # The status field should reflect the true report state
+            # Normalize to lowercase for display consistency
+            report.status = report.status.lower() if report.status else 'draft'
                     
     except Exception as e:
         current_app.logger.error(f"Could not retrieve report statistics for admin: {e}", exc_info=True)
@@ -904,16 +894,12 @@ def my_reports():
             current_app.logger.warning(f"Could not decode approvals_json for report ID: {report.id}")
             approvals = [] # Handle malformed JSON
 
-        # Determine overall status
-        statuses = [a.get("status", "pending") for a in approvals]
-        if "rejected" in statuses:
-            overall_status = "rejected"
-        elif all(status == "approved" for status in statuses):
-            overall_status = "approved"
-        elif any(status == "approved" for status in statuses):
-            overall_status = "partially_approved"
-        else:
-            overall_status = "pending"
+        # Use the actual status from the database - DO NOT compute from approvals!
+        # The status field in the database is the source of truth
+        actual_status = report.status if report.status else 'DRAFT'
+        
+        # Normalize status for display (convert DRAFT -> draft, etc.)
+        normalized_status = actual_status.lower() if actual_status else 'draft'
 
         report_list.append({
             "id": report.id,
@@ -922,8 +908,9 @@ def my_reports():
             "project_reference": stored_data.get("context", {}).get("PROJECT_REFERENCE", ""),
             "created_at": report.created_at,
             "updated_at": report.updated_at,
-            "status": overall_status,
-            "locked": report.locked
+            "status": normalized_status,
+            "locked": report.locked,
+            "user_email": report.user_email  # Include user_email for edit permission check
         })
 
     return render_template('my_reports.html', reports=report_list)
