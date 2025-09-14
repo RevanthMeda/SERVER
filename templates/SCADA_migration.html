@@ -612,12 +612,16 @@
       <div class="progress-container">
         {% set steps = [
           (1, 'Migration Info', 'Project details and approvals'),
-          (2, 'Current State', 'Existing SCADA analysis'),
-          (3, 'Compatibility', 'Hardware/software assessment'),
-          (4, 'Network Review', 'Infrastructure evaluation'),
-          (5, 'Migration Plan', 'Implementation strategy'),
-          (6, 'Risk Analysis', 'Migration risks'),
-          (7, 'Final Review', 'Summary and approval')
+          (2, 'Site Survey', 'Site identification & access details'),
+          (3, 'Electrical', 'Electrical & panel systems'),
+          (4, 'Automation', 'PLC, HMI & control systems'),
+          (5, 'Networks', 'Network & communications'),
+          (6, 'SCADA', 'SCADA & monitoring systems'),
+          (7, 'Testing', 'Testing & verification'),
+          (8, 'Security', 'Cybersecurity & documentation'),
+          (9, 'Maintenance', 'Maintenance & tracking'),
+          (10, 'Documentation', 'Network diagrams & images'),
+          (11, 'Final Review', 'Issues & approvals')
         ] %}
         
         {% for num, title, desc in steps %}
@@ -639,7 +643,7 @@
         <!-- Watermark -->
         <img src="{{ url_for('static', filename='Cully_Watermark.jpg') }}" class="watermark" alt="Watermark" />
 
-        <form id="scadaMigrationForm" method="POST" action="{{ url_for('main.generate_scada_migration') }}" enctype="multipart/form-data" novalidate onsubmit="return handleFormSubmit(event)">
+        <form id="siteSurveyForm" method="POST" action="{{ url_for('main.generate_site_survey') }}" enctype="multipart/form-data" novalidate onsubmit="return handleFormSubmit(event)">
           <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
           <input type="hidden" name="submission_id" value="{{ submission_id }}"/>
 
@@ -786,45 +790,275 @@
             </div>
           </fieldset>
 
-          <!-- Step 2 — Current SCADA State Analysis -->
+          <!-- Step 2 — Site Survey & Assessment -->
           <fieldset class="form-step" id="step-2">
             <div class="step-header">
               <h1 class="step-legend">
-                <i class="fas fa-desktop"></i>
-                Step 2 — Current SCADA State Analysis
+                <i class="fas fa-clipboard-list"></i>
+                Step 2 — Site Survey & Assessment
               </h1>
-              <p style="color: #64748b;">Assess the current SCADA system configuration and capabilities that will be migrated.</p>
+              <p style="color: #64748b;">Comprehensive Site Survey, Maintenance & Digital Knowledge Tracking Form</p>
             </div>
 
             <div class="form-section">
-              <h4><i class="fas fa-server"></i> Current SCADA System Information</h4>
+              <h4><i class="fas fa-info-circle"></i> Document Information</h4>
 
               <div class="form-row">
                 <div class="form-group">
-                  <label for="current_scada_vendor">Current SCADA Vendor</label>
-                  <input id="current_scada_vendor" name="current_scada_vendor" type="text"
-                         placeholder="e.g. Wonderware, Ignition, WinCC" value="{{ submission_data.CURRENT_SCADA_VENDOR or '' }}"/>
+                  <label for="survey_project_reference">Project Reference</label>
+                  <input id="survey_project_reference" name="survey_project_reference" type="text"
+                         placeholder="Enter project reference" value="{{ submission_data.SURVEY_PROJECT_REFERENCE or '' }}"/>
                 </div>
 
                 <div class="form-group">
-                  <label for="current_scada_version">Current SCADA Version</label>
-                  <input id="current_scada_version" name="current_scada_version" type="text"
-                         placeholder="e.g. v2017, v8.1, 7.5 SP2" value="{{ submission_data.CURRENT_SCADA_VERSION or '' }}"/>
+                  <label for="survey_date_field">Survey Date</label>
+                  <input id="survey_date_field" name="survey_date_field" type="date" value="{{ submission_data.SURVEY_DATE_FIELD or '' }}"/>
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
-                  <label for="current_os">Current Operating System</label>
-                  <input id="current_os" name="current_os" type="text"
-                         placeholder="e.g. Windows Server 2016, Windows 10" value="{{ submission_data.CURRENT_OS or '' }}"/>
+                  <label for="survey_type">Survey Type</label>
+                  <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 8px;">
+                    <label><input type="checkbox" name="survey_type" value="Initial Survey"/> Initial Survey</label>
+                    <label><input type="checkbox" name="survey_type" value="Maintenance Visit"/> Maintenance Visit</label>
+                    <label><input type="checkbox" name="survey_type" value="Assessment"/> Assessment</label>
+                    <label><input type="checkbox" name="survey_type" value="Upgrade"/> Upgrade</label>
+                    <label><input type="checkbox" name="survey_type" value="Issue Investigation"/> Issue Investigation</label>
+                    <input type="text" name="survey_type_other" placeholder="Other (specify)" style="margin-top: 5px; width: 100%;"/>
+                  </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="current_database">Current Database</label>
-                  <input id="current_database" name="current_database" type="text"
-                         placeholder="e.g. SQL Server 2016, MySQL, Oracle" value="{{ submission_data.CURRENT_DATABASE or '' }}"/>
+                  <label for="survey_version">Version</label>
+                  <input id="survey_version" name="survey_version" type="text"
+                         placeholder="e.g. v1.0" value="{{ submission_data.SURVEY_VERSION or '' }}"/>
                 </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-map-marker-alt"></i> 1. Site Identification & Access</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Field</th>
+                      <th>Information</th>
+                      <th>Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Site Name</strong></td>
+                      <td><input name="site_name" placeholder="Site name"/></td>
+                      <td><input name="site_name_comments" placeholder="Comments"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Location/Address</strong></td>
+                      <td><input name="location_address" placeholder="Full address"/></td>
+                      <td><input name="location_comments" placeholder="Comments"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>GPS Coordinates</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 5px;">
+                          <input name="gps_lat" placeholder="Lat:" style="width: 100px;"/>
+                          <input name="gps_long" placeholder="Long:" style="width: 100px;"/>
+                        </div>
+                      </td>
+                      <td><input name="gps_comments" placeholder="Comments"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Site Code/Reference</strong></td>
+                      <td><input name="site_code" placeholder="Site code"/></td>
+                      <td><input name="site_code_comments" placeholder="Comments"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Site Type</strong></td>
+                      <td>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                          <label><input type="checkbox" name="site_type_survey" value="Water"/> Water</label>
+                          <label><input type="checkbox" name="site_type_survey" value="Pump"/> Pump</label>
+                          <label><input type="checkbox" name="site_type_survey" value="Ind"/> Ind</label>
+                          <label><input type="checkbox" name="site_type_survey" value="Com"/> Com</label>
+                          <input type="text" name="site_type_other_survey" placeholder="Other:" style="width: 80px;"/>
+                        </div>
+                      </td>
+                      <td><input name="site_type_comments" placeholder="Comments"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Site Classification</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="site_classification_survey" value="Critical"/> Critical</label>
+                          <label><input type="radio" name="site_classification_survey" value="High"/> High</label>
+                          <label><input type="radio" name="site_classification_survey" value="Std"/> Std</label>
+                          <label><input type="radio" name="site_classification_survey" value="Low"/> Low</label>
+                        </div>
+                      </td>
+                      <td><input name="site_classification_comments" placeholder="Comments"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-users"></i> Contacts & Access</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Role</th>
+                      <th>Name</th>
+                      <th>Phone</th>
+                      <th>Hours</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Primary Contact</strong></td>
+                      <td><input name="primary_contact_name_survey" placeholder="Name"/></td>
+                      <td><input name="primary_contact_phone_survey" placeholder="Phone"/></td>
+                      <td><input name="primary_contact_hours_survey" placeholder="Hours"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Area Engineer</strong></td>
+                      <td><input name="area_engineer_name_survey" placeholder="Name"/></td>
+                      <td><input name="area_engineer_phone_survey" placeholder="Phone"/></td>
+                      <td><input name="area_engineer_hours_survey" placeholder="Hours"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Site Caretaker</strong></td>
+                      <td><input name="site_caretaker_name_survey" placeholder="Name"/></td>
+                      <td><input name="site_caretaker_phone_survey" placeholder="Phone"/></td>
+                      <td><input name="site_caretaker_hours_survey" placeholder="Hours"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Emergency Contact</strong></td>
+                      <td><input name="emergency_contact_name_survey" placeholder="Name"/></td>
+                      <td><input name="emergency_contact_phone_survey" placeholder="Phone"/></td>
+                      <td><input name="emergency_contact_hours_survey" placeholder="Hours"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-shield-alt"></i> Site Conditions</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Aspect</th>
+                      <th>Status</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>On-Site Parking</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="parking_status_survey" value="Yes"/> Yes</label>
+                          <label><input type="radio" name="parking_status_survey" value="Limited"/> Limited</label>
+                          <label><input type="radio" name="parking_status_survey" value="None"/> None</label>
+                        </div>
+                      </td>
+                      <td><input name="parking_notes_survey" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Security</strong></td>
+                      <td>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                          <label><input type="checkbox" name="security_features_survey" value="Fence"/> Fence</label>
+                          <label><input type="checkbox" name="security_features_survey" value="CCTV"/> CCTV</label>
+                          <label><input type="checkbox" name="security_features_survey" value="Alarm"/> Alarm</label>
+                          <label><input type="checkbox" name="security_features_survey" value="None"/> None</label>
+                        </div>
+                      </td>
+                      <td><input name="security_notes_survey" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Env. Conditions</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 5px;">
+                          <input name="temperature_survey" placeholder="Temp:_°C" style="width: 80px;"/>
+                          <input name="humidity_survey" placeholder="Humidity:%" style="width: 90px;"/>
+                        </div>
+                      </td>
+                      <td><input name="env_conditions_notes_survey" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Cleanliness</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 6px;">
+                          <label><input type="radio" name="cleanliness_status_survey" value="Excellent"/> Excellent</label>
+                          <label><input type="radio" name="cleanliness_status_survey" value="Good"/> Good</label>
+                          <label><input type="radio" name="cleanliness_status_survey" value="Poor"/> Poor</label>
+                        </div>
+                      </td>
+                      <td><input name="cleanliness_notes_survey" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hazards Identified</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="hazards_identified_survey" value="No"/> No</label>
+                          <label><input type="radio" name="hazards_identified_survey" value="Yes"/> Yes (describe)</label>
+                        </div>
+                      </td>
+                      <td><input name="hazards_description_survey" placeholder="Description"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-history"></i> 2. Previous Visit & Current Status</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Field</th>
+                      <th>Information</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Last Visit Date</strong></td>
+                      <td><input name="last_visit_date_survey" type="date"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Last Survey By</strong></td>
+                      <td><input name="last_survey_by_survey" placeholder="Engineer name"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Previous Issues</strong></td>
+                      <td><textarea name="previous_issues_survey" rows="2" placeholder="Previous issues"></textarea></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Previous Actions/Notes</strong></td>
+                      <td><textarea name="previous_actions_survey" rows="2" placeholder="Actions and notes"></textarea></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Outstanding Items</strong></td>
+                      <td><textarea name="outstanding_items_survey" rows="2" placeholder="Outstanding items"></textarea></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h5 style="margin: 20px 0 10px 0; color: var(--admin-primary);">Current Visit Objectives</h5>
+              <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" name="visit_objectives_survey" value="Routine Inspection"/> Routine Inspection</label>
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" name="visit_objectives_survey" value="Upgrade"/> Upgrade</label>
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" name="visit_objectives_survey" value="New Install"/> New Install</label>
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" name="visit_objectives_survey" value="Maintenance/Repair"/> Maintenance/Repair</label>
+                <input type="text" name="other_objectives_survey" placeholder="Other: ____________" style="margin-top: 5px; width: 200px;"/>
               </div>
             </div>
 
@@ -837,75 +1071,369 @@
               </button>
             </div>
           </fieldset>
-          <!-- Step 7 — Final Review & Approval -->
-          <fieldset class="form-step" id="step-7">
+
+          <!-- Step 3 — Electrical & Panel Systems -->
+          <fieldset class="form-step" id="step-3">
             <div class="step-header">
               <h1 class="step-legend">
-                <i class="fas fa-clipboard-check"></i>
-                Step 7 — Final Review & Migration Approval
+                <i class="fas fa-bolt"></i>
+                Step 3 — Electrical & Panel Systems
               </h1>
-              <p style="color: #64748b;">Review the complete SCADA migration assessment and provide final approval for implementation.</p>
+              <p style="color: #64748b;">Electrical power systems and control panel assessment</p>
             </div>
 
             <div class="form-section">
-              <h4><i class="fas fa-check-circle"></i> Migration Readiness Assessment</h4>
+              <h4><i class="fas fa-plug"></i> 3. Electrical & Panel Systems</h4>
+              
+              <h5 style="margin: 20px 0 10px 0; color: var(--admin-primary);">Power</h5>
               <div class="table-container">
                 <table>
                   <thead>
                     <tr>
-                      <th>Migration Readiness Criteria</th>
+                      <th>Parameter</th>
+                      <th>Spec/Measured</th>
                       <th>Status</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Primary Supply</strong></td>
+                      <td><input name="primary_supply_spec" placeholder="Voltage/Current"/></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="primary_supply_status" value="OK"/> OK</label>
+                          <label><input type="radio" name="primary_supply_status" value="Issue"/> Issue</label>
+                        </div>
+                      </td>
+                      <td><input name="primary_supply_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Phase 1</strong></td>
+                      <td><input name="phase1_spec" placeholder="Measurement"/></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="phase1_status" value="OK"/> OK</label>
+                          <label><input type="radio" name="phase1_status" value="Issue"/> Issue</label>
+                        </div>
+                      </td>
+                      <td><input name="phase1_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>24VDC</strong></td>
+                      <td><input name="dc24v_spec" placeholder="Measurement"/></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="dc24v_status" value="OK"/> OK</label>
+                          <label><input type="radio" name="dc24v_status" value="Issue"/> Issue</label>
+                        </div>
+                      </td>
+                      <td><input name="dc24v_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>UPS System/Genset</strong></td>
+                      <td><input name="ups_genset_spec" placeholder="Capacity/Type"/></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="ups_genset_status" value="OK"/> OK</label>
+                          <label><input type="radio" name="ups_genset_status" value="Issue"/> Issue</label>
+                        </div>
+                      </td>
+                      <td><input name="ups_genset_notes" placeholder="Notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h5 style="margin: 20px 0 10px 0; color: var(--admin-primary);">Panel</h5>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Component</th>
+                      <th>Status</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Panel Mounting</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="panel_mounting_status" value="Secure"/> Secure</label>
+                          <label><input type="radio" name="panel_mounting_status" value="Issue"/> Issue</label>
+                        </div>
+                      </td>
+                      <td><input name="panel_mounting_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Cable Management</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="cable_management_status" value="Ok"/> Ok</label>
+                          <label><input type="radio" name="cable_management_status" value="Messy"/> Messy</label>
+                        </div>
+                      </td>
+                      <td><input name="cable_management_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Grounding/Bonding</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="grounding_status" value="Good"/> Good</label>
+                          <label><input type="radio" name="grounding_status" value="Issue"/> Issue</label>
+                        </div>
+                      </td>
+                      <td><input name="grounding_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Labeling</strong></td>
+                      <td>
+                        <div style="display: flex; gap: 8px;">
+                          <label><input type="radio" name="labeling_status" value="Complete"/> Complete</label>
+                          <label><input type="radio" name="labeling_status" value="Missing"/> Missing</label>
+                        </div>
+                      </td>
+                      <td><input name="labeling_notes" placeholder="Notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(2)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(4)">
+                Next Step <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 4 — Automation & Control -->
+          <fieldset class="form-step" id="step-4">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-microchip"></i>
+                Step 4 — Automation & Control
+              </h1>
+              <p style="color: #64748b;">PLC/Controller and HMI systems assessment</p>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-cpu"></i> 4. Automation & Control</h4>
+              
+              <h5 style="margin: 20px 0 10px 0; color: var(--admin-primary);">PLC/Controller</h5>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Details</th>
+                      <th>Serial #</th>
+                      <th>Status</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Make/Model</strong></td>
+                      <td><input name="plc_make_model" placeholder="e.g. Siemens S7-1200"/></td>
+                      <td><input name="plc_serial" placeholder="Serial number"/></td>
+                      <td>
+                        <select name="plc_status">
+                          <option value="">Select...</option>
+                          <option value="OK">OK</option>
+                          <option value="Issue">Issue</option>
+                          <option value="Needs Update">Needs Update</option>
+                        </select>
+                      </td>
+                      <td><input name="plc_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>CPU/Modules</strong></td>
+                      <td><input name="plc_cpu_modules" placeholder="CPU and I/O modules"/></td>
+                      <td><input name="plc_cpu_serial" placeholder="CPU serial"/></td>
+                      <td>
+                        <select name="plc_cpu_status">
+                          <option value="">Select...</option>
+                          <option value="OK">OK</option>
+                          <option value="Issue">Issue</option>
+                        </select>
+                      </td>
+                      <td><input name="plc_cpu_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>FW Version</strong></td>
+                      <td><input name="plc_fw_version" placeholder="Firmware version"/></td>
+                      <td><input name="plc_fw_serial" placeholder="-"/></td>
+                      <td>
+                        <select name="plc_fw_status">
+                          <option value="">Select...</option>
+                          <option value="Current">Current</option>
+                          <option value="Outdated">Outdated</option>
+                          <option value="Unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input name="plc_fw_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>I/Os</strong></td>
+                      <td><input name="plc_io_details" placeholder="I/O configuration"/></td>
+                      <td><input name="plc_io_serial" placeholder="-"/></td>
+                      <td>
+                        <select name="plc_io_status">
+                          <option value="">Select...</option>
+                          <option value="OK">OK</option>
+                          <option value="Issue">Issue</option>
+                          <option value="Needs Expansion">Needs Expansion</option>
+                        </select>
+                      </td>
+                      <td><input name="plc_io_notes" placeholder="Notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h5 style="margin: 20px 0 10px 0; color: var(--admin-primary);">HMI</h5>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Value</th>
+                      <th>Status</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Make/Model</strong></td>
+                      <td><input name="hmi_make_model" placeholder="e.g. Siemens TP700"/></td>
+                      <td>
+                        <select name="hmi_status">
+                          <option value="">Select...</option>
+                          <option value="OK">OK</option>
+                          <option value="Issue">Issue</option>
+                          <option value="Needs Replacement">Needs Replacement</option>
+                        </select>
+                      </td>
+                      <td><input name="hmi_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>SW Version</strong></td>
+                      <td><input name="hmi_sw_version" placeholder="Software version"/></td>
+                      <td>
+                        <select name="hmi_sw_status">
+                          <option value="">Select...</option>
+                          <option value="Current">Current</option>
+                          <option value="Outdated">Outdated</option>
+                          <option value="Unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input name="hmi_sw_notes" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Touch Functionality</strong></td>
+                      <td><input name="hmi_touch_function" placeholder="Touch responsiveness"/></td>
+                      <td>
+                        <select name="hmi_touch_status">
+                          <option value="">Select...</option>
+                          <option value="OK">OK</option>
+                          <option value="Poor Response">Poor Response</option>
+                          <option value="Not Working">Not Working</option>
+                        </select>
+                      </td>
+                      <td><input name="hmi_touch_notes" placeholder="Notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(3)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(5)">
+                Next Step <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 5: Networks & Communications -->
+          <fieldset class="form-step" id="step-5">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-network-wired"></i>
+                Step 5 — Networks & Communications
+              </h1>
+              <p style="color: #64748b;">Assessment of network infrastructure, devices, and communication systems.</p>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-server"></i> Network Devices</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Device Type</th>
+                      <th>Make/Model</th>
+                      <th>IP Address</th>
+                      <th>Status</th>
+                      <th>Location</th>
                       <th>Comments</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td><strong>Hardware Compatibility Verified</strong></td>
+                      <td><input type="text" name="network_device_type_1" placeholder="Router/Switch/AP"/></td>
+                      <td><input type="text" name="network_device_model_1" placeholder="Make and Model"/></td>
+                      <td><input type="text" name="network_device_ip_1" placeholder="192.168.x.x"/></td>
                       <td>
-                        <select name="hardware_compatibility_verified">
-                          <option value="">Select...</option>
-                          <option value="Ready">Ready</option>
-                          <option value="Requires Updates">Requires Updates</option>
-                          <option value="Needs Replacement">Needs Replacement</option>
+                        <select name="network_device_status_1">
+                          <option value="">Select Status</option>
+                          <option value="operational">Operational</option>
+                          <option value="degraded">Degraded</option>
+                          <option value="failed">Failed</option>
+                          <option value="unknown">Unknown</option>
                         </select>
                       </td>
-                      <td><input name="hardware_compatibility_comments" placeholder="Additional notes"/></td>
+                      <td><input type="text" name="network_device_location_1" placeholder="Panel/Rack location"/></td>
+                      <td><input type="text" name="network_device_comments_1" placeholder="Additional notes"/></td>
                     </tr>
                     <tr>
-                      <td><strong>Network Infrastructure Ready</strong></td>
+                      <td><input type="text" name="network_device_type_2" placeholder="Router/Switch/AP"/></td>
+                      <td><input type="text" name="network_device_model_2" placeholder="Make and Model"/></td>
+                      <td><input type="text" name="network_device_ip_2" placeholder="192.168.x.x"/></td>
                       <td>
-                        <select name="network_infrastructure_ready">
-                          <option value="">Select...</option>
-                          <option value="Ready">Ready</option>
-                          <option value="Requires Upgrades">Requires Upgrades</option>
-                          <option value="Major Changes Needed">Major Changes Needed</option>
+                        <select name="network_device_status_2">
+                          <option value="">Select Status</option>
+                          <option value="operational">Operational</option>
+                          <option value="degraded">Degraded</option>
+                          <option value="failed">Failed</option>
+                          <option value="unknown">Unknown</option>
                         </select>
                       </td>
-                      <td><input name="network_infrastructure_comments" placeholder="Additional notes"/></td>
+                      <td><input type="text" name="network_device_location_2" placeholder="Panel/Rack location"/></td>
+                      <td><input type="text" name="network_device_comments_2" placeholder="Additional notes"/></td>
                     </tr>
                     <tr>
-                      <td><strong>Migration Plan Approved</strong></td>
+                      <td><input type="text" name="network_device_type_3" placeholder="Router/Switch/AP"/></td>
+                      <td><input type="text" name="network_device_model_3" placeholder="Make and Model"/></td>
+                      <td><input type="text" name="network_device_ip_3" placeholder="192.168.x.x"/></td>
                       <td>
-                        <select name="migration_plan_approved">
-                          <option value="">Select...</option>
-                          <option value="Approved">Approved</option>
-                          <option value="Approved with Conditions">Approved with Conditions</option>
-                          <option value="Requires Revision">Requires Revision</option>
+                        <select name="network_device_status_3">
+                          <option value="">Select Status</option>
+                          <option value="operational">Operational</option>
+                          <option value="degraded">Degraded</option>
+                          <option value="failed">Failed</option>
+                          <option value="unknown">Unknown</option>
                         </select>
                       </td>
-                      <td><input name="migration_plan_comments" placeholder="Additional notes"/></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Risk Mitigation Strategies Defined</strong></td>
-                      <td>
-                        <select name="risk_mitigation_defined">
-                          <option value="">Select...</option>
-                          <option value="Complete">Complete</option>
-                          <option value="Partially Complete">Partially Complete</option>
-                          <option value="Needs Development">Needs Development</option>
-                        </select>
-                      </td>
-                      <td><input name="risk_mitigation_comments" placeholder="Additional notes"/></td>
+                      <td><input type="text" name="network_device_location_3" placeholder="Panel/Rack location"/></td>
+                      <td><input type="text" name="network_device_comments_3" placeholder="Additional notes"/></td>
                     </tr>
                   </tbody>
                 </table>
@@ -913,24 +1441,1057 @@
             </div>
 
             <div class="form-section">
-              <h4><i class="fas fa-signature"></i> Migration Assessment Approval</h4>
+              <h4><i class="fas fa-cogs"></i> Network Settings</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Current Value</th>
+                      <th>Required Value</th>
+                      <th>Status</th>
+                      <th>Action Required</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Subnet Mask</strong></td>
+                      <td><input type="text" name="subnet_mask_current" placeholder="255.255.255.0"/></td>
+                      <td><input type="text" name="subnet_mask_required" placeholder="255.255.255.0"/></td>
+                      <td>
+                        <select name="subnet_mask_status">
+                          <option value="">Select</option>
+                          <option value="compliant">Compliant</option>
+                          <option value="non_compliant">Non-Compliant</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="subnet_mask_action" placeholder="Configuration change needed"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Gateway</strong></td>
+                      <td><input type="text" name="gateway_current" placeholder="192.168.x.1"/></td>
+                      <td><input type="text" name="gateway_required" placeholder="192.168.x.1"/></td>
+                      <td>
+                        <select name="gateway_status">
+                          <option value="">Select</option>
+                          <option value="compliant">Compliant</option>
+                          <option value="non_compliant">Non-Compliant</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="gateway_action" placeholder="Configuration change needed"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>DNS Servers</strong></td>
+                      <td><input type="text" name="dns_current" placeholder="8.8.8.8, 8.8.4.4"/></td>
+                      <td><input type="text" name="dns_required" placeholder="Corporate DNS"/></td>
+                      <td>
+                        <select name="dns_status">
+                          <option value="">Select</option>
+                          <option value="compliant">Compliant</option>
+                          <option value="non_compliant">Non-Compliant</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="dns_action" placeholder="DNS configuration update"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>VLAN Configuration</strong></td>
+                      <td><input type="text" name="vlan_current" placeholder="Current VLAN setup"/></td>
+                      <td><input type="text" name="vlan_required" placeholder="Required VLAN setup"/></td>
+                      <td>
+                        <select name="vlan_status">
+                          <option value="">Select</option>
+                          <option value="compliant">Compliant</option>
+                          <option value="non_compliant">Non-Compliant</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="vlan_action" placeholder="VLAN reconfiguration"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-broadcast-tower"></i> Communication Systems</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Communication Type</th>
+                      <th>Protocol/Standard</th>
+                      <th>Current Status</th>
+                      <th>Signal Strength</th>
+                      <th>Reliability</th>
+                      <th>Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Ethernet</strong></td>
+                      <td><input type="text" name="ethernet_protocol" placeholder="TCP/IP, Modbus TCP"/></td>
+                      <td>
+                        <select name="ethernet_status">
+                          <option value="">Select Status</option>
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                          <option value="intermittent">Intermittent</option>
+                          <option value="failed">Failed</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="ethernet_signal" placeholder="Link speed (Mbps)"/></td>
+                      <td>
+                        <select name="ethernet_reliability">
+                          <option value="">Select</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="fair">Fair</option>
+                          <option value="poor">Poor</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="ethernet_comments" placeholder="Cable condition, connection quality"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Serial Communications</strong></td>
+                      <td><input type="text" name="serial_protocol" placeholder="Modbus RTU, DNP3"/></td>
+                      <td>
+                        <select name="serial_status">
+                          <option value="">Select Status</option>
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                          <option value="intermittent">Intermittent</option>
+                          <option value="failed">Failed</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="serial_signal" placeholder="Baud rate, cable length"/></td>
+                      <td>
+                        <select name="serial_reliability">
+                          <option value="">Select</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="fair">Fair</option>
+                          <option value="poor">Poor</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="serial_comments" placeholder="Cable type, termination"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Wireless</strong></td>
+                      <td><input type="text" name="wireless_protocol" placeholder="Wi-Fi, Cellular, Radio"/></td>
+                      <td>
+                        <select name="wireless_status">
+                          <option value="">Select Status</option>
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                          <option value="intermittent">Intermittent</option>
+                          <option value="failed">Failed</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="wireless_signal" placeholder="Signal strength (dBm)"/></td>
+                      <td>
+                        <select name="wireless_reliability">
+                          <option value="">Select</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="fair">Fair</option>
+                          <option value="poor">Poor</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="wireless_comments" placeholder="Antenna condition, interference"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(4)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(6)">
+                Next Step <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 6: SCADA & Monitoring Systems -->
+          <fieldset class="form-step" id="step-6">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-desktop"></i>
+                Step 6 — SCADA & Monitoring Systems
+              </h1>
+              <p style="color: #64748b;">Assessment of SCADA systems, monitoring devices, and data management.</p>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-monitor-waveform"></i> Monitoring Devices</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Device Type</th>
+                      <th>Make/Model</th>
+                      <th>Function</th>
+                      <th>Status</th>
+                      <th>Data Quality</th>
+                      <th>Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="text" name="monitor_device_type_1" placeholder="RTU/IOT/Sensor"/></td>
+                      <td><input type="text" name="monitor_device_model_1" placeholder="Make and Model"/></td>
+                      <td><input type="text" name="monitor_device_function_1" placeholder="Monitoring function"/></td>
+                      <td>
+                        <select name="monitor_device_status_1">
+                          <option value="">Select Status</option>
+                          <option value="operational">Operational</option>
+                          <option value="degraded">Degraded</option>
+                          <option value="offline">Offline</option>
+                          <option value="failed">Failed</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="monitor_data_quality_1">
+                          <option value="">Select Quality</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="poor">Poor</option>
+                          <option value="unreliable">Unreliable</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="monitor_device_comments_1" placeholder="Additional notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" name="monitor_device_type_2" placeholder="RTU/IOT/Sensor"/></td>
+                      <td><input type="text" name="monitor_device_model_2" placeholder="Make and Model"/></td>
+                      <td><input type="text" name="monitor_device_function_2" placeholder="Monitoring function"/></td>
+                      <td>
+                        <select name="monitor_device_status_2">
+                          <option value="">Select Status</option>
+                          <option value="operational">Operational</option>
+                          <option value="degraded">Degraded</option>
+                          <option value="offline">Offline</option>
+                          <option value="failed">Failed</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="monitor_data_quality_2">
+                          <option value="">Select Quality</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="poor">Poor</option>
+                          <option value="unreliable">Unreliable</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="monitor_device_comments_2" placeholder="Additional notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" name="monitor_device_type_3" placeholder="RTU/IOT/Sensor"/></td>
+                      <td><input type="text" name="monitor_device_model_3" placeholder="Make and Model"/></td>
+                      <td><input type="text" name="monitor_device_function_3" placeholder="Monitoring function"/></td>
+                      <td>
+                        <select name="monitor_device_status_3">
+                          <option value="">Select Status</option>
+                          <option value="operational">Operational</option>
+                          <option value="degraded">Degraded</option>
+                          <option value="offline">Offline</option>
+                          <option value="failed">Failed</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="monitor_data_quality_3">
+                          <option value="">Select Quality</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="poor">Poor</option>
+                          <option value="unreliable">Unreliable</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="monitor_device_comments_3" placeholder="Additional notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-database"></i> Database Systems</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Database Type</th>
+                      <th>Version</th>
+                      <th>Storage Capacity</th>
+                      <th>Performance</th>
+                      <th>Backup Status</th>
+                      <th>Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="text" name="db_type_1" placeholder="SQL Server/MySQL/Oracle"/></td>
+                      <td><input type="text" name="db_version_1" placeholder="Version number"/></td>
+                      <td><input type="text" name="db_capacity_1" placeholder="Storage size"/></td>
+                      <td>
+                        <select name="db_performance_1">
+                          <option value="">Select Performance</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="fair">Fair</option>
+                          <option value="poor">Poor</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="db_backup_status_1">
+                          <option value="">Select Status</option>
+                          <option value="current">Current</option>
+                          <option value="outdated">Outdated</option>
+                          <option value="missing">Missing</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="db_comments_1" placeholder="Additional notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" name="db_type_2" placeholder="SQL Server/MySQL/Oracle"/></td>
+                      <td><input type="text" name="db_version_2" placeholder="Version number"/></td>
+                      <td><input type="text" name="db_capacity_2" placeholder="Storage size"/></td>
+                      <td>
+                        <select name="db_performance_2">
+                          <option value="">Select Performance</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="fair">Fair</option>
+                          <option value="poor">Poor</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="db_backup_status_2">
+                          <option value="">Select Status</option>
+                          <option value="current">Current</option>
+                          <option value="outdated">Outdated</option>
+                          <option value="missing">Missing</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="db_comments_2" placeholder="Additional notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-bell"></i> Alarm Management</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Alarm Category</th>
+                      <th>Current Configuration</th>
+                      <th>Functionality</th>
+                      <th>Response Time</th>
+                      <th>Issues Identified</th>
+                      <th>Recommendations</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Critical Alarms</strong></td>
+                      <td><input type="text" name="critical_alarm_config" placeholder="Current setup"/></td>
+                      <td>
+                        <select name="critical_alarm_function">
+                          <option value="">Select Status</option>
+                          <option value="working">Working</option>
+                          <option value="partial">Partially Working</option>
+                          <option value="not_working">Not Working</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="critical_alarm_response" placeholder="Response time"/></td>
+                      <td><input type="text" name="critical_alarm_issues" placeholder="Issues found"/></td>
+                      <td><input type="text" name="critical_alarm_recommendations" placeholder="Recommendations"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Warning Alarms</strong></td>
+                      <td><input type="text" name="warning_alarm_config" placeholder="Current setup"/></td>
+                      <td>
+                        <select name="warning_alarm_function">
+                          <option value="">Select Status</option>
+                          <option value="working">Working</option>
+                          <option value="partial">Partially Working</option>
+                          <option value="not_working">Not Working</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="warning_alarm_response" placeholder="Response time"/></td>
+                      <td><input type="text" name="warning_alarm_issues" placeholder="Issues found"/></td>
+                      <td><input type="text" name="warning_alarm_recommendations" placeholder="Recommendations"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Information Alarms</strong></td>
+                      <td><input type="text" name="info_alarm_config" placeholder="Current setup"/></td>
+                      <td>
+                        <select name="info_alarm_function">
+                          <option value="">Select Status</option>
+                          <option value="working">Working</option>
+                          <option value="partial">Partially Working</option>
+                          <option value="not_working">Not Working</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="info_alarm_response" placeholder="Response time"/></td>
+                      <td><input type="text" name="info_alarm_issues" placeholder="Issues found"/></td>
+                      <td><input type="text" name="info_alarm_recommendations" placeholder="Recommendations"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(5)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(7)">
+                Next Step <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </fieldset>
+          <!-- Step 7: Testing & Verification -->
+          <fieldset class="form-step" id="step-7">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-vial"></i>
+                Step 7 — Testing & Verification
+              </h1>
+              <p style="color: #64748b;">Assessment of instrumentation, mechanical systems, and verification procedures.</p>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-thermometer-half"></i> Instrumentation</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Instrument Type</th>
+                      <th>Make/Model</th>
+                      <th>Range/Specification</th>
+                      <th>Calibration Status</th>
+                      <th>Accuracy</th>
+                      <th>Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="text" name="instrument_type_1" placeholder="Pressure/Temperature/Flow"/></td>
+                      <td><input type="text" name="instrument_model_1" placeholder="Make and Model"/></td>
+                      <td><input type="text" name="instrument_range_1" placeholder="Measurement range"/></td>
+                      <td>
+                        <select name="instrument_calibration_1">
+                          <option value="">Select Status</option>
+                          <option value="current">Current</option>
+                          <option value="due">Due for Calibration</option>
+                          <option value="overdue">Overdue</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="instrument_accuracy_1" placeholder="Accuracy specification"/></td>
+                      <td><input type="text" name="instrument_comments_1" placeholder="Additional notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" name="instrument_type_2" placeholder="Pressure/Temperature/Flow"/></td>
+                      <td><input type="text" name="instrument_model_2" placeholder="Make and Model"/></td>
+                      <td><input type="text" name="instrument_range_2" placeholder="Measurement range"/></td>
+                      <td>
+                        <select name="instrument_calibration_2">
+                          <option value="">Select Status</option>
+                          <option value="current">Current</option>
+                          <option value="due">Due for Calibration</option>
+                          <option value="overdue">Overdue</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="instrument_accuracy_2" placeholder="Accuracy specification"/></td>
+                      <td><input type="text" name="instrument_comments_2" placeholder="Additional notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(6)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(8)">
+                Next Step <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 8: Security & Documentation -->
+          <fieldset class="form-step" id="step-8">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-shield-alt"></i>
+                Step 8 — Security & Documentation
+              </h1>
+              <p style="color: #64748b;">Cybersecurity assessment and backup/documentation systems evaluation.</p>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-lock"></i> Cybersecurity Assessment</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Security Component</th>
+                      <th>Current Status</th>
+                      <th>Compliance Level</th>
+                      <th>Risk Level</th>
+                      <th>Recommendations</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Firewall Protection</strong></td>
+                      <td>
+                        <select name="firewall_status">
+                          <option value="">Select Status</option>
+                          <option value="active">Active</option>
+                          <option value="partial">Partially Active</option>
+                          <option value="inactive">Inactive</option>
+                          <option value="not_installed">Not Installed</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="firewall_compliance">
+                          <option value="">Select Level</option>
+                          <option value="compliant">Compliant</option>
+                          <option value="partially_compliant">Partially Compliant</option>
+                          <option value="non_compliant">Non-Compliant</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="firewall_risk">
+                          <option value="">Select Risk</option>
+                          <option value="low">Low</option>
+                          <option value="medium">Medium</option>
+                          <option value="high">High</option>
+                          <option value="critical">Critical</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="firewall_recommendations" placeholder="Security recommendations"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Access Control</strong></td>
+                      <td>
+                        <select name="access_control_status">
+                          <option value="">Select Status</option>
+                          <option value="implemented">Implemented</option>
+                          <option value="partial">Partially Implemented</option>
+                          <option value="basic">Basic</option>
+                          <option value="none">None</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="access_control_compliance">
+                          <option value="">Select Level</option>
+                          <option value="compliant">Compliant</option>
+                          <option value="partially_compliant">Partially Compliant</option>
+                          <option value="non_compliant">Non-Compliant</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="access_control_risk">
+                          <option value="">Select Risk</option>
+                          <option value="low">Low</option>
+                          <option value="medium">Medium</option>
+                          <option value="high">High</option>
+                          <option value="critical">Critical</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="access_control_recommendations" placeholder="Security recommendations"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-save"></i> Backup Systems</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Backup Type</th>
+                      <th>Frequency</th>
+                      <th>Last Backup</th>
+                      <th>Storage Location</th>
+                      <th>Test Status</th>
+                      <th>Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>System Configuration</strong></td>
+                      <td>
+                        <select name="config_backup_frequency">
+                          <option value="">Select Frequency</option>
+                          <option value="daily">Daily</option>
+                          <option value="weekly">Weekly</option>
+                          <option value="monthly">Monthly</option>
+                          <option value="manual">Manual</option>
+                          <option value="none">None</option>
+                        </select>
+                      </td>
+                      <td><input type="date" name="config_backup_last"/></td>
+                      <td><input type="text" name="config_backup_location" placeholder="Storage location"/></td>
+                      <td>
+                        <select name="config_backup_test">
+                          <option value="">Select Status</option>
+                          <option value="tested">Tested</option>
+                          <option value="not_tested">Not Tested</option>
+                          <option value="failed">Failed Test</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="config_backup_comments" placeholder="Additional notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Historical Data</strong></td>
+                      <td>
+                        <select name="data_backup_frequency">
+                          <option value="">Select Frequency</option>
+                          <option value="daily">Daily</option>
+                          <option value="weekly">Weekly</option>
+                          <option value="monthly">Monthly</option>
+                          <option value="manual">Manual</option>
+                          <option value="none">None</option>
+                        </select>
+                      </td>
+                      <td><input type="date" name="data_backup_last"/></td>
+                      <td><input type="text" name="data_backup_location" placeholder="Storage location"/></td>
+                      <td>
+                        <select name="data_backup_test">
+                          <option value="">Select Status</option>
+                          <option value="tested">Tested</option>
+                          <option value="not_tested">Not Tested</option>
+                          <option value="failed">Failed Test</option>
+                          <option value="unknown">Unknown</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="data_backup_comments" placeholder="Additional notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(7)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(9)">
+                Next Step <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 9: Maintenance & Tracking -->
+          <fieldset class="form-step" id="step-9">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-wrench"></i>
+                Step 9 — Maintenance & Tracking
+              </h1>
+              <p style="color: #64748b;">Maintenance schedules, tracking systems, and operational procedures.</p>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-calendar-alt"></i> Maintenance Schedules</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Equipment/System</th>
+                      <th>Maintenance Type</th>
+                      <th>Frequency</th>
+                      <th>Last Performed</th>
+                      <th>Next Due</th>
+                      <th>Responsible Party</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="text" name="maint_equipment_1" placeholder="Equipment name"/></td>
+                      <td>
+                        <select name="maint_type_1">
+                          <option value="">Select Type</option>
+                          <option value="preventive">Preventive</option>
+                          <option value="corrective">Corrective</option>
+                          <option value="predictive">Predictive</option>
+                          <option value="emergency">Emergency</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="maint_frequency_1" placeholder="e.g., Monthly, Quarterly"/></td>
+                      <td><input type="date" name="maint_last_1"/></td>
+                      <td><input type="date" name="maint_next_1"/></td>
+                      <td><input type="text" name="maint_responsible_1" placeholder="Responsible person/team"/></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" name="maint_equipment_2" placeholder="Equipment name"/></td>
+                      <td>
+                        <select name="maint_type_2">
+                          <option value="">Select Type</option>
+                          <option value="preventive">Preventive</option>
+                          <option value="corrective">Corrective</option>
+                          <option value="predictive">Predictive</option>
+                          <option value="emergency">Emergency</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="maint_frequency_2" placeholder="e.g., Monthly, Quarterly"/></td>
+                      <td><input type="date" name="maint_last_2"/></td>
+                      <td><input type="date" name="maint_next_2"/></td>
+                      <td><input type="text" name="maint_responsible_2" placeholder="Responsible person/team"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-clipboard-list"></i> Tracking Systems</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tracking Category</th>
+                      <th>Current Method</th>
+                      <th>System Used</th>
+                      <th>Effectiveness</th>
+                      <th>Issues</th>
+                      <th>Recommendations</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Work Orders</strong></td>
+                      <td><input type="text" name="workorder_method" placeholder="Current tracking method"/></td>
+                      <td><input type="text" name="workorder_system" placeholder="System/software used"/></td>
+                      <td>
+                        <select name="workorder_effectiveness">
+                          <option value="">Select Level</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="fair">Fair</option>
+                          <option value="poor">Poor</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="workorder_issues" placeholder="Issues identified"/></td>
+                      <td><input type="text" name="workorder_recommendations" placeholder="Improvement recommendations"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Asset Management</strong></td>
+                      <td><input type="text" name="asset_method" placeholder="Current tracking method"/></td>
+                      <td><input type="text" name="asset_system" placeholder="System/software used"/></td>
+                      <td>
+                        <select name="asset_effectiveness">
+                          <option value="">Select Level</option>
+                          <option value="excellent">Excellent</option>
+                          <option value="good">Good</option>
+                          <option value="fair">Fair</option>
+                          <option value="poor">Poor</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="asset_issues" placeholder="Issues identified"/></td>
+                      <td><input type="text" name="asset_recommendations" placeholder="Improvement recommendations"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(8)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(10)">
+                Next Step <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 10: Documentation -->
+          <fieldset class="form-step" id="step-10">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-folder-open"></i>
+                Step 10 — Documentation & Images
+              </h1>
+              <p style="color: #64748b;">Network diagrams, site images, and digital visit log.</p>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-project-diagram"></i> Network Diagrams</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Diagram Type</th>
+                      <th>Current Status</th>
+                      <th>Last Updated</th>
+                      <th>Accuracy</th>
+                      <th>Format</th>
+                      <th>Location/Reference</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Network Topology</strong></td>
+                      <td>
+                        <select name="network_diagram_status">
+                          <option value="">Select Status</option>
+                          <option value="available">Available</option>
+                          <option value="outdated">Outdated</option>
+                          <option value="missing">Missing</option>
+                          <option value="partial">Partially Available</option>
+                        </select>
+                      </td>
+                      <td><input type="date" name="network_diagram_updated"/></td>
+                      <td>
+                        <select name="network_diagram_accuracy">
+                          <option value="">Select Accuracy</option>
+                          <option value="accurate">Accurate</option>
+                          <option value="mostly_accurate">Mostly Accurate</option>
+                          <option value="some_inaccuracies">Some Inaccuracies</option>
+                          <option value="inaccurate">Inaccurate</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="network_diagram_format" placeholder="PDF/Visio/CAD"/></td>
+                      <td><input type="text" name="network_diagram_location" placeholder="File location or reference"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Site Layout</strong></td>
+                      <td>
+                        <select name="site_diagram_status">
+                          <option value="">Select Status</option>
+                          <option value="available">Available</option>
+                          <option value="outdated">Outdated</option>
+                          <option value="missing">Missing</option>
+                          <option value="partial">Partially Available</option>
+                        </select>
+                      </td>
+                      <td><input type="date" name="site_diagram_updated"/></td>
+                      <td>
+                        <select name="site_diagram_accuracy">
+                          <option value="">Select Accuracy</option>
+                          <option value="accurate">Accurate</option>
+                          <option value="mostly_accurate">Mostly Accurate</option>
+                          <option value="some_inaccuracies">Some Inaccuracies</option>
+                          <option value="inaccurate">Inaccurate</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="site_diagram_format" placeholder="PDF/Visio/CAD"/></td>
+                      <td><input type="text" name="site_diagram_location" placeholder="File location or reference"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-camera"></i> Digital Visit Log</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Image/Document Type</th>
+                      <th>Description</th>
+                      <th>Timestamp</th>
+                      <th>File Reference</th>
+                      <th>Priority</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <select name="media_type_1">
+                          <option value="">Select Type</option>
+                          <option value="panel_photo">Panel Photo</option>
+                          <option value="equipment_photo">Equipment Photo</option>
+                          <option value="cable_photo">Cable Photo</option>
+                          <option value="nameplate_photo">Nameplate Photo</option>
+                          <option value="site_overview">Site Overview</option>
+                          <option value="document_scan">Document Scan</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="media_description_1" placeholder="Brief description"/></td>
+                      <td><input type="datetime-local" name="media_timestamp_1"/></td>
+                      <td><input type="text" name="media_reference_1" placeholder="File name or reference"/></td>
+                      <td>
+                        <select name="media_priority_1">
+                          <option value="">Select Priority</option>
+                          <option value="high">High</option>
+                          <option value="medium">Medium</option>
+                          <option value="low">Low</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="media_notes_1" placeholder="Additional notes"/></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <select name="media_type_2">
+                          <option value="">Select Type</option>
+                          <option value="panel_photo">Panel Photo</option>
+                          <option value="equipment_photo">Equipment Photo</option>
+                          <option value="cable_photo">Cable Photo</option>
+                          <option value="nameplate_photo">Nameplate Photo</option>
+                          <option value="site_overview">Site Overview</option>
+                          <option value="document_scan">Document Scan</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="media_description_2" placeholder="Brief description"/></td>
+                      <td><input type="datetime-local" name="media_timestamp_2"/></td>
+                      <td><input type="text" name="media_reference_2" placeholder="File name or reference"/></td>
+                      <td>
+                        <select name="media_priority_2">
+                          <option value="">Select Priority</option>
+                          <option value="high">High</option>
+                          <option value="medium">Medium</option>
+                          <option value="low">Low</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="media_notes_2" placeholder="Additional notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(9)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(11)">
+                Next Step <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 11: Final Review & Approval -->
+          <fieldset class="form-step" id="step-11">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-clipboard-check"></i>
+                Step 11 — Final Review & Approval
+              </h1>
+              <p style="color: #64748b;">Issues, recommendations, and final site survey approval.</p>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-exclamation-triangle"></i> Issues & Recommendations</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Issue Category</th>
+                      <th>Priority</th>
+                      <th>Description</th>
+                      <th>Impact</th>
+                      <th>Recommended Action</th>
+                      <th>Timeline</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <select name="issue_category_1">
+                          <option value="">Select Category</option>
+                          <option value="electrical">Electrical</option>
+                          <option value="network">Network</option>
+                          <option value="security">Security</option>
+                          <option value="equipment">Equipment</option>
+                          <option value="documentation">Documentation</option>
+                          <option value="maintenance">Maintenance</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="issue_priority_1">
+                          <option value="">Select Priority</option>
+                          <option value="critical">Critical</option>
+                          <option value="high">High</option>
+                          <option value="medium">Medium</option>
+                          <option value="low">Low</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="issue_description_1" placeholder="Issue description"/></td>
+                      <td><input type="text" name="issue_impact_1" placeholder="Potential impact"/></td>
+                      <td><input type="text" name="issue_action_1" placeholder="Recommended action"/></td>
+                      <td><input type="text" name="issue_timeline_1" placeholder="Suggested timeline"/></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <select name="issue_category_2">
+                          <option value="">Select Category</option>
+                          <option value="electrical">Electrical</option>
+                          <option value="network">Network</option>
+                          <option value="security">Security</option>
+                          <option value="equipment">Equipment</option>
+                          <option value="documentation">Documentation</option>
+                          <option value="maintenance">Maintenance</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="issue_priority_2">
+                          <option value="">Select Priority</option>
+                          <option value="critical">Critical</option>
+                          <option value="high">High</option>
+                          <option value="medium">Medium</option>
+                          <option value="low">Low</option>
+                        </select>
+                      </td>
+                      <td><input type="text" name="issue_description_2" placeholder="Issue description"/></td>
+                      <td><input type="text" name="issue_impact_2" placeholder="Potential impact"/></td>
+                      <td><input type="text" name="issue_action_2" placeholder="Recommended action"/></td>
+                      <td><input type="text" name="issue_timeline_2" placeholder="Suggested timeline"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-signature"></i> Site Survey Approval</h4>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="migration_recommendation">Migration Recommendation</label>
-                  <select id="migration_recommendation" name="migration_recommendation">
+                  <label for="survey_recommendation">Site Survey Recommendation</label>
+                  <select id="survey_recommendation" name="survey_recommendation">
                     <option value="">Select recommendation...</option>
-                    <option value="Proceed with Migration">Proceed with Migration as Planned</option>
-                    <option value="Proceed with Conditions">Proceed with Migration - Address Conditions</option>
-                    <option value="Defer Migration">Defer Migration - Major Issues Identified</option>
-                    <option value="Redesign Required">Migration Redesign Required</option>
+                    <option value="Approved">Site Survey Approved - Proceed as Planned</option>
+                    <option value="Approved with Conditions">Approved with Conditions - Address Issues</option>
+                    <option value="Conditional Approval">Conditional Approval - Minor Issues</option>
+                    <option value="Defer">Defer - Major Issues Identified</option>
+                    <option value="Redesign Required">Redesign/Replanning Required</option>
                   </select>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="assessment_summary">Migration Assessment Summary</label>
-                  <textarea id="assessment_summary" name="assessment_summary" rows="4" 
-                            placeholder="Provide a comprehensive summary of the migration assessment findings, recommendations, and next steps...">{{ submission_data.ASSESSMENT_SUMMARY or '' }}</textarea>
+                  <label for="survey_summary">Site Survey Summary</label>
+                  <textarea id="survey_summary" name="survey_summary" rows="4" 
+                            placeholder="Provide a comprehensive summary of the site survey findings, recommendations, and next steps...">{{ submission_data.SURVEY_SUMMARY or '' }}</textarea>
                 </div>
               </div>
               
@@ -944,11 +2505,11 @@
             </div>
 
             <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(6)">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(10)">
                 <i class="fas fa-arrow-left"></i> Previous
               </button>
               <button type="submit" class="btn btn-primary">
-                <i class="fas fa-paper-plane"></i> Submit SCADA Migration Assessment
+                <i class="fas fa-paper-plane"></i> Submit Site Survey Assessment
               </button>
             </div>
           </fieldset>
@@ -962,6 +2523,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       console.log('SCADA Migration Assessment initialized');
       initializeForm();
+      initializeApprovalDropdowns();
     });
 
     function goToStep(step) {
@@ -1013,6 +2575,98 @@
             });
           }
         }
+      }
+    }
+
+    // Initialize approval dropdowns with automation manager fetching
+    function initializeApprovalDropdowns() {
+      console.log('Initializing approval dropdowns for SCADA Migration...');
+
+      // Load users and populate dropdowns
+      fetch('/api/get-users-by-role')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log('Users loaded successfully:', data.users);
+
+            // Populate Automation Manager dropdown (using 'Automation Manager' key from API)
+            const amSelect = document.getElementById('approver_1_name_select');
+            if (amSelect && data.users['Automation Manager']) {
+              data.users['Automation Manager'].forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.name;
+                option.textContent = user.name;
+                option.setAttribute('data-email', user.email);
+                amSelect.appendChild(option);
+              });
+            }
+
+            // Setup event listeners
+            setupDropdownListeners();
+          }
+        })
+        .catch(error => {
+          console.error('Error loading users:', error);
+        });
+
+      console.log('Approval dropdowns initialized successfully');
+    }
+
+    function setupDropdownListeners() {
+      // Automation Manager selection
+      const amSelect = document.getElementById('approver_1_name_select');
+      if (amSelect) {
+        amSelect.addEventListener('change', function() {
+          if (this.value) {
+            const selectedOption = this.options[this.selectedIndex];
+            const name = selectedOption.value;
+            const email = selectedOption.getAttribute('data-email');
+
+            // Update hidden fields
+            document.getElementById('approver_1_name').value = name;
+            document.getElementById('approver_1_email').value = email;
+
+            // Update email display field
+            const emailDisplay = document.getElementById('approver_1_email_display');
+            if (emailDisplay) {
+              emailDisplay.value = email;
+              emailDisplay.style.backgroundColor = '#ffffff';
+              emailDisplay.style.cursor = 'text';
+            }
+
+            // Update top field
+            const topField = document.getElementById('reviewed_by_tech_lead');
+            if (topField) {
+              topField.value = name;
+              topField.style.backgroundColor = '#ffffff';
+              topField.style.cursor = 'text';
+              topField.removeAttribute('readonly');
+            }
+
+            console.log('Updated Automation Manager:', { name, email });
+          } else {
+            // Clear fields when no selection
+            document.getElementById('approver_1_name').value = '';
+            document.getElementById('approver_1_email').value = '';
+
+            const emailDisplay = document.getElementById('approver_1_email_display');
+            if (emailDisplay) {
+              emailDisplay.value = '';
+              emailDisplay.placeholder = 'Email will auto-populate when name is selected';
+              emailDisplay.style.backgroundColor = '#f8fafc';
+              emailDisplay.style.cursor = 'not-allowed';
+            }
+
+            const topField = document.getElementById('reviewed_by_tech_lead');
+            if (topField) {
+              topField.value = '';
+              topField.placeholder = 'Will auto-populate from selection below';
+              topField.style.backgroundColor = '#f8fafc';
+              topField.style.cursor = 'not-allowed';
+              topField.setAttribute('readonly', 'readonly');
+            }
+          }
+        });
       }
     }
 
