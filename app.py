@@ -25,6 +25,7 @@ config = config_module.config
 from config.manager import init_config_system
 from config.secrets import init_secrets_management
 from middleware import init_security_middleware
+from middleware_optimized import init_optimized_middleware
 from session_manager import session_manager
 
 # Initialize CSRF protection globally
@@ -71,6 +72,8 @@ def create_app(config_name='default'):
     
     # Initialize extensions
     csrf.init_app(app)
+    # Initialize optimized middleware
+    init_optimized_middleware(app)
     
     # Configure server-side sessions
     app.config['SESSION_TYPE'] = 'filesystem'

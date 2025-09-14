@@ -3,8 +3,11 @@ from flask_login import login_required, current_user
 from auth import admin_required, role_required
 from models import db, User, Report, Notification, SystemSettings, SATReport, test_db_connection
 from utils import get_unread_count
+from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy import and_, or_, func
 import json
-from functools import wraps
+from functools import wraps, lru_cache
+from datetime import datetime, timedelta
 
 def no_cache(f):
     """Decorator to prevent caching of routes"""
@@ -50,13 +53,21 @@ def admin():
     """Admin dashboard"""
     from models import Report, Notification
 
-    users = User.query.all()
     db_connected = test_db_connection()
 
-    # Calculate user statistics
-    total_users = len(users)
-    active_users = len([u for u in users if u.status == 'Active'])
-    pending_users_count = len([u for u in users if u.status == 'Pending'])
+    # Calculate user statistics with optimized single query
+    user_stats = db.session.query(
+        func.count(User.id).label('total'),
+        func.sum(func.cast(User.status == 'Active', db.Integer)).label('active'),
+        func.sum(func.cast(User.status == 'Pending', db.Integer)).label('pending')
+    ).first()
+    
+    total_users = user_stats.total or 0
+    active_users = user_stats.active or 0
+    pending_users_count = user_stats.pending or 0
+    
+    # Get all users for display (only if needed)
+    users = User.query.all()
 
     # Get unread notifications count
     try:
@@ -76,10 +87,14 @@ def admin():
 
     # Calculate report statistics
     try:
-        total_reports = Report.query.count()
+        # Use optimized query for report count
+        total_reports = db.session.query(func.count(Report.id)).scalar() or 0
         current_app.logger.info(f"Admin dashboard: Found {total_reports} total reports")
         
-        recent_reports = Report.query.order_by(Report.created_at.desc()).limit(5).all()
+        # Eager load SAT reports to prevent N+1 queries
+        recent_reports = Report.query.options(
+            joinedload(Report.sat_report)
+        ).order_by(Report.created_at.desc()).limit(5).all()
         current_app.logger.info(f"Admin dashboard: Processing {len(recent_reports)} recent reports")
         
         # Add basic report info for display
@@ -92,11 +107,10 @@ def admin():
             report.document_title = report.document_title or 'Untitled Report'
             report.project_reference = report.project_reference or 'N/A'
             
-            # Try to get enhanced data from SAT report (with timeout protection)
+            # Use pre-loaded sat_report data (no additional query needed)
             try:
-                sat_report = SATReport.query.filter_by(report_id=report.id).first()
-                if sat_report and sat_report.data_json:
-                    data = json.loads(sat_report.data_json)
+                if report.sat_report and report.sat_report.data_json:
+                    data = json.loads(report.sat_report.data_json)
                     context_data = data.get('context', {})
                     if context_data.get('DOCUMENT_TITLE'):
                         report.document_title = context_data['DOCUMENT_TITLE']
