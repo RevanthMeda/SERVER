@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SCADA Migration Site Survey Report – Cully Automation</title>
+  <title>SCADA Migration Assessment Report – Cully Automation</title>
 
   <!-- CSS Files -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}"/>
@@ -24,7 +24,7 @@
     <div class="admin-header">
       <div class="header-content">
         <div class="header-info">
-          <h1><i class="fas fa-network-wired"></i> SCADA Migration Site Survey Report</h1>
+          <h1><i class="fas fa-exchange-alt"></i> SCADA Migration Assessment Report</h1>
           <p>Cork County Council to Cully Automation Cloud SCADA Migration Assessment for Irish Water</p>
         </div>
         <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
@@ -69,17 +69,19 @@
     <div class="horizontal-progress-bar">
       <div class="progress-container">
         {% set steps = [
-          (1, "Site Information", "Basic site details"),
-          (2, "System Architecture", "Network layout"),
-          (3, "Hardware Details", "PLC/HMI/Router specs"),
-          (4, "Communications", "Network & connectivity"),
-          (5, "Plant SCADA", "Local SCADA systems"),
-          (6, "Pre-Departure", "Verification checklist"),
-          (7, "Review & Submit", "Final submission")
+          (1, 'Migration Info', 'Project and migration details'),
+          (2, 'Current State', 'Existing SCADA analysis'),
+          (3, 'Compatibility', 'Hardware/software assessment'),
+          (4, 'Network Review', 'Infrastructure evaluation'),
+          (5, 'Migration Plan', 'Implementation strategy'),
+          (6, 'Risk Analysis', 'Migration risks'),
+          (7, 'Final Review', 'Summary and approval')
         ] %}
         
         {% for num, title, desc in steps %}
-        <div class="progress-step {% if num == 1 %}active{% endif %}" onclick="goToStep({{ num }})">
+        <div id="prog-{{ num }}"
+             class="progress-step {{ 'active' if num==1 else 'disabled' }}"
+             onclick="goToStep({{ num }})">
           <div class="step-circle">{{ num }}</div>
           <div class="step-info">
             <div class="step-title">{{ title }}</div>
@@ -99,124 +101,145 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
           <input type="hidden" name="submission_id" value="{{ submission_id }}"/>
 
-          <!-- Step 1 — Site Information -->
+          <!-- Step 1 — Migration Project Information -->
           <fieldset class="form-step active" id="step-1">
             <div class="step-header">
               <h1 class="step-legend">
-                <i class="fas fa-map-marker-alt"></i>
-                Step 1 — Site Information
+                <i class="fas fa-project-diagram"></i>
+                Step 1 — Migration Project Information
               </h1>
-              <p style="color: #64748b;">Basic site details and contact information for SCADA migration assessment.</p>
+              <p style="color: #64748b;">Define the SCADA migration project scope, objectives, and key stakeholders.</p>
             </div>
 
             <div class="form-section">
-              <h4><i class="fas fa-info-circle"></i> Site Information Table</h4>
-
-              <div class="table-container">
-                <table>
-                  <thead>
-                    <tr>
-                      <th style="width: 5%;">#</th>
-                      <th style="width: 35%;">Information Category</th>
-                      <th style="width: 60%;">Details</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>01</td><td><strong>Site Name</strong></td><td><input name="site_name" type="text" value="{{ submission_data.SITE_NAME }}"/></td></tr>
-                    <tr><td>02</td><td><strong>Site Location / Co-ordinates</strong></td><td><input name="site_location" type="text" value="{{ submission_data.SITE_LOCATION }}"/></td></tr>
-                    <tr><td>03</td><td><strong>Site Access Details</strong></td><td><input name="site_access_details" type="text" placeholder="Plant Operator must be contacted" value="{{ submission_data.SITE_ACCESS_DETAILS }}"/></td></tr>
-                    <tr><td>04</td><td><strong>On Site Parking</strong></td><td><input name="on_site_parking" type="text" value="{{ submission_data.ON_SITE_PARKING }}"/></td></tr>
-                    <tr><td>05</td><td><strong>Area Engineer & Number</strong></td><td><input name="area_engineer" type="text" value="{{ submission_data.AREA_ENGINEER }}"/></td></tr>
-                    <tr><td>06</td><td><strong>Site Caretaker & Number</strong></td><td><input name="site_caretaker" type="text" value="{{ submission_data.SITE_CARETAKER }}"/></td></tr>
-                    <tr><td>07</td><td><strong>Site Survey Completed By</strong></td><td><input name="survey_completed_by" type="text" value="{{ submission_data.SURVEY_COMPLETED_BY or current_user.full_name if current_user.is_authenticated }}"/></td></tr>
-                    <tr><td>08</td><td><strong>Control approach discussed with Site Operator</strong></td><td><select name="control_approach_discussed"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>
-                    <tr><td>09</td><td><strong>Visual Inspection of existing Treatment</strong></td><td><textarea name="visual_inspection" rows="2">{{ submission_data.VISUAL_INSPECTION }}</textarea></td></tr>
-                    <tr><td>10</td><td><strong>Site Type / Raw Water Supply Type</strong></td><td><input name="site_type" type="text" value="{{ submission_data.SITE_TYPE }}"/></td></tr>
-                    <tr><td>11</td><td><strong>Electrical Supply</strong></td><td><input name="electrical_supply" type="text" placeholder="400VAC/ 24VDC" value="{{ submission_data.ELECTRICAL_SUPPLY }}"/></td></tr>
-                    <tr><td>12</td><td><strong>Plant Photos Completed</strong></td><td><select name="plant_photos_completed"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>
-                    <tr><td>13</td><td><strong>Is the Site Undergoing Construction/Upgrades</strong></td><td><select name="site_undergoing_construction"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>
-                    <tr><td>14</td><td><strong>Description of Construction/Upgrade Works</strong></td><td><textarea name="construction_description" rows="2">{{ submission_data.CONSTRUCTION_DESCRIPTION }}</textarea></td></tr>
-                  </tbody>
-                </table>
+              <h4><i class="fas fa-file-alt"></i> Migration Project Details</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="migration_project_name">Migration Project Name <span class="required">*</span></label>
+                  <input id="migration_project_name" name="migration_project_name" type="text" required 
+                         placeholder="e.g. Cork County Council to Cully Cloud SCADA Migration" 
+                         value="{{ submission_data.MIGRATION_PROJECT_NAME or '' }}"/>
+                </div>
+                <div class="form-group">
+                  <label for="site_name">Target Site Name <span class="required">*</span></label>
+                  <input id="site_name" name="site_name" type="text" required 
+                         value="{{ submission_data.SITE_NAME or '' }}"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="current_scada_vendor">Current SCADA Platform</label>
+                  <input id="current_scada_vendor" name="current_scada_vendor" type="text" 
+                         placeholder="e.g. Schneider Electric Citect, Siemens WinCC" 
+                         value="{{ submission_data.CURRENT_SCADA_VENDOR or '' }}"/>
+                </div>
+                <div class="form-group">
+                  <label for="migration_assessment_date">Assessment Date <span class="required">*</span></label>
+                  <input id="migration_assessment_date" name="migration_assessment_date" type="date" required 
+                         value="{{ submission_data.MIGRATION_ASSESSMENT_DATE or '' }}"/>
+                </div>
               </div>
             </div>
 
             <div class="btn-group">
               <button type="button" class="btn btn-primary" onclick="goToStep(2)">
-                <i class="fas fa-arrow-right"></i> Next: System Architecture
+                <i class="fas fa-arrow-right"></i> Next: Current State Analysis
               </button>
             </div>
           </fieldset>
 
-          <!-- Step 2 — System Architecture -->
+          <!-- Step 2 — Current SCADA State Analysis -->
           <fieldset class="form-step" id="step-2">
             <div class="step-header">
               <h1 class="step-legend">
-                <i class="fas fa-sitemap"></i>
-                Step 2 — Existing System Architecture
+                <i class="fas fa-search"></i>
+                Step 2 — Current SCADA State Analysis
               </h1>
-              <p style="color: #64748b;">Document the current network layout and system architecture.</p>
+              <p style="color: #64748b;">Analyze the existing SCADA system architecture and performance.</p>
             </div>
 
             <div class="form-section">
-              <h4><i class="fas fa-project-diagram"></i> Architecture Documentation</h4>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="system_architecture_description">System Architecture Description</label>
-                  <textarea id="system_architecture_description" name="system_architecture_description" rows="8" placeholder="Detailed architecture can be attached. Describe the existing system architecture, network topology, key components...">{{ submission_data.SYSTEM_ARCHITECTURE_DESCRIPTION }}</textarea>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="architecture_diagram">Architecture Diagram Upload</label>
-                  <input type="file" id="architecture_diagram" name="architecture_diagram" accept=".pdf,.png,.jpg,.jpeg,.dwg,.vsd">
-                </div>
+              <h4><i class="fas fa-server"></i> Current SCADA System Assessment</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>System Component</th>
+                      <th>Current Status</th>
+                      <th>Performance</th>
+                      <th>Migration Impact</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>SCADA Server Hardware</strong></td>
+                      <td><input name="scada_server_status" placeholder="Age, specs, condition"/></td>
+                      <td><select name="scada_server_performance"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td>
+                      <td><input name="scada_server_migration" placeholder="Migration strategy"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Database System</strong></td>
+                      <td><input name="database_status" placeholder="Type, version, size"/></td>
+                      <td><select name="database_performance"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td>
+                      <td><input name="database_migration" placeholder="Data migration approach"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>HMI/Graphics System</strong></td>
+                      <td><input name="hmi_graphics_status" placeholder="Version, complexity, custom elements"/></td>
+                      <td><select name="hmi_graphics_performance"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td>
+                      <td><input name="hmi_graphics_migration" placeholder="Graphics conversion strategy"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Communication Drivers</strong></td>
+                      <td><input name="comm_drivers_status" placeholder="Protocols, custom drivers"/></td>
+                      <td><select name="comm_drivers_performance"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td>
+                      <td><input name="comm_drivers_migration" placeholder="Driver compatibility"/></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
             <div class="btn-group">
               <button type="button" class="btn btn-secondary" onclick="goToStep(1)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(3)"><i class="fas fa-arrow-right"></i> Next: Hardware Details</button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(3)"><i class="fas fa-arrow-right"></i> Next: Compatibility Assessment</button>
             </div>
           </fieldset>
 
-          <!-- Step 3 — Hardware Details -->
+          <!-- Step 3 — Hardware/Software Compatibility -->
           <fieldset class="form-step" id="step-3">
             <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-microchip"></i> Step 3 — Hardware Details</h1>
-              <p style="color: #64748b;">Document existing hardware components and specifications.</p>
+              <h1 class="step-legend"><i class="fas fa-microchip"></i> Step 3 — Hardware/Software Compatibility Assessment</h1>
+              <p style="color: #64748b;">Evaluate compatibility for migration to Cully Automation cloud platform.</p>
             </div>
 
             <div class="form-section">
-              <h4><i class="fas fa-cogs"></i> Hardware Components</h4>
+              <h4><i class="fas fa-cogs"></i> Hardware Compatibility Matrix</h4>
               <div class="table-container">
                 <table>
-                  <thead><tr><th>Component</th><th>Manufacturer / Model</th><th>Model / Slot</th><th>Hardware Version</th><th>Comments</th></tr></thead>
+                  <thead><tr><th>Component</th><th>Current System</th><th>Cully Cloud Compatible</th><th>Action Required</th><th>Migration Priority</th></tr></thead>
                   <tbody>
-                    <tr><td><strong>CPU</strong></td><td><input name="cpu_manufacturer"/></td><td><input name="cpu_model_slot"/></td><td><input name="cpu_hardware_version"/></td><td><input name="cpu_comments"/></td></tr>
-                    <tr><td><strong>Ethernet Card</strong></td><td><input name="ethernet_manufacturer"/></td><td><input name="ethernet_model_slot"/></td><td><input name="ethernet_hardware_version"/></td><td><input name="ethernet_comments"/></td></tr>
-                    <tr><td><strong>Other Comms</strong></td><td><input name="other_comms_manufacturer"/></td><td><input name="other_comms_model_slot"/></td><td><input name="other_comms_hardware_version"/></td><td><input name="other_comms_comments"/></td></tr>
-                    <tr><td><strong>No. of Racks</strong></td><td><input name="num_racks"/></td><td>-</td><td>-</td><td><input name="racks_comments"/></td></tr>
-                    <tr><td><strong>HMI</strong></td><td><input name="hmi_manufacturer"/></td><td><input name="hmi_model_slot"/></td><td><input name="hmi_hardware_version"/></td><td><input name="hmi_comments"/></td></tr>
-                    <tr><td><strong>Router</strong></td><td><input name="router_manufacturer"/></td><td><input name="router_model_slot"/></td><td><input name="router_hardware_version"/></td><td><input name="router_comments"/></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-tools"></i> Additional Hardware Assessment</h4>
-              <div class="table-container">
-                <table>
-                  <tbody>
-                    <tr><td><strong>Approx. Age of PLC</strong></td><td><input name="plc_age"/></td></tr>
-                    <tr><td><strong>Compatible software version for PLC & HMI</strong></td><td><input name="compatible_software"/></td></tr>
-                    <tr><td><strong>Space for new Router</strong></td><td><select name="space_new_router"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>
-                    <tr><td><strong>Space for managed switch (CISCO)</strong></td><td><select name="space_managed_switch"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>
-                    <tr><td><strong>Existing Router Power Supply</strong></td><td><input name="router_power_supply"/></td></tr>
-                    <tr><td><strong>Antenna Location & Distance from Router</strong></td><td><input name="antenna_location" placeholder="Internal/ External"/></td></tr>
-                    <tr><td><strong>Existing UHF Network? (Radio)</strong></td><td><select name="uhf_network_exists"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>
-                    <tr><td><strong>Type of UHF Network (IP Radio or Serial)</strong></td><td><input name="uhf_network_type"/></td></tr>
+                    <tr>
+                      <td><strong>PLC/Control System</strong></td>
+                      <td><input name="plc_current" placeholder="Make/model/version"/></td>
+                      <td><select name="plc_compatible"><option value="">Assess...</option><option value="Fully Compatible">Fully Compatible</option><option value="Partially Compatible">Partially Compatible</option><option value="Requires Updates">Requires Updates</option><option value="Not Compatible">Not Compatible</option></select></td>
+                      <td><input name="plc_action" placeholder="Required actions"/></td>
+                      <td><select name="plc_priority"><option value="">Set...</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Communication Gateway</strong></td>
+                      <td><input name="gateway_current" placeholder="Current gateway details"/></td>
+                      <td><select name="gateway_compatible"><option value="">Assess...</option><option value="Compatible">Compatible</option><option value="Needs Configuration">Needs Configuration</option><option value="Replacement Required">Replacement Required</option></select></td>
+                      <td><input name="gateway_action" placeholder="Required actions"/></td>
+                      <td><select name="gateway_priority"><option value="">Set...</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Network Infrastructure</strong></td>
+                      <td><input name="network_current" placeholder="Current network setup"/></td>
+                      <td><select name="network_compatible"><option value="">Assess...</option><option value="Ready">Ready</option><option value="Minor Upgrades">Minor Upgrades</option><option value="Major Upgrades">Major Upgrades</option><option value="Complete Overhaul">Complete Overhaul</option></select></td>
+                      <td><input name="network_action" placeholder="Required actions"/></td>
+                      <td><select name="network_priority"><option value="">Set...</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -224,127 +247,138 @@
 
             <div class="btn-group">
               <button type="button" class="btn btn-secondary" onclick="goToStep(2)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(4)"><i class="fas fa-arrow-right"></i> Next: Communications</button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(4)"><i class="fas fa-arrow-right"></i> Next: Network Review</button>
             </div>
           </fieldset>
 
-          <!-- Step 4 — Communications Details -->
+          <!-- Continue with remaining steps (4-6) -->
           <fieldset class="form-step" id="step-4">
             <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-wifi"></i> Step 4 — Communications Details</h1>
-              <p style="color: #64748b;">Network configuration and signal strength measurements.</p>
+              <h1 class="step-legend"><i class="fas fa-network-wired"></i> Step 4 — Network Infrastructure Review</h1>
             </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-network-wired"></i> Network Configuration</h4>
-              <div class="table-container">
-                <table>
-                  <thead><tr><th>Device</th><th>IP Address</th><th>Port Details</th><th>Gateway</th><th>Notes</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>PLC</strong></td><td><input name="plc_ip"/></td><td><input name="plc_ports"/></td><td><input name="plc_gateway"/></td><td><input name="plc_network_notes"/></td></tr>
-                    <tr><td><strong>HMI</strong></td><td><input name="hmi_ip"/></td><td><input name="hmi_ports"/></td><td><input name="hmi_gateway"/></td><td><input name="hmi_network_notes"/></td></tr>
-                    <tr><td><strong>Router</strong></td><td><input name="router_ip"/></td><td><input name="router_ports"/></td><td><input name="router_gateway"/></td><td><input name="router_network_notes"/></td></tr>
-                    <tr><td><strong>Radio</strong></td><td><input name="radio_ip"/></td><td><input name="radio_ports"/></td><td><input name="radio_gateway"/></td><td><input name="radio_network_notes"/></td></tr>
-                    <tr><td><strong>Network Switch</strong></td><td><input name="switch_ip"/></td><td><input name="switch_ports"/></td><td><input name="switch_gateway"/></td><td><input name="switch_network_notes"/></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-signal"></i> Mobile Signal Strength</h4>
-              <div class="table-container">
-                <table>
-                  <thead><tr><th>Network Provider</th><th>Signal (dBm)</th><th>Quality</th><th>Notes</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>Vodafone IE</strong></td><td><input name="vodafone_signal" placeholder="e.g. -65"/> dBm</td><td><select name="vodafone_quality"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td><td><input name="vodafone_notes"/></td></tr>
-                    <tr><td><strong>Eir</strong></td><td><input name="eir_signal" placeholder="e.g. -72"/> dBm</td><td><select name="eir_quality"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td><td><input name="eir_notes"/></td></tr>
-                    <tr><td><strong>3 IRL Meteor LTE</strong></td><td><input name="three_signal" placeholder="e.g. -68"/> dBm</td><td><select name="three_quality"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td><td><input name="three_notes"/></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
             <div class="btn-group">
               <button type="button" class="btn btn-secondary" onclick="goToStep(3)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(5)"><i class="fas fa-arrow-right"></i> Next: Plant SCADA</button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(5)"><i class="fas fa-arrow-right"></i> Next: Migration Plan</button>
             </div>
           </fieldset>
 
-          <!-- Step 5 — Local Plant SCADA Details -->
           <fieldset class="form-step" id="step-5">
             <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-desktop"></i> Step 5 — Local Plant SCADA Details</h1>
-              <p style="color: #64748b;">Document existing SCADA system information.</p>
+              <h1 class="step-legend"><i class="fas fa-route"></i> Step 5 — Migration Implementation Plan</h1>
             </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-server"></i> SCADA System Information</h4>
-              <div class="table-container">
-                <table>
-                  <tbody>
-                    <tr><td><strong>SCADA location</strong></td><td><input name="scada_location"/></td></tr>
-                    <tr><td><strong>SCADA PC details</strong></td><td><textarea name="scada_pc_details" rows="2"></textarea></td></tr>
-                    <tr><td><strong>SCADA platform</strong></td><td><input name="scada_platform" placeholder="e.g. Iconics, Wonderware"/></td></tr>
-                    <tr><td><strong>SCADA Licence</strong></td><td><input name="scada_licence"/></td></tr>
-                    <tr><td><strong>Clients/Slave/Remote Login details</strong></td><td><textarea name="scada_clients" rows="2"></textarea></td></tr>
-                    <tr><td><strong>Operating System</strong></td><td><input name="pc_operating_system"/></td></tr>
-                    <tr><td><strong>Memory</strong></td><td><input name="pc_memory"/></td></tr>
-                    <tr><td><strong>CPU</strong></td><td><input name="pc_cpu"/></td></tr>
-                    <tr><td><strong>Peripheral information</strong></td><td><textarea name="pc_peripherals" rows="2"></textarea></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
             <div class="btn-group">
               <button type="button" class="btn btn-secondary" onclick="goToStep(4)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(6)"><i class="fas fa-arrow-right"></i> Next: Verification</button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(6)"><i class="fas fa-arrow-right"></i> Next: Risk Analysis</button>
             </div>
           </fieldset>
 
-          <!-- Step 6 — Pre-Departure Verification Checklist -->
           <fieldset class="form-step" id="step-6">
             <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-clipboard-check"></i> Step 6 — Pre-Departure Verification Checklist</h1>
-              <p style="color: #64748b;">Complete verification checklist before site departure.</p>
+              <h1 class="step-legend"><i class="fas fa-exclamation-triangle"></i> Step 6 — Migration Risk Analysis</h1>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(5)"><i class="fas fa-arrow-left"></i> Previous</button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(7)"><i class="fas fa-arrow-right"></i> Next: Final Review</button>
+            </div>
+          </fieldset>
+
+          <!-- Step 7 — Final Review & Approval -->
+          <fieldset class="form-step" id="step-7">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-clipboard-check"></i>
+                Step 7 — Final Review & Migration Approval
+              </h1>
+              <p style="color: #64748b;">Review the complete SCADA migration assessment and provide final approval for implementation.</p>
             </div>
 
             <div class="form-section">
-              <h4><i class="fas fa-tasks"></i> Verification Checklist</h4>
+              <h4><i class="fas fa-check-circle"></i> Migration Readiness Assessment</h4>
               <div class="table-container">
                 <table>
-                  <thead><tr><th>Verification Item</th><th>Yes</th><th>No</th><th>N/A</th><th>Remarks</th></tr></thead>
+                  <thead>
+                    <tr>
+                      <th>Migration Readiness Criteria</th>
+                      <th>Status</th>
+                      <th>Comments</th>
+                    </tr>
+                  </thead>
                   <tbody>
-                    <tr><td><strong>Uploaded PLC Load</strong></td><td><input type="checkbox" name="check_plc_load" value="Yes"></td><td><input type="checkbox" name="check_plc_load" value="No"></td><td><input type="checkbox" name="check_plc_load" value="N/A"></td><td><input name="remarks_plc_load"></td></tr>
-                    <tr><td><strong>Uploaded/Backed up HMI Load</strong></td><td><input type="checkbox" name="check_hmi_load" value="Yes"></td><td><input type="checkbox" name="check_hmi_load" value="No"></td><td><input type="checkbox" name="check_hmi_load" value="N/A"></td><td><input name="remarks_hmi_load"></td></tr>
-                    <tr><td><strong>ABB PLC load matched SharePoint?</strong></td><td><input type="checkbox" name="check_abb_match" value="Yes"></td><td><input type="checkbox" name="check_abb_match" value="No"></td><td><input type="checkbox" name="check_abb_match" value="N/A"></td><td><input name="remarks_abb_match"></td></tr>
-                    <tr><td><strong>Recorded SCADA PC System Information</strong></td><td><input type="checkbox" name="check_scada_info" value="Yes"></td><td><input type="checkbox" name="check_scada_info" value="No"></td><td><input type="checkbox" name="check_scada_info" value="N/A"></td><td><input name="remarks_scada_info"></td></tr>
-                    <tr><td><strong>Recorded versions of Iconics, Kepware, CODESYS</strong></td><td><input type="checkbox" name="check_versions" value="Yes"></td><td><input type="checkbox" name="check_versions" value="No"></td><td><input type="checkbox" name="check_versions" value="N/A"></td><td><input name="remarks_versions"></td></tr>
-                    <tr><td><strong>Created system architecture diagram</strong></td><td><input type="checkbox" name="check_architecture" value="Yes"></td><td><input type="checkbox" name="check_architecture" value="No"></td><td><input type="checkbox" name="check_architecture" value="N/A"></td><td><input name="remarks_architecture"></td></tr>
-                    <tr><td><strong>Uploaded Router configuration</strong></td><td><input type="checkbox" name="check_router_config" value="Yes"></td><td><input type="checkbox" name="check_router_config" value="No"></td><td><input type="checkbox" name="check_router_config" value="N/A"></td><td><input name="remarks_router_config"></td></tr>
-                    <tr><td><strong>Backed up SCADA Graphics</strong></td><td><input type="checkbox" name="check_scada_graphics" value="Yes"></td><td><input type="checkbox" name="check_scada_graphics" value="No"></td><td><input type="checkbox" name="check_scada_graphics" value="N/A"></td><td><input name="remarks_scada_graphics"></td></tr>
-                    <tr><td><strong>Electrician required for migration</strong></td><td><input type="checkbox" name="check_electrician" value="Yes"></td><td><input type="checkbox" name="check_electrician" value="No"></td><td><input type="checkbox" name="check_electrician" value="N/A"></td><td><input name="remarks_electrician"></td></tr>
+                    <tr>
+                      <td><strong>Hardware Compatibility Verified</strong></td>
+                      <td>
+                        <select name="hardware_compatibility_verified">
+                          <option value="">Select...</option>
+                          <option value="Ready">Ready</option>
+                          <option value="Requires Updates">Requires Updates</option>
+                          <option value="Needs Replacement">Needs Replacement</option>
+                        </select>
+                      </td>
+                      <td><input name="hardware_compatibility_comments" placeholder="Additional notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Network Infrastructure Ready</strong></td>
+                      <td>
+                        <select name="network_infrastructure_ready">
+                          <option value="">Select...</option>
+                          <option value="Ready">Ready</option>
+                          <option value="Requires Upgrades">Requires Upgrades</option>
+                          <option value="Major Changes Needed">Major Changes Needed</option>
+                        </select>
+                      </td>
+                      <td><input name="network_infrastructure_comments" placeholder="Additional notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Migration Plan Approved</strong></td>
+                      <td>
+                        <select name="migration_plan_approved">
+                          <option value="">Select...</option>
+                          <option value="Approved">Approved</option>
+                          <option value="Approved with Conditions">Approved with Conditions</option>
+                          <option value="Requires Revision">Requires Revision</option>
+                        </select>
+                      </td>
+                      <td><input name="migration_plan_comments" placeholder="Additional notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Risk Mitigation Strategies Defined</strong></td>
+                      <td>
+                        <select name="risk_mitigation_defined">
+                          <option value="">Select...</option>
+                          <option value="Complete">Complete</option>
+                          <option value="Partially Complete">Partially Complete</option>
+                          <option value="Needs Development">Needs Development</option>
+                        </select>
+                      </td>
+                      <td><input name="risk_mitigation_comments" placeholder="Additional notes"/></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(5)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(7)"><i class="fas fa-arrow-right"></i> Next: Submit</button>
-            </div>
-          </fieldset>
-
-          <!-- Step 7 — Review & Submit -->
-          <fieldset class="form-step" id="step-7">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-paper-plane"></i> Step 7 — Review & Submit</h1>
-              <p style="color: #64748b;">Review all information and submit your SCADA migration assessment.</p>
-            </div>
-
             <div class="form-section">
-              <h4><i class="fas fa-signature"></i> Digital Signature</h4>
+              <h4><i class="fas fa-signature"></i> Migration Assessment Approval</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="migration_recommendation">Migration Recommendation</label>
+                  <select id="migration_recommendation" name="migration_recommendation">
+                    <option value="">Select recommendation...</option>
+                    <option value="Proceed with Migration">Proceed with Migration as Planned</option>
+                    <option value="Proceed with Conditions">Proceed with Migration - Address Conditions</option>
+                    <option value="Defer Migration">Defer Migration - Major Issues Identified</option>
+                    <option value="Redesign Required">Migration Redesign Required</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="assessment_summary">Migration Assessment Summary</label>
+                  <textarea id="assessment_summary" name="assessment_summary" rows="4" 
+                            placeholder="Provide a comprehensive summary of the migration assessment findings, recommendations, and next steps...">{{ submission_data.ASSESSMENT_SUMMARY or '' }}</textarea>
+                </div>
+              </div>
+              
               <div class="signature-pad-container">
                 <canvas id="fixed_signature_canvas" width="600" height="200"></canvas>
               </div>
@@ -355,8 +389,12 @@
             </div>
 
             <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(6)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit SCADA Migration Survey</button>
+              <button type="button" class="btn btn-secondary" onclick="goToStep(6)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Submit SCADA Migration Assessment
+              </button>
             </div>
           </fieldset>
         </form>
@@ -367,16 +405,32 @@
     let currentStep = 1;
 
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('SCADA Migration Survey initialized');
+      console.log('SCADA Migration Assessment initialized');
       initializeForm();
     });
 
     function goToStep(step) {
+      // Hide all form steps
       document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.progress-step').forEach(el => el.classList.remove('active'));
       
-      document.getElementById('step-' + step).classList.add('active');
-      document.querySelectorAll('.progress-step')[step - 1].classList.add('active');
+      // Remove active class from all progress steps
+      document.querySelectorAll('.progress-step').forEach(el => {
+        el.classList.remove('active');
+        el.classList.add('disabled');
+      });
+      
+      // Show the target step
+      const targetStep = document.getElementById('step-' + step);
+      if (targetStep) {
+        targetStep.classList.add('active');
+      }
+      
+      // Update progress bar
+      const progressStep = document.getElementById('prog-' + step);
+      if (progressStep) {
+        progressStep.classList.add('active');
+        progressStep.classList.remove('disabled');
+      }
       
       currentStep = step;
       window.scrollTo(0, 0);
@@ -388,15 +442,21 @@
         if (canvas) {
           const signaturePad = new SignaturePad(canvas);
           
-          document.getElementById('fixed_clear_btn').addEventListener('click', function() {
-            signaturePad.clear();
-          });
+          const clearBtn = document.getElementById('fixed_clear_btn');
+          if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+              signaturePad.clear();
+            });
+          }
           
-          document.getElementById('scadaMigrationForm').addEventListener('submit', function() {
-            if (!signaturePad.isEmpty()) {
-              document.getElementById('sig_prepared_data').value = signaturePad.toDataURL();
-            }
-          });
+          const form = document.getElementById('scadaMigrationForm');
+          if (form) {
+            form.addEventListener('submit', function() {
+              if (!signaturePad.isEmpty()) {
+                document.getElementById('sig_prepared_data').value = signaturePad.toDataURL();
+              }
+            });
+          }
         }
       }
     }
@@ -410,7 +470,7 @@
         body: formData
       }).then(response => {
         if (response.ok) {
-          console.log('Progress saved');
+          console.log('Migration assessment progress saved');
         }
       }).catch(error => {
         console.error('Auto-save failed:', error);
@@ -420,262 +480,14 @@
     function handleFormSubmit(event) {
       const signatureData = document.getElementById('sig_prepared_data').value;
       if (!signatureData) {
-        alert('Please provide your digital signature before submitting.');
+        alert('Please provide your digital signature before submitting the migration assessment.');
         event.preventDefault();
         return false;
       }
       return true;
     }
 
-    setInterval(saveProgress, 120000);
-  </script>
-</body>
-</html> Details</button>
-            </div>
-          </fieldset>
-
-          <!-- Step 3 — Hardware Details -->
-          <fieldset class="form-step" id="step-3">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-microchip"></i> Step 3 — Hardware Details</h1>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-cogs"></i> Hardware Components</h4>
-              <div class="table-container">
-                <table>
-                  <thead><tr><th>Component</th><th>Manufacturer / Model</th><th>Model / Slot</th><th>Hardware Version</th><th>Comments</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>CPU</strong></td><td><input name="cpu_manufacturer"/></td><td><input name="cpu_model_slot"/></td><td><input name="cpu_hardware_version"/></td><td><input name="cpu_comments"/></td></tr>
-                    <tr><td><strong>Ethernet Card</strong></td><td><input name="ethernet_manufacturer"/></td><td><input name="ethernet_model_slot"/></td><td><input name="ethernet_hardware_version"/></td><td><input name="ethernet_comments"/></td></tr>
-                    <tr><td><strong>Other Comms</strong></td><td><input name="other_comms_manufacturer"/></td><td><input name="other_comms_model_slot"/></td><td><input name="other_comms_hardware_version"/></td><td><input name="other_comms_comments"/></td></tr>
-                    <tr><td><strong>No. of Racks</strong></td><td><input name="num_racks"/></td><td>-</td><td>-</td><td><input name="racks_comments"/></td></tr>
-                    <tr><td><strong>HMI</strong></td><td><input name="hmi_manufacturer"/></td><td><input name="hmi_model_slot"/></td><td><input name="hmi_hardware_version"/></td><td><input name="hmi_comments"/></td></tr>
-                    <tr><td><strong>Router</strong></td><td><input name="router_manufacturer"/></td><td><input name="router_model_slot"/></td><td><input name="router_hardware_version"/></td><td><input name="router_comments"/></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-tools"></i> Additional Hardware Assessment</h4>
-              <div class="table-container">
-                <table>
-                  <tbody>
-                    <tr><td><strong>Approx. Age of PLC</strong></td><td><input name="plc_age"/></td></tr>
-                    <tr><td><strong>Compatible software version for PLC & HMI</strong></td><td><input name="compatible_software"/></td></tr>
-                    <tr><td><strong>Space for new Router</strong></td><td><select name="space_new_router"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>
-                    <tr><td><strong>Space for managed switch (CISCO)</strong></td><td><select name="space_managed_switch"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>
-                    <tr><td><strong>Existing Router Power Supply</strong></td><td><input name="router_power_supply"/></td></tr>
-                    <tr><td><strong>Antenna Location & Distance from Router</strong></td><td><input name="antenna_location" placeholder="Internal/ External"/></td></tr>
-                    <tr><td><strong>Existing UHF Network? (Radio)</strong></td><td><select name="uhf_network_exists"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>
-                    <tr><td><strong>Type of UHF Network (IP Radio or Serial)</strong></td><td><input name="uhf_network_type"/></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(2)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(4)"><i class="fas fa-arrow-right"></i> Next: Communications</button>
-            </div>
-          </fieldset>
-
-          <!-- Step 4 — Communications Details -->
-          <fieldset class="form-step" id="step-4">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-wifi"></i> Step 4 — Communications Details</h1>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-network-wired"></i> Network Configuration</h4>
-              <div class="table-container">
-                <table>
-                  <thead><tr><th>Device</th><th>IP Address</th><th>Port Details</th><th>Gateway</th><th>Notes</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>PLC</strong></td><td><input name="plc_ip"/></td><td><input name="plc_ports"/></td><td><input name="plc_gateway"/></td><td><input name="plc_network_notes"/></td></tr>
-                    <tr><td><strong>HMI</strong></td><td><input name="hmi_ip"/></td><td><input name="hmi_ports"/></td><td><input name="hmi_gateway"/></td><td><input name="hmi_network_notes"/></td></tr>
-                    <tr><td><strong>Router</strong></td><td><input name="router_ip"/></td><td><input name="router_ports"/></td><td><input name="router_gateway"/></td><td><input name="router_network_notes"/></td></tr>
-                    <tr><td><strong>Radio</strong></td><td><input name="radio_ip"/></td><td><input name="radio_ports"/></td><td><input name="radio_gateway"/></td><td><input name="radio_network_notes"/></td></tr>
-                    <tr><td><strong>Network Switch</strong></td><td><input name="switch_ip"/></td><td><input name="switch_ports"/></td><td><input name="switch_gateway"/></td><td><input name="switch_network_notes"/></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-signal"></i> Mobile Signal Strength</h4>
-              <div class="table-container">
-                <table>
-                  <thead><tr><th>Network Provider</th><th>Signal (dBm)</th><th>Quality</th><th>Notes</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>Vodafone IE</strong></td><td><input name="vodafone_signal" placeholder="e.g. -65"/> dBm</td><td><select name="vodafone_quality"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td><td><input name="vodafone_notes"/></td></tr>
-                    <tr><td><strong>Eir</strong></td><td><input name="eir_signal" placeholder="e.g. -72"/> dBm</td><td><select name="eir_quality"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td><td><input name="eir_notes"/></td></tr>
-                    <tr><td><strong>3 IRL Meteor LTE</strong></td><td><input name="three_signal" placeholder="e.g. -68"/> dBm</td><td><select name="three_quality"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td><td><input name="three_notes"/></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(3)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(5)"><i class="fas fa-arrow-right"></i> Next: Plant SCADA</button>
-            </div>
-          </fieldset>
-
-          <!-- Step 5 — Local Plant SCADA Details -->
-          <fieldset class="form-step" id="step-5">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-desktop"></i> Step 5 — Local Plant SCADA Details</h1>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-server"></i> SCADA System Information</h4>
-              <div class="table-container">
-                <table>
-                  <tbody>
-                    <tr><td><strong>SCADA location</strong></td><td><input name="scada_location"/></td></tr>
-                    <tr><td><strong>SCADA PC details</strong></td><td><textarea name="scada_pc_details" rows="2"></textarea></td></tr>
-                    <tr><td><strong>SCADA platform</strong></td><td><input name="scada_platform" placeholder="e.g. Iconics, Wonderware"/></td></tr>
-                    <tr><td><strong>SCADA Licence</strong></td><td><input name="scada_licence"/></td></tr>
-                    <tr><td><strong>Clients/Slave/Remote Login details</strong></td><td><textarea name="scada_clients" rows="2"></textarea></td></tr>
-                    <tr><td><strong>Operating System</strong></td><td><input name="pc_operating_system"/></td></tr>
-                    <tr><td><strong>Memory</strong></td><td><input name="pc_memory"/></td></tr>
-                    <tr><td><strong>CPU</strong></td><td><input name="pc_cpu"/></td></tr>
-                    <tr><td><strong>Peripheral information</strong></td><td><textarea name="pc_peripherals" rows="2"></textarea></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(4)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(6)"><i class="fas fa-arrow-right"></i> Next: Verification</button>
-            </div>
-          </fieldset>
-
-          <!-- Step 6 — Pre-Departure Verification Checklist -->
-          <fieldset class="form-step" id="step-6">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-clipboard-check"></i> Step 6 — Pre-Departure Verification Checklist</h1>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-tasks"></i> Verification Checklist</h4>
-              <div class="table-container">
-                <table>
-                  <thead><tr><th>Verification Item</th><th>Yes</th><th>No</th><th>N/A</th><th>Remarks</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>Uploaded PLC Load</strong></td><td><input type="checkbox" name="check_plc_load" value="Yes"></td><td><input type="checkbox" name="check_plc_load" value="No"></td><td><input type="checkbox" name="check_plc_load" value="N/A"></td><td><input name="remarks_plc_load"></td></tr>
-                    <tr><td><strong>Uploaded/Backed up HMI Load</strong></td><td><input type="checkbox" name="check_hmi_load" value="Yes"></td><td><input type="checkbox" name="check_hmi_load" value="No"></td><td><input type="checkbox" name="check_hmi_load" value="N/A"></td><td><input name="remarks_hmi_load"></td></tr>
-                    <tr><td><strong>ABB PLC load matched SharePoint?</strong></td><td><input type="checkbox" name="check_abb_match" value="Yes"></td><td><input type="checkbox" name="check_abb_match" value="No"></td><td><input type="checkbox" name="check_abb_match" value="N/A"></td><td><input name="remarks_abb_match"></td></tr>
-                    <tr><td><strong>Recorded SCADA PC System Information</strong></td><td><input type="checkbox" name="check_scada_info" value="Yes"></td><td><input type="checkbox" name="check_scada_info" value="No"></td><td><input type="checkbox" name="check_scada_info" value="N/A"></td><td><input name="remarks_scada_info"></td></tr>
-                    <tr><td><strong>Recorded versions of Iconics, Kepware, CODESYS</strong></td><td><input type="checkbox" name="check_versions" value="Yes"></td><td><input type="checkbox" name="check_versions" value="No"></td><td><input type="checkbox" name="check_versions" value="N/A"></td><td><input name="remarks_versions"></td></tr>
-                    <tr><td><strong>Created system architecture diagram</strong></td><td><input type="checkbox" name="check_architecture" value="Yes"></td><td><input type="checkbox" name="check_architecture" value="No"></td><td><input type="checkbox" name="check_architecture" value="N/A"></td><td><input name="remarks_architecture"></td></tr>
-                    <tr><td><strong>Uploaded Router configuration</strong></td><td><input type="checkbox" name="check_router_config" value="Yes"></td><td><input type="checkbox" name="check_router_config" value="No"></td><td><input type="checkbox" name="check_router_config" value="N/A"></td><td><input name="remarks_router_config"></td></tr>
-                    <tr><td><strong>Backed up SCADA Graphics</strong></td><td><input type="checkbox" name="check_scada_graphics" value="Yes"></td><td><input type="checkbox" name="check_scada_graphics" value="No"></td><td><input type="checkbox" name="check_scada_graphics" value="N/A"></td><td><input name="remarks_scada_graphics"></td></tr>
-                    <tr><td><strong>Electrician required for migration</strong></td><td><input type="checkbox" name="check_electrician" value="Yes"></td><td><input type="checkbox" name="check_electrician" value="No"></td><td><input type="checkbox" name="check_electrician" value="N/A"></td><td><input name="remarks_electrician"></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(5)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(7)"><i class="fas fa-arrow-right"></i> Next: Submit</button>
-            </div>
-          </fieldset>
-
-          <!-- Step 7 — Review & Submit -->
-          <fieldset class="form-step" id="step-7">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-paper-plane"></i> Step 7 — Review & Submit</h1>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-signature"></i> Digital Signature</h4>
-              <div class="signature-pad-container">
-                <canvas id="fixed_signature_canvas" width="600" height="200"></canvas>
-              </div>
-              <button type="button" id="fixed_clear_btn" class="btn btn-secondary">
-                <i class="fas fa-eraser"></i> Clear Signature
-              </button>
-              <input type="hidden" id="sig_prepared_data" name="sig_prepared_data"/>
-            </div>
-
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(6)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit SCADA Migration Survey</button>
-            </div>
-          </fieldset>
-        </form>
-    </main>
-  </div>
-
-  <script>
-    let currentStep = 1;
-
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('SCADA Migration Survey initialized');
-      initializeForm();
-    });
-
-    function goToStep(step) {
-      document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.progress-step').forEach(el => el.classList.remove('active'));
-      
-      document.getElementById('step-' + step).classList.add('active');
-      document.querySelectorAll('.progress-step')[step - 1].classList.add('active');
-      
-      currentStep = step;
-      window.scrollTo(0, 0);
-    }
-
-    function initializeForm() {
-      if (typeof SignaturePad !== 'undefined') {
-        const canvas = document.getElementById('fixed_signature_canvas');
-        if (canvas) {
-          const signaturePad = new SignaturePad(canvas);
-          
-          document.getElementById('fixed_clear_btn').addEventListener('click', function() {
-            signaturePad.clear();
-          });
-          
-          document.getElementById('scadaMigrationForm').addEventListener('submit', function() {
-            if (!signaturePad.isEmpty()) {
-              document.getElementById('sig_prepared_data').value = signaturePad.toDataURL();
-            }
-          });
-        }
-      }
-    }
-
-    function saveProgress() {
-      const formData = new FormData(document.getElementById('scadaMigrationForm'));
-      formData.append('action', 'auto_save');
-      
-      fetch('/auto_save_progress', {
-        method: 'POST',
-        body: formData
-      }).then(response => {
-        if (response.ok) {
-          console.log('Progress saved');
-        }
-      }).catch(error => {
-        console.error('Auto-save failed:', error);
-      });
-    }
-
-    function handleFormSubmit(event) {
-      const signatureData = document.getElementById('sig_prepared_data').value;
-      if (!signatureData) {
-        alert('Please provide your digital signature before submitting.');
-        event.preventDefault();
-        return false;
-      }
-      return true;
-    }
-
+    // Auto-save every 2 minutes
     setInterval(saveProgress, 120000);
   </script>
 </body>
