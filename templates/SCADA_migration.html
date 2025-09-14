@@ -101,184 +101,188 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
           <input type="hidden" name="submission_id" value="{{ submission_id }}"/>
 
-          <!-- Step 1 — Migration Project Information -->
+          <!-- Step 1 — Basic Information -->
           <fieldset class="form-step active" id="step-1">
             <div class="step-header">
               <h1 class="step-legend">
-                <i class="fas fa-project-diagram"></i>
-                Step 1 — Migration Project Information
+                <i class="fas fa-info-circle"></i>
+                Step 1 — Basic Information
               </h1>
-              <p style="color: #64748b;">Define the SCADA migration project scope, objectives, and key stakeholders.</p>
+              <p style="color: #64748b;">Please provide the basic information about your SCADA Migration Assessment report. Fields marked with <span class="required">*</span> are required.</p>
             </div>
 
             <div class="form-section">
-              <h4><i class="fas fa-file-alt"></i> Migration Project Details</h4>
+              <h4><i class="fas fa-file-alt"></i> Document Information</h4>
+
               <div class="form-row">
                 <div class="form-group">
-                  <label for="migration_project_name">Migration Project Name <span class="required">*</span></label>
-                  <input id="migration_project_name" name="migration_project_name" type="text" required 
-                         placeholder="e.g. Cork County Council to Cully Cloud SCADA Migration" 
-                         value="{{ submission_data.MIGRATION_PROJECT_NAME or '' }}"/>
+                  <label for="document_title">Document Title <span class="required">*</span></label>
+                  <input id="document_title" name="document_title" type="text" required
+                         placeholder="e.g. SCADA Migration Assessment Report v1.0" value="{{ submission_data.DOCUMENT_TITLE or '' }}"/>
                 </div>
+
                 <div class="form-group">
-                  <label for="site_name">Target Site Name <span class="required">*</span></label>
-                  <input id="site_name" name="site_name" type="text" required 
-                         value="{{ submission_data.SITE_NAME or '' }}"/>
+                  <label for="project_reference">Project Reference <span class="required">*</span></label>
+                  <input id="project_reference" name="project_reference" type="text" required
+                         placeholder="e.g. PROJ-SCADA-MIG-2024" value="{{ submission_data.PROJECT_REFERENCE or '' }}"/>
                 </div>
               </div>
+
               <div class="form-row">
                 <div class="form-group">
-                  <label for="current_scada_vendor">Current SCADA Platform</label>
-                  <input id="current_scada_vendor" name="current_scada_vendor" type="text" 
-                         placeholder="e.g. Schneider Electric Citect, Siemens WinCC" 
-                         value="{{ submission_data.CURRENT_SCADA_VENDOR or '' }}"/>
+                  <label for="document_reference">Document Reference</label>
+                  <input id="document_reference" name="document_reference" type="text"
+                         placeholder="e.g. DOC-SCADA-MIG-2024-001" value="{{ submission_data.DOCUMENT_REFERENCE or '' }}"/>
                 </div>
+
                 <div class="form-group">
-                  <label for="migration_assessment_date">Assessment Date <span class="required">*</span></label>
-                  <input id="migration_assessment_date" name="migration_assessment_date" type="date" required 
-                         value="{{ submission_data.MIGRATION_ASSESSMENT_DATE or '' }}"/>
+                  <label for="date">Date <span class="required">*</span></label>
+                  <input id="date" name="date" type="date" required value="{{ submission_data.DATE or '' }}"/>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="prepared_for">Prepared for</label>
+                  <input id="prepared_for" name="prepared_for" type="text"
+                         placeholder="Enter client/company name" value="{{ submission_data.PREPARED_FOR or '' }}"/>
+                </div>
+
+                <div class="form-group">
+                  <label for="revision">Revision</label>
+                  <input id="revision" name="revision" type="text"
+                         placeholder="e.g., R0, R1, Rev A" value="{{ submission_data.REVISION or '' }}"/>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="revision_details">Revision Details</label>
+                  <input id="revision_details" name="revision_details" type="text"
+                         placeholder="e.g. Initial migration assessment, Updated compatibility analysis"
+                         value="{{ submission_data.REVISION_DETAILS or '' }}"/>
+                </div>
+
+                <div class="form-group">
+                  <label for="revision_date">Revision Date</label>
+                  <input id="revision_date" name="revision_date" type="date"
+                         value="{{ submission_data.REVISION_DATE or '' }}"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-envelope"></i> Contact Information</h4>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="user_email">Your Email <span class="required">*</span></label>
+                  <input id="user_email" name="user_email" type="email" required readonly
+                         placeholder="your.email@company.com" value="{{ current_user.email if current_user.is_authenticated else submission_data.USER_EMAIL or '' }}"
+                         style="background-color: #f8fafc; cursor: not-allowed;"/>
                 </div>
               </div>
             </div>
 
             <div class="btn-group">
               <button type="button" class="btn btn-primary" onclick="goToStep(2)">
-                <i class="fas fa-arrow-right"></i> Next: Current State Analysis
+                <i class="fas fa-arrow-right"></i> Next Step
               </button>
             </div>
           </fieldset>
 
-          <!-- Step 2 — Current SCADA State Analysis -->
+          <!-- Step 2 — Approvals -->
           <fieldset class="form-step" id="step-2">
             <div class="step-header">
               <h1 class="step-legend">
-                <i class="fas fa-search"></i>
-                Step 2 — Current SCADA State Analysis
+                <i class="fas fa-users"></i>
+                Step 2 — Approvals & Workflow
               </h1>
-              <p style="color: #64748b;">Analyze the existing SCADA system architecture and performance.</p>
             </div>
 
             <div class="form-section">
-              <h4><i class="fas fa-server"></i> Current SCADA System Assessment</h4>
-              <div class="table-container">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>System Component</th>
-                      <th>Current Status</th>
-                      <th>Performance</th>
-                      <th>Migration Impact</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>SCADA Server Hardware</strong></td>
-                      <td><input name="scada_server_status" placeholder="Age, specs, condition"/></td>
-                      <td><select name="scada_server_performance"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td>
-                      <td><input name="scada_server_migration" placeholder="Migration strategy"/></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Database System</strong></td>
-                      <td><input name="database_status" placeholder="Type, version, size"/></td>
-                      <td><select name="database_performance"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td>
-                      <td><input name="database_migration" placeholder="Data migration approach"/></td>
-                    </tr>
-                    <tr>
-                      <td><strong>HMI/Graphics System</strong></td>
-                      <td><input name="hmi_graphics_status" placeholder="Version, complexity, custom elements"/></td>
-                      <td><select name="hmi_graphics_performance"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td>
-                      <td><input name="hmi_graphics_migration" placeholder="Graphics conversion strategy"/></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Communication Drivers</strong></td>
-                      <td><input name="comm_drivers_status" placeholder="Protocols, custom drivers"/></td>
-                      <td><select name="comm_drivers_performance"><option value="">Select...</option><option value="Excellent">Excellent</option><option value="Good">Good</option><option value="Fair">Fair</option><option value="Poor">Poor</option></select></td>
-                      <td><input name="comm_drivers_migration" placeholder="Driver compatibility"/></td>
-                    </tr>
-                  </tbody>
-                </table>
+              <h4><i class="fas fa-user-check"></i> Approval Personnel</h4>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="prepared_by">Prepared By</label>
+                  <input id="prepared_by" name="prepared_by" type="text" readonly
+                         value="{{ current_user.full_name if current_user.is_authenticated else submission_data.PREPARED_BY or '' }}"
+                         style="background-color: #f8fafc; cursor: not-allowed;"/>
+                </div>
+
+                <div class="form-group">
+                  <label for="reviewed_by_tech_lead">Reviewed by (Automation Manager)</label>
+                  <input type="text" id="reviewed_by_tech_lead" name="reviewed_by_tech_lead" readonly
+                         value="{{ submission_data.get('REVIEWED_BY_TECH_LEAD', '') }}"
+                         placeholder="Will auto-populate from selection below"
+                         style="background-color: #f8fafc; cursor: not-allowed;"/>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="reviewed_by_pm">Reviewed By PM</label>
+                  <input id="reviewed_by_pm" name="reviewed_by_pm" type="text" readonly
+                         value="{{ submission_data.get('REVIEWED_BY_PM', '') }}"
+                         placeholder="Will auto-populate from selection below"
+                         style="background-color: #f8fafc; cursor: not-allowed;"/>
+                </div>
+
+                <div class="form-group">
+                  <label for="approved_by_client">Approved By Client</label>
+                  <input id="approved_by_client" name="approved_by_client" type="text"
+                         value="{{ submission_data.APPROVED_BY_CLIENT or '' }}"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="data-card">
+              <div class="card-header">Approval Workflow</div>
+              <div class="card-body">
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">
+                  Select the people who will approve this SCADA Migration Assessment report. Names and email addresses will be auto-populated.
+                </p>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="approver_1_name_select"><i class="fas fa-user-cog"></i> Automation Manager Name</label>
+                    <select id="approver_1_name_select" name="approver_1_name_select">
+                      <option value="">Select Automation Manager...</option>
+                    </select>
+                    <input type="hidden" name="approver_1_name" id="approver_1_name" />
+                    <input type="hidden" name="approver_1_email" id="approver_1_email" />
+                    <label for="approver_1_email_display" style="margin-top: 8px;">Email Address</label>
+                    <input type="email" id="approver_1_email_display" readonly
+                           placeholder="Email will auto-populate when name is selected"
+                           style="background-color: #f8fafc; cursor: not-allowed;"/>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="approver_2_name_select">
+                      <i class="fa fa-user"></i> Project Manager Name
+                    </label>
+                    <select id="approver_2_name_select" name="approver_2_name_select">
+                      <option value="">Select Project Manager...</option>
+                    </select>
+                    <input type="hidden" name="approver_2_name" id="approver_2_name" />
+                    <input type="hidden" name="approver_2_email" id="approver_2_email" />
+                    <label for="approver_2_email_display" style="margin-top: 8px;">Email Address</label>
+                    <input type="email" id="approver_2_email_display" readonly
+                           placeholder="Email will auto-populate when name is selected"
+                           style="background-color: #f8fafc; cursor: not-allowed;"/>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(1)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(3)"><i class="fas fa-arrow-right"></i> Next: Compatibility Assessment</button>
-            </div>
-          </fieldset>
-
-          <!-- Step 3 — Hardware/Software Compatibility -->
-          <fieldset class="form-step" id="step-3">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-microchip"></i> Step 3 — Hardware/Software Compatibility Assessment</h1>
-              <p style="color: #64748b;">Evaluate compatibility for migration to Cully Automation cloud platform.</p>
-            </div>
-
-            <div class="form-section">
-              <h4><i class="fas fa-cogs"></i> Hardware Compatibility Matrix</h4>
-              <div class="table-container">
-                <table>
-                  <thead><tr><th>Component</th><th>Current System</th><th>Cully Cloud Compatible</th><th>Action Required</th><th>Migration Priority</th></tr></thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>PLC/Control System</strong></td>
-                      <td><input name="plc_current" placeholder="Make/model/version"/></td>
-                      <td><select name="plc_compatible"><option value="">Assess...</option><option value="Fully Compatible">Fully Compatible</option><option value="Partially Compatible">Partially Compatible</option><option value="Requires Updates">Requires Updates</option><option value="Not Compatible">Not Compatible</option></select></td>
-                      <td><input name="plc_action" placeholder="Required actions"/></td>
-                      <td><select name="plc_priority"><option value="">Set...</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Communication Gateway</strong></td>
-                      <td><input name="gateway_current" placeholder="Current gateway details"/></td>
-                      <td><select name="gateway_compatible"><option value="">Assess...</option><option value="Compatible">Compatible</option><option value="Needs Configuration">Needs Configuration</option><option value="Replacement Required">Replacement Required</option></select></td>
-                      <td><input name="gateway_action" placeholder="Required actions"/></td>
-                      <td><select name="gateway_priority"><option value="">Set...</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Network Infrastructure</strong></td>
-                      <td><input name="network_current" placeholder="Current network setup"/></td>
-                      <td><select name="network_compatible"><option value="">Assess...</option><option value="Ready">Ready</option><option value="Minor Upgrades">Minor Upgrades</option><option value="Major Upgrades">Major Upgrades</option><option value="Complete Overhaul">Complete Overhaul</option></select></td>
-                      <td><input name="network_action" placeholder="Required actions"/></td>
-                      <td><select name="network_priority"><option value="">Set...</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(2)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(4)"><i class="fas fa-arrow-right"></i> Next: Network Review</button>
-            </div>
-          </fieldset>
-
-          <!-- Continue with remaining steps (4-6) -->
-          <fieldset class="form-step" id="step-4">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-network-wired"></i> Step 4 — Network Infrastructure Review</h1>
-            </div>
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(3)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(5)"><i class="fas fa-arrow-right"></i> Next: Migration Plan</button>
-            </div>
-          </fieldset>
-
-          <fieldset class="form-step" id="step-5">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-route"></i> Step 5 — Migration Implementation Plan</h1>
-            </div>
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(4)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(6)"><i class="fas fa-arrow-right"></i> Next: Risk Analysis</button>
-            </div>
-          </fieldset>
-
-          <fieldset class="form-step" id="step-6">
-            <div class="step-header">
-              <h1 class="step-legend"><i class="fas fa-exclamation-triangle"></i> Step 6 — Migration Risk Analysis</h1>
-            </div>
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary" onclick="goToStep(5)"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(7)"><i class="fas fa-arrow-right"></i> Next: Final Review</button>
+              <button type="button" class="btn btn-secondary" onclick="goToStep(1)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(3)">
+                Next Step <i class="fas fa-arrow-right"></i>
+              </button>
             </div>
           </fieldset>
 
