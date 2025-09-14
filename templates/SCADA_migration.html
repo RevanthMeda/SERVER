@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SCADA Migration Site Survey Report – Cully Automation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.5/dist/signature_pad.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='js/form.js') }}" defer></script>
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+  <div class="admin-container">
+    <!-- Header -->
+    <div class="admin-header">
+      <div class="header-content">
+        <div class="header-info">
+          <h1><i class="fas fa-network-wired"></i> SCADA Migration Site Survey</h1>
+          <p>Comprehensive site assessment for SCADA system migration to Cully Automation cloud platform</p>
+        </div>
+        <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="dashboard-nav">
+      <div class="nav-left">
+        <a href="{{ url_for('dashboard.engineer') }}" class="nav-item">
+          <i class="fa fa-home"></i> Dashboard
+        </a>
+        <button type="button" class="nav-item" onclick="saveProgress()">
+          <i class="fas fa-save"></i> Save Progress
+        </button>
+      </div>
+      <div class="nav-right">
+        <a href="{{ url_for('auth.logout') }}" class="nav-item logout-btn">
+          <i class="fa fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="horizontal-progress-bar">
+      <div class="progress-container">
+        {% set steps = [
+          (1, "Site Info", "Basic details"),
+          (2, "Architecture", "System layout"),
+          (3, "Hardware", "PLC/HMI/Router"),
+          (4, "Communications", "Network details"),
+          (5, "Plant SCADA", "Local systems"),
+          (6, "Verification", "Pre-departure"),
+          (7, "Submit", "Final review")
+        ] %}
+        
+        {% for num, title, desc in steps %}
+        <div class="progress-step {% if num == 1 %}active{% endif %}" onclick="goToStep({{ num }})">
+          <div class="step-circle">{{ num }}</div>
+          <div class="step-info">
+            <div class="step-title">{{ title }}</div>
+            <div class="step-description">{{ desc }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="full-width-content">
+        <img src="{{ url_for('static', filename='Cully_Watermark.jpg') }}" class="watermark" alt="Watermark" />
+
+        <form id="scadaMigrationForm" method="POST" action="{{ url_for('main.generate_scada_migration') }}" enctype="multipart/form-data">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
+          <input type="hidden" name="submission_id" value="{{ submission_id }}"/>
+
+          <!-- Step 1 — Site Information -->
+          <fieldset class="form-step active" id="step-1">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-map-marker-alt"></i>
+                Step 1 — Site Information
+              </h1>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-info-circle"></i> Site Details</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="site_name">Site Name <span class="required">*</span></label>
+                  <input id="site_name" name="site_name" type="text" required value="{{ submission_data.SITE_NAME }}"/>
+                </div>
+                <div class="form-group">
+                  <label for="site_location">Site Location / Co-ordinates</label>
+                  <input id="site_location" name="site_location" type="text" value="{{ submission_data.SITE_LOCATION }}"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="site_access_details">Site Access Details</label>
+                  <textarea id="site_access_details" name="site_access_details" placeholder="Plant Operator must be contacted">{{ submission_data.SITE_ACCESS_DETAILS }}</textarea>
+                </div>
+                <div class="form-group">
+                  <label for="on_site_parking">On Site Parking</label>
+                  <input id="on_site_parking" name="on_site_parking" type="text" value="{{ submission_data.ON_SITE_PARKING }}"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="area_engineer">Area Engineer & Number</label>
+                  <input id="area_engineer" name="area_engineer" type="text" value="{{ submission_data.AREA_ENGINEER }}"/>
+                </div>
+                <div class="form-group">
+                  <label for="site_caretaker">Site Caretaker & Number</label>
+                  <input id="site_caretaker" name="site_caretaker" type="text" value="{{ submission_data.SITE_CARETAKER }}"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" onclick="goToStep(2)">
+                <i class="fas fa-arrow-right"></i> Next
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 2 — Hardware Details -->
+          <fieldset class="form-step" id="step-2">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-microchip"></i>
+                Step 2 — Hardware Details
+              </h1>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-cogs"></i> Hardware Components</h4>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Component</th>
+                      <th>Manufacturer / Model</th>
+                      <th>Hardware Version</th>
+                      <th>Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>PLC CPU</strong></td>
+                      <td><input name="plc_manufacturer" placeholder="e.g. ABB AC800M"/></td>
+                      <td><input name="plc_version" placeholder="Version"/></td>
+                      <td><input name="plc_comments" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>HMI</strong></td>
+                      <td><input name="hmi_manufacturer" placeholder="e.g. Beijer X2"/></td>
+                      <td><input name="hmi_version" placeholder="Version"/></td>
+                      <td><input name="hmi_comments" placeholder="Notes"/></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Router</strong></td>
+                      <td><input name="router_manufacturer" placeholder="e.g. Cisco IE-2000"/></td>
+                      <td><input name="router_version" placeholder="Version"/></td>
+                      <td><input name="router_comments" placeholder="Notes"/></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(1)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(3)">
+                <i class="fas fa-arrow-right"></i> Next
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 3 — Communications -->
+          <fieldset class="form-step" id="step-3">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-wifi"></i>
+                Step 3 — Communications Details
+              </h1>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-network-wired"></i> Network Configuration</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="plc_ip">PLC IP, Port Details & Gateway</label>
+                  <input id="plc_ip" name="plc_ip" type="text" placeholder="IP: 192.168.1.10, Port: 502, Gateway: 192.168.1.1"/>
+                </div>
+                <div class="form-group">
+                  <label for="hmi_ip">HMI IP, Port Details & Gateway</label>
+                  <input id="hmi_ip" name="hmi_ip" type="text" placeholder="IP: 192.168.1.20, Port: 80, Gateway: 192.168.1.1"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="router_ip">Router IP, Port Details & Gateway</label>
+                  <input id="router_ip" name="router_ip" type="text" placeholder="IP: 192.168.1.1, Ports: open"/>
+                </div>
+                <div class="form-group">
+                  <label for="signal_strength">Router Signal Strength</label>
+                  <input id="signal_strength" name="signal_strength" type="text" placeholder="e.g. -65 dBm"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(2)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(4)">
+                <i class="fas fa-arrow-right"></i> Next
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Step 4 — Submit -->
+          <fieldset class="form-step" id="step-4">
+            <div class="step-header">
+              <h1 class="step-legend">
+                <i class="fas fa-paper-plane"></i>
+                Step 4 — Review & Submit
+              </h1>
+            </div>
+
+            <div class="form-section">
+              <h4><i class="fas fa-signature"></i> Digital Signature</h4>
+              <div class="signature-pad-container">
+                <canvas id="fixed_signature_canvas" width="600" height="200"></canvas>
+              </div>
+              <button type="button" id="fixed_clear_btn" class="btn btn-secondary">
+                <i class="fas fa-eraser"></i> Clear Signature
+              </button>
+              <input type="hidden" id="sig_prepared_data" name="sig_prepared_data"/>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="goToStep(3)">
+                <i class="fas fa-arrow-left"></i> Previous
+              </button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Submit Survey
+              </button>
+            </div>
+          </fieldset>
+        </form>
+    </main>
+  </div>
+
+  <script>
+    let currentStep = 1;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('SCADA Migration Survey initialized');
+      initializeForm();
+    });
+
+    function goToStep(step) {
+      document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.progress-step').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById('step-' + step).classList.add('active');
+      document.querySelectorAll('.progress-step')[step - 1].classList.add('active');
+      
+      currentStep = step;
+    }
+
+    function initializeForm() {
+      // Initialize signature pad
+      if (typeof SignaturePad !== 'undefined') {
+        const canvas = document.getElementById('fixed_signature_canvas');
+        if (canvas) {
+          const signaturePad = new SignaturePad(canvas);
+          
+          document.getElementById('fixed_clear_btn').addEventListener('click', function() {
+            signaturePad.clear();
+          });
+          
+          // Save signature data before form submission
+          document.getElementById('scadaMigrationForm').addEventListener('submit', function() {
+            if (!signaturePad.isEmpty()) {
+              document.getElementById('sig_prepared_data').value = signaturePad.toDataURL();
+            }
+          });
+        }
+      }
+    }
+
+    function saveProgress() {
+      // Auto-save functionality
+      const formData = new FormData(document.getElementById('scadaMigrationForm'));
+      formData.append('action', 'auto_save');
+      
+      fetch('/auto-save', {
+        method: 'POST',
+        body: formData
+      }).then(response => {
+        if (response.ok) {
+          console.log('Progress saved');
+        }
+      }).catch(error => {
+        console.error('Auto-save failed:', error);
+      });
+    }
+
+    function handleFormSubmit(event) {
+      // Form validation before submission
+      const requiredFields = document.querySelectorAll('input[required]');
+      let isValid = true;
+      
+      requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+          field.style.borderColor = '#ef4444';
+          isValid = false;
+        } else {
+          field.style.borderColor = '#e2e8f0';
+        }
+      });
+      
+      if (!isValid) {
+        alert('Please fill in all required fields.');
+        return false;
+      }
+      
+      return true;
+    }
+  </script>
+</body>
+</html>

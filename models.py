@@ -152,6 +152,30 @@ class SiteSurveyReport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     report_id = db.Column(db.String(36), db.ForeignKey('reports.id'), nullable=False, unique=True)
     data_json = db.Column(db.Text, nullable=False)
+    
+    # SCADA Migration specific fields
+    site_name = db.Column(db.String(200), nullable=True)
+    site_location = db.Column(db.Text, nullable=True)
+    site_access_details = db.Column(db.Text, nullable=True)
+    area_engineer = db.Column(db.String(200), nullable=True)
+    site_caretaker = db.Column(db.String(200), nullable=True)
+    survey_completed_by = db.Column(db.String(200), nullable=True)
+    
+    # Hardware details
+    plc_details = db.Column(db.Text, nullable=True)  # JSON for PLC specifications
+    hmi_details = db.Column(db.Text, nullable=True)  # JSON for HMI specifications
+    router_details = db.Column(db.Text, nullable=True)  # JSON for router specifications
+    network_equipment = db.Column(db.Text, nullable=True)  # JSON for additional network equipment
+    
+    # Communications
+    network_configuration = db.Column(db.Text, nullable=True)  # JSON for IP, ports, gateways
+    mobile_signal_strength = db.Column(db.Text, nullable=True)  # JSON for signal measurements
+    
+    # Plant SCADA details
+    local_scada_details = db.Column(db.Text, nullable=True)  # JSON for local SCADA system info
+    
+    # Pre-departure checklist
+    verification_checklist = db.Column(db.Text, nullable=True)  # JSON for checklist items
 
 class SDSReport(db.Model):
     __tablename__ = 'sds_reports'

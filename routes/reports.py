@@ -149,3 +149,54 @@ def sat_wizard():
         current_app.logger.error(f"Error in sat_wizard: {e}", exc_info=True)
         flash('An error occurred while loading the report for editing.', 'error')
         return redirect(url_for('dashboard.home'))
+
+@reports_bp.route('/new/scada-migration')
+@login_required
+@role_required(['Engineer', 'Automation Manager', 'Admin'])
+def new_scada_migration():
+    """SCADA Migration Site Survey report creation"""
+    try:
+        import uuid
+        from utils import get_unread_count
+        
+        # Create empty submission data structure for new SCADA migration reports
+        submission_data = {
+            'SITE_NAME': '',
+            'SITE_LOCATION': '',
+            'SITE_ACCESS_DETAILS': '',
+            'ON_SITE_PARKING': '',
+            'AREA_ENGINEER': '',
+            'SITE_CARETAKER': '',
+            'SURVEY_COMPLETED_BY': current_user.full_name if current_user.is_authenticated else '',
+            'CONTROL_APPROACH_DISCUSSED': '',
+            'VISUAL_INSPECTION': '',
+            'SITE_TYPE': '',
+            'ELECTRICAL_SUPPLY': '',
+            'PLANT_PHOTOS_COMPLETED': '',
+            'SITE_UNDERGOING_CONSTRUCTION': '',
+            'CONSTRUCTION_DESCRIPTION': '',
+            'SYSTEM_ARCHITECTURE_DESCRIPTION': '',
+            'PLC_DETAILS': {},
+            'HMI_DETAILS': {},
+            'ROUTER_DETAILS': {},
+            'NETWORK_CONFIGURATION': {},
+            'MOBILE_SIGNAL_STRENGTH': {},
+            'LOCAL_SCADA_DETAILS': {},
+            'VERIFICATION_CHECKLIST': {}
+        }
+        
+        unread_count = get_unread_count()
+        submission_id = str(uuid.uuid4())
+        
+        return render_template('SCADA_migration.html', 
+                             submission_data=submission_data,
+                             submission_id=submission_id,
+                             unread_count=unread_count,
+                             is_new_report=True)
+    except Exception as e:
+        current_app.logger.error(f"Error rendering SCADA Migration form: {e}")
+        submission_data = {}
+        return render_template('SCADA_migration.html', 
+                             submission_data=submission_data,
+                             submission_id='',
+                             unread_count=0)
