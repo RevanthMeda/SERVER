@@ -3,1186 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome - Report Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <style>
-        :root {
-            --primary-color: #4DD0E1;
-            --primary-hover-color: #26C6DA;
-            --secondary-color: #00BCD4;
-            --accent-color: #00ACC1;
-            --background-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --card-header-bg: #e9ecef;
-            --border-color: #dee2e6;
-            --text-primary: #333;
-            --text-secondary: #6c757d;
-            --text-muted: #adb5bd;
-            --info-bg: #e0f7fa;
-        }
-
-        /* 3D Background and Base Styles */
-        body {
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%),
-                linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Floating 3D Elements */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
-                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-            background-size: 60px 60px, 40px 40px;
-            animation: float 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) rotate(1deg); }
-            66% { transform: translateY(-10px) rotate(-1deg); }
-        }
-
-        /* 3D Geometric Shapes */
-        .floating-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .shape {
-            position: absolute;
-            opacity: 0.1;
-            animation: floatShape 15s ease-in-out infinite;
-        }
-
-        .shape:nth-child(1) {
-            top: 10%;
-            left: 10%;
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            transform: rotate(45deg);
-            animation-delay: 0s;
-            border-radius: 20px;
-        }
-
-        .shape:nth-child(2) {
-            top: 60%;
-            right: 10%;
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(45deg, #74b9ff, #0984e3);
-            border-radius: 50%;
-            animation-delay: 2s;
-        }
-
-        .shape:nth-child(3) {
-            bottom: 20%;
-            left: 20%;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
-            transform: rotate(30deg);
-            animation-delay: 4s;
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        }
-
-        .shape:nth-child(4) {
-            top: 30%;
-            right: 30%;
-            width: 120px;
-            height: 40px;
-            background: linear-gradient(45deg, #fd79a8, #e84393);
-            border-radius: 50px;
-            animation-delay: 6s;
-        }
-
-        @keyframes floatShape {
-            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
-            25% { transform: translateY(-30px) rotate(90deg) scale(1.1); }
-            50% { transform: translateY(-20px) rotate(180deg) scale(0.9); }
-            75% { transform: translateY(-40px) rotate(270deg) scale(1.05); }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* 3D Welcome Container */
-        .welcome-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 40px;
-            text-align: center;
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%),
-                linear-gradient(45deg, rgba(77, 208, 225, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            box-shadow: 
-                0 25px 60px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 1px 3px rgba(0, 0, 0, 0.1);
-            position: relative;
-            transform-style: preserve-3d;
-            transform: perspective(1000px) rotateX(2deg);
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .welcome-container:hover {
-            transform: perspective(1000px) rotateX(0deg) translateY(-10px);
-            box-shadow: 
-                0 35px 80px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .welcome-container::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff6b6b, #74b9ff, #fd79a8, #a29bfe);
-            border-radius: 32px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .welcome-container:hover::before {
-            opacity: 0.7;
-            animation: borderGlow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes borderGlow {
-            0% { filter: blur(5px); }
-            100% { filter: blur(10px); }
-        }
-
-        /* 3D Header with Animations */
-        .welcome-header {
-            margin-bottom: 50px;
-            padding-bottom: 40px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-        }
-
-        .welcome-logo {
-            max-width: 180px;
-            margin-bottom: 30px;
-            filter: brightness(0) invert(1) drop-shadow(0 8px 16px rgba(255, 255, 255, 0.3));
-            transition: all 0.4s ease;
-            animation: logoFloat 6s ease-in-out infinite;
-        }
-
-        .welcome-logo:hover {
-            transform: scale(1.1) rotateY(10deg);
-            filter: brightness(0) invert(1) drop-shadow(0 12px 24px rgba(255, 255, 255, 0.5));
-        }
-
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0px) rotateY(0deg); }
-            50% { transform: translateY(-10px) rotateY(5deg); }
-        }
-
-        .welcome-header h1 {
-            font-size: 3.2rem;
-            color: white;
-            margin-bottom: 15px;
-            line-height: 1.2;
-            text-shadow: 
-                0 0 20px rgba(255, 255, 255, 0.5),
-                0 0 40px rgba(77, 208, 225, 0.3),
-                0 0 60px rgba(77, 208, 225, 0.1);
-            background: linear-gradient(135deg, #ffffff 0%, #a8edea 50%, #fed6e3 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            animation: titleGlow 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes titleGlow {
-            0% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(77, 208, 225, 0.3); }
-            100% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(77, 208, 225, 0.5); }
-        }
-
-        .welcome-subtitle {
-            font-size: 1.4rem;
-            color: rgba(255, 255, 255, 0.95);
-            margin-bottom: 30px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            animation: subtitleFade 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes subtitleFade {
-            0% { opacity: 0.8; }
-            100% { opacity: 1; }
-        }
-
-        /* 3D Intro Section */
-        .intro-section {
-            margin-top: 30px;
-            padding: 30px;
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 
-                0 15px 35px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            transform: perspective(1000px) rotateX(1deg);
-            transition: all 0.4s ease;
-        }
-
-        .intro-section:hover {
-            transform: perspective(1000px) rotateX(0deg) translateY(-5px);
-            box-shadow: 
-                0 20px 45px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-        }
-
-        .intro-text {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.95);
-            max-width: 800px;
-            margin: 0 auto;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            line-height: 1.7;
-        }
-
-        /* 3D Cards */
-        .card {
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%),
-                linear-gradient(45deg, rgba(77, 208, 225, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            margin-bottom: 40px;
-            box-shadow: 
-                0 20px 50px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            transform: perspective(1000px) rotateX(2deg);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .card:hover {
-            transform: perspective(1000px) rotateX(0deg) translateY(-15px);
-            box-shadow: 
-                0 30px 70px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-        }
-
-        .card:hover::before {
-            left: 100%;
-        }
-
-        .card-header {
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
-            padding: 25px 35px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px 25px 0 0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .card-header h2 {
-            margin: 0;
-            color: white;
-            font-size: 1.7rem;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-content {
-            padding: 35px;
-        }
-
-        .get-started {
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .get-started-header {
-            justify-content: flex-start !important;
-            text-align: left !important;
-        }
-
-        .get-started-header i,
-        .get-started-header h2 {
-            margin-right: auto;
-        }
-
-        .cta-description {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.8);
-            max-width: 700px;
-            margin: 0 auto 30px auto;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: stretch;
-            flex-wrap: wrap;
-            margin: 30px 0;
-        }
-
-        /* 3D Buttons with Enhanced Effects */
-        .btn-primary,
-        .btn-secondary {
-            padding: 25px 35px;
-            font-size: 1.2rem;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 18px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-weight: bold;
-            min-width: 240px;
-            min-height: 90px;
-            text-align: left;
-            text-decoration: none;
-            border: 3px solid;
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .btn-primary::before,
-        .btn-secondary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-primary:hover::before,
-        .btn-secondary:hover::before {
-            left: 100%;
-        }
-
-        .btn-content {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
-            z-index: 2;
-            position: relative;
-        }
-
-        .btn-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            line-height: 1.2;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-subtitle {
-            font-size: 0.9rem;
-            font-weight: normal;
-            opacity: 0.9;
-            line-height: 1.2;
-        }
-
-        .btn-primary {
-            background: 
-                linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover-color) 100%),
-                linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
-            color: white;
-            border-color: var(--primary-color);
-            box-shadow: 
-                0 10px 30px rgba(77, 208, 225, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: 
-                linear-gradient(135deg, var(--primary-hover-color) 0%, #1de9b6 100%),
-                linear-gradient(45deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
-            border-color: var(--primary-hover-color);
-            transform: translateY(-8px) rotateX(5deg) scale(1.02);
-            box-shadow: 
-                0 20px 50px rgba(77, 208, 225, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-            color: white;
-            text-decoration: none;
-        }
-
-        .btn-secondary {
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-            color: white;
-            border-color: rgba(255, 255, 255, 0.6);
-            box-shadow: 
-                0 10px 30px rgba(255, 255, 255, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-            transform: translateY(-8px) rotateX(5deg) scale(1.02);
-            box-shadow: 
-                0 20px 50px rgba(255, 255, 255, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            color: white;
-            text-decoration: none;
-            border-color: rgba(255, 255, 255, 0.8);
-        }
-
-        .btn-primary i,
-        .btn-secondary i {
-            font-size: 1.8rem;
-            flex-shrink: 0;
-            z-index: 2;
-            position: relative;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .registration-info {
-            margin-top: 25px;
-            padding: 18px 25px;
-            background-color: rgba(255, 193, 7, 0.15);
-            border-radius: 10px;
-            text-align: center;
-            font-size: 0.95rem;
-            border: 1px solid rgba(255, 193, 7, 0.3);
-            max-width: 650px;
-            margin-left: auto;
-            margin-right: auto;
-            backdrop-filter: blur(5px);
-        }
-
-        .registration-info p {
-            margin: 0;
-            color: rgba(255, 255, 255, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            line-height: 1.5;
-        }
-
-        .registration-info i {
-            font-size: 1.1rem;
-            color: rgba(255, 193, 7, 1);
-        }
-
-        /* 3D Features Section */
-        .features {
-            margin-top: 80px;
-        }
-
-        .features h2 {
-            font-size: 2.6rem;
-            color: white;
-            text-align: center;
-            margin-bottom: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            text-shadow: 
-                0 0 20px rgba(255, 255, 255, 0.3),
-                0 0 40px rgba(77, 208, 225, 0.2);
-            background: linear-gradient(135deg, #ffffff 0%, #a8edea 50%, #fed6e3 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            perspective: 1000px;
-        }
-
-        .feature-item {
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%),
-                linear-gradient(45deg, rgba(77, 208, 225, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            padding: 40px;
-            text-align: center;
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform: perspective(1000px) rotateX(5deg) rotateY(2deg);
-            box-shadow: 
-                0 20px 50px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-item::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: rotate 8s linear infinite;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .feature-item:hover::before {
-            opacity: 1;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .feature-item:hover {
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(-20px) scale(1.02);
-            box-shadow: 
-                0 30px 80px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-        }
-
-        .feature-icon {
-            font-size: 3.2rem;
-            color: var(--primary-color);
-            margin-bottom: 25px;
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: 
-                linear-gradient(135deg, rgba(77, 208, 225, 0.2) 0%, rgba(77, 208, 225, 0.1) 100%);
-            border-radius: 50%;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(77, 208, 225, 0.3);
-            text-shadow: 0 0 20px rgba(77, 208, 225, 0.5);
-            transition: all 0.4s ease;
-            position: relative;
-            z-index: 2;
-        }
-
-        .feature-item:hover .feature-icon {
-            transform: scale(1.1) rotateY(15deg);
-            text-shadow: 0 0 30px rgba(77, 208, 225, 0.8);
-            box-shadow: 0 10px 30px rgba(77, 208, 225, 0.3);
-        }
-
-        .feature-item h3 {
-            color: white;
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 2;
-        }
-
-        .feature-item p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-            line-height: 1.6;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 2;
-        }
-
-        .feature-benefits {
-            list-style: none;
-            padding: 0;
-            margin-top: auto;
-            width: 100%;
-            text-align: left;
-            position: relative;
-            z-index: 2;
-        }
-
-        .feature-benefits li {
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-            margin-bottom: 10px;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            color: rgba(255, 255, 255, 0.95);
-            border-left: 4px solid var(--primary-color);
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        .feature-benefits li:hover {
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
-            transform: translateX(5px);
-            border-left-color: #1de9b6;
-        }
-
-        .feature-benefits li:before {
-            content: "✨ ";
-            color: var(--primary-color);
-            font-weight: bold;
-            margin-right: 10px;
-            text-shadow: 0 0 10px rgba(77, 208, 225, 0.5);
-        }
-
-        /* 3D Support Section */
-        .support-section {
-            margin-top: 80px;
-            background: 
-                linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%),
-                linear-gradient(45deg, rgba(77, 208, 225, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-            backdrop-filter: blur(20px);
-            padding: 50px;
-            border-radius: 25px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 25px 60px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            transform: perspective(1000px) rotateX(2deg);
-            transition: all 0.6s ease;
-        }
-
-        .support-section:hover {
-            transform: perspective(1000px) rotateX(0deg) translateY(-10px);
-        }
-
-        .support-section h2 {
-            font-size: 2.6rem;
-            color: white;
-            text-align: center;
-            margin-bottom: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            text-shadow: 
-                0 0 20px rgba(255, 255, 255, 0.3),
-                0 0 40px rgba(77, 208, 225, 0.2);
-            background: linear-gradient(135deg, #ffffff 0%, #a8edea 50%, #fed6e3 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .support-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 35px;
-            perspective: 1000px;
-        }
-
-        .support-item {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-            backdrop-filter: blur(15px);
-            padding: 35px;
-            border-radius: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform: perspective(1000px) rotateX(3deg);
-            box-shadow: 
-                0 15px 40px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .support-item:hover {
-            background: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
-            transform: perspective(1000px) rotateX(0deg) translateY(-15px) scale(1.02);
-            box-shadow: 
-                0 25px 60px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-
-        .support-item i {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(77, 208, 225, 0.5);
-            background: 
-                linear-gradient(135deg, rgba(77, 208, 225, 0.2) 0%, rgba(77, 208, 225, 0.1) 100%);
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(77, 208, 225, 0.3);
-            transition: all 0.4s ease;
-        }
-
-        .support-item:hover i {
-            transform: scale(1.1) rotateY(15deg);
-            text-shadow: 0 0 30px rgba(77, 208, 225, 0.8);
-        }
-
-        .support-item h3 {
-            font-size: 1.5rem;
-            color: white;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .support-item p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        .support-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            padding: 15px 25px;
-            border: 3px solid var(--primary-color);
-            border-radius: 15px;
-            display: inline-block;
-            background: 
-                linear-gradient(135deg, rgba(77, 208, 225, 0.1) 0%, rgba(77, 208, 225, 0.05) 100%);
-            backdrop-filter: blur(10px);
-            text-shadow: 0 0 10px rgba(77, 208, 225, 0.3);
-            box-shadow: 
-                0 8px 25px rgba(77, 208, 225, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .support-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .support-link:hover::before {
-            left: 100%;
-        }
-
-        .support-link:hover,
-        .support-link:focus {
-            color: white;
-            background: 
-                linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover-color) 100%);
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 
-                0 15px 40px rgba(77, 208, 225, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            outline: none;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .support-link:focus {
-            outline: 3px solid rgba(77, 208, 225, 0.5);
-            outline-offset: 3px;
-        }
-
-        .welcome-footer {
-            background-color: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            color: #ffffff;
-            padding: 40px 20px 20px 20px;
-            margin-top: 60px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-section h4 {
-            color: var(--primary-color);
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 5px;
-            display: inline-block;
-        }
-
-        .footer-section ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 10px;
-        }
-
-        .footer-section ul li a {
-            color: rgba(255, 255, 255, 0.85);
-            text-decoration: underline;
-            text-decoration-color: transparent;
-            transition: all 0.3s ease;
-            padding: 2px 0;
-            border-radius: 3px;
-        }
-
-        .footer-section ul li a:hover,
-        .footer-section ul li a:focus {
-            color: var(--primary-color);
-            text-decoration-color: var(--primary-color);
-            background-color: rgba(77, 208, 225, 0.1);
-            outline: none;
-        }
-
-        .footer-section ul li a:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        .footer-section p {
-            color: rgba(255, 255, 255, 0.7);
-            margin: 0;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .footer-bottom a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        .footer-bottom a:hover {
-            color: white;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background-color: var(--card-bg);
-            margin: 5% auto;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            width: 80%;
-            max-width: 800px;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .close {
-            color: #aaa;
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 30px;
-            font-weight: bold;
-            transition: color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: var(--primary-color);
-        }
-
-        .modal h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
-        }
-
-        .modal h3 {
-            color: var(--text-primary);
-            margin-top: 25px;
-            margin-bottom: 10px;
-        }
-
-        .modal p,
-        .modal ul {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        .modal ul {
-            margin-left: 25px;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 6px;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .status-indicator.online {
-            background-color: #28a745;
-            box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
-        }
-
-        .status-indicator.offline {
-            background-color: #dc3545;
-        }
-
-        .status-indicator.maintenance {
-            background-color: #ffc107;
-        }
-
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .alert-success {
-            color: #155724;
-            background-color: rgba(212, 237, 218, 0.9);
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-danger {
-            color: #721c24;
-            background-color: rgba(248, 215, 218, 0.9);
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert-warning {
-            color: #856404;
-            background-color: rgba(255, 243, 205, 0.9);
-            border: 1px solid #ffeeba;
-        }
-
-        .alert-info {
-            color: #0c5460;
-            background-color: rgba(209, 236, 241, 0.9);
-            border: 1px solid #bee5eb;
-        }
-
-        /* Mobile responsiveness with maintained 3D effects */
-        @media (max-width: 768px) {
-            .floating-shapes {
-                display: none; /* Hide floating shapes on mobile for performance */
-            }
-
-            .welcome-container {
-                padding: 25px;
-                margin: 25px auto;
-                transform: perspective(1000px) rotateX(1deg);
-            }
-
-            .welcome-header h1 {
-                font-size: 2.4rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-
-            .feature-item {
-                transform: perspective(1000px) rotateX(2deg);
-            }
-
-            .support-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-
-            .auth-buttons {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .auth-buttons .btn-primary,
-            .auth-buttons .btn-secondary {
-                width: 100%;
-                min-width: auto;
-            }
-
-            .modal-content {
-                width: 95%;
-                margin: 10% auto;
-            }
-
-            /* Reduce 3D effects on smaller screens */
-            .card {
-                transform: perspective(800px) rotateX(1deg);
-            }
-
-            .card:hover {
-                transform: perspective(800px) rotateX(0deg) translateY(-8px);
-            }
-
-            .support-section {
-                transform: perspective(800px) rotateX(1deg);
-                padding: 35px 25px;
-            }
-        }
-    </style>
+    <title>Welcome - Cully Water Excellence</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome-water.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Floating 3D Shapes -->
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
+    <!-- Floating Water Elements -->
+    <div class="water-elements">
+        <div class="water-drop"></div>
+        <div class="water-drop"></div>
+        <div class="water-drop"></div>
+        <div class="water-bubble"></div>
+        <div class="water-bubble"></div>
     </div>
     
     <div class="container">
-        <div class="welcome-container">
+        <div class="welcome-hero">
             <div class="welcome-header">
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Report Generator Logo" class="welcome-logo">
-                <h1>Welcome to Report Generator</h1>
-                <p class="welcome-subtitle">Professional documentation platform for engineering and project teams</p>
+                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Water Excellence" class="cully-logo">
+                <h1 class="hero-title">Welcome to Cully Water Excellence</h1>
+                <p class="hero-subtitle">Your Partner in Water Excellence - Professional Documentation Platform for Engineering Excellence</p>
                 <div class="intro-section">
                     <p class="intro-text">
-                        Streamline your project documentation with automated report generation for SAT, FAT, commissioning, 
-                        maintenance, QA, compliance, and technical documentation. Designed for engineers, project managers, 
-                        and technical teams across all departments.
+                        Transform your technical documentation with our water-industry specialized platform. 
+                        Streamline SAT reports, site surveys, commissioning documentation, and compliance reporting 
+                        for water treatment, distribution, and automation systems.
                     </p>
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header get-started-header">
-                <h2>Get Started</h2>
+        <div class="water-card">
+            <div class="card-header">
+                <h2><i class="fas fa-rocket"></i> Get Started</h2>
             </div>
             <div class="card-content">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                            <div class="alert alert-{{ category }}" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">{{ message }}</div>
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
 
                 <div class="get-started">
                     <p class="cta-description">
-                        Join engineering and project teams using Report Generator to create professional 
-                        technical documentation faster and more accurately than ever before.
+                        Join water industry professionals using Cully Water Excellence to create 
+                        professional technical documentation faster and more accurately than ever before.
                     </p>
                     <div class="auth-buttons">
                         <a href="{{ url_for('auth.login') }}" class="btn-primary">
-                            <i class="fa fa-sign-in-alt"></i>
+                            <i class="fas fa-water"></i>
                             <div class="btn-content">
-                                <span class="btn-title">Log In</span>
-                                <span class="btn-subtitle">Access your dashboard</span>
+                                <span class="btn-title">Access Portal</span>
+                                <span class="btn-subtitle">Login to your dashboard</span>
                             </div>
                         </a>
                         <a href="{{ url_for('auth.register') }}" class="btn-secondary">
-                            <i class="fa fa-user-plus"></i>
+                            <i class="fas fa-user-plus"></i>
                             <div class="btn-content">
-                                <span class="btn-title">Register</span>
+                                <span class="btn-title">Join Excellence</span>
                                 <span class="btn-subtitle">Create your account</span>
                             </div>
                         </a>
                     </div>
-                    <div class="registration-info">
-                        <p><i class="fa fa-info-circle"></i> <strong>New users:</strong> Registration requires administrator approval.
+                    <div class="registration-info" style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; margin-top: 25px; border: 1px solid rgba(255,255,255,0.1);">
+                        <p style="margin: 0; color: rgba(255,255,255,0.9);"><i class="fas fa-info-circle"></i> <strong>New users:</strong> Registration requires administrator approval.
                         You'll receive an email notification within 24 hours once your account is approved.
                         </p>
                     </div>
@@ -1190,137 +77,94 @@
             </div>
         </div>
 
-        <div class="features">
-            <h2><i class="fa fa-star"></i> Key Features</h2>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="fa fa-file-alt"></i></div>
-                    <h3>Multi-Purpose Reports</h3>
-                    <p>Generate comprehensive technical reports including SAT, FAT, commissioning, maintenance, 
-                    QA documentation, and compliance reports with automated formatting and professional templates.</p>
-                    <ul class="feature-benefits">
-                        <li>SAT & FAT Reports</li>
-                        <li>Commissioning Documentation</li>
-                        <li>Maintenance Reports</li>
-                        <li>QA & Compliance Reports</li>
-                        <li>Multi-format export (Word/PDF)</li>
-                    </ul>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="fa fa-users"></i></div>
-                    <h3>Team Collaboration</h3>
-                    <p>Role-based access control with approval workflows designed for engineering teams,
-                    project managers, technical managers, and department leads.</p>
-                    <ul class="feature-benefits">
-                        <li>Role-based dashboards</li>
-                        <li>Multi-stage approval workflows</li>
-                        <li>Team notifications</li>
-                        <li>Progress tracking</li>
-                        <li>Digital signatures</li>
-                    </ul>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="fa fa-sitemap"></i></div>
-                    <h3>I/O Builder Tool</h3>
-                    <p>Interactive tool for creating and managing comprehensive input/output documentation
-                    for automation systems, control panels, and technical specifications.</p>
-                    <ul class="feature-benefits">
-                        <li>Drag-and-drop interface</li>
-                        <li>Hardware integration</li>
-                        <li>Automated documentation</li>
-                        <li>Export capabilities</li>
-                        <li>Modbus configuration</li>
-                    </ul>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="fa fa-shield-alt"></i></div>
-                    <h3>Enterprise Security</h3>
-                    <p>Bank-level security with encrypted data storage, user authentication,
-                    and comprehensive audit trails for enterprise compliance and data protection.</p>
-                    <ul class="feature-benefits">
-                        <li>Encrypted data storage</li>
-                        <li>Multi-factor authentication</li>
-                        <li>Comprehensive audit trails</li>
-                        <li>GDPR compliance</li>
-                        <li>Role-based permissions</li>
-                    </ul>
+        <!-- WATER EXCELLENCE FEATURES SECTION -->
+        <div class="water-card">
+            <div class="card-header">
+                <h2><i class="fas fa-water"></i> Water Industry Excellence</h2>
+            </div>
+            <div class="card-content">
+                <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 30px 0;">
+                    <div class="feature-item" style="background: rgba(255,255,255,0.08); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; backdrop-filter: blur(10px);">
+                        <div class="feature-icon" style="font-size: 3rem; color: #00cccc; margin-bottom: 20px;"><i class="fas fa-droplet"></i></div>
+                        <h3 style="color: white; margin-bottom: 15px; font-size: 1.4rem;">Water System Reports</h3>
+                        <p style="color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 20px;">Specialized documentation for water treatment, distribution, and automation systems with industry-specific templates.</p>
+                        <ul class="feature-benefits" style="list-style: none; padding: 0; color: rgba(255,255,255,0.8);">
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #00cccc;"></i>Water Treatment SAT Reports</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #00cccc;"></i>Distribution System Documentation</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #00cccc;"></i>SCADA Migration Reports</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #00cccc;"></i>Compliance Documentation</li>
+                        </ul>
+                    </div>
+                    <div class="feature-item" style="background: rgba(255,255,255,0.08); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; backdrop-filter: blur(10px);">
+                        <div class="feature-icon" style="font-size: 3rem; color: #0080ff; margin-bottom: 20px;"><i class="fas fa-users-cog"></i></div>
+                        <h3 style="color: white; margin-bottom: 15px; font-size: 1.4rem;">Team Collaboration</h3>
+                        <p style="color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 20px;">Advanced workflow management designed for water industry engineering teams and project coordination.</p>
+                        <ul class="feature-benefits" style="list-style: none; padding: 0; color: rgba(255,255,255,0.8);">
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0080ff;"></i>Multi-stage Approval Workflows</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0080ff;"></i>Real-time Collaboration</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0080ff;"></i>Digital Signatures</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0080ff;"></i>Progress Tracking</li>
+                        </ul>
+                    </div>
+                    <div class="feature-item" style="background: rgba(255,255,255,0.08); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; backdrop-filter: blur(10px);">
+                        <div class="feature-icon" style="font-size: 3rem; color: #33dddd; margin-bottom: 20px;"><i class="fas fa-sitemap"></i></div>
+                        <h3 style="color: white; margin-bottom: 15px; font-size: 1.4rem;">I/O Builder Tool</h3>
+                        <p style="color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 20px;">Interactive tool for creating comprehensive automation system documentation with water industry focus.</p>
+                        <ul class="feature-benefits" style="list-style: none; padding: 0; color: rgba(255,255,255,0.8);">
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #33dddd;"></i>Drag-and-drop Interface</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #33dddd;"></i>Hardware Integration</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #33dddd;"></i>Automated Documentation</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #33dddd;"></i>Modbus Configuration</li>
+                        </ul>
+                    </div>
+                    <div class="feature-item" style="background: rgba(255,255,255,0.08); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; backdrop-filter: blur(10px);">
+                        <div class="feature-icon" style="font-size: 3rem; color: #0066cc; margin-bottom: 20px;"><i class="fas fa-shield-water"></i></div>
+                        <h3 style="color: white; margin-bottom: 15px; font-size: 1.4rem;">Enterprise Security</h3>
+                        <p style="color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 20px;">Bank-level security tailored for water industry compliance and critical infrastructure protection.</p>
+                        <ul class="feature-benefits" style="list-style: none; padding: 0; color: rgba(255,255,255,0.8);">
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0066cc;"></i>Encrypted Data Storage</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0066cc;"></i>Multi-factor Authentication</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0066cc;"></i>Audit Trails</li>
+                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0066cc;"></i>Industry Compliance</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Support Section -->
-        <div class="support-section">
-            <h2><i class="fa fa-life-ring" aria-hidden="true"></i> Support & Resources</h2>
-            <div class="support-grid">
-                <div class="support-item">
-                    <i class="fa fa-book" aria-hidden="true"></i>
-                    <h3>Documentation Center</h3>
-                    <p>Complete user guides covering SAT reports, I/O Builder, approval workflows, and advanced features for all user roles</p>
-                    <a href="#" onclick="showModal('docs')" class="support-link" aria-label="View comprehensive documentation">View Documentation</a>
+        <!-- SUPPORT & RESOURCES SECTION -->
+        <div class="water-card">
+            <div class="card-header">
+                <h2><i class="fas fa-life-ring"></i> Support & Resources</h2>
+            </div>
+            <div class="card-content">
+                <div class="support-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 30px 0;">
+                    <div class="support-item" style="background: rgba(255,255,255,0.08); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: all 0.3s ease;">
+                        <i class="fas fa-book" style="font-size: 2.5rem; color: #00cccc; margin-bottom: 15px; display: block;"></i>
+                        <h3 style="color: white; margin-bottom: 15px;">Documentation Center</h3>
+                        <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">Complete guides for water industry professionals covering all platform features and workflows.</p>
+                        <a href="#" onclick="showModal('docs')" class="support-link" style="color: #00cccc; text-decoration: none; font-weight: 600; border: 2px solid #00cccc; padding: 8px 16px; border-radius: 8px; display: inline-block; transition: all 0.3s ease;">View Documentation</a>
+                    </div>
+                    <div class="support-item" style="background: rgba(255,255,255,0.08); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: all 0.3s ease;">
+                        <i class="fas fa-video" style="font-size: 2.5rem; color: #0080ff; margin-bottom: 15px; display: block;"></i>
+                        <h3 style="color: white; margin-bottom: 15px;">Video Training Library</h3>
+                        <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">Interactive tutorials for water system documentation and platform navigation.</p>
+                        <a href="#" onclick="showModal('training')" class="support-link" style="color: #0080ff; text-decoration: none; font-weight: 600; border: 2px solid #0080ff; padding: 8px 16px; border-radius: 8px; display: inline-block; transition: all 0.3s ease;">Watch Tutorials</a>
+                    </div>
+                    <div class="support-item" style="background: rgba(255,255,255,0.08); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: all 0.3s ease;">
+                        <i class="fas fa-headset" style="font-size: 2.5rem; color: #33dddd; margin-bottom: 15px; display: block;"></i>
+                        <h3 style="color: white; margin-bottom: 15px;">Technical Assistance</h3>
+                        <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">Direct support for water industry technical issues and platform troubleshooting.</p>
+                        <a href="mailto:support@cullyautomation.com" class="support-link" style="color: #33dddd; text-decoration: none; font-weight: 600; border: 2px solid #33dddd; padding: 8px 16px; border-radius: 8px; display: inline-block; transition: all 0.3s ease;">Get Help</a>
+                    </div>
+                    <div class="support-item" style="background: rgba(255,255,255,0.08); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: all 0.3s ease;">
+                        <i class="fas fa-comments" style="font-size: 2.5rem; color: #0066cc; margin-bottom: 15px; display: block;"></i>
+                        <h3 style="color: white; margin-bottom: 15px;">Water Industry Forum</h3>
+                        <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">Connect with water industry professionals and share best practices.</p>
+                        <a href="#" onclick="showModal('community')" class="support-link" style="color: #0066cc; text-decoration: none; font-weight: 600; border: 2px solid #0066cc; padding: 8px 16px; border-radius: 8px; display: inline-block; transition: all 0.3s ease;">Join Forum</a>
+                    </div>
                 </div>
-                <div class="support-item">
-                    <i class="fa fa-video" aria-hidden="true"></i>
-                    <h3>Video Training Library</h3>
-                    <p>Interactive tutorials for platform navigation, report creation, team collaboration, and role-specific workflows</p>
-                    <a href="#" onclick="showModal('training')" class="support-link" aria-label="Access video training tutorials">Watch Tutorials</a>
-                </div>
-                <div class="support-item">
-                    <i class="fa fa-headset" aria-hidden="true"></i>
-                    <h3>Technical Assistance</h3>
-                    <p>Direct support for technical issues, account setup, and platform troubleshooting</p>
-                    <a href="mailto:support@reportgenerator.com" class="support-link" aria-label="Contact technical support team">Get Help</a>
-                </div>
-                <div class="support-item">
-                    <i class="fa fa-comments" aria-hidden="true"></i>
-                    <h3>Community Forum</h3>
-                    <p>Connect with other users, share best practices, and get peer support for report generation challenges</p>
-                    <a href="#" onclick="showModal('community')" class="support-link" aria-label="Join community discussions">Join Forum</a>
-                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="welcome-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>About Report Generator</h4>
-                <p>Professional technical documentation platform for engineering teams, project managers, and technical professionals across all departments.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Report Types</h4>
-                <ul>
-                    <li><a href="#" onclick="showModal('report-types')">SAT Reports</a></li>
-                    <li><a href="#" onclick="showModal('report-types')">FAT Reports</a></li>
-                    <li><a href="#" onclick="showModal('report-types')">Commissioning</a></li>
-                    <li><a href="#" onclick="showModal('report-types')">Maintenance</a></li>
-                    <li><a href="#" onclick="showModal('report-types')">QA & Compliance</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Legal & Compliance</h4>
-                <ul>
-                    <li><a href="#" onclick="showModal('privacy')" aria-label="Read privacy policy">Privacy Policy</a></li>
-                    <li><a href="#" onclick="showModal('terms')" aria-label="View terms of service">Terms of Service</a></li>
-                    <li><a href="#" onclick="showModal('security')" aria-label="Learn about security measures">Security Policy</a></li>
-                    <li><a href="#" onclick="showModal('accessibility')" aria-label="View accessibility statement">Accessibility Statement</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Platform Resources</h4>
-                <ul>
-                    <li><a href="#" onclick="showModal('changelog')" aria-label="View latest platform updates">Version 1.2 Updates</a></li>
-                    <li><a href="#" onclick="showModal('faq')" aria-label="Frequently asked questions">FAQ</a></li>
-                    <li><a href="#" onclick="showModal('status')" aria-label="Check system status">System Status</a></li>
-                    <li><a href="#" onclick="showModal('roadmap')" aria-label="View future platform features">Development Roadmap</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Report Generator Platform. All rights reserved. | Professional documentation for engineering teams worldwide.</p>
-            <p style="margin-top: 8px; font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">Developed by <strong>Revanth Meda</strong> for Cully Automation</p>
-        </div>
-    </footer>
 
     <!-- Modal for content -->
     <div id="contentModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">

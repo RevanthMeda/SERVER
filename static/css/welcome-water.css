@@ -1,0 +1,601 @@
+/* CULLY WATER EXCELLENCE WELCOME PAGE - ULTRA STYLISH & OPTIMIZED */
+
+:root {
+    /* Enhanced Water Theme Variables */
+    --water-deep: #003366;
+    --water-primary: #0066cc;
+    --water-bright: #0080ff;
+    --water-crystal: #66b3ff;
+    --water-surface: #99ccff;
+    --aqua-pure: #00cccc;
+    --aqua-flow: #33dddd;
+    
+    /* Performance Optimized Gradients */
+    --ocean-hero: linear-gradient(135deg, #003366 0%, #0066cc 40%, #0080ff 100%);
+    --water-flow: linear-gradient(45deg, #0080ff 0%, #00cccc 50%, #3399ff 100%);
+    --crystal-glass: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
+    
+    /* Glass Effects */
+    --glass-primary: rgba(255, 255, 255, 0.15);
+    --glass-secondary: rgba(255, 255, 255, 0.08);
+    --glass-hover: rgba(255, 255, 255, 0.25);
+    
+    /* Shadows & Effects */
+    --water-glow: 0 0 30px rgba(0, 128, 255, 0.4);
+    --crystal-shadow: 0 20px 60px rgba(0, 102, 204, 0.2);
+    --surface-shadow: 0 8px 32px rgba(0, 51, 102, 0.15);
+    
+    /* Performance Variables */
+    --transition-fast: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* PERFORMANCE CRITICAL ANIMATIONS */
+@keyframes waterFlow {
+    0%, 100% { transform: translateX(0) rotate(0deg); opacity: 0.6; }
+    33% { transform: translateX(15px) rotate(1deg); opacity: 0.8; }
+    66% { transform: translateX(-8px) rotate(-0.5deg); opacity: 0.7; }
+}
+
+@keyframes crystalFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.02); }
+}
+
+@keyframes heroSlide {
+    0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* OPTIMIZED BODY & BASE */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: var(--ocean-hero);
+    color: white;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    font-weight: 400;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(0, 204, 204, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(0, 128, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    animation: waterFlow 12s ease-in-out infinite;
+}
+
+/* FLOATING WATER ELEMENTS */
+.water-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+.water-drop {
+    position: absolute;
+    background: var(--water-flow);
+    border-radius: 50% 50% 50% 0;
+    opacity: 0.4;
+    animation: crystalFloat 8s ease-in-out infinite;
+}
+
+.water-drop:nth-child(1) {
+    top: 15%; left: 10%; width: 60px; height: 60px;
+    animation-delay: 0s; transform: rotate(45deg);
+}
+
+.water-drop:nth-child(2) {
+    top: 70%; right: 15%; width: 40px; height: 40px;
+    animation-delay: 2s; transform: rotate(-30deg);
+}
+
+.water-drop:nth-child(3) {
+    bottom: 25%; left: 20%; width: 50px; height: 50px;
+    animation-delay: 4s; transform: rotate(15deg);
+}
+
+.water-bubble {
+    position: absolute;
+    background: var(--glass-primary);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    backdrop-filter: blur(5px);
+    animation: crystalFloat 6s ease-in-out infinite;
+}
+
+.water-bubble:nth-child(4) {
+    top: 40%; right: 25%; width: 80px; height: 80px;
+    animation-delay: 1s;
+}
+
+.water-bubble:nth-child(5) {
+    bottom: 40%; right: 40%; width: 35px; height: 35px;
+    animation-delay: 3s;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+/* HERO WELCOME SECTION */
+.welcome-hero {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 60px 40px;
+    text-align: center;
+    background: var(--crystal-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    box-shadow: var(--crystal-shadow);
+    position: relative;
+    overflow: hidden;
+    animation: heroSlide 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.welcome-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--water-flow);
+    border-radius: 24px 24px 0 0;
+}
+
+.welcome-hero::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0, 204, 204, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: waterFlow 10s ease-in-out infinite;
+}
+
+.welcome-header {
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
+}
+
+.cully-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 8px 20px rgba(255, 255, 255, 0.3));
+    transition: var(--transition-smooth);
+    animation: crystalFloat 8s ease-in-out infinite;
+}
+
+.cully-logo:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 12px 30px rgba(255, 255, 255, 0.5));
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #b3e5fc 50%, #81d4fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 12px rgba(0, 128, 255, 0.3);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 40px;
+    font-weight: 500;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 0 2px 8px rgba(0, 51, 102, 0.4);
+}
+
+/* INTRO SECTION */
+.intro-section {
+    background: var(--glass-secondary);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 30px;
+    margin: 40px 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--surface-shadow);
+    transition: var(--transition-fast);
+}
+
+.intro-section:hover {
+    background: var(--glass-primary);
+    transform: translateY(-2px);
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* WATER CARDS */
+.water-card {
+    background: var(--crystal-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    margin: 40px 0;
+    box-shadow: var(--crystal-shadow);
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.water-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--water-flow);
+    border-radius: 20px 20px 0 0;
+}
+
+.water-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 30px 80px rgba(0, 102, 204, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.card-header {
+    background: var(--glass-secondary);
+    padding: 30px 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px 20px 0 0;
+}
+
+.card-header h2 {
+    margin: 0;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0, 51, 102, 0.4);
+}
+
+.card-content {
+    padding: 40px;
+}
+
+/* WATER BUTTONS */
+.auth-buttons {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    margin: 40px 0;
+}
+
+.btn-water {
+    padding: 20px 32px;
+    font-size: 1.1rem;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: var(--transition-smooth);
+    font-weight: 700;
+    min-width: 220px;
+    min-height: 70px;
+    text-decoration: none;
+    border: 2px solid;
+    position: relative;
+    overflow: hidden;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.btn-water::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.5s ease;
+    transform: translate(-50%, -50%);
+}
+
+.btn-water:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary {
+    background: var(--water-flow);
+    color: white;
+    border-color: var(--water-bright);
+    box-shadow: var(--water-glow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 128, 255, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: var(--glass-primary);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+    background: var(--glass-hover);
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.6);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.btn-subtitle {
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.btn-water i {
+    font-size: 1.6rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* RESPONSIVE OPTIMIZATIONS */
+@media (max-width: 768px) {
+    .water-elements {
+        display: none; /* Hide water elements on mobile for performance */
+    }
+
+    .welcome-hero {
+        margin: 30px auto;
+        padding: 40px 20px;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .auth-buttons {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .btn-water {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .card-content {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .welcome-hero {
+        padding: 30px 15px;
+        margin: 20px auto;
+    }
+
+    .card-header {
+        padding: 20px 15px;
+    }
+
+    .card-content {
+        padding: 20px 15px;
+    }
+}
+
+/* PERFORMANCE OPTIMIZATIONS */
+* {
+    will-change: auto;
+}
+
+.btn-water:hover,
+.water-card:hover,
+.cully-logo:hover {
+    will-change: transform;
+}
+
+.welcome-hero {
+    contain: layout style;
+}
+
+/* REGISTRATION INFO */
+.registration-info {
+    margin-top: 25px;
+    padding: 18px 25px;
+    background: var(--glass-secondary);
+    border-radius: 12px;
+    text-align: center;
+    font-size: 0.95rem;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    backdrop-filter: blur(10px);
+}
+
+.registration-info p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    line-height: 1.5;
+}
+
+.registration-info i {
+    font-size: 1.1rem;
+    color: rgba(255, 193, 7, 1);
+}
+
+/* FEATURE SECTION */
+.features {
+    margin-top: 80px;
+}
+
+.features h2 {
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    color: white;
+    text-align: center;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    text-shadow: 0 4px 12px rgba(0, 128, 255, 0.3);
+    background: linear-gradient(135deg, #ffffff 0%, #b3e5fc 50%, #81d4fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.feature-item {
+    background: var(--crystal-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    transition: var(--transition-smooth);
+    box-shadow: var(--surface-shadow);
+}
+
+.feature-item:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--crystal-shadow);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--water-bright);
+    margin-bottom: 20px;
+    display: block;
+}
+
+.feature-item h3 {
+    color: white;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.feature-item p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* MODAL STYLES */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    background: var(--crystal-glass);
+    backdrop-filter: blur(20px);
+    margin: 5% auto;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    width: 80%;
+    max-width: 800px;
+    position: relative;
+    box-shadow: var(--crystal-shadow);
+    color: white;
+}
+
+.close {
+    color: rgba(255, 255, 255, 0.8);
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 30px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: var(--water-bright);
+}
