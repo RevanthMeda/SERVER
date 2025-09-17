@@ -1,49 +1,62 @@
 /* CULLY WATER EXCELLENCE - PROFESSIONAL & ULTRA-STYLISH DESIGN */
 
 :root {
-    /* Professional Water Industry Color Palette */
-    --primary-blue: #1e3a8a;
-    --secondary-blue: #3b82f6;
-    --accent-blue: #60a5fa;
+    /* Enhanced Professional Water Palette */
+    --primary-blue: #0f172a;
+    --secondary-blue: #1e40af;
+    --accent-blue: #3b82f6;
+    --bright-cyan: #06b6d4;
+    --electric-blue: #0ea5e9;
     --light-blue: #dbeafe;
-    --dark-navy: #0f172a;
+    --dark-navy: #020617;
     --water-teal: #0891b2;
     --surface-white: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --text-light: #94a3b8;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-light: #64748b;
+    --accent-orange: #f97316;
+    --success-green: #10b981;
     
-    /* Professional Gradients */
-    --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
-    --surface-gradient: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-    --accent-gradient: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+    /* Dynamic Gradients */
+    --hero-gradient: linear-gradient(135deg, #0f172a 0%, #1e40af 30%, #3b82f6 60%, #06b6d4 100%);
+    --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+    --accent-gradient: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 50%, #3b82f6 100%);
+    --glow-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
     
-    /* Glass Effects - Professional */
-    --glass-surface: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(30, 58, 138, 0.2);
-    --glass-shadow: 0 8px 32px rgba(30, 58, 138, 0.12);
+    /* Enhanced Glass Effects */
+    --glass-surface: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(6, 182, 212, 0.3);
+    --glass-shadow: 0 25px 50px rgba(15, 23, 42, 0.15);
     
-    /* Professional Shadows */
-    --shadow-sm: 0 2px 8px rgba(30, 58, 138, 0.08);
-    --shadow-md: 0 4px 16px rgba(30, 58, 138, 0.12);
-    --shadow-lg: 0 8px 32px rgba(30, 58, 138, 0.15);
-    --shadow-xl: 0 12px 48px rgba(30, 58, 138, 0.2);
+    /* Professional Shadows with Impact */
+    --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.1);
+    --shadow-md: 0 8px 25px rgba(15, 23, 42, 0.15);
+    --shadow-lg: 0 15px 35px rgba(15, 23, 42, 0.2);
+    --shadow-xl: 0 25px 50px rgba(15, 23, 42, 0.25);
+    --glow-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
     
     /* Smooth Transitions */
     --transition-fast: all 0.2s ease;
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* PROFESSIONAL SUBTLE ANIMATIONS - NO LAG */
-@keyframes subtleFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
+/* ENHANCED PROFESSIONAL ANIMATIONS */
+@keyframes pulseGlow {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 40px rgba(6, 182, 212, 0.6);
+        transform: scale(1.02);
+    }
 }
 
-@keyframes fadeInUp {
+@keyframes slideInUp {
     0% {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(60px);
     }
     100% {
         opacity: 1;
@@ -51,10 +64,10 @@
     }
 }
 
-@keyframes scaleIn {
+@keyframes fadeInScale {
     0% {
         opacity: 0;
-        transform: scale(0.9);
+        transform: scale(0.8);
     }
     100% {
         opacity: 1;
@@ -62,12 +75,22 @@
     }
 }
 
-/* PROFESSIONAL CLEAN BODY */
+@keyframes floatUp {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+/* ENHANCED DYNAMIC BODY */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--primary-gradient);
+    background: var(--hero-gradient);
     color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
@@ -84,14 +107,30 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 20% 80%, rgba(30, 58, 138, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-        linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+        radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 40% 40%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, transparent 20%, rgba(255, 255, 255, 0.05) 50%, transparent 80%);
     pointer-events: none;
     z-index: 0;
+    animation: floatUp 8s ease-in-out infinite;
 }
 
-/* SIMPLE PROFESSIONAL WATER ELEMENTS */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(6, 182, 212, 0.03) 90deg, transparent 180deg, rgba(59, 130, 246, 0.03) 270deg, transparent 360deg);
+    pointer-events: none;
+    z-index: 1;
+    animation: shimmer 20s linear infinite;
+}
+
+/* ENHANCED ATTRACTIVE WATER ELEMENTS */
 .water-elements {
     position: fixed;
     top: 0;
@@ -99,50 +138,55 @@ body::before {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 1;
-    opacity: 0.6;
+    z-index: 2;
+    opacity: 0.8;
 }
 
 .water-drop {
     position: absolute;
-    background: var(--accent-gradient);
+    background: var(--glow-gradient);
     border-radius: 50% 50% 50% 0;
-    opacity: 0.3;
-    animation: subtleFloat 6s ease-in-out infinite;
+    opacity: 0.6;
+    animation: floatUp 8s ease-in-out infinite;
+    box-shadow: var(--glow-shadow);
+    filter: blur(1px);
 }
 
 .water-drop:nth-child(1) {
-    top: 15%; left: 10%; width: 40px; height: 40px;
+    top: 15%; left: 10%; width: 60px; height: 60px;
     animation-delay: 0s; transform: rotate(45deg);
 }
 
 .water-drop:nth-child(2) {
-    top: 70%; right: 15%; width: 30px; height: 30px;
-    animation-delay: 2s; transform: rotate(-30deg);
+    top: 70%; right: 15%; width: 45px; height: 45px;
+    animation-delay: 3s; transform: rotate(-30deg);
 }
 
 .water-drop:nth-child(3) {
-    bottom: 25%; left: 20%; width: 35px; height: 35px;
-    animation-delay: 4s; transform: rotate(15deg);
+    bottom: 25%; left: 20%; width: 50px; height: 50px;
+    animation-delay: 6s; transform: rotate(15deg);
 }
 
 .water-bubble {
     position: absolute;
     background: var(--glass-surface);
-    border: 1px solid var(--glass-border);
+    border: 2px solid var(--bright-cyan);
     border-radius: 50%;
-    backdrop-filter: blur(8px);
-    animation: subtleFloat 8s ease-in-out infinite;
+    backdrop-filter: blur(15px);
+    animation: floatUp 10s ease-in-out infinite;
+    box-shadow: 
+        0 0 20px rgba(6, 182, 212, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 .water-bubble:nth-child(4) {
-    top: 40%; right: 25%; width: 50px; height: 50px;
-    animation-delay: 1s;
+    top: 40%; right: 25%; width: 80px; height: 80px;
+    animation-delay: 2s;
 }
 
 .water-bubble:nth-child(5) {
-    bottom: 40%; right: 40%; width: 25px; height: 25px;
-    animation-delay: 3s;
+    bottom: 40%; right: 40%; width: 35px; height: 35px;
+    animation-delay: 5s;
 }
 
 .container {
@@ -150,29 +194,33 @@ body::before {
     margin: 0 auto;
     padding: 20px;
     position: relative;
-    z-index: 2;
+    z-index: 3;
 }
 
-/* PROFESSIONAL HERO SECTION */
+/* ENHANCED HERO SECTION WITH IMPACT */
 .welcome-hero {
     max-width: 1200px;
     margin: 60px auto;
-    padding: 60px 50px;
+    padding: 70px 60px;
     text-align: center;
     background: var(--glass-surface);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    box-shadow: var(--shadow-xl);
+    backdrop-filter: blur(25px);
+    border: 2px solid var(--glass-border);
+    border-radius: 32px;
+    box-shadow: var(--shadow-xl), var(--glow-shadow);
     position: relative;
     overflow: hidden;
-    animation: fadeInUp 0.8s ease-out;
-    transition: var(--transition-smooth);
+    animation: slideInUp 1s ease-out;
+    transition: var(--transition-bounce);
 }
 
 .welcome-hero:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-xl), 0 20px 60px rgba(30, 58, 138, 0.15);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        var(--shadow-xl), 
+        0 0 60px rgba(6, 182, 212, 0.4),
+        0 30px 80px rgba(15, 23, 42, 0.2);
+    border-color: var(--bright-cyan);
 }
 
 .welcome-hero::before {
@@ -181,93 +229,138 @@ body::before {
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
-    background: var(--primary-gradient);
-    border-radius: 24px 24px 0 0;
+    height: 6px;
+    background: var(--glow-gradient);
+    border-radius: 32px 32px 0 0;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+    animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.welcome-hero::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: floatUp 12s ease-in-out infinite;
+    filter: blur(40px);
 }
 
 .welcome-header {
-    margin-bottom: 50px;
+    margin-bottom: 60px;
     position: relative;
-    z-index: 2;
+    z-index: 4;
 }
 
 .cully-logo {
-    max-width: 200px;
+    max-width: 220px;
     height: auto;
-    margin-bottom: 30px;
-    filter: drop-shadow(0 8px 16px rgba(30, 58, 138, 0.2));
-    transition: var(--transition-smooth);
-    animation: scaleIn 0.6s ease-out 0.2s both;
+    margin-bottom: 40px;
+    filter: drop-shadow(0 15px 25px rgba(6, 182, 212, 0.3)) drop-shadow(0 0 30px rgba(6, 182, 212, 0.2));
+    transition: var(--transition-bounce);
+    animation: fadeInScale 0.8s ease-out 0.2s both;
 }
 
 .cully-logo:hover {
-    transform: scale(1.05) translateY(-2px);
-    filter: drop-shadow(0 12px 24px rgba(30, 58, 138, 0.3));
+    transform: scale(1.08) translateY(-5px);
+    filter: drop-shadow(0 25px 40px rgba(6, 182, 212, 0.4)) drop-shadow(0 0 50px rgba(6, 182, 212, 0.3));
 }
 
 .hero-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 800;
-    margin-bottom: 20px;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 900;
+    margin-bottom: 25px;
     color: var(--surface-white);
-    text-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+    text-shadow: 
+        0 8px 16px rgba(15, 23, 42, 0.4),
+        0 0 30px rgba(6, 182, 212, 0.3),
+        0 0 60px rgba(6, 182, 212, 0.2);
     letter-spacing: -0.02em;
     line-height: 1.1;
-    animation: fadeInUp 0.8s ease-out 0.4s both;
+    animation: slideInUp 1s ease-out 0.4s both;
+    background: linear-gradient(135deg, #ffffff 0%, #06b6d4 50%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 200%;
+    animation: slideInUp 1s ease-out 0.4s both, shimmer 8s ease-in-out infinite;
 }
 
 .hero-subtitle {
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 40px;
-    font-weight: 500;
-    max-width: 700px;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 50px;
+    font-weight: 600;
+    max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    text-shadow: 0 2px 8px rgba(30, 58, 138, 0.2);
-    animation: fadeInUp 0.8s ease-out 0.6s both;
+    text-shadow: 
+        0 4px 12px rgba(15, 23, 42, 0.3),
+        0 0 20px rgba(6, 182, 212, 0.2);
+    animation: slideInUp 1s ease-out 0.6s both;
+    line-height: 1.7;
 }
 
-/* PROFESSIONAL INTRO SECTION */
+/* ENHANCED INTRO SECTION */
 .intro-section {
     background: var(--glass-surface);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 35px;
-    margin: 40px 0;
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-lg);
-    transition: var(--transition-smooth);
-    animation: fadeInUp 0.8s ease-out 0.8s both;
+    backdrop-filter: blur(25px);
+    border-radius: 24px;
+    padding: 45px;
+    margin: 50px 0;
+    border: 2px solid var(--glass-border);
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(6, 182, 212, 0.15);
+    transition: var(--transition-bounce);
+    animation: slideInUp 1s ease-out 0.8s both;
+    position: relative;
+    overflow: hidden;
+}
+
+.intro-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--glow-gradient);
+    border-radius: 24px 24px 0 0;
 }
 
 .intro-section:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 
+        var(--shadow-xl), 
+        0 0 50px rgba(6, 182, 212, 0.25),
+        0 25px 60px rgba(15, 23, 42, 0.15);
+    border-color: var(--bright-cyan);
 }
 
 .intro-text {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: var(--text-primary);
-    line-height: 1.7;
-    max-width: 800px;
+    line-height: 1.8;
+    max-width: 900px;
     margin: 0 auto;
-    font-weight: 500;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
 }
 
-/* PROFESSIONAL WATER CARDS */
+/* ENHANCED DYNAMIC WATER CARDS */
 .water-card {
     background: var(--glass-surface);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    margin: 40px 0;
-    box-shadow: var(--shadow-lg);
-    transition: var(--transition-smooth);
+    backdrop-filter: blur(25px);
+    border: 2px solid var(--glass-border);
+    border-radius: 28px;
+    margin: 50px 0;
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(6, 182, 212, 0.1);
+    transition: var(--transition-bounce);
     position: relative;
     overflow: hidden;
-    animation: fadeInUp 0.8s ease-out 1s both;
+    animation: slideInUp 1s ease-out 1s both;
 }
 
 .water-card::before {
@@ -276,66 +369,95 @@ body::before {
     top: 0;
     left: 0;
     width: 100%;
-    height: 3px;
-    background: var(--primary-gradient);
-    border-radius: 20px 20px 0 0;
+    height: 4px;
+    background: var(--glow-gradient);
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+}
+
+.water-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: floatUp 10s ease-in-out infinite;
+    filter: blur(30px);
 }
 
 .water-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-xl), 0 20px 60px rgba(30, 58, 138, 0.15);
-    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 
+        var(--shadow-xl), 
+        0 0 60px rgba(6, 182, 212, 0.3),
+        0 35px 80px rgba(15, 23, 42, 0.2);
+    border-color: var(--bright-cyan);
 }
 
 .card-header {
-    background: rgba(30, 58, 138, 0.05);
-    padding: 30px 40px;
-    border-bottom: 1px solid var(--glass-border);
-    border-radius: 20px 20px 0 0;
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+    padding: 40px 50px;
+    border-bottom: 2px solid var(--glass-border);
+    border-radius: 28px 28px 0 0;
+    position: relative;
+    z-index: 2;
 }
 
 .card-header h2 {
     margin: 0;
     color: var(--primary-blue);
-    font-size: 1.8rem;
-    font-weight: 700;
-    text-shadow: 0 2px 4px rgba(30, 58, 138, 0.1);
+    font-size: 2rem;
+    font-weight: 800;
+    text-shadow: 0 4px 8px rgba(15, 23, 42, 0.1);
+    background: var(--glow-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.01em;
 }
 
 .card-content {
-    padding: 40px;
+    padding: 50px;
     color: var(--text-primary);
+    position: relative;
+    z-index: 2;
+    font-weight: 500;
 }
 
-/* PROFESSIONAL CRISP BUTTONS */
+/* ENHANCED DYNAMIC BUTTONS */
 .auth-buttons {
     display: flex;
-    gap: 24px;
+    gap: 30px;
     justify-content: center;
     align-items: stretch;
     flex-wrap: wrap;
-    margin: 40px 0;
+    margin: 50px 0;
 }
 
 .btn-water {
-    padding: 20px 32px;
-    font-size: 1.1rem;
-    border-radius: 16px;
+    padding: 25px 40px;
+    font-size: 1.2rem;
+    border-radius: 20px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    transition: var(--transition-smooth);
-    font-weight: 700;
-    min-width: 220px;
-    min-height: 70px;
+    gap: 15px;
+    transition: var(--transition-bounce);
+    font-weight: 800;
+    min-width: 250px;
+    min-height: 80px;
     text-decoration: none;
-    border: 2px solid;
+    border: 3px solid;
     position: relative;
     overflow: hidden;
     font-family: inherit;
     cursor: pointer;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .btn-water::before {
@@ -345,74 +467,103 @@ body::before {
     left: 50%;
     width: 0;
     height: 0;
-    background: rgba(255, 255, 255, 0.2);
+    background: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(6, 182, 212, 0.2) 50%, transparent 70%);
     border-radius: 50%;
-    transition: all 0.4s ease;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
     transform: translate(-50%, -50%);
     z-index: 1;
 }
 
 .btn-water:hover::before {
-    width: 300px;
-    height: 300px;
+    width: 500px;
+    height: 500px;
+}
+
+.btn-water::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.btn-water:hover::after {
+    left: 100%;
 }
 
 .btn-primary {
-    background: var(--primary-gradient);
+    background: var(--glow-gradient);
     color: white;
-    border-color: var(--secondary-blue);
-    box-shadow: var(--shadow-md);
+    border-color: var(--bright-cyan);
+    box-shadow: var(--shadow-lg), var(--glow-shadow);
+    animation: pulseGlow 4s ease-in-out infinite;
 }
 
 .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-xl), 0 15px 40px rgba(30, 58, 138, 0.3);
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 
+        var(--shadow-xl),
+        0 0 60px rgba(6, 182, 212, 0.5),
+        0 30px 80px rgba(15, 23, 42, 0.3);
     color: white;
     text-decoration: none;
-    border-color: var(--accent-blue);
+    border-color: var(--electric-blue);
 }
 
 .btn-secondary {
     background: var(--glass-surface);
     color: var(--primary-blue);
     border-color: var(--glass-border);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(25px);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.95);
-    transform: translateY(-3px);
-    border-color: var(--secondary-blue);
+    transform: translateY(-6px) scale(1.05);
+    border-color: var(--bright-cyan);
     color: var(--primary-blue);
     text-decoration: none;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 
+        var(--shadow-xl),
+        0 0 40px rgba(6, 182, 212, 0.3);
 }
 
 .btn-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     position: relative;
     z-index: 2;
 }
 
 .btn-title {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: 800;
     line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(15, 23, 42, 0.2);
 }
 
 .btn-subtitle {
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     opacity: 0.9;
+    text-shadow: 0 1px 2px rgba(15, 23, 42, 0.1);
+    text-transform: none;
+    letter-spacing: normal;
 }
 
 .btn-water i {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     position: relative;
     z-index: 2;
+    filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.2));
 }
 
 /* CLEAN RESPONSIVE DESIGN */
