@@ -1,64 +1,188 @@
-/* CULLY WATER EXCELLENCE WELCOME PAGE - ULTRA STYLISH & OPTIMIZED */
+/* REVOLUTIONARY CULLY WATER EXCELLENCE - ULTRA MODERN 3D EXPERIENCE */
 
 :root {
-    /* Enhanced Water Theme Variables */
-    --water-deep: #003366;
-    --water-primary: #0066cc;
-    --water-bright: #0080ff;
-    --water-crystal: #66b3ff;
-    --water-surface: #99ccff;
-    --aqua-pure: #00cccc;
-    --aqua-flow: #33dddd;
+    /* Ultra Modern Quantum Water Palette */
+    --quantum-deep: #0a0e2e;
+    --quantum-primary: #1a2b5c;
+    --quantum-electric: #00d4ff;
+    --quantum-neon: #0099ff;
+    --quantum-plasma: #66ccff;
+    --quantum-crystal: #99e6ff;
+    --hologram-blue: #3df5ff;
+    --cyber-aqua: #00ffcc;
     
-    /* Performance Optimized Gradients */
-    --ocean-hero: linear-gradient(135deg, #003366 0%, #0066cc 40%, #0080ff 100%);
-    --water-flow: linear-gradient(45deg, #0080ff 0%, #00cccc 50%, #3399ff 100%);
-    --crystal-glass: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 100%);
+    /* Revolutionary 4D Gradients */
+    --cosmic-ocean: conic-gradient(from 180deg at 50% 50%, #0a0e2e 0deg, #1a2b5c 60deg, #00d4ff 120deg, #0099ff 180deg, #66ccff 240deg, #0a0e2e 360deg);
+    --quantum-flow: linear-gradient(135deg, #00d4ff 0%, #0099ff 25%, #00ffcc 50%, #66ccff 75%, #3df5ff 100%);
+    --neural-mesh: radial-gradient(circle at 30% 70%, rgba(0, 212, 255, 0.3) 0%, transparent 60%), radial-gradient(circle at 70% 30%, rgba(0, 255, 204, 0.2) 0%, transparent 60%), linear-gradient(45deg, rgba(102, 204, 255, 0.1) 0%, rgba(61, 245, 255, 0.1) 100%);
+    --holographic-surface: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(0,212,255,0.3) 50%, rgba(255,255,255,0.2) 100%);
     
-    /* Glass Effects */
-    --glass-primary: rgba(255, 255, 255, 0.15);
-    --glass-secondary: rgba(255, 255, 255, 0.08);
-    --glass-hover: rgba(255, 255, 255, 0.25);
+    /* Next-Gen Glass Morphism */
+    --glass-quantum: rgba(255, 255, 255, 0.12);
+    --glass-neural: rgba(0, 212, 255, 0.08);
+    --glass-plasma: rgba(102, 204, 255, 0.15);
+    --glass-hologram: rgba(255, 255, 255, 0.35);
     
-    /* Shadows & Effects */
-    --water-glow: 0 0 30px rgba(0, 128, 255, 0.4);
-    --crystal-shadow: 0 20px 60px rgba(0, 102, 204, 0.2);
-    --surface-shadow: 0 8px 32px rgba(0, 51, 102, 0.15);
+    /* 3D Shadow Dimensions */
+    --quantum-glow: 0 0 60px rgba(0, 212, 255, 0.6), 0 0 120px rgba(0, 153, 255, 0.3), inset 0 0 30px rgba(255, 255, 255, 0.1);
+    --neural-shadow: 0 30px 80px rgba(0, 212, 255, 0.4), 0 15px 40px rgba(0, 153, 255, 0.3), 0 8px 20px rgba(10, 14, 46, 0.5);
+    --hologram-depth: 0 25px 100px rgba(61, 245, 255, 0.3), 0 50px 200px rgba(0, 255, 204, 0.2), inset 0 2px 10px rgba(255, 255, 255, 0.2);
+    --cyber-outline: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 153, 255, 0.6), 0 0 80px rgba(102, 204, 255, 0.4);
     
-    /* Performance Variables */
-    --transition-fast: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-smooth: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Ultra Performance Transitions */
+    --transition-quantum: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-neural: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+    --transition-hologram: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+    
+    /* 3D Transform Variables */
+    --perspective-field: 1200px;
+    --rotate-x: rotateX(8deg);
+    --rotate-y: rotateY(2deg);
+    --scale-hover: scale3d(1.05, 1.05, 1.05);
+    --float-amplitude: translateY(-15px) rotateX(5deg);
 }
 
-/* PERFORMANCE CRITICAL ANIMATIONS */
-@keyframes waterFlow {
-    0%, 100% { transform: translateX(0) rotate(0deg); opacity: 0.6; }
-    33% { transform: translateX(15px) rotate(1deg); opacity: 0.8; }
-    66% { transform: translateX(-8px) rotate(-0.5deg); opacity: 0.7; }
+/* REVOLUTIONARY 3D QUANTUM ANIMATIONS */
+@keyframes quantumBreathing {
+    0%, 100% { 
+        transform: perspective(var(--perspective-field)) rotateX(0deg) rotateY(0deg) translateZ(0px) scale3d(1, 1, 1);
+        filter: hue-rotate(0deg) brightness(1) saturate(1);
+        box-shadow: var(--quantum-glow);
+    }
+    25% { 
+        transform: perspective(var(--perspective-field)) rotateX(2deg) rotateY(1deg) translateZ(10px) scale3d(1.01, 1.01, 1.01);
+        filter: hue-rotate(15deg) brightness(1.1) saturate(1.2);
+    }
+    50% { 
+        transform: perspective(var(--perspective-field)) rotateX(0deg) rotateY(-1deg) translateZ(20px) scale3d(1.02, 1.02, 1.02);
+        filter: hue-rotate(30deg) brightness(1.2) saturate(1.4);
+        box-shadow: var(--hologram-depth);
+    }
+    75% { 
+        transform: perspective(var(--perspective-field)) rotateX(-1deg) rotateY(0deg) translateZ(10px) scale3d(1.01, 1.01, 1.01);
+        filter: hue-rotate(15deg) brightness(1.1) saturate(1.2);
+    }
 }
 
-@keyframes crystalFloat {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-20px) scale(1.02); }
+@keyframes hologramShift {
+    0%, 100% { 
+        transform: perspective(var(--perspective-field)) rotateY(0deg) rotateX(0deg) translateZ(0px);
+        background-position: 0% 50%;
+        opacity: 0.8;
+    }
+    20% { 
+        transform: perspective(var(--perspective-field)) rotateY(5deg) rotateX(2deg) translateZ(15px);
+        background-position: 25% 25%;
+        opacity: 0.9;
+    }
+    40% { 
+        transform: perspective(var(--perspective-field)) rotateY(-3deg) rotateX(-1deg) translateZ(25px);
+        background-position: 75% 75%;
+        opacity: 1;
+    }
+    60% { 
+        transform: perspective(var(--perspective-field)) rotateY(2deg) rotateX(3deg) translateZ(20px);
+        background-position: 50% 100%;
+        opacity: 0.95;
+    }
+    80% { 
+        transform: perspective(var(--perspective-field)) rotateY(-1deg) rotateX(-2deg) translateZ(10px);
+        background-position: 100% 50%;
+        opacity: 0.85;
+    }
 }
 
-@keyframes heroSlide {
-    0% { opacity: 0; transform: translateY(40px) scale(0.95); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes neuralPulse {
+    0%, 100% { 
+        transform: scale3d(1, 1, 1) rotateZ(0deg);
+        box-shadow: var(--neural-shadow);
+        border-color: rgba(0, 212, 255, 0.3);
+    }
+    25% { 
+        transform: scale3d(1.02, 1.02, 1.02) rotateZ(0.5deg);
+        box-shadow: var(--cyber-outline);
+        border-color: rgba(0, 212, 255, 0.6);
+    }
+    50% { 
+        transform: scale3d(1.05, 1.05, 1.05) rotateZ(0deg);
+        box-shadow: var(--hologram-depth);
+        border-color: rgba(61, 245, 255, 0.8);
+    }
+    75% { 
+        transform: scale3d(1.02, 1.02, 1.02) rotateZ(-0.5deg);
+        box-shadow: var(--cyber-outline);
+        border-color: rgba(0, 212, 255, 0.6);
+    }
 }
 
-/* OPTIMIZED BODY & BASE */
+@keyframes cosmicFloat {
+    0%, 100% { 
+        transform: perspective(var(--perspective-field)) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg);
+    }
+    33% { 
+        transform: perspective(var(--perspective-field)) translateY(-25px) translateZ(15px) rotateX(3deg) rotateY(2deg);
+    }
+    66% { 
+        transform: perspective(var(--perspective-field)) translateY(-15px) translateZ(25px) rotateX(-2deg) rotateY(-1deg);
+    }
+}
+
+@keyframes auroraFlow {
+    0% { 
+        background-position: 0% 0%, 100% 100%, 50% 50%;
+        filter: hue-rotate(0deg) brightness(1);
+    }
+    25% { 
+        background-position: 100% 0%, 0% 100%, 25% 75%;
+        filter: hue-rotate(90deg) brightness(1.1);
+    }
+    50% { 
+        background-position: 100% 100%, 0% 0%, 75% 25%;
+        filter: hue-rotate(180deg) brightness(1.2);
+    }
+    75% { 
+        background-position: 0% 100%, 100% 0%, 50% 50%;
+        filter: hue-rotate(270deg) brightness(1.1);
+    }
+    100% { 
+        background-position: 0% 0%, 100% 100%, 50% 50%;
+        filter: hue-rotate(360deg) brightness(1);
+    }
+}
+
+@keyframes quantumEntrance {
+    0% { 
+        opacity: 0;
+        transform: perspective(var(--perspective-field)) translateY(80px) translateZ(-50px) rotateX(25deg) scale3d(0.8, 0.8, 0.8);
+        filter: blur(10px) brightness(0.5);
+    }
+    50% { 
+        opacity: 0.7;
+        transform: perspective(var(--perspective-field)) translateY(20px) translateZ(10px) rotateX(8deg) scale3d(0.95, 0.95, 0.95);
+        filter: blur(2px) brightness(0.8);
+    }
+    100% { 
+        opacity: 1;
+        transform: perspective(var(--perspective-field)) translateY(0) translateZ(0) rotateX(0deg) scale3d(1, 1, 1);
+        filter: blur(0px) brightness(1);
+    }
+}
+
+/* QUANTUM BODY & REVOLUTIONARY BASE */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-    background: var(--ocean-hero);
+    font-family: 'Inter', 'SF Pro Display', system-ui, sans-serif;
+    background: var(--cosmic-ocean);
     color: white;
     line-height: 1.6;
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
     font-weight: 400;
+    perspective: var(--perspective-field);
+    background-size: 400% 400%;
+    animation: auroraFlow 20s ease-in-out infinite;
 }
 
 body::before {
@@ -68,67 +192,102 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(circle at 25% 25%, rgba(0, 204, 204, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(0, 128, 255, 0.1) 0%, transparent 50%),
-        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
+    background: var(--neural-mesh);
     pointer-events: none;
     z-index: 0;
-    animation: waterFlow 12s ease-in-out infinite;
+    opacity: 0.8;
+    background-size: 300% 300%;
+    animation: hologramShift 25s ease-in-out infinite;
 }
 
-/* FLOATING WATER ELEMENTS */
-.water-elements {
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(61, 245, 255, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(0, 255, 204, 0.08) 0%, transparent 50%),
+        linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.03) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+    animation: quantumBreathing 18s ease-in-out infinite;
+}
+
+/* REVOLUTIONARY 3D QUANTUM ELEMENTS */
+.quantum-elements {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 1;
-    opacity: 0.6;
+    z-index: 2;
+    opacity: 0.9;
+    perspective: var(--perspective-field);
 }
 
-.water-drop {
+.quantum-orb {
     position: absolute;
-    background: var(--water-flow);
-    border-radius: 50% 50% 50% 0;
-    opacity: 0.4;
-    animation: crystalFloat 8s ease-in-out infinite;
-}
-
-.water-drop:nth-child(1) {
-    top: 15%; left: 10%; width: 60px; height: 60px;
-    animation-delay: 0s; transform: rotate(45deg);
-}
-
-.water-drop:nth-child(2) {
-    top: 70%; right: 15%; width: 40px; height: 40px;
-    animation-delay: 2s; transform: rotate(-30deg);
-}
-
-.water-drop:nth-child(3) {
-    bottom: 25%; left: 20%; width: 50px; height: 50px;
-    animation-delay: 4s; transform: rotate(15deg);
-}
-
-.water-bubble {
-    position: absolute;
-    background: var(--glass-primary);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: var(--quantum-flow);
     border-radius: 50%;
-    backdrop-filter: blur(5px);
-    animation: crystalFloat 6s ease-in-out infinite;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    opacity: 0.7;
+    box-shadow: var(--cyber-outline);
+    animation: cosmicFloat 12s ease-in-out infinite;
 }
 
-.water-bubble:nth-child(4) {
-    top: 40%; right: 25%; width: 80px; height: 80px;
+.quantum-orb:nth-child(1) {
+    top: 10%; left: 15%; width: 80px; height: 80px;
+    animation-delay: 0s;
+    background: radial-gradient(circle at 30% 30%, var(--hologram-blue) 0%, var(--quantum-electric) 70%);
+    transform: perspective(var(--perspective-field)) rotateX(15deg) rotateY(10deg);
+}
+
+.quantum-orb:nth-child(2) {
+    top: 60%; right: 20%; width: 60px; height: 60px;
+    animation-delay: 4s;
+    background: radial-gradient(circle at 60% 40%, var(--cyber-aqua) 0%, var(--quantum-neon) 70%);
+    transform: perspective(var(--perspective-field)) rotateX(-10deg) rotateY(-15deg);
+}
+
+.quantum-orb:nth-child(3) {
+    bottom: 30%; left: 25%; width: 100px; height: 100px;
+    animation-delay: 2s;
+    background: radial-gradient(circle at 50% 50%, var(--quantum-plasma) 0%, var(--quantum-electric) 70%);
+    transform: perspective(var(--perspective-field)) rotateX(8deg) rotateY(20deg);
+}
+
+.neural-crystal {
+    position: absolute;
+    background: var(--holographic-surface);
+    border: 3px solid rgba(61, 245, 255, 0.4);
+    backdrop-filter: blur(20px);
+    animation: neuralPulse 8s ease-in-out infinite;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    filter: drop-shadow(0 10px 30px rgba(0, 212, 255, 0.4));
+}
+
+.neural-crystal:nth-child(4) {
+    top: 35%; right: 30%; width: 60px; height: 60px;
     animation-delay: 1s;
+    transform: perspective(var(--perspective-field)) rotateX(45deg) rotateY(25deg) rotateZ(30deg);
 }
 
-.water-bubble:nth-child(5) {
-    bottom: 40%; right: 40%; width: 35px; height: 35px;
+.neural-crystal:nth-child(5) {
+    bottom: 45%; right: 45%; width: 40px; height: 40px;
+    animation-delay: 5s;
+    transform: perspective(var(--perspective-field)) rotateX(-30deg) rotateY(-20deg) rotateZ(-45deg);
+}
+
+.neural-crystal:nth-child(6) {
+    top: 20%; left: 60%; width: 70px; height: 70px;
     animation-delay: 3s;
+    transform: perspective(var(--perspective-field)) rotateX(60deg) rotateY(-30deg) rotateZ(15deg);
 }
 
 .container {
@@ -136,23 +295,32 @@ body::before {
     margin: 0 auto;
     padding: 20px;
     position: relative;
-    z-index: 2;
+    z-index: 3;
+    perspective: var(--perspective-field);
 }
 
-/* HERO WELCOME SECTION */
+/* REVOLUTIONARY QUANTUM HERO SECTION */
 .welcome-hero {
     max-width: 1200px;
     margin: 60px auto;
-    padding: 60px 40px;
+    padding: 80px 50px;
     text-align: center;
-    background: var(--crystal-glass);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 24px;
-    box-shadow: var(--crystal-shadow);
+    background: var(--holographic-surface);
+    backdrop-filter: blur(30px);
+    border: 2px solid rgba(61, 245, 255, 0.3);
+    border-radius: 32px;
+    box-shadow: var(--hologram-depth);
     position: relative;
     overflow: hidden;
-    animation: heroSlide 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: quantumEntrance 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: perspective(var(--perspective-field)) rotateX(2deg) rotateY(1deg);
+    transition: var(--transition-neural);
+}
+
+.welcome-hero:hover {
+    transform: perspective(var(--perspective-field)) rotateX(0deg) rotateY(0deg) translateZ(20px) scale3d(1.02, 1.02, 1.02);
+    box-shadow: var(--cyber-outline);
+    border-color: rgba(61, 245, 255, 0.6);
 }
 
 .welcome-hero::before {
@@ -161,103 +329,152 @@ body::before {
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
-    background: var(--water-flow);
-    border-radius: 24px 24px 0 0;
+    height: 6px;
+    background: var(--quantum-flow);
+    border-radius: 32px 32px 0 0;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+    animation: neuralPulse 6s ease-in-out infinite;
 }
 
 .welcome-hero::after {
     content: '';
     position: absolute;
-    top: -50%;
-    right: -30%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(0, 204, 204, 0.1) 0%, transparent 70%);
+    top: -100%;
+    right: -50%;
+    width: 600px;
+    height: 600px;
+    background: 
+        radial-gradient(circle, rgba(61, 245, 255, 0.15) 0%, transparent 60%),
+        conic-gradient(from 45deg, rgba(0, 212, 255, 0.1) 0deg, rgba(0, 255, 204, 0.1) 120deg, rgba(102, 204, 255, 0.1) 240deg, rgba(61, 245, 255, 0.1) 360deg);
     border-radius: 50%;
-    animation: waterFlow 10s ease-in-out infinite;
+    animation: hologramShift 15s ease-in-out infinite;
+    filter: blur(40px);
 }
 
 .welcome-header {
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 4;
+    perspective: var(--perspective-field);
+}
+
+.cully-logo {
+    max-width: 220px;
+    height: auto;
+    margin-bottom: 40px;
+    filter: drop-shadow(0 15px 35px rgba(61, 245, 255, 0.4)) drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+    transition: var(--transition-neural);
+    animation: cosmicFloat 12s ease-in-out infinite;
+    transform: perspective(var(--perspective-field)) rotateX(5deg) rotateY(2deg);
+}
+
+.cully-logo:hover {
+    transform: perspective(var(--perspective-field)) rotateX(0deg) rotateY(0deg) translateZ(30px) scale3d(1.08, 1.08, 1.08);
+    filter: drop-shadow(0 25px 50px rgba(61, 245, 255, 0.6)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.8));
+}
+
+.hero-title {
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 900;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #ffffff 0%, #3df5ff 25%, #00d4ff 50%, #66ccff 75%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 300% 300%;
+    animation: auroraFlow 8s ease-in-out infinite;
+    text-shadow: 
+        0 0 20px rgba(61, 245, 255, 0.6),
+        0 0 40px rgba(0, 212, 255, 0.4),
+        0 8px 16px rgba(10, 14, 46, 0.8);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    transform: perspective(var(--perspective-field)) rotateX(3deg);
+    transition: var(--transition-neural);
+}
+
+.hero-title:hover {
+    transform: perspective(var(--perspective-field)) rotateX(0deg) translateZ(15px) scale3d(1.02, 1.02, 1.02);
+    text-shadow: 
+        0 0 30px rgba(61, 245, 255, 0.8),
+        0 0 60px rgba(0, 212, 255, 0.6),
+        0 12px 24px rgba(10, 14, 46, 0.9);
+}
+
+.hero-subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    color: rgba(255, 255, 255, 0.95);
     margin-bottom: 50px;
+    font-weight: 600;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 
+        0 4px 12px rgba(10, 14, 46, 0.6),
+        0 0 20px rgba(61, 245, 255, 0.3);
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    animation: quantumBreathing 10s ease-in-out infinite;
+}
+
+/* QUANTUM INTRO SECTION */
+.intro-section {
+    background: var(--glass-neural);
+    backdrop-filter: blur(25px);
+    border-radius: 24px;
+    padding: 40px;
+    margin: 50px 0;
+    border: 2px solid rgba(0, 212, 255, 0.2);
+    box-shadow: var(--neural-shadow);
+    transition: var(--transition-neural);
+    position: relative;
+    overflow: hidden;
+    transform: perspective(var(--perspective-field)) rotateX(1deg);
+}
+
+.intro-section:hover {
+    background: var(--glass-plasma);
+    transform: perspective(var(--perspective-field)) rotateX(0deg) translateY(-8px) translateZ(15px) scale3d(1.01, 1.01, 1.01);
+    border-color: rgba(61, 245, 255, 0.4);
+    box-shadow: var(--hologram-depth);
+}
+
+.intro-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(61, 245, 255, 0.05) 0%, transparent 50%, rgba(0, 212, 255, 0.05) 100%);
+    pointer-events: none;
+    animation: hologramShift 12s ease-in-out infinite;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;
+    font-weight: 500;
+    text-shadow: 0 2px 8px rgba(10, 14, 46, 0.4);
     position: relative;
     z-index: 2;
 }
 
-.cully-logo {
-    max-width: 200px;
-    height: auto;
-    margin-bottom: 30px;
-    filter: drop-shadow(0 8px 20px rgba(255, 255, 255, 0.3));
-    transition: var(--transition-smooth);
-    animation: crystalFloat 8s ease-in-out infinite;
-}
-
-.cully-logo:hover {
-    transform: scale(1.05);
-    filter: drop-shadow(0 12px 30px rgba(255, 255, 255, 0.5));
-}
-
-.hero-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 800;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #ffffff 0%, #b3e5fc 50%, #81d4fa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 4px 12px rgba(0, 128, 255, 0.3);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-}
-
-.hero-subtitle {
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 40px;
-    font-weight: 500;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    text-shadow: 0 2px 8px rgba(0, 51, 102, 0.4);
-}
-
-/* INTRO SECTION */
-.intro-section {
-    background: var(--glass-secondary);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 30px;
-    margin: 40px 0;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: var(--surface-shadow);
-    transition: var(--transition-fast);
-}
-
-.intro-section:hover {
-    background: var(--glass-primary);
-    transform: translateY(-2px);
-}
-
-.intro-text {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.7;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* WATER CARDS */
+/* REVOLUTIONARY 3D WATER CARDS */
 .water-card {
-    background: var(--crystal-glass);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    margin: 40px 0;
-    box-shadow: var(--crystal-shadow);
-    transition: var(--transition-smooth);
+    background: var(--holographic-surface);
+    backdrop-filter: blur(30px);
+    border: 2px solid rgba(61, 245, 255, 0.3);
+    border-radius: 28px;
+    margin: 50px 0;
+    box-shadow: var(--hologram-depth);
+    transition: var(--transition-neural);
     position: relative;
     overflow: hidden;
+    transform: perspective(var(--perspective-field)) rotateX(2deg) rotateY(1deg);
 }
 
 .water-card::before {
@@ -266,64 +483,92 @@ body::before {
     top: 0;
     left: 0;
     width: 100%;
-    height: 3px;
-    background: var(--water-flow);
-    border-radius: 20px 20px 0 0;
+    height: 6px;
+    background: var(--quantum-flow);
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.8);
+    animation: neuralPulse 8s ease-in-out infinite;
+}
+
+.water-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%, rgba(61, 245, 255, 0.05) 100%);
+    pointer-events: none;
+    animation: hologramShift 15s ease-in-out infinite;
 }
 
 .water-card:hover {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: 0 30px 80px rgba(0, 102, 204, 0.25);
-    border-color: rgba(255, 255, 255, 0.4);
+    transform: perspective(var(--perspective-field)) rotateX(0deg) rotateY(0deg) translateY(-15px) translateZ(25px) scale3d(1.02, 1.02, 1.02);
+    box-shadow: var(--cyber-outline);
+    border-color: rgba(61, 245, 255, 0.6);
 }
 
 .card-header {
-    background: var(--glass-secondary);
-    padding: 30px 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px 20px 0 0;
+    background: var(--glass-neural);
+    padding: 40px 50px;
+    border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+    border-radius: 28px 28px 0 0;
+    position: relative;
+    z-index: 2;
 }
 
 .card-header h2 {
     margin: 0;
     color: white;
-    font-size: 1.8rem;
-    font-weight: 700;
-    text-shadow: 0 2px 8px rgba(0, 51, 102, 0.4);
+    font-size: 2rem;
+    font-weight: 800;
+    text-shadow: 
+        0 4px 12px rgba(10, 14, 46, 0.6),
+        0 0 20px rgba(61, 245, 255, 0.4);
+    background: linear-gradient(135deg, #ffffff 0%, #3df5ff 50%, #00d4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.01em;
 }
 
 .card-content {
-    padding: 40px;
+    padding: 50px;
+    position: relative;
+    z-index: 2;
 }
 
-/* WATER BUTTONS */
+/* REVOLUTIONARY 3D QUANTUM BUTTONS */
 .auth-buttons {
     display: flex;
-    gap: 24px;
+    gap: 30px;
     justify-content: center;
     align-items: stretch;
     flex-wrap: wrap;
-    margin: 40px 0;
+    margin: 50px 0;
+    perspective: var(--perspective-field);
 }
 
 .btn-water {
-    padding: 20px 32px;
-    font-size: 1.1rem;
-    border-radius: 16px;
+    padding: 25px 40px;
+    font-size: 1.2rem;
+    border-radius: 24px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    transition: var(--transition-smooth);
-    font-weight: 700;
-    min-width: 220px;
-    min-height: 70px;
+    gap: 15px;
+    transition: var(--transition-neural);
+    font-weight: 800;
+    min-width: 260px;
+    min-height: 80px;
     text-decoration: none;
-    border: 2px solid;
+    border: 3px solid;
     position: relative;
     overflow: hidden;
     font-family: inherit;
     cursor: pointer;
+    transform: perspective(var(--perspective-field)) rotateX(3deg) rotateY(1deg);
+    backdrop-filter: blur(20px);
 }
 
 .btn-water::before {
@@ -333,135 +578,212 @@ body::before {
     left: 50%;
     width: 0;
     height: 0;
-    background: rgba(255, 255, 255, 0.2);
+    background: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(61, 245, 255, 0.2) 50%, transparent 70%);
     border-radius: 50%;
-    transition: all 0.5s ease;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
     transform: translate(-50%, -50%);
+    z-index: 1;
 }
 
 .btn-water:hover::before {
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    height: 400px;
+}
+
+.btn-water::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(61, 245, 255, 0.1) 100%);
+    pointer-events: none;
+    z-index: 1;
+    animation: hologramShift 10s ease-in-out infinite;
 }
 
 .btn-primary {
-    background: var(--water-flow);
+    background: var(--quantum-flow);
     color: white;
-    border-color: var(--water-bright);
-    box-shadow: var(--water-glow);
+    border-color: var(--hologram-blue);
+    box-shadow: var(--cyber-outline);
+    background-size: 300% 300%;
+    animation: auroraFlow 12s ease-in-out infinite;
 }
 
 .btn-primary:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 20px 50px rgba(0, 128, 255, 0.4);
+    transform: perspective(var(--perspective-field)) rotateX(0deg) rotateY(0deg) translateY(-8px) translateZ(20px) scale3d(1.05, 1.05, 1.05);
+    box-shadow: 
+        0 0 40px rgba(0, 212, 255, 0.8),
+        0 0 80px rgba(61, 245, 255, 0.6),
+        0 25px 60px rgba(0, 212, 255, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
     color: white;
     text-decoration: none;
+    border-color: rgba(61, 245, 255, 0.8);
 }
 
 .btn-secondary {
-    background: var(--glass-primary);
+    background: var(--glass-quantum);
     color: white;
-    border-color: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(10px);
+    border-color: rgba(61, 245, 255, 0.4);
+    backdrop-filter: blur(25px);
+    box-shadow: var(--neural-shadow);
 }
 
 .btn-secondary:hover {
-    background: var(--glass-hover);
-    transform: translateY(-4px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.6);
+    background: var(--glass-plasma);
+    transform: perspective(var(--perspective-field)) rotateX(0deg) rotateY(0deg) translateY(-8px) translateZ(20px) scale3d(1.05, 1.05, 1.05);
+    border-color: rgba(61, 245, 255, 0.7);
     color: white;
     text-decoration: none;
+    box-shadow: var(--hologram-depth);
 }
 
 .btn-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     position: relative;
-    z-index: 2;
+    z-index: 3;
 }
 
 .btn-title {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: 800;
     line-height: 1.2;
+    text-shadow: 0 2px 8px rgba(10, 14, 46, 0.6);
 }
 
 .btn-subtitle {
-    font-size: 0.9rem;
-    font-weight: 500;
-    opacity: 0.9;
+    font-size: 1rem;
+    font-weight: 600;
+    opacity: 0.95;
+    text-shadow: 0 1px 4px rgba(10, 14, 46, 0.4);
 }
 
 .btn-water i {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     position: relative;
-    z-index: 2;
+    z-index: 3;
+    filter: drop-shadow(0 2px 8px rgba(10, 14, 46, 0.6));
 }
 
-/* RESPONSIVE OPTIMIZATIONS */
+/* ULTRA RESPONSIVE OPTIMIZATIONS */
 @media (max-width: 768px) {
-    .water-elements {
-        display: none; /* Hide water elements on mobile for performance */
+    .quantum-elements {
+        opacity: 0.6; /* Reduce opacity on mobile for better readability */
     }
 
     .welcome-hero {
-        margin: 30px auto;
-        padding: 40px 20px;
+        margin: 40px auto;
+        padding: 60px 30px;
+        transform: perspective(var(--perspective-field)) rotateX(1deg);
+    }
+
+    .welcome-hero:hover {
+        transform: perspective(var(--perspective-field)) rotateX(0deg) translateZ(10px) scale3d(1.01, 1.01, 1.01);
     }
 
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 3rem;
+        transform: perspective(var(--perspective-field)) rotateX(2deg);
     }
 
     .auth-buttons {
         flex-direction: column;
-        gap: 16px;
+        gap: 20px;
     }
 
     .btn-water {
         width: 100%;
         min-width: auto;
+        transform: perspective(var(--perspective-field)) rotateX(2deg);
+    }
+
+    .btn-water:hover {
+        transform: perspective(var(--perspective-field)) rotateX(0deg) translateY(-5px) translateZ(10px) scale3d(1.02, 1.02, 1.02);
     }
 
     .card-content {
-        padding: 30px 20px;
+        padding: 40px 30px;
+    }
+
+    .water-card {
+        transform: perspective(var(--perspective-field)) rotateX(1deg);
+    }
+
+    .water-card:hover {
+        transform: perspective(var(--perspective-field)) rotateX(0deg) translateY(-8px) translateZ(10px) scale3d(1.01, 1.01, 1.01);
     }
 }
 
 @media (max-width: 480px) {
     .container {
-        padding: 10px;
+        padding: 15px;
     }
 
     .welcome-hero {
-        padding: 30px 15px;
-        margin: 20px auto;
+        padding: 50px 20px;
+        margin: 30px auto;
+        border-radius: 24px;
     }
 
     .card-header {
-        padding: 20px 15px;
+        padding: 30px 20px;
     }
 
     .card-content {
-        padding: 20px 15px;
+        padding: 30px 20px;
+    }
+
+    .btn-water {
+        padding: 20px 30px;
+        min-height: 70px;
+        font-size: 1.1rem;
+    }
+
+    .quantum-orb {
+        opacity: 0.4;
+    }
+
+    .neural-crystal {
+        opacity: 0.5;
     }
 }
 
-/* PERFORMANCE OPTIMIZATIONS */
+/* EXTREME PERFORMANCE OPTIMIZATIONS */
 * {
     will-change: auto;
 }
 
 .btn-water:hover,
 .water-card:hover,
-.cully-logo:hover {
-    will-change: transform;
+.cully-logo:hover,
+.welcome-hero:hover {
+    will-change: transform, box-shadow, border-color;
 }
 
-.welcome-hero {
+.welcome-hero,
+.water-card,
+.btn-water {
     contain: layout style;
+    transform-style: preserve-3d;
+}
+
+/* Enable hardware acceleration for 3D elements */
+.quantum-orb,
+.neural-crystal,
+.welcome-hero,
+.water-card,
+.btn-water,
+.cully-logo {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
 }
 
 /* REGISTRATION INFO */
