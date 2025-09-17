@@ -167,7 +167,7 @@ body::before {
     margin: 60px auto;
     padding: 70px 60px;
     text-align: center;
-    background: var(--surface-glass);
+    background: var(--quantum-glass);
     backdrop-filter: blur(25px);
     border: 2px solid var(--cyber-electric);
     border-radius: 32px;
