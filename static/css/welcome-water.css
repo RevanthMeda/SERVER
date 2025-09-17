@@ -260,15 +260,15 @@ body::before {
 
 /* ENHANCED INTRO SECTION */
 .intro-section {
-    background: var(--glass-surface);
+    background: var(--quantum-glass);
     backdrop-filter: blur(25px);
     border-radius: 24px;
     padding: 45px;
     margin: 50px 0;
-    border: 2px solid var(--glass-border);
-    box-shadow: var(--shadow-lg), 0 0 30px rgba(6, 182, 212, 0.15);
-    transition: var(--transition-bounce);
-    animation: slideInUp 1s ease-out 0.8s both;
+    border: 2px solid var(--cyber-electric);
+    box-shadow: var(--void-shadow), 0 0 30px rgba(0, 229, 255, 0.15);
+    transition: var(--transition-elegant);
+    animation: fadeInUp 1s ease-out 0.8s both;
     position: relative;
     overflow: hidden;
 }
@@ -287,10 +287,10 @@ body::before {
 .intro-section:hover {
     transform: translateY(-6px) scale(1.01);
     box-shadow: 
-        var(--shadow-xl), 
-        0 0 50px rgba(6, 182, 212, 0.25),
-        0 25px 60px rgba(15, 23, 42, 0.15);
-    border-color: var(--bright-cyan);
+        var(--void-shadow), 
+        0 0 50px rgba(0, 229, 255, 0.25),
+        0 25px 60px rgba(0, 0, 0, 0.15);
+    border-color: var(--plasma-cyan);
 }
 
 .intro-text {
@@ -307,7 +307,7 @@ body::before {
 
 /* PROFESSIONAL STYLISH CARDS */
 .water-card {
-    background: var(--surface-glass);
+    background: var(--quantum-glass);
     backdrop-filter: blur(25px);
     border: 2px solid var(--cyber-electric);
     border-radius: 28px;
@@ -380,6 +380,58 @@ body::before {
     color: var(--crystal-white);
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     font-weight: 600;
+}
+
+/* FEATURE CONTENT STYLING */
+.features-grid .feature-item {
+    background: var(--quantum-glass) !important;
+    color: var(--crystal-white) !important;
+    backdrop-filter: blur(25px) !important;
+    border: 2px solid var(--cyber-electric) !important;
+}
+
+.features-grid .feature-item h3 {
+    color: var(--crystal-white) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+.features-grid .feature-item p {
+    color: var(--crystal-white) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+.features-grid .feature-item li {
+    color: var(--crystal-white) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+.support-grid .support-item {
+    background: var(--quantum-glass) !important;
+    color: var(--crystal-white) !important;
+    backdrop-filter: blur(25px) !important;
+    border: 2px solid var(--cyber-electric) !important;
+}
+
+.support-grid .support-item h3 {
+    color: var(--crystal-white) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+.support-grid .support-item p {
+    color: var(--crystal-white) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+.registration-info {
+    background: var(--quantum-glass) !important;
+    color: var(--crystal-white) !important;
+    backdrop-filter: blur(25px) !important;
+    border: 2px solid var(--cyber-electric) !important;
+}
+
+.registration-info p {
+    color: var(--crystal-white) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* PROFESSIONAL STYLISH BUTTONS */
