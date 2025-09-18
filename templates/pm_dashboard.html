@@ -7,41 +7,82 @@
     <title>Project Manager Dashboard - Cully Report Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* DARK QUANTUM GLASS THEME - CONSISTENT WITH ALL PAGES */
         :root {
-            --admin-primary: #4DD0E1;
-            --admin-primary-dark: #26C6DA;
-            --admin-primary-light: #80DEEA;
-            --admin-success: #10b981;
-            --admin-warning: #f59e0b;
-            --admin-danger: #ef4444;
-            --admin-neutral: #6b7280;
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --quantum-dark: #0a0f1c;
+            --neural-blue: #1a2332;
+            --cyber-electric: #00e5ff;
+            --plasma-cyan: #00bcd4;
+            --tech-blue: #2196f3;
+            --crystal-white: #ffffff;
+            --quantum-glass: rgba(26, 35, 50, 0.15);
+            --surface-glass: rgba(26, 35, 50, 0.25);
+            --deep-space: rgba(10, 15, 28, 0.95);
+            --neural-gradient: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #2c3e50 100%);
+            --cyber-gradient: linear-gradient(45deg, #00e5ff 0%, #00bcd4 50%, #2196f3 100%);
+            --glass-gradient: linear-gradient(180deg, rgba(26, 35, 50, 0.15) 0%, rgba(26, 35, 50, 0.05) 100%);
+            --quantum-shadow: 0 8px 32px rgba(0, 229, 255, 0.15);
+            --cyber-glow: 0 0 20px rgba(0, 229, 255, 0.3);
+            --neural-border: rgba(0, 229, 255, 0.2);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-dark: #ffffff;
+            --text-medium: rgba(255, 255, 255, 0.9);
+            --text-light: rgba(255, 255, 255, 0.7);
         }
 
         body {
             margin: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            color: #1f2937;
+            padding: 0;
+            font-family: 'Orbitron', 'Exo 2', 'Inter', monospace;
+            background: var(--neural-gradient);
+            color: var(--text-dark);
             line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(0, 188, 212, 0.08) 0%, transparent 50%),
+                        linear-gradient(45deg, transparent 30%, rgba(0, 229, 255, 0.03) 50%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: quantumFlow 8s ease-in-out infinite;
+        }
+
+        @keyframes quantumFlow {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            33% { transform: translateX(10px) rotate(1deg); }
+            66% { transform: translateX(-5px) rotate(-0.5deg); }
         }
 
         .dashboard-container {
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%;
+            margin: 0;
             padding: 24px;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
         }
 
-        /* Header Section - Exact same as admin/engineer */
+        /* Header Section - Dark Quantum Glass Style */
         .dashboard-header {
-            background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
-            border-radius: 16px;
-            padding: 32px;
+            background: var(--quantum-glass);
+            backdrop-filter: blur(25px);
+            border: 2px solid var(--cyber-electric);
+            border-radius: 32px;
+            padding: 40px;
             margin-bottom: 32px;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--quantum-shadow), 0 0 40px rgba(0, 229, 255, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -49,12 +90,13 @@
         .dashboard-header::before {
             content: '';
             position: absolute;
-            top: 0;
-            right: 0;
-            width: 200px;
-            height: 200px;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/></svg>');
-            opacity: 0.3;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 229, 255, 0.05), transparent);
+            animation: quantumFlow 10s ease-in-out infinite;
+            pointer-events: none;
         }
 
         .header-content {
@@ -62,28 +104,31 @@
             justify-content: space-between;
             align-items: center;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .header-info h1 {
-            color: white;
+            color: var(--crystal-white);
             font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0 0 8px 0;
+            font-weight: 800;
+            margin: 0 0 12px 0;
             display: flex;
             align-items: center;
             gap: 16px;
+            text-shadow: 0 4px 8px rgba(0, 15, 28, 0.5), 0 0 20px rgba(0, 229, 255, 0.3);
+            letter-spacing: -0.02em;
         }
 
         .header-info p {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-medium);
             font-size: 1.1rem;
             margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .header-logo {
             height: 80px;
-            filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 8px 16px rgba(0, 229, 255, 0.3)) brightness(1.2);
         }
 
         /* Navigation - Exact same as admin */
@@ -748,9 +793,13 @@
         </div>
 
         <!-- Footer -->
-        <div style="text-align: center; padding: 24px; color: #6b7280; font-size: 0.875rem; background: white; border-radius: 12px; margin-top: 32px; box-shadow: var(--card-shadow);">
-            <p>Developed by <strong>Revanth Meda</strong> for <strong>Cully Automation</strong></p>
-        </div>
+        <footer class="developer-credit">
+            <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 2px solid var(--cyber-electric); background: var(--surface-glass); backdrop-filter: blur(15px); border-radius: 12px; box-shadow: var(--quantum-shadow);">
+                <p style="color: var(--text-medium); font-size: 0.9rem; margin: 0;">
+                    <i class="fas fa-code"></i> Developed by <strong style="color: var(--cyber-electric);">Revanth Meda</strong> for <strong style="color: var(--crystal-white);">CULLY LTD</strong>
+                </p>
+            </div>
+        </footer>
     </div>
 </body>
 </html>
