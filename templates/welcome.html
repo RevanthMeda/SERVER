@@ -246,6 +246,248 @@
             }
         }
 
+        /* Enhanced CTA Section Styles */
+        .cta-hero-section {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: var(--cyber-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: var(--cyber-glow), var(--quantum-shadow);
+            animation: quantumFloat 3s ease-in-out infinite;
+        }
+
+        .cta-icon-wrapper i {
+            font-size: 2rem;
+            color: var(--crystal-white);
+        }
+
+        @keyframes quantumFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-8px) rotate(2deg); }
+            66% { transform: translateY(4px) rotate(-1deg); }
+        }
+
+        .cta-title {
+            color: var(--crystal-white) !important;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 8px rgba(0, 15, 28, 0.5), 0 0 20px rgba(0, 229, 255, 0.3);
+            letter-spacing: -0.02em;
+        }
+
+        .cta-description {
+            color: var(--text-medium) !important;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
+        }
+
+        .highlight-text {
+            color: var(--cyber-electric) !important;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+
+        /* Enhanced Button Styles */
+        .auth-buttons-enhanced {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 32px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-primary-enhanced, .btn-secondary-enhanced {
+            display: flex;
+            align-items: center;
+            padding: 20px 24px;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-primary-enhanced {
+            background: var(--cyber-gradient) !important;
+            color: var(--crystal-white) !important;
+            box-shadow: var(--cyber-glow), var(--quantum-shadow);
+        }
+
+        .btn-secondary-enhanced {
+            background: var(--surface-glass) !important;
+            color: var(--crystal-white) !important;
+            border-color: var(--neural-border);
+            box-shadow: var(--quantum-shadow);
+        }
+
+        .btn-primary-enhanced::before, .btn-secondary-enhanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-primary-enhanced:hover::before, .btn-secondary-enhanced:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary-enhanced:hover, .btn-secondary-enhanced:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.5), 0 16px 48px rgba(0, 229, 255, 0.3);
+        }
+
+        .btn-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .btn-icon i {
+            font-size: 1.2rem;
+            color: var(--crystal-white);
+        }
+
+        .btn-content {
+            flex: 1;
+            text-align: left;
+        }
+
+        .btn-title {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .btn-subtitle {
+            display: block;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .btn-arrow {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 16px;
+            transition: var(--transition);
+        }
+
+        .btn-primary-enhanced:hover .btn-arrow, .btn-secondary-enhanced:hover .btn-arrow {
+            transform: translateX(8px);
+        }
+
+        /* Enhanced Registration Info */
+        .registration-info-enhanced {
+            background: var(--surface-glass) !important;
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--neural-border) !important;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 32px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-info-enhanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--cyber-gradient);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+        }
+
+        .info-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--cyber-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: var(--cyber-glow);
+        }
+
+        .info-icon i {
+            font-size: 1.2rem;
+            color: var(--crystal-white);
+        }
+
+        .info-content h4 {
+            color: var(--crystal-white) !important;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
+        }
+
+        .info-content p {
+            color: var(--text-medium) !important;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0 0 16px 0;
+        }
+
+        .approval-benefits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .benefit-badge {
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--cyber-electric) !important;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        .benefit-badge i {
+            font-size: 0.7rem;
+        }
+
         /* Dark Quantum Glass Theme Variables */
         :root {
             --quantum-dark: #0a0f1c;
@@ -310,30 +552,59 @@
                 {% endwith %}
 
                 <div class="get-started">
-                    <p class="cta-description">
-                        Join water industry professionals using Cully Water Excellence to create 
-                        professional technical documentation faster and more accurately than ever before.
-                    </p>
-                    <div class="auth-buttons">
-                        <a href="{{ url_for('auth.login') }}" class="btn-primary">
-                            <i class="fas fa-water"></i>
+                    <div class="cta-hero-section">
+                        <div class="cta-icon-wrapper">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3 class="cta-title">Transform Your Documentation Journey</h3>
+                        <p class="cta-description">
+                            Join <strong>500+</strong> water industry professionals using <span class="highlight-text">Cully Water Excellence</span> to create 
+                            professional technical documentation <strong>3x faster</strong> and with <strong>99.5% accuracy</strong>.
+                        </p>
+                    </div>
+                    
+                    <div class="auth-buttons-enhanced">
+                        <a href="{{ url_for('auth.login') }}" class="btn-primary-enhanced">
+                            <div class="btn-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
                             <div class="btn-content">
                                 <span class="btn-title">Access Portal</span>
-                                <span class="btn-subtitle">Login to your dashboard</span>
+                                <span class="btn-subtitle">Login to your professional dashboard</span>
+                            </div>
+                            <div class="btn-arrow">
+                                <i class="fas fa-arrow-right"></i>
                             </div>
                         </a>
-                        <a href="{{ url_for('auth.register') }}" class="btn-secondary">
-                            <i class="fas fa-user-plus"></i>
+                        
+                        <a href="{{ url_for('auth.register') }}" class="btn-secondary-enhanced">
+                            <div class="btn-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
                             <div class="btn-content">
                                 <span class="btn-title">Join Excellence</span>
-                                <span class="btn-subtitle">Create your account</span>
+                                <span class="btn-subtitle">Start your free professional account</span>
+                            </div>
+                            <div class="btn-arrow">
+                                <i class="fas fa-arrow-right"></i>
                             </div>
                         </a>
                     </div>
-                    <div class="registration-info" style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; margin-top: 25px; border: 1px solid rgba(255,255,255,0.1);">
-                        <p style="margin: 0; color: rgba(255,255,255,0.9);"><i class="fas fa-info-circle"></i> <strong>New users:</strong> Registration requires administrator approval.
-                        You'll receive an email notification within 24 hours once your account is approved.
-                        </p>
+                    
+                    <div class="registration-info-enhanced">
+                        <div class="info-icon">
+                            <i class="fas fa-shield-check"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Secure Approval Process</h4>
+                            <p><strong>New professionals:</strong> All registrations undergo secure administrator verification. 
+                            You'll receive email confirmation within <strong>24 hours</strong> once approved.</p>
+                            <div class="approval-benefits">
+                                <span class="benefit-badge"><i class="fas fa-check"></i> Enterprise Security</span>
+                                <span class="benefit-badge"><i class="fas fa-check"></i> Quality Assurance</span>
+                                <span class="benefit-badge"><i class="fas fa-check"></i> Professional Network</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
