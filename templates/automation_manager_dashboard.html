@@ -105,7 +105,7 @@
         }
 
         .header-info h1 {
-            color: var(--crystal-white);
+            color: var(--cyber-electric);
             font-family: 'Orbitron', 'Exo 2', monospace;
             font-size: 2.5rem;
             font-weight: 800;
@@ -345,7 +345,7 @@
         .section-header h2 {
             font-size: 24px;
             font-weight: 700;
-            color: var(--crystal-white);
+            color: var(--cyber-electric);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -393,12 +393,13 @@
         .action-card h3 {
             font-size: 18px;
             font-weight: 600;
-            color: #1f2937;
+            color: var(--crystal-white);
             margin: 0 0 8px 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .action-card p {
-            color: #64748b;
+            color: var(--text-light);
             font-size: 14px;
             margin: 0;
             line-height: 1.5;
@@ -419,22 +420,25 @@
         }
 
         .users-table th {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: var(--surface-glass);
+            backdrop-filter: blur(10px);
             padding: 16px;
             text-align: left;
             font-weight: 600;
-            color: #374151;
-            border-bottom: 1px solid #e2e8f0;
+            color: var(--cyber-electric);
+            border-bottom: 1px solid var(--neural-border);
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .users-table td {
             padding: 16px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--neural-border);
             vertical-align: middle;
+            color: var(--text-medium);
         }
 
         .users-table tr:hover {
-            background: #f8fafc;
+            background: rgba(26, 35, 50, 0.3);
         }
 
         .status-badge {
@@ -491,10 +495,12 @@
         .empty-state {
             text-align: center;
             padding: 32px 16px;
-            color: #64748b;
-            background: white;
+            color: var(--text-light);
+            background: var(--quantum-glass);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--neural-border);
             border-radius: 16px;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--quantum-shadow);
         }
 
         .empty-state i {
@@ -504,9 +510,10 @@
         }
 
         .empty-state h3 {
-            color: #374151;
+            color: var(--crystal-white);
             font-size: 18px;
             margin: 0 0 8px 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .empty-state p {

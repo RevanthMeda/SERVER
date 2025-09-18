@@ -112,7 +112,7 @@
         }
 
         .header-info h1 {
-            color: var(--crystal-white);
+            color: var(--cyber-electric);
             font-size: 2.5rem;
             font-weight: 800;
             margin: 0 0 12px 0;
@@ -316,15 +316,17 @@
         .stat-value, .stat-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #1f2937;
+            color: var(--crystal-white);
             margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .stat-label {
-            color: #64748b;
+            color: var(--text-medium);
             font-size: 14px;
             font-weight: 500;
             margin: 4px 0 0 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         /* Dashboard Widgets - Same as admin */
@@ -339,11 +341,12 @@
         .section-header h2 {
             font-size: 24px;
             font-weight: 700;
-            color: #1f2937;
+            color: var(--cyber-electric);
             display: flex;
             align-items: center;
             gap: 12px;
             margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .quick-actions {
@@ -386,12 +389,13 @@
         .action-card h3 {
             font-size: 18px;
             font-weight: 600;
-            color: #1f2937;
+            color: var(--crystal-white);
             margin: 0 0 8px 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .action-card p {
-            color: #64748b;
+            color: var(--text-light);
             font-size: 14px;
             margin: 0;
             line-height: 1.5;
@@ -412,22 +416,25 @@
         }
 
         .users-table th {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: var(--surface-glass);
+            backdrop-filter: blur(10px);
             padding: 16px;
             text-align: left;
             font-weight: 600;
-            color: #374151;
-            border-bottom: 1px solid #e2e8f0;
+            color: var(--cyber-electric);
+            border-bottom: 1px solid var(--neural-border);
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .users-table td {
             padding: 16px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--neural-border);
             vertical-align: middle;
+            color: var(--text-medium);
         }
 
         .users-table tr:hover {
-            background: #f8fafc;
+            background: rgba(26, 35, 50, 0.3);
         }
 
         .status-badge {
