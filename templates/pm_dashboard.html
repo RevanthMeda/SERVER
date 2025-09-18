@@ -201,16 +201,261 @@
             flex-shrink: 0;
         }
 
-        .nav-link.logout {
-            background: rgba(239, 68, 68, 0.2) !important;
-            color: #fca5a5 !important;
-            border: 2px solid rgba(239, 68, 68, 0.3) !important;
+        .nav-link.featured {
+            background: var(--cyber-gradient);
+            color: var(--crystal-white);
+            font-weight: 700;
+            border-color: transparent;
+            box-shadow: var(--cyber-glow);
         }
 
-        .nav-link.logout:hover {
-            background: rgba(239, 68, 68, 0.3) !important;
-            color: #fecaca !important;
-            border-color: rgba(239, 68, 68, 0.4) !important;
+        .nav-link.featured:hover {
+            background: var(--cyber-gradient);
+            color: var(--crystal-white);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4), 0 12px 40px rgba(0, 229, 255, 0.3);
+        }
+
+        /* Navigation badges */
+        .nav-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .nav-link.active .nav-badge {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-link.featured .nav-badge {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        /* User Info Section */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--cyber-electric) 0%, var(--plasma-cyan) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--crystal-white);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Widget Cards - Exact same as engineer dashboard */
+        .widgets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .widget-card {
+            background: var(--quantum-glass);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--neural-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--quantum-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .widget-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--cyber-glow), var(--quantum-shadow);
+            border-color: var(--cyber-electric);
+        }
+
+        .widget-header {
+            background: var(--surface-glass);
+            backdrop-filter: blur(10px);
+            padding: 20px 24px;
+            border-bottom: 2px solid var(--neural-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--cyber-electric);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
+        }
+
+        .widget-action {
+            padding: 8px 16px;
+            background: var(--cyber-gradient);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .widget-action:hover {
+            background: var(--cyber-gradient);
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .widget-content {
+            padding: 24px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .action-item {
+            background: var(--surface-glass);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid var(--neural-border);
+            transition: all 0.2s ease;
+        }
+
+        .action-item:hover:not(.disabled) {
+            background: rgba(26, 35, 50, 0.35);
+            border-color: var(--cyber-electric);
+            transform: translateY(-2px);
+            box-shadow: var(--cyber-glow);
+        }
+
+        .action-item.featured {
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.1) 0%, rgba(0, 188, 212, 0.08) 100%);
+            border-color: var(--cyber-electric);
+        }
+
+        .action-item.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .action-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: var(--cyber-gradient);
+            color: white;
+        }
+
+        .action-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            background: #d1fae5;
+            color: #065f46;
+            margin-left: auto;
+        }
+
+        .action-badge.coming-soon {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .action-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--crystal-white);
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
+        }
+
+        .action-description {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--cyber-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .action-button:hover:not(:disabled) {
+            background: var(--cyber-gradient);
+            transform: translateY(-1px);
+            color: white;
+            box-shadow: var(--cyber-glow);
+        }
+
+        .action-button.secondary {
+            background: var(--surface-glass);
+            color: var(--text-light);
+            border: 2px solid var(--neural-border);
+        }
+
+        .action-button.secondary:hover {
+            background: rgba(26, 35, 50, 0.35);
+            color: var(--cyber-electric);
+            border-color: var(--cyber-electric);
+        }
+
+        .action-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
         }
 
         /* FORCE DARK QUANTUM GLASS THEME - HIGHEST PRIORITY */
@@ -595,252 +840,188 @@
         <div class="dashboard-header">
             <div class="header-content">
                 <div class="header-info">
-                    <h1><i class="fa fa-project-diagram"></i> Project Manager Dashboard</h1>
-                    <p>Oversee project deliverables, track progress, and manage stakeholder communications</p>
+                    <h1><i class="fas fa-project-diagram"></i> Project Manager Dashboard</h1>
+                    <p>Welcome back, {{ current_user.full_name if current_user and current_user.full_name else 'Project Manager' }}! Oversee project deliverables and track progress.</p>
                 </div>
                 <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
             </div>
         </div>
 
-        <div class="dashboard-content">
-            <!-- Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="flash-messages">
-                        {% for category, message in messages %}
-                            <div class="flash-message">
-                                <i class="fa fa-check-circle"></i>
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
-
-            <!-- Navigation -->
-            <div class="dashboard-nav">
-                <div class="nav-links">
-                    <a href="{{ url_for('dashboard.pm') }}" class="nav-link active">
-                        <i class="fa fa-home"></i> Dashboard
-                    </a>
-                    <a href="{{ url_for('dashboard.pm') }}" class="nav-link">
-                        <i class="fa fa-file-alt"></i> Project Reports
-                    </a>
-                    <a href="{{ url_for('reports.new_sat') }}" class="nav-link">
-                        <i class="fa fa-plus"></i> Create Report
-                    </a>
-                    <a href="{{ url_for('io_builder.index') }}" class="nav-link">
-                        <i class="fa fa-sitemap"></i> I/O Builder
-                    </a>
-                    <a href="{{ url_for('notifications.notification_center') }}" class="nav-link">
-                        <i class="fa fa-bell"></i> Notifications
-                        {% if unread_count > 0 %}
-                            <span class="notification-badge">{{ unread_count }}</span>
-                        {% endif %}
-                    </a>
-                    <a href="{{ url_for('auth.change_password') }}" class="nav-link">
-                        <i class="fa fa-key"></i> Settings
-                    </a>
-                    <a href="{{ url_for('auth.logout') }}" class="nav-link logout">
-                        <i class="fa fa-sign-out-alt"></i> Logout
-                    </a>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message">
+                            <i class="fa fa-check-circle"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                 </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Horizontal Navigation -->
+        <div class="dashboard-nav">
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard.pm') }}" class="nav-link active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+                <a href="{{ url_for('reports.new_sat') }}" class="nav-link featured">
+                    <i class="fas fa-plus-circle"></i>
+                    Create Report
+                    <span class="nav-badge">New</span>
+                </a>
+                <a href="{{ url_for('dashboard.my_reports') }}" class="nav-link">
+                    <i class="fas fa-folder-open"></i>
+                    My Reports
+                </a>
+                <a href="{{ url_for('io_builder.index') }}" class="nav-link">
+                    <i class="fas fa-sitemap"></i>
+                    I/O Builder
+                </a>
+                <a href="{{ url_for('notifications.notification_center') }}" class="nav-link">
+                    <i class="fas fa-bell"></i>
+                    Notifications
+                </a>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">
+                    {{ current_user.full_name[0] if current_user and current_user.full_name else 'P' }}
+                </div>
+                <div class="user-details">
+                    <div class="user-name">{{ current_user.full_name if current_user and current_user.full_name else 'Project Manager' }}</div>
+                    <div class="user-role">{{ current_user.role if current_user and current_user.role else 'Project Manager' }}</div>
+                </div>
+                <a href="{{ url_for('auth.change_password') }}" class="nav-link">
+                    <i class="fas fa-key"></i>
+                    Settings
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="color: #ef4444;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fa fa-file-alt"></i>
+                    </div>
+                </div>
+                <div class="stat-value">{{ project_count if project_count is defined else 0 }}</div>
+                <p class="stat-label">Active Projects</p>
             </div>
 
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fa fa-chart-line"></i>
-                        </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fa fa-clock"></i>
                     </div>
-                    <div class="stat-value">{{ project_count }}</div>
-                    <p class="stat-label">Active Projects</p>
                 </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fa fa-exclamation-triangle"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value">{{ pending_deliverables }}</div>
-                    <p class="stat-label">Pending Deliverables</p>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fa fa-check-double"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value">{{ completed_reports }}</div>
-                    <p class="stat-label">Completed Reports</p>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fa fa-calendar-check"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value">{{ on_time_percentage }}%</div>
-                    <p class="stat-label">On-Time Delivery</p>
-                </div>
+                <div class="stat-value">{{ pending_deliverables if pending_deliverables is defined else 0 }}</div>
+                <p class="stat-label">Pending Deliverables</p>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="dashboard-section">
-                <div class="section-header">
-                    <h2><i class="fa fa-rocket"></i> Project Management</h2>
-                </div>
-                <div class="quick-actions">
-                    <a href="{{ url_for('reports.new_sat') }}" class="action-card">
-                        <div class="action-icon">
-                            <i class="fa fa-plus-circle"></i>
-                        </div>
-                        <h3>New Project Report</h3>
-                        <p>Initialize a new SAT report for project milestone tracking</p>
-                    </a>
-
-                    <a href="{{ url_for('dashboard.pm') }}" class="action-card">
-                        <div class="action-icon">
-                            <i class="fa fa-tasks"></i>
-                        </div>
-                        <h3>Track Deliverables</h3>
-                        <p>Monitor project deliverables and milestone completion status</p>
-                    </a>
-
-                    <a href="{{ url_for('notifications.notification_center') }}" class="action-card">
-                        <div class="action-icon">
-                            <i class="fa fa-bell"></i>
-                        </div>
-                        <h3>Notifications</h3>
-                        <p>Check pending approvals and team updates</p>
-                    </a>
-
-                    <a href="{{ url_for('io_builder.index') }}" class="action-card">
-                        <div class="action-icon">
-                            <i class="fa fa-chart-bar"></i>
-                        </div>
-                        <h3>Project Analytics</h3>
-                        <p>Generate reports and analytics for project performance</p>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Pending Approvals -->
-            <div class="dashboard-section">
-                <div class="section-header">
-                    <h2><i class="fa fa-clock"></i> Pending Final Approvals</h2>
-                </div>
-                {% if pending_reports %}
-                    <div class="table-responsive">
-                        <table class="users-table">
-                            <thead>
-                                <tr>
-                                    <th>Document</th>
-                                    <th>Project</th>
-                                    <th>Client</th>
-                                    <th>Prepared By</th>
-                                    <th>Technical Review</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for report in pending_reports %}
-                                <tr>
-                                    <td>
-                                        <strong>{{ report.document_title or 'Untitled Report' }}</strong><br>
-                                        <small>ID: {{ report.id[:8] }}...</small>
-                                    </td>
-                                    <td>{{ report.project_reference or 'N/A' }}</td>
-                                    <td>{{ report.client_name or 'N/A' }}</td>
-                                    <td>{{ report.prepared_by or 'N/A' }}</td>
-                                    <td>
-                                        <span class="status-badge status-approved">
-                                            <i class="fa fa-check"></i> Approved
-                                        </span>
-                                    </td>
-                                    <td>{{ report.created_at.strftime('%Y-%m-%d') if report.created_at else 'N/A' }}</td>
-                                    <td>
-                                        <a href="{{ report.approval_url }}" class="btn-view" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
-                                            <i class="fa fa-stamp"></i> Final Approval
-                                        </a>
-                                        <a href="{{ url_for('status.view_status', submission_id=report.id) }}" class="btn-view" style="margin-left: 8px;">
-                                            <i class="fa fa-eye"></i> View
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% else %}
-                    <div class="empty-state">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
                         <i class="fa fa-check-circle"></i>
-                        <h3>No Pending Final Approvals</h3>
-                        <p>All reports have been reviewed. Check back later for reports requiring final approval.</p>
                     </div>
-                {% endif %}
+                </div>
+                <div class="stat-value">{{ completed_reports if completed_reports is defined else 0 }}</div>
+                <p class="stat-label">Completed Reports</p>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="widgets-grid">
+            <div class="widget-card">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <i class="fa fa-rocket"></i>
+                        Project Management Tools
+                    </h3>
+                </div>
+                <div class="widget-content">
+                    <div class="action-grid">
+                        <div class="action-item featured">
+                            <div class="action-header">
+                                <div class="action-icon">
+                                    <i class="fa fa-vial"></i>
+                                </div>
+                                <h4 class="action-title">System Acceptance Testing (SAT)</h4>
+                                <div class="action-badge">Available</div>
+                            </div>
+                            <p class="action-description">Comprehensive testing documentation for system acceptance and validation procedures</p>
+                            <a href="{{ url_for('reports.new_sat') }}" class="action-button">
+                                <i class="fa fa-plus"></i>
+                                Create SAT Report
+                            </a>
+                        </div>
+
+                        <div class="action-item">
+                            <div class="action-header">
+                                <div class="action-icon">
+                                    <i class="fa fa-map-marker-alt"></i>
+                                </div>
+                                <h4 class="action-title">Site Survey Form</h4>
+                                <div class="action-badge">Available</div>
+                            </div>
+                            <p class="action-description">Comprehensive site assessment and survey form for infrastructure evaluation and documentation</p>
+                            <a href="{{ url_for('reports.new_site_survey') if url_for('reports.new_site_survey') else '#' }}" class="action-button">
+                                <i class="fa fa-clipboard-list"></i>
+                                Start Site Survey
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Recent Projects -->
-            <div class="dashboard-section">
-                <div class="section-header">
-                    <h2><i class="fa fa-folder-open"></i> Recent Projects</h2>
+            <div class="widget-card">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <i class="fa fa-tools"></i>
+                        Design Specifications
+                    </h3>
                 </div>
-                {% if recent_reports %}
-                    <div class="table-responsive">
-                        <table class="users-table">
-                            <thead>
-                                <tr>
-                                    <th>Project</th>
-                                    <th>Client</th>
-                                    <th>Status</th>
-                                    <th>Progress</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for report in recent_reports[:5] %}
-                                <tr>
-                                    <td>
-                                        <strong>{{ report.document_title or 'Untitled Project' }}</strong><br>
-                                        <small>{{ report.project_reference or 'No reference' }}</small>
-                                    </td>
-                                    <td>{{ report.client_name or 'N/A' }}</td>
-                                    <td>
-                                        <span class="status-badge status-{{ report.status.lower() }}">
-                                            {{ report.status }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill progress-fill-{% if report.status == 'APPROVED' %}approved{% elif report.status == 'PENDING' %}pending{% else %}draft{% endif %}"></div>
-                                        </div>
-                                        <small>{% if report.status == 'APPROVED' %}100{% elif report.status == 'PENDING' %}75{% else %}25{% endif %}% Complete</small>
-                                    </td>
-                                    <td>{{ report.updated_at.strftime('%Y-%m-%d') if report.updated_at else 'N/A' }}</td>
-                                    <td>
-                                        <a href="{{ url_for('status.view_status', submission_id=report.id) }}" class="btn-view">
-                                            <i class="fa fa-eye"></i> View
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                <div class="widget-content">
+                    <div class="action-grid">
+                        <div class="action-item disabled">
+                            <div class="action-header">
+                                <div class="action-icon">
+                                    <i class="fa fa-cogs"></i>
+                                </div>
+                                <h4 class="action-title">Functional Design Specification (FDS)</h4>
+                                <div class="action-badge coming-soon">Coming Soon</div>
+                            </div>
+                            <p class="action-description">Detailed functional requirements and design specifications for system components</p>
+                            <button class="action-button" disabled>
+                                <i class="fa fa-clock"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+
+                        <div class="action-item disabled">
+                            <div class="action-header">
+                                <div class="action-icon">
+                                    <i class="fa fa-microchip"></i>
+                                </div>
+                                <h4 class="action-title">Hardware Design Specification (HDS)</h4>
+                                <div class="action-badge coming-soon">Coming Soon</div>
+                            </div>
+                            <p class="action-description">Comprehensive hardware design documentation and specifications</p>
+                            <button class="action-button" disabled>
+                                <i class="fa fa-clock"></i>
+                                Coming Soon
+                            </button>
+                        </div>
                     </div>
-                {% else %}
-                    <div class="empty-state">
-                        <h3>No Active Projects</h3>
-                        <p>No projects are currently active. Create a new project report to get started.</p>
-                    </div>
-                {% endif %}
+                </div>
             </div>
         </div>
 
@@ -853,5 +1034,41 @@
             </div>
         </footer>
     </div>
+    
+    {% if not current_user.is_authenticated %}
+    <script>
+        window.location.replace('/welcome');
+    </script>
+    {% endif %}
+    
+    <script>
+        // Detect if page was accessed via back button after logout
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                // Page was restored from cache
+                fetch('/api/check-auth', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                }).then(response => {
+                    if (!response.ok) {
+                        // Not authenticated - redirect to welcome
+                        window.location.replace('/welcome');
+                    }
+                }).catch(() => {
+                    // Error checking auth - redirect to be safe
+                    window.location.replace('/welcome');
+                });
+            }
+        });
+        
+        // Disable page caching
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                names.forEach(name => {
+                    caches.delete(name);
+                });
+            });
+        }
+    </script>
 </body>
 </html>
