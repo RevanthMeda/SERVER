@@ -1,7 +1,7 @@
 
 #!/usr/bin/env python3
 """
-Script to initialize a new database with admin user
+Script to initialize a new database with admin user and fix missing tables
 Run this after updating your DATABASE_URL in .env
 """
 
@@ -16,7 +16,7 @@ load_dotenv()
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app import create_app
-from models import db, init_db, create_admin_user, User
+from models import db, init_db, create_admin_user, User, CullyStatistics
 
 def initialize_new_database():
     """Initialize new database with tables and admin user"""
@@ -32,10 +32,20 @@ def initialize_new_database():
             db.engine.connect().close()
             print("✅ Database connection successful")
             
-            # Create all tables
+            # Create all tables including cully_statistics
             print("📋 Creating database tables...")
             db.create_all()
             print("✅ Database tables created")
+            
+            # Initialize Cully statistics if missing
+            print("📊 Initializing Cully statistics...")
+            if not CullyStatistics.query.first():
+                initial_stats = CullyStatistics()
+                db.session.add(initial_stats)
+                db.session.commit()
+                print('✅ Created cully_statistics table and initialized with default values')
+            else:
+                print('✅ cully_statistics table already exists')
             
             # Create admin user
             print("👤 Creating admin user...")

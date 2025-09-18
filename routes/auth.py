@@ -15,16 +15,27 @@ def welcome():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard.home'))
     
-    # Get live Cully statistics
+    # Get live Cully statistics with proper error handling
     try:
+        # First ensure the table exists
+        try:
+            db.create_all()  # This will create missing tables including cully_statistics
+        except Exception as create_error:
+            current_app.logger.warning(f"Could not ensure tables exist: {create_error}")
+        
+        # Now try to get statistics
         cully_stats = CullyStatistics.get_current_statistics()
         
         # Check if we need to update statistics (once per day)
         should_update = True
-        stats_record = CullyStatistics.query.first()
-        if stats_record and stats_record.last_updated:
-            time_since_update = datetime.utcnow() - stats_record.last_updated
-            should_update = time_since_update > timedelta(hours=24)
+        try:
+            stats_record = CullyStatistics.query.first()
+            if stats_record and stats_record.last_updated:
+                time_since_update = datetime.utcnow() - stats_record.last_updated
+                should_update = time_since_update > timedelta(hours=24)
+        except Exception:
+            # If query fails, we should update
+            should_update = True
         
         # If needed, trigger background update (don't wait for it)
         if should_update:
@@ -32,8 +43,9 @@ def welcome():
                 # Try to update synchronously with short timeout
                 CullyStatistics.fetch_and_update_from_cully()
                 cully_stats = CullyStatistics.get_current_statistics()
-            except:
-                # If sync fails, use cached data
+            except Exception as sync_error:
+                current_app.logger.debug(f"Statistics sync failed: {sync_error}")
+                # If sync fails, use cached/default data
                 pass
                 
     except Exception as e:

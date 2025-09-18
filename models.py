@@ -212,7 +212,7 @@ class CullyStatistics(db.Model):
     fetch_successful = db.Column(db.Boolean, default=True)
     error_message = db.Column(db.String(500), nullable=True)
     
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> Dict[str, Optional[str]]:
         """Convert to dictionary for easy template rendering"""
         return {
             'instruments': self.instruments_count,
@@ -223,21 +223,40 @@ class CullyStatistics(db.Model):
         }
 
     @staticmethod
-    def get_current_statistics() -> Dict[str, str]:
+    def get_current_statistics() -> Dict[str, Optional[str]]:
         """Get current statistics from database"""
         try:
+            # First ensure the table exists
+            try:
+                db.create_all()
+            except Exception:
+                pass  # Ignore table creation errors
+            
             stats_record = CullyStatistics.query.first()
             if stats_record:
                 return stats_record.to_dict()
             else:
                 # Return defaults if no record exists
-                return {
+                default_stats = {
                     'instruments': '22k',
                     'engineers': '46',
                     'experience': '600+',
                     'plants': '250',
                     'last_updated': None
                 }
+                
+                # Try to create a default record
+                try:
+                    new_stats = CullyStatistics()
+                    db.session.add(new_stats)
+                    db.session.commit()
+                    current_app.logger.info("Created default Cully statistics record")
+                except Exception as create_error:
+                    current_app.logger.warning(f"Could not create default statistics: {create_error}")
+                    db.session.rollback()
+                
+                return default_stats
+                
         except Exception as e:
             current_app.logger.error(f"Error getting statistics: {str(e)}")
             return {
