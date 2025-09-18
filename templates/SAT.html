@@ -7,8 +7,9 @@
 
   <!-- CSS Files -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome-cully.css') }}"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
 
   <!-- JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.5/dist/signature_pad.umd.min.js"></script>
@@ -19,20 +20,43 @@
 
   <style>
     :root {
-      --admin-primary: #4DD0E1;
-      --admin-primary-dark: #26C6DA;
-      --admin-primary-light: #80DEEA;
-      --admin-success: #10b981;
-      --admin-warning: #f59e0b;
+      /* CULLY EXACT COLOR SYSTEM - MATCHING CULLY.IE */
+      --cully-navy: #5a7fa3;
+      --cully-blue: #7ba5c7;
+      --cully-light-blue: #9ec5e5;
+      --cully-dark: #2c3e50;
+      --cully-gray: #8fa3b5;
+      --cully-light-gray: #e8f2f7;
+      --cully-bg-light: #f5f7fa;
+      --cully-white: #ffffff;
+      --cully-success: #22c55e;
+      --cully-warning: #d97706;
+      
+      /* CULLY GRADIENTS */
+      --cully-gradient: linear-gradient(135deg, #5a7fa3 0%, #7ba5c7 100%);
+      
+      /* CULLY SHADOWS */
+      --cully-shadow: 0 4px 12px rgba(90, 127, 163, 0.15);
+      --cully-shadow-lg: 0 8px 24px rgba(90, 127, 163, 0.2);
+      
+      /* TRANSITIONS */
+      --transition: all 0.3s ease;
+      
+      /* OTHER COLORS */
+      --admin-primary: var(--cully-navy);
+      --admin-primary-dark: var(--cully-dark);
+      --admin-primary-light: var(--cully-blue);
+      --admin-success: var(--cully-success);
+      --admin-warning: var(--cully-warning);
       --admin-danger: #ef4444;
-      --admin-neutral: #6b7280;
-      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
-      --text-primary: #1f2937;
-      --text-secondary: #64748b;
-      --border-color: #e2e8f0;
-      --bg-primary: #f8fafc;
-      --bg-card: #ffffff;
+      --admin-neutral: var(--cully-gray);
+      --card-shadow: var(--cully-shadow);
+      --card-shadow-hover: var(--cully-shadow-lg);
+      --text-primary: var(--cully-dark);
+      --text-secondary: var(--cully-gray);
+      --border-color: rgba(30, 58, 138, 0.1);
+      --bg-primary: var(--cully-bg-light);
+      --bg-card: var(--cully-white);
       --border-radius-sm: 8px;
       --border-radius-md: 12px;
       --border-radius-lg: 16px;
@@ -47,11 +71,13 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-      color: var(--text-primary);
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--cully-bg-light);
+      color: var(--cully-dark);
       line-height: 1.6;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .admin-container {
@@ -61,15 +87,17 @@
       width: 100vw;
     }
 
-    /* Header Section - Exact match to report selector */
+    /* Header Section - Cully Style */
     .admin-header {
-      background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
+      background: rgba(90, 127, 163, 0.95);
+      backdrop-filter: blur(10px);
       border-radius: 16px;
       padding: 32px;
       margin-bottom: 32px;
-      box-shadow: var(--card-shadow);
+      box-shadow: var(--cully-shadow-lg);
       position: relative;
       overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .admin-header::before {
@@ -92,37 +120,39 @@
     }
 
     .header-info h1 {
-      color: white;
+      color: var(--cully-white);
       font-size: 2.5rem;
       font-weight: 700;
       margin: 0 0 8px 0;
       display: flex;
       align-items: center;
       gap: 16px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      font-family: 'Montserrat', sans-serif;
     }
 
     .header-info p {
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.95);
       font-size: 1.1rem;
       margin: 0;
     }
 
     .header-logo {
       height: 80px;
-      filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+      filter: brightness(1.2) contrast(1.1);
     }
 
-    /* Navigation - Exact match to report selector */
+    /* Navigation - Cully Style */
     .dashboard-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: white;
+      background: var(--cully-white);
       padding: 20px 24px;
       border-radius: 16px;
-      box-shadow: var(--card-shadow);
+      box-shadow: var(--cully-shadow);
       margin-bottom: 32px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid rgba(30, 58, 138, 0.1);
     }
 
     .nav-left {
@@ -136,30 +166,31 @@
       align-items: center;
       gap: 8px;
       padding: 12px 20px;
-      background: #f1f5f9;
-      border: 2px solid #e2e8f0;
+      background: var(--cully-white);
+      border: 2px solid rgba(90, 127, 163, 0.2);
       border-radius: 12px;
       text-decoration: none;
-      color: #64748b;
+      color: var(--cully-navy);
       font-weight: 600;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       position: relative;
       font-size: 14px;
+      font-family: 'Montserrat', sans-serif;
     }
 
     .nav-item:hover {
-      background: #e2e8f0;
-      color: var(--admin-primary);
+      background: rgba(123, 165, 199, 0.1);
+      color: var(--cully-navy);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(77, 208, 225, 0.25);
-      border-color: var(--admin-primary-light);
+      box-shadow: 0 4px 12px rgba(90, 127, 163, 0.15);
+      border-color: var(--cully-blue);
     }
 
     .nav-item.active {
-      background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-      color: white;
-      box-shadow: 0 4px 15px rgba(77, 208, 225, 0.4);
-      border-color: var(--admin-primary);
+      background: var(--cully-gradient);
+      color: var(--cully-white);
+      box-shadow: 0 4px 12px rgba(90, 127, 163, 0.2);
+      border-color: transparent;
     }
 
     .nav-item i {
@@ -176,26 +207,26 @@
     }
 
     .logout-btn {
-      background: #fee2e2 !important;
-      color: #dc2626 !important;
-      border: 2px solid #fca5a5 !important;
+      background: rgba(239, 68, 68, 0.1) !important;
+      color: #ef4444 !important;
+      border: 2px solid rgba(239, 68, 68, 0.2) !important;
     }
 
     .logout-btn:hover {
-      background: #fecaca !important;
-      color: #b91c1c !important;
+      background: rgba(239, 68, 68, 0.2) !important;
+      color: #dc2626 !important;
       transform: translateY(-1px);
       border-color: #f87171 !important;
     }
 
     /* Horizontal Progress Bar */
     .horizontal-progress-bar {
-      background: white;
+      background: var(--cully-white);
       margin: 16px 0;
       padding: 20px;
       border-radius: 16px;
-      box-shadow: var(--card-shadow);
-      border: 1px solid var(--border-color);
+      box-shadow: var(--cully-shadow);
+      border: 1px solid rgba(30, 58, 138, 0.1);
       overflow-x: auto;
     }
 
@@ -214,61 +245,61 @@
       padding: 12px 16px;
       border-radius: 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: var(--transition);
       border: 2px solid transparent;
-      background: #f8fafc;
+      background: var(--cully-white);
       min-width: 120px;
       text-align: center;
     }
 
     .progress-step:hover {
-      background: #f1f5f9;
-      border-color: #e2e8f0;
+      background: rgba(123, 165, 199, 0.1);
+      border-color: rgba(90, 127, 163, 0.2);
       transform: translateY(-2px);
     }
 
     .progress-step.active {
-      background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-      color: white;
-      box-shadow: 0 4px 15px rgba(77, 208, 225, 0.4);
-      border-color: var(--admin-primary);
+      background: var(--cully-gradient);
+      color: var(--cully-white);
+      box-shadow: 0 4px 12px rgba(90, 127, 163, 0.2);
+      border-color: transparent;
     }
 
     .progress-step.completed {
-      background: var(--admin-success);
-      color: white;
-      border-color: var(--admin-success);
+      background: var(--cully-success);
+      color: var(--cully-white);
+      border-color: var(--cully-success);
     }
 
     .progress-step.disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      background: #f8fafc;
+      background: var(--cully-white);
     }
 
     .step-circle {
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: #e2e8f0;
-      color: var(--text-secondary);
+      background: rgba(30, 58, 138, 0.1);
+      color: var(--cully-gray);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 600;
       font-size: 14px;
-      transition: all 0.2s;
+      transition: var(--transition);
       margin-bottom: 8px;
     }
 
     .progress-step.active .step-circle {
       background: rgba(255, 255, 255, 0.3);
-      color: white;
+      color: var(--cully-white);
     }
 
     .progress-step.completed .step-circle {
       background: rgba(255, 255, 255, 0.3);
-      color: white;
+      color: var(--cully-white);
     }
 
     .step-info {
@@ -279,6 +310,7 @@
       font-weight: 600;
       font-size: 12px;
       margin-bottom: 4px;
+      font-family: 'Montserrat', sans-serif;
     }
 
     .step-description {
@@ -289,7 +321,7 @@
 
     /* Full Width Content */
     .full-width-content {
-      background: white;
+      background: var(--cully-white);
       margin: 0;
       padding: 0;
       width: 100vw;
@@ -312,41 +344,42 @@
     .step-header {
       margin-bottom: 32px;
       padding-bottom: 24px;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid rgba(30, 58, 138, 0.1);
     }
 
     .step-legend {
       font-size: 1.8rem;
       font-weight: 700;
-      color: var(--text-primary);
+      color: var(--cully-dark);
       margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 12px;
+      font-family: 'Montserrat', sans-serif;
     }
 
     .step-legend i {
-      color: var(--admin-primary);
+      color: var(--cully-navy);
     }
 
     /* Form Sections */
     .form-section {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(245, 247, 250, 0.5);
+      border: 1px solid rgba(30, 58, 138, 0.1);
       border-radius: var(--border-radius-sm);
       padding: 16px;
       margin: 16px 0;
     }
 
     .form-section h4 {
-      color: var(--admin-primary);
+      color: var(--cully-navy);
       font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
+      font-family: 'Montserrat', sans-serif;
     }
 
     .form-row {
@@ -365,7 +398,8 @@
       display: block;
       margin-bottom: 8px;
       font-weight: 600;
-      color: var(--text-primary);
+      color: var(--cully-dark);
+      font-family: 'Montserrat', sans-serif;
     }
 
     .required {
@@ -376,38 +410,38 @@
       width: 100%;
       padding: 12px 16px;
       font-size: 14px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid rgba(30, 58, 138, 0.1);
       border-radius: 8px;
-      background: white;
-      transition: all 0.2s;
+      background: var(--cully-white);
+      transition: var(--transition);
       font-family: inherit;
     }
 
     input:focus, textarea:focus, select:focus {
       outline: none;
-      border-color: var(--admin-primary);
-      box-shadow: 0 0 0 3px rgba(77, 208, 225, 0.1);
+      border-color: var(--cully-blue);
+      box-shadow: 0 0 0 3px rgba(90, 127, 163, 0.1);
     }
 
     /* Data Cards */
     .data-card {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(15px);
+      background: var(--cully-white);
       border-radius: var(--border-radius-sm);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(30, 58, 138, 0.1);
       margin: 12px 0;
       overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--cully-shadow);
     }
 
     .card-header {
-      background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light));
-      color: white;
+      background: var(--cully-gradient);
+      color: var(--cully-white);
       padding: 16px 24px;
       font-weight: 600;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-family: 'Montserrat', sans-serif;
     }
 
     .card-body {
@@ -418,21 +452,20 @@
     .table-container {
       overflow-x: auto;
       border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
+      border: 1px solid rgba(30, 58, 138, 0.1);
+      background: var(--cully-white);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: transparent; /* Changed to transparent for glassmorphism */
+      background: var(--cully-white);
       min-width: 800px;
     }
 
     th {
-      background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light));
-      color: white;
+      background: var(--cully-gradient);
+      color: var(--cully-white);
       padding: 12px;
       text-align: left;
       font-weight: 600;
@@ -440,21 +473,22 @@
       white-space: nowrap;
       position: sticky;
       top: 0;
+      font-family: 'Montserrat', sans-serif;
     }
 
     td {
       padding: 12px;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1px solid rgba(30, 58, 138, 0.1);
       vertical-align: middle;
-      background: white;
+      background: var(--cully-white);
     }
 
     tbody tr:nth-child(even) {
-      background: #f8fafc;
+      background: var(--cully-light-gray);
     }
 
     tbody tr:hover {
-      background: rgba(77, 208, 225, 0.08);
+      background: rgba(123, 165, 199, 0.1);
     }
 
     td input, td select, td textarea {
@@ -464,7 +498,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       margin: 0;
-      background: white; /* Keep input backgrounds white for clarity */
+      background: var(--cully-white);
     }
 
     /* Buttons */
@@ -474,7 +508,7 @@
       justify-content: flex-end;
       margin-top: 32px;
       padding-top: 24px;
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid rgba(30, 58, 138, 0.1);
     }
 
     .btn {
@@ -487,54 +521,57 @@
       font-size: 14px;
       border: none;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: var(--transition);
       text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-      color: white;
-      box-shadow: 0 4px 12px rgba(77, 208, 225, 0.3);
+      background: var(--cully-gradient);
+      color: var(--cully-white);
+      box-shadow: 0 4px 12px rgba(90, 127, 163, 0.2);
     }
 
     .btn-primary:hover {
+      background: linear-gradient(135deg, #7ba5c7 0%, #5a7fa3 100%);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(77, 208, 225, 0.4);
+      box-shadow: 0 6px 20px rgba(90, 127, 163, 0.3);
     }
 
     .btn-secondary {
-      background: #f8fafc;
-      color: #64748b;
-      border: 1px solid #d1d5db;
+      background: var(--cully-light-gray);
+      color: var(--cully-gray);
+      border: 1px solid rgba(30, 58, 138, 0.1);
     }
 
     .btn-secondary:hover {
       background: #e2e8f0;
-      color: var(--admin-primary);
-      border-color: var(--admin-primary-light);
+      color: var(--cully-navy);
+      border-color: var(--cully-blue);
     }
 
     .btn-add {
-      background: var(--admin-success);
-      color: white;
+      background: var(--cully-success);
+      color: var(--cully-white);
       padding: 8px 16px;
       font-size: 13px;
       margin-top: 16px;
     }
 
     .btn-add:hover {
-      background: #059669;
+      background: #16a34a;
+      transform: translateY(-1px);
     }
 
     .btn-remove {
       background: #ef4444;
-      color: white;
+      color: var(--cully-white);
       border: none;
       border-radius: 4px;
       padding: 6px 8px;
       font-size: 12px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: var(--transition);
     }
 
     .btn-remove:hover {
@@ -551,12 +588,13 @@
       align-items: center;
       gap: 12px;
       padding: 16px 20px;
-      background: #d1fae5;
-      border: 1px solid #059669;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.2);
       border-radius: 12px;
-      color: #065f46;
+      color: #22c55e;
       font-weight: 500;
-      box-shadow: var(--card-shadow);
+      box-shadow: var(--cully-shadow);
+      font-family: 'Montserrat', sans-serif;
     }
 
     .flash-message i {
@@ -565,10 +603,10 @@
 
     /* Signature Pad */
     .signature-pad-container {
-      border: 2px solid var(--border-color);
+      border: 2px solid rgba(30, 58, 138, 0.1);
       border-radius: 8px;
       margin: 16px 0;
-      background: white;
+      background: var(--cully-white);
     }
 
     #fixed_signature_canvas {
@@ -586,9 +624,9 @@
       flex-wrap: wrap;
       gap: 8px;
       padding: 8px 12px;
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      border-bottom: 1px solid #e2e8f0;
+      background: var(--cully-light-gray);
+      border: 2px solid rgba(30, 58, 138, 0.1);
+      border-bottom: 1px solid rgba(30, 58, 138, 0.1);
       border-radius: 8px 8px 0 0;
       align-items: center;
     }
@@ -597,7 +635,7 @@
       display: flex;
       gap: 4px;
       padding-right: 8px;
-      border-right: 1px solid #e2e8f0;
+      border-right: 1px solid rgba(30, 58, 138, 0.1);
     }
 
     .toolbar-group:last-child {
@@ -612,25 +650,25 @@
       width: 32px;
       height: 32px;
       border: none;
-      background: white;
+      background: var(--cully-white);
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      color: #64748b;
+      transition: var(--transition);
+      color: var(--cully-gray);
       font-size: 14px;
     }
 
     .toolbar-btn:hover {
-      background: var(--admin-primary);
-      color: white;
+      background: var(--cully-blue);
+      color: var(--cully-white);
       transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(77, 208, 225, 0.3);
+      box-shadow: 0 2px 8px rgba(90, 127, 163, 0.2);
     }
 
     .toolbar-btn.active {
-      background: var(--admin-primary);
-      color: white;
-      box-shadow: 0 2px 8px rgba(77, 208, 225, 0.3);
+      background: var(--cully-blue);
+      color: var(--cully-white);
+      box-shadow: 0 2px 8px rgba(90, 127, 163, 0.2);
     }
 
     /* Enhanced toolbar button styles */
@@ -656,7 +694,7 @@
       transform: translateY(-50%);
       height: 20px;
       width: 1px;
-      background: #e2e8f0;
+      background: rgba(30, 58, 138, 0.1);
     }
 
     /* Special styling for heading buttons */
@@ -675,9 +713,9 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      padding: 2px; /* Add padding to make the color visible */
-      background: transparent; /* Remove default background */
-      overflow: hidden; /* Hide the default arrow */
+      padding: 2px;
+      background: transparent;
+      overflow: hidden;
     }
 
     .color-picker::-webkit-color-swatch-wrapper {
@@ -685,53 +723,53 @@
     }
 
     .color-picker::-webkit-color-swatch {
-      border: 1px solid #e2e8f0;
+      border: 1px solid rgba(30, 58, 138, 0.1);
       border-radius: 5px;
     }
 
     /* Ensure rich text editor content always has white background */
     .rich-text-editor * {
-      background-color: white !important;
+      background-color: var(--cully-white) !important;
     }
 
     .rich-text-editor div,
     .rich-text-editor p,
     .rich-text-editor span {
-      background-color: white !important;
+      background-color: var(--cully-white) !important;
     }
 
     .rich-text-editor {
       min-height: 120px;
       max-height: 300px;
       padding: 12px 16px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid rgba(30, 58, 138, 0.1);
       border-top: none;
       border-radius: 0 0 8px 8px;
-      background: white;
+      background: var(--cully-white);
       font-size: 14px;
       font-family: inherit;
       line-height: 1.5;
       overflow-y: auto;
       resize: vertical;
-      transition: all 0.2s;
+      transition: var(--transition);
     }
 
     .rich-text-editor:focus {
       outline: none;
-      border-color: var(--admin-primary);
-      box-shadow: 0 0 0 3px rgba(77, 208, 225, 0.1);
+      border-color: var(--cully-blue);
+      box-shadow: 0 0 0 3px rgba(90, 127, 163, 0.1);
     }
 
     .rich-text-editor:empty:before {
       content: attr(data-placeholder);
-      color: #9ca3af;
+      color: var(--cully-gray);
       font-style: italic;
       pointer-events: none;
     }
 
     /* When toolbar is focused, also highlight editor border */
     .formatting-toolbar:focus-within + .rich-text-editor {
-      border-color: var(--admin-primary);
+      border-color: var(--cully-blue);
     }
 
     /* Preserve formatting in rich text editor */
@@ -768,6 +806,7 @@
     .rich-text-editor h1, .rich-text-editor h2, .rich-text-editor h3 {
       font-weight: bold;
       margin: 12px 0 8px 0;
+      font-family: 'Montserrat', sans-serif;
     }
 
     .rich-text-editor h1 { font-size: 1.4em; }
@@ -797,12 +836,12 @@
 
     .image-preview {
       position: relative;
-      border: 1px solid var(--border-color);
+      border: 1px solid rgba(30, 58, 138, 0.1);
       border-radius: 8px;
       overflow: hidden;
-      background: white;
+      background: var(--cully-white);
       padding: 8px;
-      box-shadow: var(--card-shadow);
+      box-shadow: var(--cully-shadow);
     }
 
     .image-preview img {
@@ -816,7 +855,7 @@
       top: 5px;
       right: 5px;
       background: rgba(255, 0, 0, 0.7);
-      color: white;
+      color: var(--cully-white);
       border: none;
       border-radius: 50%;
       width: 24px;
