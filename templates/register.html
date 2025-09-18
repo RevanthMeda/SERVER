@@ -4,32 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Report Generator</title>
+    <title>Create Account - Cully Report Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* DARK QUANTUM GLASS THEME - CONSISTENT WITH WELCOME/LOGIN PAGES */
         :root {
-            --primary-color: #4DD0E1;
-            --primary-hover-color: #26C6DA;
-            --secondary-color: #00BCD4;
-            --accent-color: #00ACC1;
-            --background-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --card-header-bg: #e9ecef;
-            --border-color: #dee2e6;
-            --text-primary: #333;
-            --text-secondary: #6c757d;
-            --text-muted: #adb5bd;
-            --info-bg: #e0f7fa;
+            --quantum-dark: #0a0f1c;
+            --neural-blue: #1a2332;
+            --cyber-electric: #00e5ff;
+            --plasma-cyan: #00bcd4;
+            --tech-blue: #2196f3;
+            --crystal-white: #ffffff;
+            --quantum-glass: rgba(26, 35, 50, 0.15);
+            --surface-glass: rgba(26, 35, 50, 0.25);
+            --deep-space: rgba(10, 15, 28, 0.95);
+            --neural-gradient: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #2c3e50 100%);
+            --cyber-gradient: linear-gradient(45deg, #00e5ff 0%, #00bcd4 50%, #2196f3 100%);
+            --glass-gradient: linear-gradient(180deg, rgba(26, 35, 50, 0.15) 0%, rgba(26, 35, 50, 0.05) 100%);
+            --quantum-shadow: 0 8px 32px rgba(0, 229, 255, 0.15);
+            --cyber-glow: 0 0 20px rgba(0, 229, 255, 0.3);
+            --neural-border: rgba(0, 229, 255, 0.2);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-dark: #ffffff;
+            --text-medium: rgba(255, 255, 255, 0.9);
+            --text-light: rgba(255, 255, 255, 0.7);
         }
 
         body {
             margin: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, var(--primary-color) 0%, #2c5aa0 100%);
-            color: white;
+            padding: 0;
+            font-family: 'Orbitron', 'Exo 2', 'Inter', monospace;
+            background: var(--neural-gradient);
+            color: var(--text-dark);
             line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(0, 188, 212, 0.08) 0%, transparent 50%),
+                        linear-gradient(45deg, transparent 30%, rgba(0, 229, 255, 0.03) 50%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: quantumFlow 8s ease-in-out infinite;
+        }
+
+        @keyframes quantumFlow {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            33% { transform: translateX(10px) rotate(1deg); }
+            66% { transform: translateX(-5px) rotate(-0.5deg); }
         }
 
         .register-container {
@@ -37,200 +70,249 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
+            position: relative;
+            z-index: 1;
         }
 
         .register-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            max-width: 480px;
+            background: var(--quantum-glass);
+            backdrop-filter: blur(25px);
+            border: 2px solid var(--cyber-electric);
+            border-radius: 32px;
+            box-shadow: var(--quantum-shadow), 0 0 40px rgba(0, 229, 255, 0.2);
+            max-width: 500px;
             width: 100%;
-            padding: 40px;
+            padding: 48px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 229, 255, 0.05), transparent);
+            animation: quantumFlow 10s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .register-header {
-            margin-bottom: 40px;
+            margin-bottom: 48px;
+            position: relative;
+            z-index: 2;
         }
 
         .register-header img {
             height: 80px;
             margin-bottom: 24px;
-            filter: brightness(0) invert(1);
+            filter: drop-shadow(0 8px 16px rgba(0, 229, 255, 0.3)) brightness(1.2);
         }
 
         .register-header h1 {
-            color: white;
+            color: var(--crystal-white);
             font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
+            font-weight: 800;
+            margin-bottom: 16px;
             line-height: 1.2;
+            text-shadow: 0 4px 8px rgba(0, 15, 28, 0.5), 0 0 20px rgba(0, 229, 255, 0.3);
+            letter-spacing: -0.02em;
         }
 
         .register-header .subtitle {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-medium);
             font-size: 1.1rem;
             line-height: 1.5;
             margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .auth-form {
-            margin: 32px 0;
+            margin: 40px 0;
             text-align: left;
+            position: relative;
+            z-index: 2;
         }
 
         .form-group {
             position: relative;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: white;
+            margin-bottom: 10px;
+            color: var(--crystal-white);
             font-weight: 600;
             font-size: 14px;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .required {
-            color: #ffeb3b;
+            color: var(--cyber-electric);
             margin-left: 4px;
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
         }
 
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 16px 20px;
+            padding: 18px 24px;
             font-size: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            color: white;
-            transition: all 0.3s ease;
+            border: 2px solid var(--neural-border);
+            border-radius: 16px;
+            background: var(--surface-glass);
+            backdrop-filter: blur(15px);
+            color: var(--crystal-white);
+            transition: var(--transition);
             font-family: inherit;
             box-sizing: border-box;
+            font-weight: 500;
         }
 
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-light);
         }
 
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+            border-color: var(--cyber-electric);
+            background: rgba(26, 35, 50, 0.35);
+            box-shadow: var(--cyber-glow), 0 0 0 3px rgba(0, 229, 255, 0.1);
+            transform: translateY(-2px);
         }
 
         .form-group select {
             cursor: pointer;
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='5' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 5 5-5z' fill='%23ffffff'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='12' height='7' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l6 7 6-7z' fill='%2300e5ff'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 20px center;
-            background-size: 10px 5px;
+            background-position: right 24px center;
+            background-size: 12px 7px;
         }
 
         .form-group select option {
-            background: #333;
-            color: white;
-            padding: 8px;
+            background: var(--neural-blue);
+            color: var(--crystal-white);
+            padding: 12px;
         }
 
         .btn-primary {
             width: 100%;
-            padding: 18px 24px;
+            padding: 20px 32px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
+            border-radius: 16px;
+            background: var(--cyber-gradient);
+            color: var(--crystal-white);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-            box-shadow: 0 6px 20px rgba(77, 208, 225, 0.3);
+            gap: 12px;
+            margin-top: 16px;
+            box-shadow: var(--cyber-glow), var(--quantum-shadow);
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.5);
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 0.02em;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--primary-hover-color) 0%, var(--accent-color) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(77, 208, 225, 0.4);
+            background: var(--cyber-gradient);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4), 0 12px 40px rgba(0, 229, 255, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px) scale(1.01);
         }
 
         .auth-links {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 2;
         }
 
         .auth-links p {
-            margin: 15px 0;
-            color: rgba(255, 255, 255, 0.9);
+            margin: 18px 0;
+            color: var(--text-medium);
             font-size: 14px;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .auth-links a {
-            color: #ffeb3b;
+            color: var(--cyber-electric);
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
         }
 
         .auth-links a:hover {
-            color: white;
-            text-decoration: underline;
+            color: var(--crystal-white);
+            text-decoration: none;
+            text-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+            transform: translateY(-1px);
         }
 
         .alert {
-            padding: 16px 20px;
-            margin-bottom: 24px;
-            border-radius: 12px;
+            padding: 18px 24px;
+            margin-bottom: 28px;
+            border-radius: 16px;
             font-weight: 500;
-            backdrop-filter: blur(10px);
-            border: 1px solid;
+            backdrop-filter: blur(15px);
+            border: 2px solid;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
         }
 
         .alert-error {
-            background: rgba(239, 68, 68, 0.15);
+            background: rgba(239, 68, 68, 0.2);
             color: #fecaca;
-            border-color: rgba(239, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.1);
         }
 
         .alert-success {
-            background: rgba(34, 197, 94, 0.15);
+            background: rgba(34, 197, 94, 0.2);
             color: #bbf7d0;
-            border-color: rgba(34, 197, 94, 0.3);
+            border-color: rgba(34, 197, 94, 0.4);
+            box-shadow: 0 8px 32px rgba(34, 197, 94, 0.1);
         }
 
         .alert-warning {
-            background: rgba(245, 158, 11, 0.15);
+            background: rgba(245, 158, 11, 0.2);
             color: #fde68a;
-            border-color: rgba(245, 158, 11, 0.3);
+            border-color: rgba(245, 158, 11, 0.4);
+            box-shadow: 0 8px 32px rgba(245, 158, 11, 0.1);
         }
 
         .alert-info {
-            background: rgba(59, 130, 246, 0.15);
+            background: rgba(59, 130, 246, 0.2);
             color: #dbeafe;
-            border-color: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
         }
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             .register-container {
-                padding: 15px;
+                padding-bottom: 80px; /* Space for footer */
             }
 
             .register-card {
-                padding: 30px 25px;
+                padding: 32px 24px;
+                border-radius: 24px;
             }
 
             .register-header h1 {
@@ -244,13 +326,17 @@
 
             .form-group input,
             .form-group select {
-                padding: 14px 16px;
-                font-size: 14px;
+                padding: 16px 20px;
+                font-size: 15px;
             }
 
             .btn-primary {
-                padding: 16px 20px;
-                font-size: 14px;
+                padding: 18px 24px;
+                font-size: 15px;
+            }
+
+            .auth-links {
+                margin-top: 32px;
             }
         }
     </style>
@@ -259,9 +345,9 @@
     <div class="register-container">
         <div class="register-card">
             <div class="register-header">
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Report Generator Logo"/>
+                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Report Generator Logo"/>
                 <h1>Create Account</h1>
-                <p class="subtitle">Register for access to the Report Generator Platform</p>
+                <p class="subtitle">Register for access to the Cully Report Generator Platform</p>
             </div>
             
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -310,6 +396,15 @@
                 <p><a href="{{ url_for('auth.welcome') }}">← Back to Welcome</a></p>
             </div>
         </div>
+        
+        <!-- Developer Credit Footer -->
+        <footer class="developer-credit" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;">
+            <div style="text-align: center; padding: 16px; background: var(--surface-glass); backdrop-filter: blur(15px); border-top: 2px solid var(--cyber-electric);">
+                <p style="color: var(--text-medium); font-size: 0.85rem; margin: 0;">
+                    <i class="fas fa-code"></i> Developed by <strong style="color: var(--cyber-electric);">Revanth Meda</strong> for <strong style="color: var(--crystal-white);">CULLY LTD</strong>
+                </p>
+            </div>
+        </footer>
     </div>
 </body>
 </html>
