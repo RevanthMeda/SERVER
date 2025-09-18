@@ -1,41 +1,63 @@
 /* CULLY WATER EXCELLENCE - PROFESSIONAL & ULTRA-STYLISH DESIGN */
 
 :root {
-    /* STABLE PROFESSIONAL COLOR SYSTEM */
+    /* CULLY PROFESSIONAL COLOR SYSTEM */
     --void-black: #000000;
     --quantum-dark: #0a0f1c;
-    --neural-blue: #1a2332;
-    --cyber-electric: #00e5ff;
-    --plasma-cyan: #00bcd4;
-    --tech-blue: #2196f3;
-    --neon-accent: #ff4081;
+    --neural-blue: #1e293b;
+    --cyber-electric: #1e3a8a;
+    --plasma-cyan: #3b82f6;
+    --tech-blue: #2563eb;
+    --neon-accent: #0ea5e9;
     --crystal-white: #ffffff;
-    --ghost-silver: #eceff1;
-    --success-green: #4caf50;
-    --energy-orange: #ff9800;
+    --ghost-silver: #f8fafc;
+    --success-green: #059669;
+    --energy-orange: #ea580c;
     
-    /* STABLE PROFESSIONAL GRADIENTS */
-    --primary-gradient: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #2196f3 100%);
+    /* CULLY INSPIRED COLORS */
+    --cully-primary: #1e3a8a;
+    --cully-secondary: #3b82f6;
+    --cully-accent: #0ea5e9;
+    --cully-light: #dbeafe;
+    --cully-dark: #1e293b;
+    --cully-gray: #64748b;
+    --cully-light-gray: #f1f5f9;
+    
+    /* CULLY PROFESSIONAL GRADIENTS */
+    --primary-gradient: linear-gradient(135deg, #1e293b 0%, #1e3a8a 50%, #3b82f6 100%);
     --surface-gradient: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-    --accent-gradient: linear-gradient(135deg, #00bcd4 0%, #2196f3 100%);
-    --glow-gradient: linear-gradient(135deg, #00e5ff 0%, #2196f3 100%);
+    --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+    --glow-gradient: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+    --cully-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #0ea5e9 100%);
+    --cully-hero-gradient: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
     
-    /* PROFESSIONAL GLASS MATERIALS */
-    --quantum-glass: rgba(26, 35, 50, 0.15);
-    --neural-glass: rgba(0, 229, 255, 0.08);
-    --cyber-glass: rgba(0, 188, 212, 0.12);
-    --surface-glass: rgba(255, 255, 255, 0.92);
+    /* CULLY PROFESSIONAL GLASS MATERIALS */
+    --quantum-glass: rgba(30, 41, 59, 0.15);
+    --neural-glass: rgba(30, 58, 138, 0.08);
+    --cyber-glass: rgba(59, 130, 246, 0.12);
+    --surface-glass: rgba(255, 255, 255, 0.95);
+    --cully-glass: rgba(30, 58, 138, 0.1);
+    --cully-surface: rgba(248, 250, 252, 0.98);
     
-    /* STABLE SHADOWS */
-    --void-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-    --tech-glow: 0 0 30px rgba(0, 229, 255, 0.4);
-    --neural-shadow: 0 15px 40px rgba(33, 150, 243, 0.2);
-    --cyber-depth: 0 20px 60px rgba(0, 0, 0, 0.2);
+    /* CULLY PROFESSIONAL SHADOWS */
+    --void-shadow: 0 25px 50px rgba(30, 41, 59, 0.3);
+    --tech-glow: 0 0 30px rgba(30, 58, 138, 0.4);
+    --neural-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
+    --cyber-depth: 0 20px 60px rgba(30, 41, 59, 0.2);
+    --cully-shadow: 0 10px 25px rgba(30, 58, 138, 0.15);
+    --cully-glow: 0 0 20px rgba(59, 130, 246, 0.3);
     
-    /* SMOOTH TRANSITIONS */
+    /* CULLY SMOOTH TRANSITIONS */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-elegant: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     --perspective-field: 1000px;
+    
+    /* CULLY TEXT COLORS */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-light: #94a3b8;
+    --text-white: #ffffff;
+    --text-accent: #1e3a8a;
 }
 
 /* STABLE PROFESSIONAL ANIMATIONS */
@@ -72,18 +94,20 @@
     }
 }
 
-/* STABLE PROFESSIONAL BODY */
+/* CULLY PROFESSIONAL BODY STYLING */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Orbitron', 'Exo 2', 'Inter', monospace;
-    background: var(--primary-gradient);
-    color: var(--crystal-white);
+    font-family: 'Inter', 'Roboto', 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--cully-hero-gradient);
+    color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
     font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body::before {
@@ -94,9 +118,9 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 20% 80%, rgba(0, 229, 255, 0.1) 0%, transparent 60%),
-        radial-gradient(circle at 80% 20%, rgba(33, 150, 243, 0.08) 0%, transparent 60%),
-        linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+        radial-gradient(circle at 20% 80%, rgba(30, 58, 138, 0.05) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.03) 0%, transparent 60%),
+        linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
     pointer-events: none;
     z-index: 0;
 }
@@ -161,17 +185,17 @@ body::before {
     z-index: 3;
 }
 
-/* PROFESSIONAL HERO SECTION */
+/* CULLY PROFESSIONAL HERO SECTION */
 .welcome-hero {
     max-width: 1200px;
-    margin: 60px auto;
-    padding: 70px 60px;
+    margin: 40px auto;
+    padding: 60px 50px;
     text-align: center;
-    background: var(--quantum-glass);
-    backdrop-filter: blur(25px);
-    border: 2px solid var(--cyber-electric);
-    border-radius: 32px;
-    box-shadow: var(--void-shadow), var(--tech-glow);
+    background: var(--cully-surface);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(30, 58, 138, 0.1);
+    border-radius: 16px;
+    box-shadow: var(--cully-shadow);
     position: relative;
     overflow: hidden;
     animation: fadeInUp 1s ease-out;
@@ -179,12 +203,9 @@ body::before {
 }
 
 .welcome-hero:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 
-        var(--void-shadow), 
-        0 0 60px rgba(0, 229, 255, 0.4),
-        0 30px 80px rgba(0, 0, 0, 0.2);
-    border-color: var(--plasma-cyan);
+    transform: translateY(-4px);
+    box-shadow: var(--cully-shadow), 0 20px 40px rgba(30, 58, 138, 0.1);
+    border-color: rgba(30, 58, 138, 0.2);
 }
 
 .welcome-hero::before {
@@ -193,11 +214,9 @@ body::before {
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
-    background: var(--glow-gradient);
-    border-radius: 32px 32px 0 0;
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
-    animation: gentleGlow 3s ease-in-out infinite;
+    height: 3px;
+    background: var(--cully-gradient);
+    border-radius: 16px 16px 0 0;
 }
 
 .welcome-header {
@@ -221,41 +240,35 @@ body::before {
 }
 
 .hero-title {
-    font-family: 'Orbitron', 'Exo 2', monospace;
-    font-size: clamp(3rem, 6vw, 5rem);
-    font-weight: 900;
-    margin-bottom: 25px;
-    color: var(--crystal-white);
-    text-shadow: 
-        0 8px 16px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(0, 229, 255, 0.4),
-        0 0 80px rgba(33, 150, 243, 0.3);
+    font-family: 'Inter', 'Roboto', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--cully-primary);
+    text-shadow: none;
     letter-spacing: -0.02em;
-    line-height: 1.1;
+    line-height: 1.2;
     animation: fadeInUp 1s ease-out 0.4s both;
-    text-transform: uppercase;
-    word-spacing: 0.1em;
+    text-transform: none;
+    word-spacing: normal;
 }
 
 .hero-subtitle {
-    font-family: 'Exo 2', 'Inter', sans-serif;
-    font-size: clamp(1.2rem, 3vw, 1.6rem);
-    color: var(--crystal-white);
-    margin-bottom: 50px;
-    font-weight: 700;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    font-weight: 400;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    text-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.8),
-        0 0 30px rgba(0, 229, 255, 0.6),
-        0 0 60px rgba(33, 150, 243, 0.4);
+    text-shadow: none;
     animation: fadeInUp 1s ease-out 0.6s both;
     line-height: 1.6;
-    background: linear-gradient(135deg, #ffffff 0%, #00e5ff 50%, #ffffff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    background: none;
+    -webkit-background-clip: initial;
+    -webkit-text-fill-color: initial;
+    background-clip: initial;
 }
 
 /* ENHANCED INTRO SECTION */
@@ -305,14 +318,14 @@ body::before {
         0 0 20px rgba(0, 229, 255, 0.4);
 }
 
-/* PROFESSIONAL STYLISH CARDS */
+/* CULLY CORPORATE CARDS */
 .water-card {
-    background: var(--quantum-glass);
-    backdrop-filter: blur(25px);
-    border: 2px solid var(--cyber-electric);
-    border-radius: 28px;
-    margin: 50px 0;
-    box-shadow: var(--void-shadow), var(--tech-glow);
+    background: var(--cully-surface);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(30, 58, 138, 0.1);
+    border-radius: 12px;
+    margin: 40px 0;
+    box-shadow: var(--cully-shadow);
     transition: var(--transition-elegant);
     position: relative;
     overflow: hidden;
@@ -325,61 +338,55 @@ body::before {
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
-    background: var(--glow-gradient);
-    border-radius: 28px 28px 0 0;
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+    height: 3px;
+    background: var(--cully-gradient);
+    border-radius: 12px 12px 0 0;
 }
 
 .water-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 
-        var(--void-shadow), 
-        0 0 60px rgba(0, 229, 255, 0.4),
-        0 30px 80px rgba(0, 0, 0, 0.2);
-    border-color: var(--plasma-cyan);
+    transform: translateY(-4px);
+    box-shadow: var(--cully-shadow), 0 20px 40px rgba(30, 58, 138, 0.1);
+    border-color: rgba(30, 58, 138, 0.2);
 }
 
 .card-header {
-    background: linear-gradient(135deg, rgba(0, 229, 255, 0.15) 0%, rgba(33, 150, 243, 0.1) 100%);
-    padding: 40px 50px;
-    border-bottom: 2px solid var(--cyber-electric);
-    border-radius: 28px 28px 0 0;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.05) 0%, rgba(59, 130, 246, 0.03) 100%);
+    padding: 30px 40px;
+    border-bottom: 1px solid rgba(30, 58, 138, 0.1);
+    border-radius: 12px 12px 0 0;
     position: relative;
     z-index: 2;
 }
 
 .card-header h2 {
     margin: 0;
-    color: var(--crystal-white);
-    font-family: 'Orbitron', monospace;
-    font-size: 2rem;
-    font-weight: 800;
-    text-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.6),
-        0 0 30px rgba(0, 229, 255, 0.5);
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+    color: var(--cully-primary);
+    font-family: 'Inter', 'Roboto', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-shadow: none;
+    letter-spacing: -0.01em;
+    text-transform: none;
 }
 
 .card-content {
-    padding: 60px;
-    color: var(--crystal-white);
+    padding: 40px;
+    color: var(--text-primary);
     position: relative;
     z-index: 2;
-    font-weight: 600;
-    font-family: 'Exo 2', sans-serif;
+    font-weight: 400;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .card-content p {
-    color: var(--crystal-white);
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    color: var(--text-secondary);
+    text-shadow: none;
 }
 
 .card-content .cta-description {
-    color: var(--crystal-white);
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    font-weight: 600;
+    color: var(--text-secondary);
+    text-shadow: none;
+    font-weight: 400;
 }
 
 /* FEATURE CONTENT STYLING */
@@ -434,37 +441,37 @@ body::before {
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* PROFESSIONAL STYLISH BUTTONS */
+/* CULLY PROFESSIONAL BUTTONS */
 .auth-buttons {
     display: flex;
-    gap: 30px;
+    gap: 20px;
     justify-content: center;
     align-items: stretch;
     flex-wrap: wrap;
-    margin: 50px 0;
+    margin: 40px 0;
 }
 
 .btn-water {
-    padding: 25px 40px;
-    font-size: 1.2rem;
-    border-radius: 20px;
+    padding: 18px 32px;
+    font-size: 1.1rem;
+    border-radius: 8px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
     transition: var(--transition-elegant);
-    font-weight: 800;
-    min-width: 250px;
-    min-height: 80px;
+    font-weight: 600;
+    min-width: 200px;
+    min-height: 56px;
     text-decoration: none;
-    border: 3px solid;
+    border: 2px solid;
     position: relative;
     overflow: hidden;
-    font-family: 'Orbitron', monospace;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
-    backdrop-filter: blur(20px);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    backdrop-filter: blur(10px);
+    text-transform: none;
+    letter-spacing: normal;
 }
 
 .btn-water::before {
@@ -504,40 +511,36 @@ body::before {
 }
 
 .btn-primary {
-    background: var(--glow-gradient);
+    background: var(--cully-gradient);
     color: var(--crystal-white);
-    border-color: var(--cyber-electric);
-    box-shadow: var(--cyber-depth), var(--tech-glow);
+    border-color: var(--cully-primary);
+    box-shadow: var(--cully-shadow);
 }
 
 .btn-primary:hover {
-    transform: translateY(-6px) scale(1.05);
-    box-shadow: 
-        var(--void-shadow),
-        0 0 60px rgba(0, 229, 255, 0.6),
-        0 30px 80px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: var(--cully-shadow), 0 10px 25px rgba(30, 58, 138, 0.2);
     color: var(--crystal-white);
     text-decoration: none;
-    border-color: var(--plasma-cyan);
+    border-color: var(--cully-secondary);
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
 }
 
 .btn-secondary {
-    background: var(--surface-glass);
-    color: var(--crystal-white);
-    border-color: var(--cyber-electric);
-    backdrop-filter: blur(25px);
-    box-shadow: var(--neural-shadow);
+    background: var(--cully-surface);
+    color: var(--cully-primary);
+    border-color: var(--cully-primary);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--cully-shadow);
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-6px) scale(1.05);
-    border-color: var(--plasma-cyan);
-    color: var(--crystal-white);
+    background: var(--cully-light);
+    transform: translateY(-2px);
+    border-color: var(--cully-secondary);
+    color: var(--cully-primary);
     text-decoration: none;
-    box-shadow: 
-        var(--void-shadow),
-        0 0 40px rgba(0, 229, 255, 0.4);
+    box-shadow: var(--cully-shadow), 0 10px 25px rgba(30, 58, 138, 0.15);
 }
 
 .btn-content {
