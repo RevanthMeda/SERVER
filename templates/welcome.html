@@ -12,12 +12,12 @@
     <!-- CULLY STYLE HEADER -->
     <header class="cully-header">
         <nav class="header-nav">
-            <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Automation" class="header-logo">
+            <img src="https://www.cully.ie/wp-content/themes/cullyautomation/assets/images/logo-25-white.svg" alt="Cully Automation" class="header-logo">
             <ul class="nav-menu">
-                <li><a href="#services" class="nav-item">Services</a></li>
-                <li><a href="#about" class="nav-item">About Us</a></li>
-                <li><a href="#sectors" class="nav-item">Sectors</a></li>
-                <li><a href="#contact" class="nav-item">Contact</a></li>
+                <li><a href="#services" class="nav-item">Report Types</a></li>
+                <li><a href="#about" class="nav-item">Features</a></li>
+                <li><a href="#sectors" class="nav-item">Documentation</a></li>
+                <li><a href="#contact" class="nav-item">Support</a></li>
             </ul>
             <a href="{{ url_for('auth.login') }}" class="contact-btn">Access Portal</a>
         </nav>
@@ -27,16 +27,34 @@
     <section class="hero-section">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <div class="hero-badge">WHAT WE DO</div>
+            <div class="hero-badge">PROFESSIONAL REPORTING PLATFORM</div>
             <h1 class="hero-title">CULLY REPORT GENERATOR</h1>
-            <h2 class="hero-subtitle-main">SPECIALIST IN WATER MANAGEMENT & CONSERVATION</h2>
+            <h2 class="hero-subtitle-main">STREAMLINED DOCUMENTATION FOR WATER PROFESSIONALS</h2>
             <p class="hero-subtitle">
-                Professional documentation platform powered by over 20 years' experience in Ireland's water sector. 
-                Streamline SAT reports, commissioning documentation, and technical reporting for 
-                water treatment, process control, automation and instrumentation.
+                Generate comprehensive SAT reports, commissioning documentation, site surveys, and technical reports with automated workflows. 
+                Built on over 20 years of expertise in Ireland's water sector with digital approval systems, 
+                version control, and professional formatting for water treatment and automation projects.
             </p>
+            <div class="hero-features">
+                <div class="feature-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>SAT Reports</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>Site Surveys</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>Commissioning Docs</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Technical Analysis</span>
+                </div>
+            </div>
             <a href="{{ url_for('auth.register') }}" class="hero-cta">
-                <span>Start Documenting</span>
+                <span>Start Creating Reports</span>
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -97,68 +115,68 @@
     <section class="services-section">
         <div class="section-container">
             <div class="services-header">
-                <div class="services-badge">OUR SERVICES</div>
-                <h2 class="services-title">Delivering secure and reliable services</h2>
+                <div class="services-badge">REPORT GENERATION FEATURES</div>
+                <h2 class="services-title">Professional Documentation Made Simple</h2>
             </div>
             <div class="services-grid">
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-cogs"></i>
+                        <i class="fas fa-file-contract"></i>
                     </div>
-                    <h3>Custom solutions</h3>
-                    <p>Delivering advanced technologies and supporting technical expertise which offers precise product specification and skilled implementation.</p>
+                    <h3>SAT Report Generator</h3>
+                    <p>Comprehensive Site Acceptance Testing documentation with automated data validation, image embedding, and professional formatting for water treatment systems.</p>
                     <a href="{{ url_for('auth.register') }}" class="service-link">
-                        Learn more <i class="fas fa-arrow-right"></i>
+                        Create SAT Reports <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-wrench"></i>
+                        <i class="fas fa-map-marked-alt"></i>
                     </div>
-                    <h3>Repair & Maintenance</h3>
-                    <p>Providing full repair & maintenance options for process control, automation, instrumentation, SCADA systems and documentation.</p>
+                    <h3>Site Survey Documentation</h3>
+                    <p>Detailed site survey forms for SCADA migration, network assessments, and infrastructure evaluation with photo documentation and compliance tracking.</p>
                     <a href="{{ url_for('auth.register') }}" class="service-link">
-                        Learn More <i class="fas fa-arrow-right"></i>
+                        Survey Documentation <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-drafting-compass"></i>
+                        <i class="fas fa-clipboard-list"></i>
                     </div>
-                    <h3>Engineering services</h3>
-                    <p>Experienced Engineers who carry out all Survey works and technical documentation with comprehensive reporting capabilities.</p>
+                    <h3>Commissioning Reports</h3>
+                    <p>Factory Acceptance Testing (FAT), Hardware Design Specification (HDS), and Functional Design Specification (FDS) reports with approval workflows.</p>
                     <a href="{{ url_for('auth.register') }}" class="service-link">
-                        Engineering Services <i class="fas fa-arrow-right"></i>
+                        Commissioning Docs <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-users-cog"></i>
                     </div>
-                    <h3>Data Management</h3>
-                    <p>Offering automation software solutions that visualize, analyze, and provide real time information for any application on any device.</p>
+                    <h3>Digital Approval Workflow</h3>
+                    <p>Multi-level approval system with email notifications, revision tracking, and digital signatures for engineers, automation managers, and project managers.</p>
                     <a href="{{ url_for('auth.register') }}" class="service-link">
-                        Learn More <i class="fas fa-arrow-right"></i>
+                        Workflow Management <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-download"></i>
                     </div>
-                    <h3>Leak Detection</h3>
-                    <p>Early detection of invisible leaks in a water distribution network is of great significance to the water utilities.</p>
+                    <h3>Professional Output</h3>
+                    <p>Generate polished PDF reports with Cully branding, automated formatting, embedded images, and comprehensive technical documentation standards.</p>
                     <a href="{{ url_for('auth.register') }}" class="service-link">
-                        Learn More <i class="fas fa-arrow-right"></i>
+                        Export Reports <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-map"></i>
+                        <i class="fas fa-database"></i>
                     </div>
-                    <h3>Surveying Services</h3>
-                    <p>Skilled Civil Engineers on hand to carry out survey works with comprehensive documentation and reporting systems.</p>
+                    <h3>Document Management</h3>
+                    <p>Centralized repository for all reports with version control, search functionality, collaboration tools, and secure access for authorized personnel.</p>
                     <a href="{{ url_for('auth.register') }}" class="service-link">
-                        Surveying Services <i class="fas fa-arrow-right"></i>
+                        Document Library <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
@@ -170,22 +188,22 @@
         <div class="section-container">
             <div class="access-content">
                 <div class="access-header">
-                    <h2>Access Your Professional Dashboard</h2>
-                    <p>Join water industry professionals using our secure documentation platform</p>
+                    <h2>Access Your Report Generation Dashboard</h2>
+                    <p>Join water industry professionals streamlining technical documentation with our secure platform</p>
                 </div>
                 <div class="access-buttons">
                     <a href="{{ url_for('auth.login') }}" class="btn-cully btn-primary">
                         <i class="fas fa-sign-in-alt"></i>
-                        <span>Access Portal</span>
+                        <span>Access Report Portal</span>
                     </a>
                     <a href="{{ url_for('auth.register') }}" class="btn-cully btn-secondary">
                         <i class="fas fa-user-plus"></i>
-                        <span>Register Account</span>
+                        <span>Request Access</span>
                     </a>
                 </div>
                 <div class="access-note">
                     <i class="fas fa-info-circle"></i>
-                    <p>New registrations require administrator approval. You'll receive email confirmation within 24 hours.</p>
+                    <p>New registrations require administrator approval. Engineers, Automation Managers, and Project Managers welcome. You'll receive email confirmation within 24 hours.</p>
                 </div>
             </div>
         </div>
