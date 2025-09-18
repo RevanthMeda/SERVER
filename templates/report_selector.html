@@ -67,27 +67,30 @@
         }
 
         .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
             position: relative;
             z-index: 1;
         }
 
-        /* Header Section - Dark Quantum Glass Style */
-        .admin-header {
+        .admin-card {
             background: var(--quantum-glass);
             backdrop-filter: blur(25px);
             border: 2px solid var(--cyber-electric);
             border-radius: 32px;
-            padding: 40px;
-            margin-bottom: 32px;
             box-shadow: var(--quantum-shadow), 0 0 40px rgba(0, 229, 255, 0.2);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .admin-header::before {
+        .admin-card::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -99,10 +102,19 @@
             pointer-events: none;
         }
 
+        /* Header Section - Centered Card Style */
+        .admin-header {
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
         .header-content {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
+            text-align: center;
+            gap: 24px;
             position: relative;
             z-index: 2;
         }
@@ -115,6 +127,7 @@
             margin: 0 0 12px 0;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 16px;
             text-shadow: 0 4px 8px rgba(0, 15, 28, 0.5), 0 0 20px rgba(0, 229, 255, 0.3);
             letter-spacing: -0.02em;
@@ -130,6 +143,7 @@
 
         .header-logo {
             height: 80px;
+            margin-bottom: 24px;
             filter: drop-shadow(0 8px 16px rgba(0, 229, 255, 0.3)) brightness(1.2);
         }
 
@@ -388,15 +402,14 @@
             border-color: var(--neural-border);
         }
 
+        /* Developer Footer - Centered Style */
         .developer-footer {
             text-align: center;
-            padding: 20px;
-            margin-top: auto;
-            background: var(--surface-glass);
-            backdrop-filter: blur(15px);
-            border-top: 2px solid var(--cyber-electric);
-            border-radius: 12px;
-            box-shadow: var(--quantum-shadow);
+            padding: 20px 0;
+            margin-top: 32px;
+            border-top: 1px solid var(--neural-border);
+            position: relative;
+            z-index: 2;
         }
 
         /* Mobile Responsiveness */
@@ -405,38 +418,47 @@
                 padding: 16px;
             }
 
+            .admin-card {
+                max-width: 100%;
+                padding: 24px;
+            }
+
             .header-content {
-                flex-direction: column;
                 gap: 16px;
-                text-align: center;
             }
 
             .header-info h1 {
                 font-size: 2rem;
-                justify-content: center;
-            }
-
-            .dashboard-nav {
-                padding: 16px 12px;
-                flex-wrap: wrap;
-                gap: 8px;
-                justify-content: center;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .nav-link {
-                padding: 8px 12px;
-                font-size: 12px;
             }
 
             .report-types-grid {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* Flash Messages - Centered Card Style */
+        .flash-messages {
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .alert i {
+            font-size: 18px;
+        }
+
+        /* Auth Links Style */
+        .auth-links {
+            margin-top: 32px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .auth-links p {
+            margin: 12px 0;
+            color: var(--text-medium);
+            font-size: 0.95rem;
         }
 
         @media (max-width: 480px) {
@@ -463,39 +485,15 @@
 </head>
 <body class="dashboard-layout">
     <div class="admin-container">
-        <!-- Header -->
-        <div class="admin-header">
-            <div class="header-content">
-                <div class="header-info">
-                    <h1><i class="fa fa-plus-circle"></i> Create Report</h1>
-                    <p>Select a report type to begin creating a new document</p>
-                </div>
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
-            </div>
-        </div>
-
-        <div class="dashboard-content">
-            <!-- Unified Navigation -->
-            <div class="dashboard-nav">
-                <div class="nav-links">
-                    <a href="{{ url_for('dashboard.admin') }}" class="nav-link {% if request.endpoint == 'dashboard.admin' %}active{% endif %}" id="nav-dashboard">
-                        <i class="fa fa-home"></i> Dashboard
-                    </a>
-                    <a href="{{ url_for('dashboard.user_management') }}" class="nav-link {% if request.endpoint == 'dashboard.user_management' %}active{% endif %}" id="nav-users">
-                        <i class="fa fa-users"></i> User Management
-                    </a>
-                    <a href="{{ url_for('dashboard.admin_reports') }}" class="nav-link {% if request.endpoint == 'dashboard.admin_reports' %}active{% endif %}" id="nav-reports">
-                        <i class="fa fa-file-alt"></i> All Reports
-                    </a>
-                    <a href="{{ url_for('dashboard.system_settings') }}" class="nav-link {% if request.endpoint == 'dashboard.system_settings' %}active{% endif %}" id="nav-settings">
-                        <i class="fa fa-cog"></i> System Settings
-                    </a>
-                    <a href="{{ url_for('reports.new') }}" class="nav-link {% if request.endpoint == 'reports.new' %}active{% endif %}" id="nav-create">
-                        <i class="fa fa-plus"></i> Create Report
-                    </a>
-                    <a href="{{ url_for('auth.logout') }}" class="nav-link logout" id="nav-logout">
-                        <i class="fa fa-sign-out-alt"></i> Logout
-                    </a>
+        <div class="admin-card">
+            <!-- Header -->
+            <div class="admin-header">
+                <div class="header-content">
+                    <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
+                    <div class="header-info">
+                        <h1><i class="fa fa-plus-circle"></i> Create Report</h1>
+                        <p>Select a report type to begin creating a new document</p>
+                    </div>
                 </div>
             </div>
 
@@ -605,16 +603,25 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Developer Credit Footer -->
-        <footer class="developer-credit">
-            <div class="developer-footer">
-                <p style="color: var(--text-medium); font-size: 0.9rem; margin: 0;">
-                    <i class="fas fa-code"></i> Developed by <strong style="color: var(--cyber-electric);">Revanth Meda</strong> for <strong style="color: var(--crystal-white);">CULLY LTD</strong>
+            <!-- Navigation Links -->
+            <div class="auth-links">
+                <p>
+                    <a href="{{ url_for('dashboard.admin') }}" style="color: var(--cyber-electric); text-decoration: none;">
+                        <i class="fa fa-arrow-left"></i> Back to Dashboard
+                    </a>
                 </p>
             </div>
-        </footer>
+
+            <!-- Developer Credit Footer -->
+            <footer class="developer-credit">
+                <div class="developer-footer">
+                    <p style="color: var(--text-medium); font-size: 0.9rem; margin: 0;">
+                        <i class="fas fa-code"></i> Developed by <strong style="color: var(--cyber-electric);">Revanth Meda</strong> for <strong style="color: var(--crystal-white);">CULLY LTD</strong>
+                    </p>
+                </div>
+            </footer>
+        </div>
     </div>
 
     <!-- Unified JavaScript -->
