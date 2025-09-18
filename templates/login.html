@@ -161,8 +161,8 @@
 
         .login-btn {
             width: 100%;
-            background: var(--cyber-gradient);
-            color: var(--crystal-white);
+            background: var(--cully-navy);
+            color: var(--cully-white);
             border: none;
             padding: 18px 24px;
             border-radius: 25px;
@@ -175,45 +175,23 @@
             justify-content: center;
             gap: 10px;
             margin-top: 32px;
-            box-shadow: var(--cyber-glow), var(--quantum-shadow);
-            border: 2px solid transparent;
-            font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transition: all 0.5s ease;
-            transform: translate(-50%, -50%);
-        }
-
-        .login-btn:hover::before {
-            width: 300px;
-            height: 300px;
+            box-shadow: var(--cully-shadow);
+            font-family: 'Montserrat', sans-serif;
         }
 
         .login-btn:hover {
+            background: var(--cully-blue);
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4), 0 12px 40px rgba(0, 229, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .login-btn:focus {
-            outline: 3px solid rgba(0, 229, 255, 0.5);
-            outline-offset: 2px;
+            box-shadow: 0 6px 16px rgba(90, 127, 163, 0.25);
         }
 
         .login-btn:active {
             transform: translateY(-1px) scale(1.01);
-            box-shadow: var(--cyber-glow);
+        }
+
+        .login-btn:focus {
+            outline: 3px solid rgba(90, 127, 163, 0.3);
+            outline-offset: 2px;
         }
 
         .login-btn:disabled {
@@ -250,27 +228,24 @@
         }
 
         .auth-links .btn-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            display: inline-block;
             padding: 12px 20px;
-            background: var(--surface-glass);
-            border: 2px solid var(--neural-border);
+            background: var(--cully-light-gray);
+            border: 1px solid var(--cully-gray);
             border-radius: 25px;
-            color: var(--crystal-white);
+            color: var(--cully-navy);
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 600;
             transition: var(--transition);
             margin: 8px;
-            backdrop-filter: blur(10px);
         }
 
         .auth-links .btn-link:hover {
-            background: rgba(26, 35, 50, 0.35);
-            border-color: var(--cyber-electric);
+            background: var(--cully-gray);
+            border-color: var(--cully-navy);
             transform: translateY(-2px);
-            box-shadow: var(--cyber-glow);
+            box-shadow: var(--cully-shadow);
         }
 
         .alert {
@@ -317,15 +292,14 @@
         .dev-notice {
             margin-top: 24px;
             padding: 16px;
-            background: rgba(245, 158, 11, 0.2);
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
             border-radius: 12px;
             text-align: left;
-            backdrop-filter: blur(10px);
         }
 
         .dev-notice h4 {
-            color: #fbbf24;
+            color: #d97706;
             margin: 0 0 8px 0;
             font-size: 0.9rem;
             font-weight: 600;
@@ -335,7 +309,7 @@
         }
 
         .dev-notice p {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--cully-dark);
             font-size: 0.85rem;
             margin: 4px 0;
             line-height: 1.4;
@@ -343,12 +317,12 @@
 
         .dev-notice strong {
             font-weight: 600;
-            color: white;
+            color: var(--cully-dark);
         }
 
         /* Field Error Styling */
         .field-error {
-            color: #fca5a5;
+            color: #dc2626;
             font-size: 0.75rem;
             margin-top: 4px;
             display: none;
@@ -374,29 +348,6 @@
                 justify-content: center;
                 margin: 8px 0;
             }
-        }
-
-        /* Dark Quantum Glass Theme Variables */
-        :root {
-            --quantum-dark: #0a0f1c;
-            --neural-blue: #1a2332;
-            --cyber-electric: #00e5ff;
-            --plasma-cyan: #00bcd4;
-            --tech-blue: #2196f3;
-            --crystal-white: #ffffff;
-            --quantum-glass: rgba(26, 35, 50, 0.15);
-            --surface-glass: rgba(26, 35, 50, 0.25);
-            --deep-space: rgba(10, 15, 28, 0.95);
-            --neural-gradient: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #2c3e50 100%);
-            --cyber-gradient: linear-gradient(45deg, #00e5ff 0%, #00bcd4 50%, #2196f3 100%);
-            --glass-gradient: linear-gradient(180deg, rgba(26, 35, 50, 0.15) 0%, rgba(26, 35, 50, 0.05) 100%);
-            --quantum-shadow: 0 8px 32px rgba(0, 229, 255, 0.15);
-            --cyber-glow: 0 0 20px rgba(0, 229, 255, 0.3);
-            --neural-border: rgba(0, 229, 255, 0.2);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --text-dark: #ffffff;
-            --text-medium: rgba(255, 255, 255, 0.9);
-            --text-light: rgba(255, 255, 255, 0.7);
         }
     </style>
 </head>
@@ -469,10 +420,7 @@
             <div class="auth-links">
                 <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Create Account</a></p>
                 <p>Forgot your password? <a href="{{ url_for('auth.forgot_password') }}">Reset Password</a></p>
-                <a href="{{ url_for('auth.welcome') }}" class="btn-link">
-                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                    Back to Welcome
-                </a>
+                <p><a href="{{ url_for('auth.welcome') }}">← Back to Welcome</a></p>
             </div>
 
             <!-- Development Environment Notice -->
@@ -486,9 +434,9 @@
             {% endif %}
 
             <!-- Developer Credit -->
-            <div style="text-align: center; margin-top: 24px; padding: 12px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
-                <p style="margin: 0; font-size: 0.8rem; color: rgba(255, 255, 255, 0.6);">
-                    Developed by <strong style="color: rgba(255, 255, 255, 0.9);">Revanth Meda</strong> for Cully Automation
+            <div style="text-align: center; margin-top: 24px; padding: 12px; background: var(--cully-light-gray); border-radius: 8px;">
+                <p style="margin: 0; font-size: 0.8rem; color: var(--cully-gray);">
+                    Developed by <strong style="color: var(--cully-navy);">Revanth Meda</strong> for Cully Automation
                 </p>
             </div>
         </div>
@@ -577,9 +525,9 @@
 
     <!-- Developer Credit Section -->
     <footer class="developer-credit">
-        <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 2px solid var(--cyber-electric);">
-            <p style="color: var(--text-medium); font-size: 0.9rem; margin: 0;">
-                <i class="fas fa-code"></i> Developed by <strong style="color: var(--cyber-electric);">Revanth Meda</strong> for <strong style="color: var(--crystal-white);">CULLY LTD</strong>
+        <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid var(--cully-light-gray);">
+            <p style="color: var(--cully-gray); font-size: 0.9rem; margin: 0;">
+                <i class="fas fa-code"></i> Developed by <strong style="color: var(--cully-navy);">Revanth Meda</strong> for <strong style="color: var(--cully-dark);">CULLY LTD</strong>
             </p>
         </div>
     </footer>
