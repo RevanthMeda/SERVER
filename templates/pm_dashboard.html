@@ -134,24 +134,24 @@
         /* Navigation - Dark Quantum Glass Style */
         .dashboard-nav {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             background: var(--quantum-glass);
             backdrop-filter: blur(20px);
-            padding: 16px 24px;
+            padding: 20px 24px;
             border-radius: 16px;
             box-shadow: var(--quantum-shadow);
             margin-bottom: 32px;
             border: 2px solid var(--neural-border);
-            overflow-x: auto;
-            white-space: nowrap;
             position: relative;
             z-index: 1;
         }
 
         .nav-links {
             display: flex;
-            gap: 10px;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: nowrap;
         }
 
         .nav-link {
@@ -159,15 +159,16 @@
             align-items: center;
             gap: 8px;
             padding: 12px 18px;
+            background: var(--surface-glass);
+            border: 2px solid var(--neural-border);
             border-radius: 12px;
             text-decoration: none;
             color: var(--text-light);
             font-weight: 600;
             transition: var(--transition);
-            font-size: 14px;
+            position: relative;
             white-space: nowrap;
-            background: var(--surface-glass);
-            border: 2px solid var(--neural-border);
+            font-size: 14px;
             backdrop-filter: blur(10px);
         }
 
