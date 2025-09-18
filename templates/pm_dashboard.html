@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Project Manager Dashboard - Cully Report Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}?v=2024">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FORCE CACHE REFRESH -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         /* DARK QUANTUM GLASS THEME - CONSISTENT WITH ALL PAGES */
         :root {
@@ -195,20 +199,47 @@
         }
 
         .nav-link.logout {
-            background: #fee2e2 !important;
-            color: #dc2626 !important;
-            border: 2px solid #fca5a5 !important;
+            background: rgba(239, 68, 68, 0.2) !important;
+            color: #fca5a5 !important;
+            border: 2px solid rgba(239, 68, 68, 0.3) !important;
         }
 
         .nav-link.logout:hover {
-            background: #fecaca !important;
-            color: #b91c1c !important;
-            border-color: #f87171 !important;
+            background: rgba(239, 68, 68, 0.3) !important;
+            color: #fecaca !important;
+            border-color: rgba(239, 68, 68, 0.4) !important;
         }
 
-        /* Flash Messages */
-        .flash-messages {
-            margin-bottom: 24px;
+        /* FORCE DARK QUANTUM GLASS THEME - HIGHEST PRIORITY */
+        body {
+            background: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #2c3e50 100%) !important;
+            color: #ffffff !important;
+        }
+        
+        .dashboard-header {
+            background: rgba(26, 35, 50, 0.15) !important;
+            backdrop-filter: blur(25px) !important;
+            border: 2px solid #00e5ff !important;
+        }
+        
+        .dashboard-nav {
+            background: rgba(26, 35, 50, 0.15) !important;
+            backdrop-filter: blur(20px) !important;
+            border: 2px solid rgba(0, 229, 255, 0.2) !important;
+        }
+        
+        .stat-card {
+            background: rgba(26, 35, 50, 0.15) !important;
+            backdrop-filter: blur(15px) !important;
+            border: 2px solid rgba(0, 229, 255, 0.2) !important;
+            color: #ffffff !important;
+        }
+        
+        .action-card {
+            background: rgba(26, 35, 50, 0.15) !important;
+            backdrop-filter: blur(15px) !important;
+            border: 2px solid rgba(0, 229, 255, 0.2) !important;
+            color: #ffffff !important;
         }
 
         .flash-message {
