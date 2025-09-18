@@ -39,9 +39,9 @@
       --radius-m: 12px;
       --radius-l: 20px;
       --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      --text-dark: #ffffff;
-      --text-medium: rgba(255, 255, 255, 0.9);
-      --text-light: rgba(255, 255, 255, 0.7);
+      --text-dark: #000000;
+      --text-medium: rgba(0, 0, 0, 0.8);
+      --text-light: rgba(0, 0, 0, 0.6);
       --border-light: rgba(0, 229, 255, 0.2);
     }
     
@@ -578,7 +578,7 @@
     .step-legend {
       font-size: 2rem;
       font-weight: 800;
-      color: var(--water-deep);
+      color: #000000;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
@@ -631,7 +631,7 @@
     }
 
     .form-section h4 {
-      color: var(--water-deep);
+      color: #000000;
       font-size: 1.4rem;
       font-weight: 700;
       margin-bottom: 24px;
@@ -685,7 +685,7 @@
       backdrop-filter: blur(5px);
       transition: var(--transition);
       font-family: inherit;
-      color: var(--text-dark);
+      color: #000000;
       box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);
     }
 
@@ -816,6 +816,7 @@
       vertical-align: middle;
       background: rgba(255, 255, 255, 0.8);
       transition: var(--transition);
+      color: #000000;
     }
 
     tbody tr:nth-child(even) {
@@ -836,6 +837,7 @@
       margin: 0;
       background: rgba(255, 255, 255, 0.95);
       transition: var(--transition);
+      color: #000000;
     }
     
     td input:focus, td select:focus, td textarea:focus {
@@ -989,6 +991,33 @@
       background: white;
       box-shadow: 0 4px 12px rgba(0, 102, 204, 0.1);
     }
+    /* ADDITIONAL TEXT COLOR FIXES FOR VISIBILITY */
+    p, span, div, strong, label, td, th {
+      color: #000000 !important;
+    }
+    
+    /* Ensure checkbox and radio labels are visible */
+    label input[type="checkbox"] + text,
+    label input[type="radio"] + text {
+      color: #000000 !important;
+    }
+    
+    /* Table cell content */
+    td strong {
+      color: #000000 !important;
+      font-weight: 600;
+    }
+    
+    /* Step descriptions */
+    .step-description {
+      color: #333333 !important;
+    }
+    
+    /* Form step descriptions */
+    .step-header p {
+      color: #000000 !important;
+    }
+    
     /* RESPONSIVE OPTIMIZATIONS */
     @media (max-width: 1200px) {
       .form-step {
@@ -1206,7 +1235,7 @@
                 <i class="fas fa-info-circle"></i>
                 Step 1 — Site Information & Details
               </h1>
-              <p style="color: #64748b;">Please provide the basic information about your Site Survey report and approval workflow. Fields marked with <span class="required">*</span> are required.</p>
+              <p style="color: #000000;">Please provide the basic information about your Site Survey report and approval workflow. Fields marked with <span class="required">*</span> are required.</p>
             </div>
 
             <div class="form-section">
@@ -1349,7 +1378,7 @@
                 <i class="fas fa-clipboard-list"></i>
                 Step 2 — Site Survey & Assessment
               </h1>
-              <p style="color: #64748b;">Comprehensive Site Survey, Maintenance & Digital Knowledge Tracking Form</p>
+              <p style="color: #000000;">Comprehensive Site Survey, Maintenance & Digital Knowledge Tracking Form</p>
             </div>
 
             <div class="form-section">
@@ -1604,7 +1633,7 @@
                 </table>
               </div>
 
-              <h5 style="margin: 20px 0 10px 0; color: var(--admin-primary);">Current Visit Objectives</h5>
+              <h5 style="margin: 20px 0 10px 0; color: #000000;">Current Visit Objectives</h5>
               <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
                 <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" name="visit_objectives_survey" value="Routine Inspection"/> Routine Inspection</label>
                 <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" name="visit_objectives_survey" value="Upgrade"/> Upgrade</label>
