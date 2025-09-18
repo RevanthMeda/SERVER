@@ -1,0 +1,71 @@
+E:\report generator\SERVER>python app.py
+🔧 Initializing SAT Report Generator...
+[2025-09-18 14:40:44,637] INFO in app: Hierarchical configuration system initialized
+Generated new master key for local secrets. Store this securely!
+[2025-09-18 14:40:44,732] INFO in app: Secrets management system initialized
+[2025-09-18 14:40:44,949] DEBUG in models: Database connection successful
+[2025-09-18 14:40:44,961] DEBUG in models: Database tables already exist: 30 tables found
+[2025-09-18 14:40:45,022] INFO in models: Default system settings initialized
+[2025-09-18 14:40:45,022] INFO in models: Database initialized successfully
+[2025-09-18 14:40:45,507] DEBUG in app: Skipping performance initialization in non-production
+DEBUG:app:Skipping performance initialization in non-production
+INFO:cache.redis_client:Cache system initialized successfully
+[2025-09-18 14:40:50,068] DEBUG in app: Using filesystem sessions (Redis not available)
+DEBUG:app:Using filesystem sessions (Redis not available)
+[2025-09-18 14:40:50,072] DEBUG in app: Cache system initialized successfully
+DEBUG:app:Cache system initialized successfully
+[2025-09-18 14:40:50,075] DEBUG in app: Query caching disabled (Redis not available)
+DEBUG:app:Query caching disabled (Redis not available)
+INFO:cache.cdn:CDN disabled or not configured
+INFO:cache.flask_cdn:Flask CDN extension initialized
+[2025-09-18 14:40:50,301] DEBUG in app: CDN integration initialized
+DEBUG:app:CDN integration initialized
+[2025-09-18 14:40:50,303] DEBUG in app: Background task processing disabled (Redis not available)
+DEBUG:app:Background task processing disabled (Redis not available)
+[2025-09-18 14:40:50,304] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
+INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-09-18 14:40:51,610] INFO in app: CDN management blueprint registered
+INFO:app:CDN management blueprint registered
+🚀 Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+ℹ️  Testing with HTTP - SSL disabled temporarily
+✅ Required directories created successfully
+🌐 Health check endpoint available at /health
+🔒 HTTPS enabled with password-protected .pfx SSL certificate
+ * Serving Flask app 'app'
+ * Debug mode: off
+[2025-09-18 14:40:58,815] ERROR in models: Error getting statistics: (psycopg2.errors.UndefinedTable) relation "cully_statistics" does not exist
+LINE 2: FROM cully_statistics
+             ^
+
+[SQL: SELECT cully_statistics.id AS cully_statistics_id, cully_statistics.instruments_count AS cully_statistics_instruments_count, cully_statistics.engineers_count AS cully_statistics_engineers_count, cully_statistics.experience_years AS cully_statistics_experience_years, cully_statistics.water_plants AS cully_statistics_water_plants, cully_statistics.last_updated AS cully_statistics_last_updated, cully_statistics.fetch_successful AS cully_statistics_fetch_successful, cully_statistics.error_message AS cully_statistics_error_message
+FROM cully_statistics
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+ERROR:app:Error getting statistics: (psycopg2.errors.UndefinedTable) relation "cully_statistics" does not exist
+LINE 2: FROM cully_statistics
+             ^
+
+[SQL: SELECT cully_statistics.id AS cully_statistics_id, cully_statistics.instruments_count AS cully_statistics_instruments_count, cully_statistics.engineers_count AS cully_statistics_engineers_count, cully_statistics.experience_years AS cully_statistics_experience_years, cully_statistics.water_plants AS cully_statistics_water_plants, cully_statistics.last_updated AS cully_statistics_last_updated, cully_statistics.fetch_successful AS cully_statistics_fetch_successful, cully_statistics.error_message AS cully_statistics_error_message
+FROM cully_statistics
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[2025-09-18 14:40:58,820] ERROR in auth: Error getting Cully statistics: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT cully_statistics.id AS cully_statistics_id, cully_statistics.instruments_count AS cully_statistics_instruments_count, cully_statistics.engineers_count AS cully_statistics_engineers_count, cully_statistics.experience_years AS cully_statistics_experience_years, cully_statistics.water_plants AS cully_statistics_water_plants, cully_statistics.last_updated AS cully_statistics_last_updated, cully_statistics.fetch_successful AS cully_statistics_fetch_successful, cully_statistics.error_message AS cully_statistics_error_message
+FROM cully_statistics
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+ERROR:app:Error getting Cully statistics: (psycopg2.errors.InFailedSqlTransaction) current transaction is aborted, commands ignored until end of transaction block
+
+[SQL: SELECT cully_statistics.id AS cully_statistics_id, cully_statistics.instruments_count AS cully_statistics_instruments_count, cully_statistics.engineers_count AS cully_statistics_engineers_count, cully_statistics.experience_years AS cully_statistics_experience_years, cully_statistics.water_plants AS cully_statistics_water_plants, cully_statistics.last_updated AS cully_statistics_last_updated, cully_statistics.fetch_successful AS cully_statistics_fetch_successful, cully_statistics.error_message AS cully_statistics_error_message
+FROM cully_statistics
+ LIMIT %(param_1)s]
+[parameters: {'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
