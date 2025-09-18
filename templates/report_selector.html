@@ -9,7 +9,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Create Report - Cully Report Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}?v={{ timestamp() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -434,7 +434,7 @@
                             </div>
                         </a>
 
-                        <a href="{{ url_for('reports.new_scada_migration') }}" class="action-item">
+                        <a href="{{ url_for('reports.new_site_survey') }}" class="action-item">
                             <div class="action-header">
                                 <div class="action-icon">
                                     <i class="fa fa-map-marker-alt"></i>

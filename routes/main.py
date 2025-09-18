@@ -996,6 +996,97 @@ def save_progress():
             'message': f'Error saving progress: {str(e)}'
         }), 500
 
+@main_bp.route('/generate_site_survey', methods=['POST'])
+@login_required
+def generate_site_survey():
+    """Generate a Site Survey report from form data"""
+    try:
+        from models import db, Report, SiteSurveyReport
+        import datetime as dt
+
+        # Get submission ID
+        submission_id = request.form.get("submission_id", "")
+        if not submission_id:
+            submission_id = str(uuid.uuid4())
+
+        # Get or create report record
+        report = Report.query.get(submission_id)
+        if not report:
+            report = Report(
+                id=submission_id,
+                type='SITE_SURVEY',
+                status='DRAFT',
+                user_email=current_user.email if hasattr(current_user, 'email') else '',
+                approvals_json='[]',
+                version='R0'
+            )
+            db.session.add(report)
+
+        # Get or create Site Survey report record
+        site_survey_report = SiteSurveyReport.query.filter_by(report_id=submission_id).first()
+        if not site_survey_report:
+            site_survey_report = SiteSurveyReport(
+                report_id=submission_id,
+                data_json='{}'
+            )
+            db.session.add(site_survey_report)
+
+        # Build context from form data
+        context = {
+            "SITE_NAME": request.form.get('site_name', ''),
+            "SITE_LOCATION": request.form.get('site_location', ''),
+            "SITE_ACCESS_DETAILS": request.form.get('site_access_details', ''),
+            "ON_SITE_PARKING": request.form.get('on_site_parking', ''),
+            "AREA_ENGINEER": request.form.get('area_engineer', ''),
+            "SITE_CARETAKER": request.form.get('site_caretaker', ''),
+            "SURVEY_COMPLETED_BY": request.form.get('survey_completed_by', ''),
+            "SIGNATURE_DATA": request.form.get('sig_prepared_data', '')
+        }
+
+        # Update report fields
+        report.document_title = f"Site Survey - {context.get('SITE_NAME', submission_id)}"
+        report.project_reference = f"SURVEY-{submission_id[:8]}"
+        report.client_name = "Irish Water"
+        report.revision = "R0"
+        report.prepared_by = context.get('SURVEY_COMPLETED_BY', current_user.full_name if current_user.is_authenticated else '')
+        report.updated_at = dt.datetime.utcnow()
+        report.status = 'PENDING'  # Submit for approval
+
+        # Prepare submission data for storage
+        submission_data = {
+            "context": context,
+            "user_email": current_user.email if hasattr(current_user, 'email') else '',
+            "created_at": dt.datetime.now().isoformat(),
+            "updated_at": dt.datetime.now().isoformat(),
+            "report_type": "SITE_SURVEY"
+        }
+
+        # Update Site Survey report data
+        site_survey_report.data_json = json.dumps(submission_data)
+        site_survey_report.site_name = context.get('SITE_NAME', '')
+        site_survey_report.site_location = context.get('SITE_LOCATION', '')
+        site_survey_report.survey_completed_by = context.get('SURVEY_COMPLETED_BY', '')
+
+        # Save to database
+        db.session.commit()
+
+        flash("Site Survey submitted successfully!", "success")
+        
+        return jsonify({
+            "success": True,
+            "message": "Site Survey submitted successfully!",
+            "submission_id": submission_id,
+            "redirect_url": url_for('status.view_status', submission_id=submission_id)
+        })
+
+    except Exception as e:
+        current_app.logger.error(f"Error in generate_site_survey: {e}", exc_info=True)
+        flash(f"An error occurred while submitting the survey: {str(e)}", "error")
+        return jsonify({
+            "success": False,
+            "message": f"Error: {str(e)}"
+        }), 500
+
 @main_bp.route('/generate_scada_migration', methods=['POST'])
 @login_required
 def generate_scada_migration():

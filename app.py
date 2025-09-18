@@ -337,7 +337,7 @@ def create_app(config_name='default'):
                 httponly=False, samesite='Lax', secure=app.config.get('USE_HTTPS', False)
             )
         
-        # EXTREME cache prevention for ALL pages
+        # EXTREME cache prevention for ALL pages - Enhanced for development
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0, s-maxage=0, proxy-revalidate'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '0'
@@ -345,8 +345,16 @@ def create_app(config_name='default'):
         response.headers['Vary'] = '*'
         response.headers['X-Cache'] = 'BYPASS'
         
+        # Add timestamp-based cache busting
+        current_time = str(int(time.time() * 1000))
+        response.headers['X-Timestamp'] = current_time
+        
         # Add unique ETag to force revalidation
         response.headers['ETag'] = f'"{time.time()}"'
+        
+        # Additional development cache busting
+        response.headers['Clear-Site-Data'] = '"cache"'
+        response.headers['X-Accel-Expires'] = '0'
         
         # Enforce HTTPS security headers
         if app.config.get('USE_HTTPS', False):
@@ -359,6 +367,12 @@ def create_app(config_name='default'):
     @app.context_processor
     def inject_csrf():
         return dict(csrf_token=getattr(g, 'csrf_token', generate_csrf()))
+    
+    # Add timestamp function for cache busting
+    @app.context_processor
+    def inject_timestamp():
+        import time
+        return dict(timestamp=lambda: str(int(time.time() * 1000)))
 
     # CSRF token refresh endpoint
     @app.route('/refresh_csrf')

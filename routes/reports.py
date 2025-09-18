@@ -150,6 +150,50 @@ def sat_wizard():
         flash('An error occurred while loading the report for editing.', 'error')
         return redirect(url_for('dashboard.home'))
 
+@reports_bp.route('/new/site-survey')
+@login_required
+@role_required(['Engineer', 'Automation Manager', 'Admin'])
+def new_site_survey():
+    """Site Survey report creation"""
+    try:
+        import uuid
+        from utils import get_unread_count
+        
+        # Create empty submission data structure for new site survey reports
+        submission_data = {
+            'DOCUMENT_TITLE': '',
+            'SITE_NAME': '',
+            'SITE_LOCATION': '',
+            'SITE_ACCESS_DETAILS': '',
+            'ON_SITE_PARKING': '',
+            'AREA_ENGINEER': '',
+            'SITE_CARETAKER': '',
+            'SURVEY_COMPLETED_BY': current_user.full_name if current_user.is_authenticated else '',
+            'CONTROL_APPROACH_DISCUSSED': '',
+            'VISUAL_INSPECTION': '',
+            'SITE_TYPE': '',
+            'ELECTRICAL_SUPPLY': '',
+            'PLANT_PHOTOS_COMPLETED': '',
+            'SITE_UNDERGOING_CONSTRUCTION': '',
+            'CONSTRUCTION_DESCRIPTION': ''
+        }
+        
+        unread_count = get_unread_count()
+        submission_id = str(uuid.uuid4())
+        
+        return render_template('Site_Survey.html', 
+                             submission_data=submission_data,
+                             submission_id=submission_id,
+                             unread_count=unread_count,
+                             is_new_report=True)
+    except Exception as e:
+        current_app.logger.error(f"Error rendering Site Survey form: {e}")
+        submission_data = {}
+        return render_template('Site_Survey.html', 
+                             submission_data=submission_data,
+                             submission_id='',
+                             unread_count=0)
+
 @reports_bp.route('/new/scada-migration')
 @login_required
 @role_required(['Engineer', 'Automation Manager', 'Admin'])
