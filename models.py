@@ -1,6 +1,9 @@
 import os
 import json
+import re
+import requests
 from datetime import datetime, timedelta
+from typing import Dict, Optional
 from flask import current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
@@ -195,6 +198,130 @@ class FATReport(db.Model):
     test_location = db.Column(db.String(200), nullable=True)
     test_equipment = db.Column(db.Text, nullable=True)  # JSON array
     acceptance_criteria = db.Column(db.Text, nullable=True)
+
+class CullyStatistics(db.Model):
+    """Model to store Cully website statistics that auto-sync"""
+    __tablename__ = 'cully_statistics'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    instruments_count = db.Column(db.String(10), default='22k')
+    engineers_count = db.Column(db.String(10), default='46')
+    experience_years = db.Column(db.String(10), default='600+')
+    water_plants = db.Column(db.String(10), default='250')
+    last_updated = db.Column(db.DateTime, default=datetime.utcnow)
+    fetch_successful = db.Column(db.Boolean, default=True)
+    error_message = db.Column(db.String(500), nullable=True)
+    
+    def to_dict(self) -> Dict[str, str]:
+        """Convert to dictionary for easy template rendering"""
+        return {
+            'instruments': self.instruments_count,
+            'engineers': self.engineers_count,
+            'experience': self.experience_years,
+            'plants': self.water_plants,
+            'last_updated': self.last_updated.strftime('%Y-%m-%d %H:%M:%S') if self.last_updated else None
+        }
+
+    @staticmethod
+    def get_current_statistics() -> Dict[str, str]:
+        """Get current statistics from database"""
+        try:
+            stats_record = CullyStatistics.query.first()
+            if stats_record:
+                return stats_record.to_dict()
+            else:
+                # Return defaults if no record exists
+                return {
+                    'instruments': '22k',
+                    'engineers': '46',
+                    'experience': '600+',
+                    'plants': '250',
+                    'last_updated': None
+                }
+        except Exception as e:
+            current_app.logger.error(f"Error getting statistics: {str(e)}")
+            return {
+                'instruments': '22k',
+                'engineers': '46', 
+                'experience': '600+',
+                'plants': '250',
+                'last_updated': None
+            }
+
+    @staticmethod
+    def fetch_and_update_from_cully() -> bool:
+        """Fetch current statistics from Cully.ie website and update database"""
+        try:
+            response = requests.get(
+                "https://www.cully.ie/",
+                timeout=10,
+                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+            )
+            response.raise_for_status()
+            
+            # Extract statistics from HTML content
+            text_content = response.text
+            
+            # Default values
+            stats = {
+                'instruments': '22k',
+                'engineers': '46',
+                'experience': '600+',
+                'plants': '250'
+            }
+            
+            # Extract numbers using regex patterns
+            instruments_match = re.search(r'(\d+k?)\s*.*(?:instruments|Instruments)', text_content, re.IGNORECASE)
+            if instruments_match:
+                stats['instruments'] = instruments_match.group(1)
+            
+            engineers_match = re.search(r'(\d+)\s*.*(?:engineers|Engineers)', text_content, re.IGNORECASE) 
+            if engineers_match:
+                stats['engineers'] = engineers_match.group(1)
+                
+            experience_match = re.search(r'(\d+\+?)\s*.*(?:years|Years)', text_content, re.IGNORECASE)
+            if experience_match:
+                stats['experience'] = experience_match.group(1)
+                
+            plants_match = re.search(r'(\d+)\s*.*(?:water plants|Water plants)', text_content, re.IGNORECASE)
+            if plants_match:
+                stats['plants'] = plants_match.group(1)
+            
+            # Update or create statistics record
+            existing = CullyStatistics.query.first()
+            if existing:
+                existing.instruments_count = stats['instruments']
+                existing.engineers_count = stats['engineers']
+                existing.experience_years = stats['experience']
+                existing.water_plants = stats['plants']
+                existing.last_updated = datetime.utcnow()
+                existing.fetch_successful = True
+                existing.error_message = None
+            else:
+                new_stats = CullyStatistics(
+                    instruments_count=stats['instruments'],
+                    engineers_count=stats['engineers'],
+                    experience_years=stats['experience'],
+                    water_plants=stats['plants'],
+                    fetch_successful=True
+                )
+                db.session.add(new_stats)
+            
+            db.session.commit()
+            current_app.logger.info(f"Successfully updated Cully statistics: {stats}")
+            return True
+            
+        except Exception as e:
+            current_app.logger.error(f"Error fetching/updating Cully statistics: {str(e)}")
+            # Update error status but keep existing data
+            existing = CullyStatistics.query.first()
+            if existing:
+                existing.fetch_successful = False
+                existing.error_message = str(e)
+                existing.last_updated = datetime.utcnow()
+                db.session.commit()
+            return False
+
 
 class ReportTemplate(db.Model):
     """Store and manage report templates with versioning"""

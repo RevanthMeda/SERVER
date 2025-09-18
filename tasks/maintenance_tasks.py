@@ -3,6 +3,8 @@ System maintenance background tasks.
 """
 import logging
 import os
+import re
+import requests
 import shutil
 import tempfile
 from typing import Dict, Any
@@ -519,4 +521,68 @@ def system_health_maintenance_task(self) -> Dict[str, Any]:
             'status': 'failed',
             'error': str(e),
             'maintenance_results': maintenance_results
+        }
+
+
+@celery_app.task(bind=True)
+def sync_cully_statistics_task(self) -> Dict[str, Any]:
+    """
+    Synchronize statistics from Cully.ie website.
+    This task runs daily to keep numbers up-to-date.
+    """
+    try:
+        logger.info("Starting Cully statistics synchronization")
+        
+        # Update task state
+        current_task.update_state(
+            state='PROGRESS',
+            meta={'status': 'Fetching data from Cully.ie', 'progress': 20}
+        )
+        
+        # Import the model after app context is available
+        from models import CullyStatistics
+        
+        # Update task state
+        current_task.update_state(
+            state='PROGRESS',
+            meta={'status': 'Updating database', 'progress': 60}
+        )
+        
+        # Use the model's built-in sync method
+        success = CullyStatistics.fetch_and_update_from_cully()
+        
+        # Update task state
+        current_task.update_state(
+            state='PROGRESS',
+            meta={'status': 'Sync completed', 'progress': 100}
+        )
+        
+        if success:
+            # Get updated statistics
+            stats = CullyStatistics.get_current_statistics()
+            logger.info(f"Successfully synced Cully statistics: {stats}")
+            
+            return {
+                'status': 'success',
+                'statistics': stats,
+                'completed_at': datetime.utcnow().isoformat(),
+                'message': 'Statistics successfully synchronized from Cully.ie'
+            }
+        else:
+            logger.warning("Failed to sync Cully statistics, using cached data")
+            stats = CullyStatistics.get_current_statistics()
+            
+            return {
+                'status': 'partial_success',
+                'statistics': stats,
+                'completed_at': datetime.utcnow().isoformat(),
+                'message': 'Using cached statistics due to sync failure'
+            }
+            
+    except Exception as e:
+        logger.error(f"Cully statistics sync failed: {e}")
+        return {
+            'status': 'failed',
+            'error': str(e),
+            'completed_at': datetime.utcnow().isoformat()
         }

@@ -1,19 +1,53 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app, session, make_response
 from flask_login import login_user, logout_user, current_user
-from models import db, User
+from models import db, User, CullyStatistics
 from auth import login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from session_manager import session_manager
+from datetime import datetime, timedelta
 import time
 
 auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/welcome')
 def welcome():
-    """Welcome/Home page with Register and Log In buttons"""
+    """Welcome/Home page with Register and Log In buttons and live Cully statistics"""
     if current_user.is_authenticated:
         return redirect(url_for('dashboard.home'))
-    return render_template('welcome.html')
+    
+    # Get live Cully statistics
+    try:
+        cully_stats = CullyStatistics.get_current_statistics()
+        
+        # Check if we need to update statistics (once per day)
+        should_update = True
+        stats_record = CullyStatistics.query.first()
+        if stats_record and stats_record.last_updated:
+            time_since_update = datetime.utcnow() - stats_record.last_updated
+            should_update = time_since_update > timedelta(hours=24)
+        
+        # If needed, trigger background update (don't wait for it)
+        if should_update:
+            try:
+                # Try to update synchronously with short timeout
+                CullyStatistics.fetch_and_update_from_cully()
+                cully_stats = CullyStatistics.get_current_statistics()
+            except:
+                # If sync fails, use cached data
+                pass
+                
+    except Exception as e:
+        current_app.logger.error(f"Error getting Cully statistics: {e}")
+        # Use default values if database fails
+        cully_stats = {
+            'instruments': '22k',
+            'engineers': '46',
+            'experience': '600+',
+            'plants': '250',
+            'last_updated': None
+        }
+    
+    return render_template('welcome.html', cully_stats=cully_stats)
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():

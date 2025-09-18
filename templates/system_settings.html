@@ -432,6 +432,58 @@
             background: var(--admin-success);
         }
 
+        /* Cully Stats Styles */
+        .stats-grid-mini {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .stat-mini {
+            text-align: center;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-mini strong {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--admin-primary);
+            font-weight: 600;
+        }
+
+        .stat-mini span {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .cully-stats-preview {
+            margin-top: 8px;
+        }
+
+        #refreshStatsBtn {
+            position: relative;
+        }
+
+        #refreshStatsBtn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        #refreshStatsBtn.loading .fa-sync-alt {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         .theme-preview span {
             color: #64748b;
             font-size: 14px;
@@ -827,6 +879,65 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Cully Statistics Management -->
+                    <div class="dashboard-widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">
+                                <i class="fa fa-chart-line"></i>
+                                Cully Statistics Sync
+                            </h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="system-info">
+                                <div class="info-row">
+                                    <span class="info-label">Auto-Sync Status:</span>
+                                    <span class="info-value">
+                                        <span class="status-badge status-connected">
+                                            <i class="fa fa-circle" style="font-size: 8px; margin-right: 4px;"></i> Active
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Current Statistics:</span>
+                                    <div class="cully-stats-preview" id="cullyStatsPreview">
+                                        <div class="stats-grid-mini">
+                                            <div class="stat-mini">
+                                                <strong id="statsInstruments">22k</strong>
+                                                <span>Instruments</span>
+                                            </div>
+                                            <div class="stat-mini">
+                                                <strong id="statsEngineers">46</strong>
+                                                <span>Engineers</span>
+                                            </div>
+                                            <div class="stat-mini">
+                                                <strong id="statsExperience">600+</strong>
+                                                <span>Years Exp.</span>
+                                            </div>
+                                            <div class="stat-mini">
+                                                <strong id="statsPlants">250</strong>
+                                                <span>Water Plants</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Last Sync:</span>
+                                    <span class="info-value" id="lastSyncTime">Loading...</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions" style="margin-top: 20px;">
+                                <form method="POST" action="{{ url_for('dashboard.refresh_cully_stats') }}" style="display: inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
+                                    <button type="submit" class="btn-primary" id="refreshStatsBtn">
+                                        <i class="fa fa-sync-alt"></i> Refresh Statistics Now
+                                    </button>
+                                </form>
+                                <p class="help-text">Statistics automatically sync every 6 hours. Use this button to force an immediate update.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -885,6 +996,42 @@
             // Initial status check and setup interval
             updateDatabaseStatus();
             setInterval(updateDatabaseStatus, 30000); // Refresh every 30 seconds
+
+            // Load Cully statistics
+            function loadCullyStats() {
+                fetch('/dashboard/api/cully-stats')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('statsInstruments').textContent = data.stats.instruments;
+                            document.getElementById('statsEngineers').textContent = data.stats.engineers;
+                            document.getElementById('statsExperience').textContent = data.stats.experience;
+                            document.getElementById('statsPlants').textContent = data.stats.plants;
+                            
+                            if (data.stats.last_updated) {
+                                document.getElementById('lastSyncTime').textContent = new Date(data.stats.last_updated).toLocaleString();
+                            } else {
+                                document.getElementById('lastSyncTime').textContent = 'Never';
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.warn('Failed to load Cully stats:', error);
+                        document.getElementById('lastSyncTime').textContent = 'Error loading';
+                    });
+            }
+
+            // Load stats on page load
+            loadCullyStats();
+
+            // Handle refresh button
+            const refreshBtn = document.getElementById('refreshStatsBtn');
+            if (refreshBtn) {
+                refreshBtn.closest('form').addEventListener('submit', function(e) {
+                    refreshBtn.classList.add('loading');
+                    refreshBtn.querySelector('.fa-sync-alt').style.animation = 'spin 1s linear infinite';
+                });
+            }
 
             // Common notification function
             window.showNotification = function(message, type) {

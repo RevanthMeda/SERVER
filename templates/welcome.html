@@ -28,14 +28,15 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <div class="hero-badge">WHAT WE DO</div>
-            <h1 class="hero-title">SPECIALIST IN WATER MANAGEMENT & CONSERVATION</h1>
+            <h1 class="hero-title">CULLY REPORT GENERATOR</h1>
+            <h2 class="hero-subtitle-main">SPECIALIST IN WATER MANAGEMENT & CONSERVATION</h2>
             <p class="hero-subtitle">
-                Over 20 years' experience in Ireland's water sector with extensive knowledge in 
-                water treatment, process control, automation and instrumentation within 
-                water utilities and multi-sector industries.
+                Professional documentation platform powered by over 20 years' experience in Ireland's water sector. 
+                Streamline SAT reports, commissioning documentation, and technical reporting for 
+                water treatment, process control, automation and instrumentation.
             </p>
             <a href="{{ url_for('auth.register') }}" class="hero-cta">
-                <span>Find out more</span>
+                <span>Start Documenting</span>
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -64,28 +65,28 @@
                     <div class="stat-icon">
                         <i class="fas fa-tools"></i>
                     </div>
-                    <div class="stat-number">22k</div>
+                    <div class="stat-number">{{ cully_stats.instruments }}</div>
                     <div class="stat-label">Instruments in the field</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <div class="stat-number">46</div>
+                    <div class="stat-number">{{ cully_stats.engineers }}</div>
                     <div class="stat-label">Service engineers on the road</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon">
                         <i class="fas fa-calendar"></i>
                     </div>
-                    <div class="stat-number">600+</div>
+                    <div class="stat-number">{{ cully_stats.experience }}</div>
                     <div class="stat-label">Years of combined engineering experience</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon">
                         <i class="fas fa-industry"></i>
                     </div>
-                    <div class="stat-number">250</div>
+                    <div class="stat-number">{{ cully_stats.plants }}</div>
                     <div class="stat-label">Automated Water plants nation wide</div>
                 </div>
             </div>

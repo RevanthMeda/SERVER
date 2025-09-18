@@ -1,7 +1,7 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, jsonify
 from flask_login import login_required, current_user
-from models import db, Report, SATReport
+from models import db, Report, SATReport, CullyStatistics
 import json
 
 main_bp = Blueprint('main', __name__)

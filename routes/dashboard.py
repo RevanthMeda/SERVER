@@ -582,6 +582,52 @@ def update_settings():
 
     return redirect(url_for('dashboard.system_settings'))
 
+@dashboard_bp.route('/refresh-cully-stats', methods=['POST'])
+@admin_required
+def refresh_cully_stats():
+    """Manually refresh Cully statistics"""
+    try:
+        from models import CullyStatistics
+        
+        current_app.logger.info("Admin triggered manual Cully statistics refresh")
+        
+        # Fetch updated statistics
+        success = CullyStatistics.fetch_and_update_from_cully()
+        
+        if success:
+            stats = CullyStatistics.get_current_statistics()
+            flash(f'Cully statistics refreshed successfully! Current stats: {stats["instruments"]} instruments, {stats["engineers"]} engineers, {stats["experience"]} years experience, {stats["plants"]} water plants.', 'success')
+            current_app.logger.info(f"Manual Cully stats refresh successful: {stats}")
+        else:
+            flash('Failed to refresh Cully statistics. Using cached data.', 'warning')
+            current_app.logger.warning("Manual Cully stats refresh failed")
+            
+    except Exception as e:
+        current_app.logger.error(f"Error during manual Cully stats refresh: {e}")
+        flash(f'Error refreshing statistics: {str(e)}', 'error')
+    
+    return redirect(url_for('dashboard.system_settings'))
+
+@dashboard_bp.route('/api/cully-stats')
+@admin_required
+def api_cully_stats():
+    """API endpoint to get current Cully statistics"""
+    try:
+        from models import CullyStatistics
+        
+        stats = CullyStatistics.get_current_statistics()
+        stats_record = CullyStatistics.query.first()
+        
+        return jsonify({
+            'success': True,
+            'stats': stats,
+            'last_sync_successful': stats_record.fetch_successful if stats_record else True,
+            'error_message': stats_record.error_message if stats_record else None
+        })
+    except Exception as e:
+        current_app.logger.error(f"Error fetching Cully stats via API: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @dashboard_bp.route('/reports')
 @admin_required
 def admin_reports():
