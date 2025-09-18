@@ -86,19 +86,22 @@
             filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0,0,0,0.2));
         }
 
-        /* Navigation - Exact same as admin */
+        /* Navigation - Dark Quantum Glass Style */
         .dashboard-nav {
             display: flex;
             justify-content: center;
             align-items: center;
-            background: white;
-            padding: 12px 24px;
+            background: var(--quantum-glass);
+            backdrop-filter: blur(20px);
+            padding: 16px 24px;
             border-radius: 16px;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--quantum-shadow);
             margin-bottom: 32px;
-            border: 1px solid #e2e8f0;
+            border: 2px solid var(--neural-border);
             overflow-x: auto;
             white-space: nowrap;
+            position: relative;
+            z-index: 1;
         }
 
         .nav-links {

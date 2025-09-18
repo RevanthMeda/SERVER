@@ -131,19 +131,22 @@
             filter: drop-shadow(0 8px 16px rgba(0, 229, 255, 0.3)) brightness(1.2);
         }
 
-        /* Navigation - Exact same as admin */
+        /* Navigation - Dark Quantum Glass Style */
         .dashboard-nav {
             display: flex;
             justify-content: center;
             align-items: center;
-            background: white;
-            padding: 12px 24px;
+            background: var(--quantum-glass);
+            backdrop-filter: blur(20px);
+            padding: 16px 24px;
             border-radius: 16px;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--quantum-shadow);
             margin-bottom: 32px;
-            border: 1px solid #e2e8f0;
+            border: 2px solid var(--neural-border);
             overflow-x: auto;
             white-space: nowrap;
+            position: relative;
+            z-index: 1;
         }
 
         .nav-links {
@@ -155,29 +158,32 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 18px;
-            border-radius: 10px;
+            padding: 12px 18px;
+            border-radius: 12px;
             text-decoration: none;
-            color: #64748b;
+            color: var(--text-light);
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             font-size: 14px;
             white-space: nowrap;
+            background: var(--surface-glass);
+            border: 2px solid var(--neural-border);
+            backdrop-filter: blur(10px);
         }
 
         .nav-link:hover {
-            background: #e2e8f0;
-            color: var(--admin-primary);
+            background: rgba(26, 35, 50, 0.35);
+            color: var(--cyber-electric);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(77, 208, 225, 0.25);
-            border-color: var(--admin-primary-light);
+            box-shadow: var(--cyber-glow);
+            border-color: var(--cyber-electric);
         }
 
         .nav-link.active {
-            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-            color: white;
-            box-shadow: 0 4px 15px rgba(77, 208, 225, 0.4);
-            border-color: var(--admin-primary);
+            background: var(--cyber-gradient);
+            color: var(--crystal-white);
+            box-shadow: var(--cyber-glow), var(--quantum-shadow);
+            border-color: transparent;
         }
 
         .nav-link i {
@@ -209,19 +215,15 @@
             align-items: center;
             gap: 12px;
             padding: 16px 20px;
-            background: #d1fae5;
-            border: 1px solid #059669;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 12px;
-            color: #065f46;
+            color: #10b981;
             font-weight: 500;
-            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(10px);
         }
 
-        .flash-message i {
-            font-size: 18px;
-        }
-
-        /* Stats Grid - Same as admin */
+        /* Stats Grid - Dark Quantum Glass Style */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -230,19 +232,21 @@
         }
 
         .stat-card {
-            background: white;
-            border-radius: 16px;
+            background: var(--quantum-glass);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--neural-border);
+            border-radius: 20px;
             padding: 24px;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
+            box-shadow: var(--quantum-shadow);
+            transition: var(--transition);
             position: relative;
             overflow: hidden;
-            border: 1px solid #e2e8f0;
         }
 
         .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--cyber-glow), var(--quantum-shadow);
+            border-color: var(--cyber-electric);
         }
 
         .stat-card::before {
@@ -252,7 +256,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--admin-primary), var(--admin-primary-light));
+            background: var(--cyber-gradient);
         }
 
         .stat-header {
