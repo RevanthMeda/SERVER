@@ -12,12 +12,20 @@
     <!-- CULLY STYLE HEADER -->
     <header class="cully-header">
         <nav class="header-nav">
-            <img src="https://www.cully.ie/wp-content/themes/cullyautomation/assets/images/logo-25-white.svg" alt="Cully Automation" class="header-logo">
-            <ul class="nav-menu">
-                <li><a href="#services" class="nav-item">Report Types</a></li>
-                <li><a href="#about" class="nav-item">Features</a></li>
-                <li><a href="#sectors" class="nav-item">Documentation</a></li>
-                <li><a href="#contact" class="nav-item">Support</a></li>
+            <div class="header-logo-container">
+                <img src="https://www.cully.ie/wp-content/themes/cullyautomation/assets/images/logo-25-white.svg" alt="Cully Automation" class="header-logo">
+                <span class="logo-text">CULLY AUTOMATION</span>
+            </div>
+            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#services" class="nav-item" onclick="scrollToSection('services')">Report Types</a></li>
+                <li><a href="#features" class="nav-item" onclick="scrollToSection('stats-section')">Features</a></li>
+                <li><a href="#documentation" class="nav-item" onclick="scrollToSection('access-section')">Documentation</a></li>
+                <li><a href="#support" class="nav-item" onclick="scrollToSection('footer')">Support</a></li>
             </ul>
             <a href="{{ url_for('auth.login') }}" class="contact-btn">Access Portal</a>
         </nav>
@@ -72,7 +80,7 @@
     {% endwith %}
 
     <!-- CULLY STATISTICS SECTION -->
-    <section class="stats-section">
+    <section class="stats-section" id="stats-section">
         <div class="stats-container">
             <div class="stats-header">
                 <div class="stats-badge">EXPERTS IN IRELAND'S WATER SECTOR</div>
@@ -112,7 +120,7 @@
     </section>
 
     <!-- CULLY SERVICES SECTION -->
-    <section class="services-section">
+    <section class="services-section" id="services">
         <div class="section-container">
             <div class="services-header">
                 <div class="services-badge">REPORT GENERATION FEATURES</div>
@@ -184,7 +192,7 @@
     </section>
 
     <!-- ACCESS PORTAL SECTION -->
-    <section class="access-section section-light">
+    <section class="access-section section-light" id="access-section">
         <div class="section-container">
             <div class="access-content">
                 <div class="access-header">
@@ -210,7 +218,7 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="cully-footer">
+    <footer class="cully-footer" id="footer">
         <div class="section-container">
             <div class="footer-content">
                 <div class="footer-logo">
@@ -228,6 +236,62 @@
             </div>
         </div>
     </footer>
+
+    <!-- Smooth Scrolling JavaScript -->
+    <script>
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // Close mobile menu if open
+                closeMobileMenu();
+            }
+        }
+        
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            navMenu.classList.toggle('mobile-active');
+            toggle.classList.toggle('active');
+        }
+        
+        function closeMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            navMenu.classList.remove('mobile-active');
+            toggle.classList.remove('active');
+        }
+        
+        // Add click event listeners for mobile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    if (href.startsWith('#')) {
+                        const sectionId = href.substring(1);
+                        scrollToSection(sectionId);
+                    }
+                });
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const navMenu = document.getElementById('navMenu');
+                const toggle = document.querySelector('.mobile-menu-toggle');
+                
+                if (!navMenu.contains(e.target) && !toggle.contains(e.target)) {
+                    closeMobileMenu();
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
