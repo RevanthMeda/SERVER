@@ -942,12 +942,13 @@
         </footer>
     </div>
     
+    {% if not current_user.is_authenticated %}
     <script>
-        // Force authentication check on page load
-        {% if not current_user.is_authenticated %}
-            window.location.replace('/welcome');
-        {% endif %}
-        
+        window.location.replace('/welcome');
+    </script>
+    {% endif %}
+    
+    <script>
         // Detect if page was accessed via back button after logout
         window.addEventListener('pageshow', function(event) {
             if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {

@@ -1017,7 +1017,7 @@
         {% for num, title, desc in steps %}
         <div id="prog-{{ num }}"
              class="progress-step {{ 'active' if num==1 else 'disabled' }}"
-             onclick="goToStep({{ num }})">
+             data-step="{{ num }}">
           <div class="step-circle">{{ num }}</div>
           <div class="step-info">
             <div class="step-title">{{ title }}</div>
@@ -2816,6 +2816,17 @@
       // Scroll to top smoothly
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // Event delegation for progress step clicks
+    document.addEventListener('click', function(e) {
+      const progressStep = e.target.closest('.progress-step');
+      if (progressStep && progressStep.dataset.step) {
+        const step = parseInt(progressStep.dataset.step, 10);
+        if (!progressStep.classList.contains('disabled')) {
+          goToStep(step);
+        }
+      }
+    });
 
     // Update the progress connector line based on completion
     function updateProgressLine(currentStep) {

@@ -416,6 +416,14 @@
             animation: pulse 2s infinite;
         }
 
+        .status-indicator-connected {
+            background: #059669;
+        }
+
+        .status-indicator-disconnected {
+            background: #dc2626;
+        }
+
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
@@ -660,7 +668,7 @@
                         </div>
                         <div class="stat-value">
                             <span class="status-badge {{ 'status-connected' if db_status else 'status-disconnected' }}">
-                                <div class="status-indicator" style="background: {{ '#059669' if db_status else '#dc2626' }};"></div>
+                                <div class="status-indicator status-indicator-{{ 'connected' if db_status else 'disconnected' }}"></div>
                                 {{ 'Connected' if db_status else 'Disconnected' }}
                             </span>
                         </div>
@@ -691,7 +699,7 @@
                                                 <span>{{ user.requested_role or 'No role specified' }}</span>
                                             </div>
                                         </div>
-                                        <button type="button" class="approve-btn" onclick="approveUser({{ user.id }})">
+                                        <button type="button" class="approve-btn" data-user-id="{{ user.id }}">
                                             <i class="fa fa-check"></i> Approve
                                         </button>
                                     </div>
@@ -738,7 +746,7 @@
                                 <span class="info-label">Database Connection:</span>
                                 <span class="info-value">
                                     <span class="status-badge {{ 'status-connected' if db_status else 'status-disconnected' }}">
-                                        <div class="status-indicator" style="background: {{ '#059669' if db_status else '#dc2626' }};"></div>
+                                        <div class="status-indicator status-indicator-{{ 'connected' if db_status else 'disconnected' }}"></div>
                                         {{ 'Operational' if db_status else 'Connection Failed' }}
                                     </span>
                                 </span>
@@ -751,7 +759,7 @@
                                 <span class="info-label">Company Branding:</span>
                                 <span class="info-value">
                                     <span class="status-badge status-connected">
-                                        <div class="status-indicator" style="background: #059669;"></div>
+                                        <div class="status-indicator status-indicator-connected"></div>
                                         Configured
                                     </span>
                                 </span>
@@ -760,7 +768,7 @@
                                 <span class="info-label">Security Status:</span>
                                 <span class="info-value">
                                     <span class="status-badge status-connected">
-                                        <div class="status-indicator" style="background: #059669;"></div>
+                                        <div class="status-indicator status-indicator-connected"></div>
                                         Protected
                                     </span>
                                 </span>
@@ -826,6 +834,17 @@
                 alert('Network error. Please check your connection.');
             }
         }
+
+        // Event delegation for approve buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.approve-btn')) {
+                const button = e.target.closest('.approve-btn');
+                const userId = button.getAttribute('data-user-id');
+                if (userId) {
+                    approveUser(userId);
+                }
+            }
+        });
 
         // Initialize
         checkDatabaseStatus();
