@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Site Survey Form – Cully Automation</title>
+  <title>Site Survey Form – CULLY LTD</title>
 
   <!-- CSS Files -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/water-excellence.css') }}"/>
@@ -99,17 +99,17 @@
       z-index: 1;
     }
 
-    /* WATER EXCELLENCE HEADER */
+    /* QUANTUM GLASS HEADER */
     .admin-header {
-      background: var(--water-gradient);
+      background: var(--cyber-gradient);
       border-radius: var(--radius-l);
       padding: 40px;
       margin: 20px;
-      box-shadow: var(--water-shadow);
+      box-shadow: var(--quantum-shadow);
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(25px);
+      border: 2px solid var(--cyber-electric);
     }
 
     .admin-header::before {
@@ -120,10 +120,10 @@
       width: 300px;
       height: 300px;
       background: 
-        radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%),
+        radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 70%),
         url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20,50 Q40,30 60,50 T100,50" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><path d="M0,60 Q30,40 60,60 T120,60" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/></svg>');
       opacity: 0.6;
-      animation: waterFlow 6s ease-in-out infinite;
+      animation: quantumFlow 6s ease-in-out infinite;
     }
     
     .admin-header::after {
@@ -133,8 +133,8 @@
       left: 0;
       width: 100%;
       height: 4px;
-      background: linear-gradient(90deg, transparent, var(--aqua-pure), transparent);
-      animation: waterFlow 4s ease-in-out infinite reverse;
+      background: linear-gradient(90deg, transparent, var(--cyber-electric), transparent);
+      animation: quantumFlow 4s ease-in-out infinite reverse;
     }
 
     .header-content {
@@ -146,31 +146,31 @@
     }
 
     .header-info h1 {
-      color: white;
+      color: var(--crystal-white);
       font-size: 2.8rem;
       font-weight: 800;
       margin: 0 0 12px 0;
       display: flex;
       align-items: center;
       gap: 20px;
-      text-shadow: 0 2px 8px rgba(0, 51, 102, 0.5);
+      text-shadow: 0 4px 8px rgba(0, 15, 28, 0.5), 0 0 20px rgba(0, 229, 255, 0.3);
       letter-spacing: -0.02em;
     }
     
     .header-info h1 i {
-      background: var(--surface-gradient);
+      background: var(--cyber-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+      filter: drop-shadow(0 2px 4px rgba(0, 229, 255, 0.3));
     }
 
     .header-info p {
-      color: rgba(255, 255, 255, 0.95);
+      color: var(--text-medium);
       font-size: 1.2rem;
       margin: 0;
       font-weight: 400;
-      text-shadow: 0 1px 4px rgba(0, 51, 102, 0.3);
+      text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
       letter-spacing: 0.01em;
     }
 
@@ -3251,5 +3251,14 @@
     // Auto-save every 2 minutes
     setInterval(saveProgress, 120000);
   </script>
+
+  <!-- Developer Credit Section -->
+  <footer class="developer-credit">
+      <div class="form-section" style="text-align: center; margin-top: 40px; padding: 20px; border-top: 2px solid var(--cyber-electric);">
+          <p style="color: var(--text-medium); font-size: 0.9rem; margin: 0;">
+              <i class="fas fa-code"></i> Developed by <strong style="color: var(--cyber-electric);">Revanth Meda</strong> for <strong style="color: var(--crystal-white);">CULLY LTD</strong>
+          </p>
+      </div>
+  </footer>
 </body>
 </html>
