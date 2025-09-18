@@ -9,13 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Professional Water Elements -->
-    <div class="water-elements">
-        <div class="water-drop"></div>
-        <div class="water-drop"></div>
-        <div class="water-drop"></div>
-        <div class="water-bubble"></div>
-        <div class="water-bubble"></div>
+    <!-- Quantum Background Elements -->
+    <div class="quantum-elements">
+        <div class="quantum-particle"></div>
+        <div class="quantum-particle"></div>
+        <div class="quantum-particle"></div>
+        <div class="neural-node"></div>
+        <div class="neural-node"></div>
     </div>
     
     <div class="container">
@@ -34,15 +34,15 @@
             </div>
         </div>
 
-        <div class="water-card">
+        <div class="data-card">
             <div class="card-header">
                 <h2><i class="fas fa-play-circle"></i> Start Your Journey</h2>
             </div>
-            <div class="card-content">
+            <div class="card-body">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">{{ message }}</div>
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
@@ -53,14 +53,14 @@
                         professional technical documentation faster and more accurately than ever before.
                     </p>
                     <div class="auth-buttons">
-                        <a href="{{ url_for('auth.login') }}" class="btn-primary">
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-water btn-primary">
                             <i class="fas fa-water"></i>
                             <div class="btn-content">
                                 <span class="btn-title">Access Portal</span>
                                 <span class="btn-subtitle">Login to your dashboard</span>
                             </div>
                         </a>
-                        <a href="{{ url_for('auth.register') }}" class="btn-secondary">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-water btn-secondary">
                             <i class="fas fa-user-plus"></i>
                             <div class="btn-content">
                                 <span class="btn-title">Join Excellence</span>
@@ -68,8 +68,8 @@
                             </div>
                         </a>
                     </div>
-                    <div class="registration-info" style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; margin-top: 25px; border: 1px solid rgba(255,255,255,0.1);">
-                        <p style="margin: 0; color: rgba(255,255,255,0.9);"><i class="fas fa-info-circle"></i> <strong>New users:</strong> Registration requires administrator approval.
+                    <div class="form-section">
+                        <p><i class="fas fa-info-circle"></i> <strong>New users:</strong> Registration requires administrator approval.
                         You'll receive an email notification within 24 hours once your account is approved.
                         </p>
                     </div>
@@ -77,55 +77,55 @@
             </div>
         </div>
 
-        <!-- WATER EXCELLENCE FEATURES SECTION -->
-        <div class="water-card">
+        <!-- QUANTUM EXCELLENCE FEATURES SECTION -->
+        <div class="data-card">
             <div class="card-header">
                 <h2><i class="fas fa-water"></i> Water Industry Excellence</h2>
             </div>
-            <div class="card-content">
-                <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 30px 0;">
-                    <div class="feature-item" style="background: rgba(255,255,255,0.08); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; backdrop-filter: blur(10px);">
-                        <div class="feature-icon" style="font-size: 3rem; color: #00cccc; margin-bottom: 20px;"><i class="fas fa-droplet"></i></div>
-                        <h3 style="color: white; margin-bottom: 15px; font-size: 1.4rem;">Water System Reports</h3>
-                        <p style="color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 20px;">Specialized documentation for water treatment, distribution, and automation systems with industry-specific templates.</p>
-                        <ul class="feature-benefits" style="list-style: none; padding: 0; color: rgba(255,255,255,0.8);">
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #00cccc;"></i>Water Treatment SAT Reports</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #00cccc;"></i>Distribution System Documentation</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #00cccc;"></i>SCADA Migration Reports</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #00cccc;"></i>Compliance Documentation</li>
+            <div class="card-body">
+                <div class="features-grid">
+                    <div class="form-section">
+                        <div class="feature-icon"><i class="fas fa-droplet"></i></div>
+                        <h3>Water System Reports</h3>
+                        <p>Specialized documentation for water treatment, distribution, and automation systems with industry-specific templates.</p>
+                        <ul class="feature-benefits">
+                            <li><i class="fas fa-check"></i>Water Treatment SAT Reports</li>
+                            <li><i class="fas fa-check"></i>Distribution System Documentation</li>
+                            <li><i class="fas fa-check"></i>SCADA Migration Reports</li>
+                            <li><i class="fas fa-check"></i>Compliance Documentation</li>
                         </ul>
                     </div>
-                    <div class="feature-item" style="background: rgba(255,255,255,0.08); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; backdrop-filter: blur(10px);">
-                        <div class="feature-icon" style="font-size: 3rem; color: #0080ff; margin-bottom: 20px;"><i class="fas fa-users-cog"></i></div>
-                        <h3 style="color: white; margin-bottom: 15px; font-size: 1.4rem;">Team Collaboration</h3>
-                        <p style="color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 20px;">Advanced workflow management designed for water industry engineering teams and project coordination.</p>
-                        <ul class="feature-benefits" style="list-style: none; padding: 0; color: rgba(255,255,255,0.8);">
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0080ff;"></i>Multi-stage Approval Workflows</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0080ff;"></i>Real-time Collaboration</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0080ff;"></i>Digital Signatures</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0080ff;"></i>Progress Tracking</li>
+                    <div class="form-section">
+                        <div class="feature-icon"><i class="fas fa-users-cog"></i></div>
+                        <h3>Team Collaboration</h3>
+                        <p>Advanced workflow management designed for water industry engineering teams and project coordination.</p>
+                        <ul class="feature-benefits">
+                            <li><i class="fas fa-check"></i>Multi-stage Approval Workflows</li>
+                            <li><i class="fas fa-check"></i>Real-time Collaboration</li>
+                            <li><i class="fas fa-check"></i>Digital Signatures</li>
+                            <li><i class="fas fa-check"></i>Progress Tracking</li>
                         </ul>
                     </div>
-                    <div class="feature-item" style="background: rgba(255,255,255,0.08); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; backdrop-filter: blur(10px);">
-                        <div class="feature-icon" style="font-size: 3rem; color: #33dddd; margin-bottom: 20px;"><i class="fas fa-sitemap"></i></div>
-                        <h3 style="color: white; margin-bottom: 15px; font-size: 1.4rem;">I/O Builder Tool</h3>
-                        <p style="color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 20px;">Interactive tool for creating comprehensive automation system documentation with water industry focus.</p>
-                        <ul class="feature-benefits" style="list-style: none; padding: 0; color: rgba(255,255,255,0.8);">
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #33dddd;"></i>Drag-and-drop Interface</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #33dddd;"></i>Hardware Integration</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #33dddd;"></i>Automated Documentation</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #33dddd;"></i>Modbus Configuration</li>
+                    <div class="form-section">
+                        <div class="feature-icon"><i class="fas fa-sitemap"></i></div>
+                        <h3>I/O Builder Tool</h3>
+                        <p>Interactive tool for creating comprehensive automation system documentation with water industry focus.</p>
+                        <ul class="feature-benefits">
+                            <li><i class="fas fa-check"></i>Drag-and-drop Interface</li>
+                            <li><i class="fas fa-check"></i>Hardware Integration</li>
+                            <li><i class="fas fa-check"></i>Automated Documentation</li>
+                            <li><i class="fas fa-check"></i>Modbus Configuration</li>
                         </ul>
                     </div>
-                    <div class="feature-item" style="background: rgba(255,255,255,0.08); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; backdrop-filter: blur(10px);">
-                        <div class="feature-icon" style="font-size: 3rem; color: #0066cc; margin-bottom: 20px;"><i class="fas fa-shield-water"></i></div>
-                        <h3 style="color: white; margin-bottom: 15px; font-size: 1.4rem;">Enterprise Security</h3>
-                        <p style="color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 20px;">Bank-level security tailored for water industry compliance and critical infrastructure protection.</p>
-                        <ul class="feature-benefits" style="list-style: none; padding: 0; color: rgba(255,255,255,0.8);">
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0066cc;"></i>Encrypted Data Storage</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0066cc;"></i>Multi-factor Authentication</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0066cc;"></i>Audit Trails</li>
-                            <li style="margin: 8px 0; padding-left: 20px; position: relative;"><i class="fas fa-check" style="position: absolute; left: 0; color: #0066cc;"></i>Industry Compliance</li>
+                    <div class="form-section">
+                        <div class="feature-icon"><i class="fas fa-shield-water"></i></div>
+                        <h3>Enterprise Security</h3>
+                        <p>Bank-level security tailored for water industry compliance and critical infrastructure protection.</p>
+                        <ul class="feature-benefits">
+                            <li><i class="fas fa-check"></i>Encrypted Data Storage</li>
+                            <li><i class="fas fa-check"></i>Multi-factor Authentication</li>
+                            <li><i class="fas fa-check"></i>Audit Trails</li>
+                            <li><i class="fas fa-check"></i>Industry Compliance</li>
                         </ul>
                     </div>
                 </div>
@@ -133,38 +133,40 @@
         </div>
 
         <!-- SUPPORT & RESOURCES SECTION -->
-        <div class="water-card">
+        <div class="data-card">
             <div class="card-header">
                 <h2><i class="fas fa-life-ring"></i> Support & Resources</h2>
             </div>
-            <div class="card-content">
-                <div class="support-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 30px 0;">
-                    <div class="support-item" style="background: rgba(255,255,255,0.08); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: all 0.3s ease;">
-                        <i class="fas fa-book" style="font-size: 2.5rem; color: #00cccc; margin-bottom: 15px; display: block;"></i>
-                        <h3 style="color: white; margin-bottom: 15px;">Documentation Center</h3>
-                        <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">Complete guides for water industry professionals covering all platform features and workflows.</p>
-                        <a href="#" onclick="showModal('docs')" class="support-link" style="color: #00cccc; text-decoration: none; font-weight: 600; border: 2px solid #00cccc; padding: 8px 16px; border-radius: 8px; display: inline-block; transition: all 0.3s ease;">View Documentation</a>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-section">
+                        <i class="fas fa-book"></i>
+                        <h3>Documentation Center</h3>
+                        <p>Complete guides for water industry professionals covering all platform features and workflows.</p>
+                        <a href="#" onclick="showModal('docs')" class="btn btn-water btn-secondary">View Documentation</a>
                     </div>
-                    <div class="support-item" style="background: rgba(255,255,255,0.08); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: all 0.3s ease;">
-                        <i class="fas fa-video" style="font-size: 2.5rem; color: #0080ff; margin-bottom: 15px; display: block;"></i>
-                        <h3 style="color: white; margin-bottom: 15px;">Video Training Library</h3>
-                        <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">Interactive tutorials for water system documentation and platform navigation.</p>
-                        <a href="#" onclick="showModal('training')" class="support-link" style="color: #0080ff; text-decoration: none; font-weight: 600; border: 2px solid #0080ff; padding: 8px 16px; border-radius: 8px; display: inline-block; transition: all 0.3s ease;">Watch Tutorials</a>
+                    <div class="form-section">
+                        <i class="fas fa-video"></i>
+                        <h3>Video Training Library</h3>
+                        <p>Interactive tutorials for water system documentation and platform navigation.</p>
+                        <a href="#" onclick="showModal('training')" class="btn btn-water btn-secondary">Watch Tutorials</a>
                     </div>
-                    <div class="support-item" style="background: rgba(255,255,255,0.08); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: all 0.3s ease;">
-                        <i class="fas fa-headset" style="font-size: 2.5rem; color: #33dddd; margin-bottom: 15px; display: block;"></i>
-                        <h3 style="color: white; margin-bottom: 15px;">Technical Assistance</h3>
-                        <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">Direct support for water industry technical issues and platform troubleshooting.</p>
-                        <a href="mailto:support@cullyautomation.com" class="support-link" style="color: #33dddd; text-decoration: none; font-weight: 600; border: 2px solid #33dddd; padding: 8px 16px; border-radius: 8px; display: inline-block; transition: all 0.3s ease;">Get Help</a>
+                    <div class="form-section">
+                        <i class="fas fa-headset"></i>
+                        <h3>Technical Assistance</h3>
+                        <p>Direct support for water industry technical issues and platform troubleshooting.</p>
+                        <a href="mailto:support@cullyautomation.com" class="btn btn-water btn-secondary">Get Help</a>
                     </div>
-                    <div class="support-item" style="background: rgba(255,255,255,0.08); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: all 0.3s ease;">
-                        <i class="fas fa-comments" style="font-size: 2.5rem; color: #0066cc; margin-bottom: 15px; display: block;"></i>
-                        <h3 style="color: white; margin-bottom: 15px;">Water Industry Forum</h3>
-                        <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px;">Connect with water industry professionals and share best practices.</p>
-                        <a href="#" onclick="showModal('community')" class="support-link" style="color: #0066cc; text-decoration: none; font-weight: 600; border: 2px solid #0066cc; padding: 8px 16px; border-radius: 8px; display: inline-block; transition: all 0.3s ease;">Join Forum</a>
+                    <div class="form-section">
+                        <i class="fas fa-comments"></i>
+                        <h3>Water Industry Forum</h3>
+                        <p>Connect with water industry professionals and share best practices.</p>
+                        <a href="#" onclick="showModal('community')" class="btn btn-water btn-secondary">Join Forum</a>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
     <!-- Modal for content -->
     <div id="contentModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
