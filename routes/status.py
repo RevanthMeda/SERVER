@@ -585,6 +585,33 @@ def download_report(submission_id):
 
 
 
+@status_bp.route('/download-modern/<submission_id>')
+@login_required
+def download_report_modern(submission_id):
+    if not submission_id or submission_id == 'None':
+        flash('Invalid submission ID.', 'error')
+        return redirect(url_for('dashboard.home'))
+
+    from services.report_renderer import generate_modern_sat_report
+
+    result = generate_modern_sat_report(submission_id)
+    if 'error' in result:
+        flash(result['error'], 'error')
+        return redirect(url_for('status.view_status', submission_id=submission_id))
+
+    try:
+        return send_file(
+            result['path'],
+            as_attachment=True,
+            download_name=result['download_name'],
+            mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+    except Exception as exc:  # noqa: BLE001 - provide user-facing feedback
+        current_app.logger.error(f'Error sending modern report for {submission_id}: {exc}', exc_info=True)
+        flash('Error downloading report.', 'error')
+        return redirect(url_for('status.view_status', submission_id=submission_id))
+
+
 @status_bp.route('/list')
 @login_required
 def list_submissions():

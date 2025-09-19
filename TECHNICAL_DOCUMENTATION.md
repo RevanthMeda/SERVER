@@ -198,3 +198,12 @@ To maintain version integrity during documentation updates:
 ---
 
 *This technical documentation was generated based on systematic analysis of the codebase on [Current Date].*
+## Conversational Bot Enhancements
+- Guided conversation now prompts for required SAT fields sequentially and validates responses before persisting them.
+- Excel uploads can be multi-sheet; recognised values are auto-mapped to form fields with inline validation and immediate session updates.
+- Bot messages that include a report identifier such as a UUID trigger a read-only document lookup and return a modern download link.
+
+## Modern Document Pipeline
+- /status/download-modern/<id> streams a regenerated DOCX built by services/report_renderer.generate_modern_sat_report using the existing SAT template for styling.
+- The renderer assembles cover metadata, purpose/scope copy, and structured tables for any populated SAT list sections to maintain parity with legacy reports while modernising the layout.
+

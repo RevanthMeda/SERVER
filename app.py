@@ -491,6 +491,7 @@ def create_app(config_name='default'):
         from routes.bulk import bulk_bp
         from routes.audit import audit_bp
         from routes.analytics import analytics_bp
+        from routes.bot import bot_bp
         from routes.ai import ai_bp
         from routes.edit import edit_bp
         
@@ -516,6 +517,7 @@ def create_app(config_name='default'):
         app.register_blueprint(bulk_bp, url_prefix='/bulk')
         app.register_blueprint(audit_bp, url_prefix='/audit')
         app.register_blueprint(analytics_bp, url_prefix='/analytics')
+        app.register_blueprint(bot_bp, url_prefix='/bot')
         app.register_blueprint(edit_bp, url_prefix='/edit')
         app.register_blueprint(ai_bp)
         
