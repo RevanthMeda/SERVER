@@ -146,7 +146,8 @@ def admin():
                          recent_activity=[],  # Placeholder for recent activity
                          pending_users_list=pending_users_list,
                          storage_location=storage_location,
-                         company_logo=company_logo)
+                         company_logo=company_logo,
+                         recent_reports=recent_reports)
 
 @dashboard_bp.route('/engineer')
 @role_required(['Engineer'])
@@ -1013,7 +1014,7 @@ def delete_report(report_id):
         return jsonify({'success': False, 'message': 'Failed to delete report'}), 500
 
 @dashboard_bp.route('/my-reports')
-@role_required(['Engineer', 'Automation Manager'])
+@role_required(['Engineer', 'Automation Manager', 'PM'])
 def my_reports():
     """View reports relevant to the current user"""
     from models import Report, SATReport
@@ -1022,7 +1023,7 @@ def my_reports():
     # Build reports queryset based on role
     if current_user.role == 'Engineer':
         reports_query = Report.query.filter_by(user_email=current_user.email)
-    else:
+    elif current_user.role == 'Automation Manager':
         approver_match = f'"approver_email": "{current_user.email}"'
         reports_query = Report.query.filter(
             or_(
@@ -1030,6 +1031,19 @@ def my_reports():
                 and_(
                     Report.approvals_json.isnot(None),
                     Report.approvals_json.contains(approver_match)
+                )
+            )
+        )
+    else:
+        approver_match = f'"approver_email": "{current_user.email}"'
+        stage_match = '"stage": 2'
+        reports_query = Report.query.filter(
+            or_(
+                Report.user_email == current_user.email,
+                and_(
+                    Report.approvals_json.isnot(None),
+                    Report.approvals_json.contains(approver_match),
+                    Report.approvals_json.contains(stage_match)
                 )
             )
         )

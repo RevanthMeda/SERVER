@@ -1,901 +1,450 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <title>Admin Dashboard - Cully Report Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        /* DARK QUANTUM GLASS THEME - CONSISTENT WITH ALL PAGES */
-        :root {
-            --quantum-dark: #0a0f1c;
-            --neural-blue: #1a2332;
-            --cyber-electric: #00e5ff;
-            --plasma-cyan: #00bcd4;
-            --tech-blue: #2196f3;
-            --crystal-white: #ffffff;
-            --quantum-glass: rgba(26, 35, 50, 0.15);
-            --surface-glass: rgba(26, 35, 50, 0.25);
-            --deep-space: rgba(10, 15, 28, 0.95);
-            --neural-gradient: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #2c3e50 100%);
-            --cyber-gradient: linear-gradient(45deg, #00e5ff 0%, #00bcd4 50%, #2196f3 100%);
-            --glass-gradient: linear-gradient(180deg, rgba(26, 35, 50, 0.15) 0%, rgba(26, 35, 50, 0.05) 100%);
-            --quantum-shadow: 0 8px 32px rgba(0, 229, 255, 0.15);
-            --cyber-glow: 0 0 20px rgba(0, 229, 255, 0.3);
-            --neural-border: rgba(0, 229, 255, 0.2);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --text-dark: #ffffff;
-            --text-medium: rgba(255, 255, 255, 0.9);
-            --text-light: rgba(255, 255, 255, 0.7);
-        }
+{% block title %}Admin Dashboard - {{ super() }}{% endblock %}
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Orbitron', 'Exo 2', 'Inter', monospace;
-            background: var(--neural-gradient);
-            color: var(--text-dark);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+{% block head %}
+<style>
+    .page-header {
+        text-align: left;
+        padding: 1rem 0 2rem;
+        border-bottom: 1px solid var(--cully-light-gray);
+        margin-bottom: 2.5rem;
+    }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(0, 188, 212, 0.08) 0%, transparent 50%),
-                        linear-gradient(45deg, transparent 30%, rgba(0, 229, 255, 0.03) 50%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            animation: quantumFlow 8s ease-in-out infinite;
-        }
+    .page-title {
+        font-size: 2.25rem;
+        margin-bottom: 0.5rem;
+    }
 
-        @keyframes quantumFlow {
-            0%, 100% { transform: translateX(0) rotate(0deg); }
-            33% { transform: translateX(10px) rotate(1deg); }
-            66% { transform: translateX(-5px) rotate(-0.5deg); }
-        }
+    .page-subtitle {
+        text-align: left;
+        max-width: 760px;
+        font-size: 1.05rem;
+        color: var(--cully-gray);
+    }
 
-        .admin-container {
-            width: 100%;
-            margin: 0;
-            padding: 24px;
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-        }
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 1.75rem;
+        margin-bottom: 2.5rem;
+    }
 
-        /* Header Section - Dark Quantum Glass Style */
-        .admin-header {
-            background: var(--quantum-glass);
-            backdrop-filter: blur(25px);
-            border: 2px solid var(--cyber-electric);
-            border-radius: 32px;
-            padding: 40px;
-            margin-bottom: 32px;
-            box-shadow: var(--quantum-shadow), 0 0 40px rgba(0, 229, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
+    .stat-card {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--cully-shadow);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: var(--transition-smooth);
+    }
 
-        .admin-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(0, 229, 255, 0.05), transparent);
-            animation: quantumFlow 10s ease-in-out infinite;
-            pointer-events: none;
-        }
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--cully-shadow-lg);
+    }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
+    .stat-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        color: var(--cully-white);
+        flex-shrink: 0;
+    }
 
-        .header-info h1 {
-            color: var(--crystal-white);
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 0 0 12px 0;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            text-shadow: 0 4px 8px rgba(0, 15, 28, 0.5), 0 0 20px rgba(0, 229, 255, 0.3);
-            letter-spacing: -0.02em;
-        }
+    .stat-icon.stat-users { background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%); }
+    .stat-icon.stat-active { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
+    .stat-icon.stat-pending { background: linear-gradient(135deg, #facc15 0%, #ea580c 100%); }
+    .stat-icon.stat-reports { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); }
+    .stat-icon.stat-db { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); }
 
-        .header-info p {
-            color: var(--text-medium);
-            font-size: 1.1rem;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
-        }
+    .stat-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
 
-        .header-logo {
-            height: 80px;
-            filter: drop-shadow(0 8px 16px rgba(0, 229, 255, 0.3)) brightness(1.2);
-        }
+    .stat-info .value {
+        font-size: 2.6rem;
+        font-weight: 700;
+        color: var(--cully-dark);
+        line-height: 1;
+    }
 
-        /* Navigation - Dark Quantum Glass Style */
-        .dashboard-nav {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: var(--quantum-glass);
-            backdrop-filter: blur(20px);
-            padding: 16px 24px;
-            border-radius: 16px;
-            box-shadow: var(--quantum-shadow);
-            margin-bottom: 32px;
-            border: 2px solid var(--neural-border);
-            overflow-x: auto;
-            white-space: nowrap;
-            position: relative;
-            z-index: 1;
-        }
+    .stat-info .label {
+        font-size: 0.95rem;
+        color: var(--cully-gray);
+        font-weight: 600;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 12px;
-        }
+    .status-pill {
+        font-weight: 600;
+        padding: 0.4rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+    }
 
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: var(--text-light);
-            font-weight: 600;
-            transition: var(--transition);
-            font-size: 14px;
-            white-space: nowrap;
-            background: var(--surface-glass);
-            border: 2px solid var(--neural-border);
-            backdrop-filter: blur(10px);
-        }
+    .status-pill.connected {
+        background: rgba(134, 239, 172, 0.18);
+        color: #047857;
+    }
 
-        .nav-link:hover {
-            background: rgba(26, 35, 50, 0.35);
-            color: var(--cyber-electric);
-            transform: translateY(-2px);
-            box-shadow: var(--cyber-glow);
-            border-color: var(--cyber-electric);
-        }
+    .status-pill.disconnected {
+        background: rgba(248, 113, 113, 0.18);
+        color: #b91c1c;
+    }
 
-        .nav-link.active {
-            background: var(--cyber-gradient);
-            color: var(--crystal-white);
-            box-shadow: var(--cyber-glow), var(--quantum-shadow);
-            border-color: transparent;
-        }
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 1.25rem;
+        color: var(--cully-dark);
+    }
 
-        .nav-link i {
-            font-size: 16px;
-            width: 20px;
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .action-card {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: 1.75rem;
+        box-shadow: var(--cully-shadow);
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        color: var(--cully-dark);
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .action-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--cully-shadow-lg);
+        color: var(--cully-navy);
+    }
+
+    .action-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .action-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(123, 165, 199, 0.12);
+        color: var(--cully-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .action-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .action-description {
+        color: var(--cully-gray);
+        line-height: 1.55;
+        margin: 0;
+        flex-grow: 1;
+    }
+
+    .action-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: var(--cully-navy);
+    }
+
+    .widget-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .widget-card {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--cully-shadow);
+    }
+
+    .widget-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 1.5rem;
+    }
+
+    .widget-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .widget-title i {
+        color: var(--cully-navy);
+    }
+
+    .widget-action {
+        font-weight: 600;
+        color: var(--cully-navy);
+        text-decoration: none;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 0.75rem 0.5rem;
+        text-align: left;
+    }
+
+    th {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--cully-gray);
+        border-bottom: 1px solid var(--cully-light-gray);
+    }
+
+    tr + tr {
+        border-top: 1px solid var(--cully-light-gray);
+    }
+
+    .empty-state {
+        color: var(--cully-gray);
+        font-style: italic;
+    }
+
+    .system-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .info-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--cully-gray);
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: var(--cully-dark);
+    }
+
+    @media (max-width: 600px) {
+        .page-header {
             text-align: center;
-            flex-shrink: 0;
         }
 
-        .nav-link.logout {
-            background: rgba(239, 68, 68, 0.2) !important;
-            color: #fca5a5 !important;
-            border: 2px solid rgba(239, 68, 68, 0.3) !important;
-        }
-
-        .nav-link.logout:hover {
-            background: rgba(239, 68, 68, 0.3) !important;
-            color: #ffffff !important;
-            border-color: #ef4444 !important;
-        }
-
-        /* Flash Messages */
-        .flash-messages {
-            margin-bottom: 24px;
-        }
-
-        .flash-message {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 20px;
-            background: #d1fae5;
-            border: 1px solid #059669;
-            border-radius: 12px;
-            color: #065f46;
-            font-weight: 500;
-            box-shadow: var(--card-shadow);
-        }
-
-        .flash-message i {
-            font-size: 18px;
-        }
-
-        /* Stats Grid - Same as System Settings */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
+        .page-subtitle {
+            text-align: center;
+            margin: 0 auto;
         }
 
         .stat-card {
-            background: var(--quantum-glass);
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: var(--quantum-shadow);
-            display: flex;
-            align-items: center;
-            transition: var(--transition);
-            border: 2px solid var(--neural-border);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--cyber-glow), var(--quantum-shadow);
-            border-color: var(--cyber-electric);
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .stat-icon {
-            font-size: 2rem;
-            color: var(--cyber-electric);
-            width: 40px;
-            height: 40px;
-            margin-right: 16px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin-bottom: 1rem;
         }
+    }
+</style>
+{% endblock %}
 
-        .stat-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Admin Dashboard</h1>
+    <p class="page-subtitle">
+        Welcome back, {{ current_user.full_name if current_user and current_user.full_name else 'Admin' }}.
+        Monitor platform health, manage users, and keep the reporting workflow on track.
+    </p>
+</div>
 
-        .stat-info .value {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--crystal-white);
-        }
-
-        .stat-info .label {
-            font-size: 0.9rem;
-            color: var(--text-medium);
-            font-weight: 500;
-        }
-
-        /* Dashboard Widgets - Same as System Settings */
-        .widgets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .dashboard-widget {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-        }
-
-        .dashboard-widget:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow-hover);
-        }
-
-        .widget-header {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 20px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .widget-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .widget-content {
-            padding: 24px;
-        }
-
-        .widget-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .widget-action:hover {
-            background: linear-gradient(135deg, var(--admin-primary-dark), #00acc1);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(77, 208, 225, 0.3);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 32px 16px;
-            color: #64748b;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            color: #cbd5e1;
-            margin-bottom: 16px;
-        }
-
-        .empty-state h4 {
-            color: #374151;
-            font-size: 18px;
-            margin: 0 0 8px 0;
-        }
-
-        .empty-state p {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        /* Status badges - Same as System Settings */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-connected {
-            background: #d1fae5;
-            color: #065f46;
-            border: 1px solid #059669;
-        }
-
-        .status-disconnected {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #dc2626;
-        }
-
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .status-indicator-connected {
-            background: #059669;
-        }
-
-        .status-indicator-disconnected {
-            background: #dc2626;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* System Overview - Same styling as System Settings */
-        .system-overview {
-            display: grid;
-            gap: 15px;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .info-value {
-            color: #1f2937;
-            font-weight: 600;
-        }
-
-        /* User management styles */
-        .approval-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .approval-item:hover {
-            background: #f1f5f9;
-            border-color: var(--admin-primary);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-        }
-
-        .user-details h5 {
-            margin: 0 0 2px 0;
-            font-size: 14px;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        .user-details span {
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .approve-btn {
-            padding: 8px 16px;
-            background: linear-gradient(135deg, var(--admin-success), #059669);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .approve-btn:hover {
-            background: linear-gradient(135deg, #059669, #047857);
-            transform: translateY(-1px);
-        }
-
-        .developer-footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: auto;
-            background-color: #f1f5f9;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .admin-container {
-                padding: 16px;
-            }
-
-            .header-content {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-
-            .header-info h1 {
-                font-size: 2rem;
-                justify-content: center;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 4px;
-            }
-
-            .nav-link {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .widgets-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        /* Updated stat tile presentation */
-        .stats-grid {
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 28px;
-        }
-        .stats-grid .stat-card {
-            border-radius: 16px;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.1rem;
-            align-items: flex-start;
-        }
-        .stats-grid .stat-header {
-            width: 100%;
-        }
-        .stats-grid .stat-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.4rem;
-            color: #ffffff;
-            background: linear-gradient(135deg, rgba(123, 165, 199, 0.6) 0%, rgba(90, 127, 163, 0.9) 100%);
-        }
-        .stats-grid .stat-icon i {
-            color: inherit;
-        }
-        .stats-grid .stat-value {
-            font-size: 2.6rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--crystal-white);
-        }
-        .stats-grid .stat-label {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-medium);
-            margin: 0;
-        }
-        .stats-grid .stat-card:nth-child(1) .stat-icon {
-            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-        }
-        .stats-grid .stat-card:nth-child(2) .stat-icon {
-            background: linear-gradient(135deg, #facc15 0%, #ea580c 100%);
-        }
-        .stats-grid .stat-card:nth-child(3) .stat-icon {
-            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-        }
-        .stats-grid .stat-card:nth-child(4) .stat-icon {
-            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-        }
-    </style>
-</head>
-<body class="dashboard-layout">
-    <div class="admin-container">
-        <!-- Header -->
-        <div class="admin-header">
-            <div class="header-content">
-                <div class="header-info">
-                    <h1><i class="fa fa-tachometer-alt"></i> Dashboard</h1>
-                    <p>Monitor system performance and manage user activities</p>
-                </div>
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
-            </div>
-        </div>
-
-        <div class="dashboard-content">
-            <!-- Unified Navigation -->
-            <div class="dashboard-nav">
-                <div class="nav-links">
-                    <a href="{{ url_for('dashboard.admin') }}" class="nav-link {% if request.endpoint == 'dashboard.admin' %}active{% endif %}">
-                        <i class="fa fa-home"></i> Dashboard
-                    </a>
-                    <a href="{{ url_for('dashboard.user_management') }}" class="nav-link {% if request.endpoint == 'dashboard.user_management' %}active{% endif %}">
-                        <i class="fa fa-users"></i> User Management
-                        {% if pending_users > 0 %}
-                        <span class="nav-badge">{{ pending_users }}</span>
-                        {% endif %}
-                    </a>
-                    <a href="{{ url_for('dashboard.admin_reports') }}" class="nav-link {% if request.endpoint == 'dashboard.admin_reports' %}active{% endif %}">
-                        <i class="fa fa-file-alt"></i> All Reports
-                        {% if total_reports > 0 %}
-                        <span class="nav-badge">{{ total_reports }}</span>
-                        {% endif %}
-                    </a>
-                    <a href="{{ url_for('dashboard.system_settings') }}" class="nav-link {% if request.endpoint == 'dashboard.system_settings' %}active{% endif %}">
-                        <i class="fa fa-cog"></i> System Settings
-                    </a>
-                    <a href="{{ url_for('main.sat_form') }}" class="nav-link {% if request.endpoint == 'main.sat_form' %}active{% endif %}">
-                        <i class="fa fa-plus"></i> Create Report
-                    </a>
-                    <a href="{{ url_for('auth.logout') }}" class="nav-link logout">
-                        <i class="fa fa-sign-out-alt"></i> Logout
-                    </a>
-                </div>
-            </div>
-
-            <!-- Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="flash-messages">
-                        {% for category, message in messages %}
-                            <div class="flash-message">
-                                <i class="fa fa-check-circle"></i>
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
-
-            <!-- Main Content Area -->
-            <div class="dashboard-main">
-                <!-- Stats Grid -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">
-                                <i class="fa fa-users"></i>
-                            </div>
-                        </div>
-                        <div class="stat-value">{{ total_users }}</div>
-                        <p class="stat-label">Total Users</p>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">
-                                <i class="fa fa-clock"></i>
-                            </div>
-                        </div>
-                        <div class="stat-value">{{ pending_users }}</div>
-                        <p class="stat-label">Pending Approval</p>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">
-                                <i class="fa fa-file-alt"></i>
-                            </div>
-                        </div>
-                        <div class="stat-value">{{ total_reports }}</div>
-                        <p class="stat-label">Total Reports</p>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">
-                                <i class="fa fa-database"></i>
-                            </div>
-                        </div>
-                        <div class="stat-value">
-                            <span class="status-badge {{ 'status-connected' if db_status else 'status-disconnected' }}">
-                                <div class="status-indicator status-indicator-{{ 'connected' if db_status else 'disconnected' }}"></div>
-                                {{ 'Connected' if db_status else 'Disconnected' }}
-                            </span>
-                        </div>
-                        <p class="stat-label">Database Status</p>
-                    </div>
-                </div>
-
-                <!-- Dashboard Widgets -->
-                <div class="widgets-grid">
-                    <div class="dashboard-widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">
-                                <i class="fa fa-exclamation-triangle"></i>
-                                Pending Approvals
-                            </h3>
-                            <a href="{{ url_for('dashboard.user_management') }}" class="widget-action">Manage All</a>
-                        </div>
-                        <div class="widget-content">
-                            {% if pending_users_list %}
-                                {% for user in pending_users_list %}
-                                    <div class="approval-item">
-                                        <div class="user-info">
-                                            <div class="user-avatar">
-                                                {{ user.full_name[0] if user.full_name else 'U' }}
-                                            </div>
-                                            <div class="user-details">
-                                                <h5>{{ user.full_name }}</h5>
-                                                <span>{{ user.requested_role or 'No role specified' }}</span>
-                                            </div>
-                                        </div>
-                                        <button type="button" class="approve-btn" data-user-id="{{ user.id }}">
-                                            <i class="fa fa-check"></i> Approve
-                                        </button>
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="empty-state">
-                                    <i class="fa fa-check-circle"></i>
-                                    <h4>All caught up!</h4>
-                                    <p>No pending user approvals at this time</p>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="dashboard-widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">
-                                <i class="fa fa-clock"></i>
-                                Recent Activity
-                            </h3>
-                            <a href="{{ url_for('dashboard.user_management') }}" class="widget-action">View All</a>
-                        </div>
-                        <div class="widget-content">
-                            <div class="empty-state">
-                                <i class="fa fa-history"></i>
-                                <h4>No recent activity</h4>
-                                <p>User activities and system events will appear here</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- System Overview -->
-                <div class="dashboard-widget">
-                    <div class="widget-header">
-                        <h3 class="widget-title">
-                            <i class="fa fa-cogs"></i>
-                            System Overview
-                        </h3>
-                    </div>
-                    <div class="widget-content">
-                        <div class="system-overview">
-                            <div class="info-row">
-                                <span class="info-label">Database Connection:</span>
-                                <span class="info-value">
-                                    <span class="status-badge {{ 'status-connected' if db_status else 'status-disconnected' }}">
-                                        <div class="status-indicator status-indicator-{{ 'connected' if db_status else 'disconnected' }}"></div>
-                                        {{ 'Operational' if db_status else 'Connection Failed' }}
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Storage Location:</span>
-                                <span class="info-value">{{ storage_location or 'Not configured' }}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Company Branding:</span>
-                                <span class="info-value">
-                                    <span class="status-badge status-connected">
-                                        <div class="status-indicator status-indicator-connected"></div>
-                                        Configured
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Security Status:</span>
-                                <span class="info-value">
-                                    <span class="status-badge status-connected">
-                                        <div class="status-indicator status-indicator-connected"></div>
-                                        Protected
-                                    </span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Developer Credit Footer -->
-        <div class="developer-footer">
-            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
-                Developed by <strong style="color: var(--admin-primary);">Revanth Meda</strong> for Cully Automation
-            </p>
+<div class="stats-grid">
+    <div class="stat-card">
+        <i class="fas fa-users stat-icon stat-users"></i>
+        <div class="stat-info">
+            <div class="value">{{ total_users if total_users is defined else 0 }}</div>
+            <div class="label">Total Users</div>
         </div>
     </div>
-
-    <script>
-        // Database status check
-        async function checkDatabaseStatus() {
-            try {
-                const response = await fetch('/dashboard/db-status');
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                const data = await response.json();
-                console.log('Database status:', data.connected ? 'Connected' : 'Disconnected');
-            } catch (error) {
-                console.error('Database status check failed:', error);
-            }
-        }
-
-        // User approval function
-        async function approveUser(userId) {
-            if (!confirm('Are you sure you want to approve this user?')) {
-                return;
-            }
-
-            try {
-                const formData = new FormData();
-                formData.append('role', 'Engineer');
-
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                const response = await fetch(`/dashboard/approve-user/${userId}`, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': csrfToken
-                    }
-                });
-
-                if (response.ok) {
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                } else {
-                    alert('Error approving user. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error approving user:', error);
-                alert('Network error. Please check your connection.');
-            }
-        }
-
-        // Event delegation for approve buttons
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.approve-btn')) {
-                const button = e.target.closest('.approve-btn');
-                const userId = button.getAttribute('data-user-id');
-                if (userId) {
-                    approveUser(userId);
-                }
-            }
-        });
-
-        // Initialize
-        checkDatabaseStatus();
-        setInterval(checkDatabaseStatus, 30000);
-    </script>
-
-    <!-- Footer -->
-    <div style="text-align: center; padding: 24px; color: #6b7280; font-size: 0.875rem; background: white; border-radius: 12px; margin-top: 32px; box-shadow: var(--card-shadow);">
-        <p>Developed by <strong>Revanth Meda</strong> for <strong>Cully Automation</strong></p>
+    <div class="stat-card">
+        <i class="fas fa-user-check stat-icon stat-active"></i>
+        <div class="stat-info">
+            <div class="value">{{ users | selectattr('status', 'equalto', 'Active') | list | length }}</div>
+            <div class="label">Active Accounts</div>
+        </div>
     </div>
-</body>
-</html>
+    <div class="stat-card">
+        <i class="fas fa-user-clock stat-icon stat-pending"></i>
+        <div class="stat-info">
+            <div class="value">{{ pending_users if pending_users is defined else 0 }}</div>
+            <div class="label">Pending Approvals</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-file-alt stat-icon stat-reports"></i>
+        <div class="stat-info">
+            <div class="value">{{ total_reports if total_reports is defined else 0 }}</div>
+            <div class="label">Total Reports</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-database stat-icon stat-db"></i>
+        <div class="stat-info">
+            <div class="label">Database Status</div>
+            <div class="value" style="font-size:1.4rem;">
+                <span class="status-pill {{ 'connected' if db_status else 'disconnected' }}">
+                    {{ 'Connected' if db_status else 'Disconnected' }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-title">Quick Actions</div>
+<div class="action-grid">
+    <a href="{{ url_for('dashboard.user_management') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-user-gear"></i></div>
+            <h3 class="action-title">Manage Users</h3>
+        </div>
+        <p class="action-description">Approve new registrations, assign roles, and update account status.</p>
+        <span class="action-link">Open User Management <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="{{ url_for('dashboard.automation_manager') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-clipboard-check"></i></div>
+            <h3 class="action-title">Monitor Approvals</h3>
+        </div>
+        <p class="action-description">Review the automation queue and support project managers with escalations.</p>
+        <span class="action-link">View Workflow <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="{{ url_for('dashboard.pm') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-diagram-project"></i></div>
+            <h3 class="action-title">Project Oversight</h3>
+        </div>
+        <p class="action-description">Keep an eye on project manager progress and outstanding deliverables.</p>
+        <span class="action-link">Visit PM Dashboard <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="{{ url_for('notifications.notification_center') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-bell"></i></div>
+            <h3 class="action-title">Notifications</h3>
+        </div>
+        <p class="action-description">Review platform alerts, user events, and integration updates.</p>
+        <span class="action-link">Open Center <i class="fas fa-arrow-right"></i></span>
+    </a>
+</div>
+
+<div class="widget-grid">
+    <div class="widget-card">
+        <div class="widget-header">
+            <h3 class="widget-title"><i class="fas fa-user-plus"></i> Pending User Approvals</h3>
+            <a href="{{ url_for('dashboard.user_management') }}" class="widget-action">View All</a>
+        </div>
+        {% if pending_users_list and pending_users_list|length > 0 %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Requested</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in pending_users_list %}
+                    <tr>
+                        <td>{{ user.full_name or 'Unnamed User' }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.created_date.strftime('%d %b %Y') if user.created_date else '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="empty-state">No users awaiting approval.</p>
+        {% endif %}
+    </div>
+
+    <div class="widget-card">
+        <div class="widget-header">
+            <h3 class="widget-title"><i class="fas fa-file-alt"></i> Recent Reports</h3>
+            <a href="{{ url_for('dashboard.pm') }}" class="widget-action">Go to Reports</a>
+        </div>
+        {% if recent_reports and recent_reports|length > 0 %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in recent_reports %}
+                    <tr>
+                        <td>{{ report.document_title or 'Untitled Report' }}</td>
+                        <td>{{ report.status | replace('_', ' ') | title }}</td>
+                        <td>{{ report.updated_at.strftime('%d %b %Y') if report.updated_at else '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="empty-state">No recent reports to display.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="widget-card" style="margin-top: 2rem;">
+    <div class="widget-header">
+        <h3 class="widget-title"><i class="fas fa-sliders-h"></i> Platform Configuration</h3>
+    </div>
+    <div class="system-info">
+        <div class="info-row">
+            <span class="info-label">Storage Location</span>
+            <span class="info-value">{{ storage_location }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Company Branding</span>
+            <span class="info-value">{{ company_logo }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

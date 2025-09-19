@@ -62,9 +62,6 @@
     .stat-icon.stat-pending { background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%); }
     .stat-icon.stat-rejected { background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%); }
     .stat-icon.stat-approved { background: linear-gradient(135deg, #86efac 0%, #22c55e 100%); }
-    .stat-icon.stat-automation { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); }
-    .stat-icon.stat-workflows { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
-    .stat-icon.stat-complete { background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%); }
 
     .stat-info {
         display: flex;
@@ -325,32 +322,6 @@
 
 {% if automation_count is defined or pending_workflows is defined or completed_automations is defined %}
 <div class="automation-overview">
-    <h2 class="section-title">Automation Overview</h2>
-    <div class="stats-grid">
-        <div class="stat-card">
-            <i class="fas fa-robot stat-icon stat-automation"></i>
-            <div class="stat-info">
-                <div class="value">{{ automation_count if automation_count is defined else 0 }}</div>
-                <div class="label">Active Automations</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-route stat-icon stat-workflows"></i>
-            <div class="stat-info">
-                <div class="value">{{ pending_workflows if pending_workflows is defined else 0 }}</div>
-                <div class="label">Pending Workflows</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-clipboard-check stat-icon stat-complete"></i>
-            <div class="stat-info">
-                <div class="value">{{ completed_automations if completed_automations is defined else 0 }}</div>
-                <div class="label">Completed Automations</div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
 
 <div class="section-title">Quick Actions</div>
 <div class="action-grid">
@@ -414,3 +385,4 @@
     </div>
 </div>
 {% endblock %}
+

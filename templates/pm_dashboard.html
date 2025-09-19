@@ -1,1124 +1,417 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <title>Project Manager Dashboard - Cully Report Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}?v=2024">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FORCE CACHE REFRESH -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <style>
-        /* DARK QUANTUM GLASS THEME - CONSISTENT WITH ALL PAGES */
-        :root {
-            --quantum-dark: #0a0f1c;
-            --neural-blue: #1a2332;
-            --cyber-electric: #00e5ff;
-            --plasma-cyan: #00bcd4;
-            --tech-blue: #2196f3;
-            --crystal-white: #ffffff;
-            --quantum-glass: rgba(26, 35, 50, 0.15);
-            --surface-glass: rgba(26, 35, 50, 0.25);
-            --deep-space: rgba(10, 15, 28, 0.95);
-            --neural-gradient: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #2c3e50 100%);
-            --cyber-gradient: linear-gradient(45deg, #00e5ff 0%, #00bcd4 50%, #2196f3 100%);
-            --glass-gradient: linear-gradient(180deg, rgba(26, 35, 50, 0.15) 0%, rgba(26, 35, 50, 0.05) 100%);
-            --quantum-shadow: 0 8px 32px rgba(0, 229, 255, 0.15);
-            --cyber-glow: 0 0 20px rgba(0, 229, 255, 0.3);
-            --neural-border: rgba(0, 229, 255, 0.2);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --text-dark: #ffffff;
-            --text-medium: rgba(255, 255, 255, 0.9);
-            --text-light: rgba(255, 255, 255, 0.7);
-        }
+{% extends "base.html" %}
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Orbitron', 'Exo 2', 'Inter', monospace;
-            background: var(--neural-gradient);
-            color: var(--text-dark);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+{% block title %}Project Manager Dashboard - {{ super() }}{% endblock %}
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(0, 188, 212, 0.08) 0%, transparent 50%),
-                        linear-gradient(45deg, transparent 30%, rgba(0, 229, 255, 0.03) 50%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            animation: quantumFlow 8s ease-in-out infinite;
-        }
+{% block head %}
+<style>
+    .page-header {
+        text-align: left;
+        padding: 1rem 0 2rem;
+        border-bottom: 1px solid var(--cully-light-gray);
+        margin-bottom: 2.5rem;
+    }
 
-        @keyframes quantumFlow {
-            0%, 100% { transform: translateX(0) rotate(0deg); }
-            33% { transform: translateX(10px) rotate(1deg); }
-            66% { transform: translateX(-5px) rotate(-0.5deg); }
-        }
+    .page-title {
+        font-size: 2.25rem;
+        margin-bottom: 0.5rem;
+    }
 
-        .dashboard-container {
-            width: 100%;
-            margin: 0;
-            padding: 24px;
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-        }
+    .page-subtitle {
+        text-align: left;
+        max-width: 720px;
+        font-size: 1.05rem;
+        color: var(--cully-gray);
+    }
 
-        /* Header Section - Dark Quantum Glass Style */
-        .dashboard-header {
-            background: var(--quantum-glass);
-            backdrop-filter: blur(25px);
-            border: 2px solid var(--cyber-electric);
-            border-radius: 32px;
-            padding: 40px;
-            margin-bottom: 32px;
-            box-shadow: var(--quantum-shadow), 0 0 40px rgba(0, 229, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 1.75rem;
+        margin-bottom: 2.5rem;
+    }
 
-        .dashboard-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(0, 229, 255, 0.05), transparent);
-            animation: quantumFlow 10s ease-in-out infinite;
-            pointer-events: none;
-        }
+    .stat-card {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--cully-shadow);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: var(--transition-smooth);
+    }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--cully-shadow-lg);
+    }
 
-        .header-info h1 {
-            color: var(--cyber-electric);
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 0 0 12px 0;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            text-shadow: 0 4px 8px rgba(0, 15, 28, 0.5), 0 0 20px rgba(0, 229, 255, 0.3);
-            letter-spacing: -0.02em;
-            font-family: 'Orbitron', 'Exo 2', monospace;
-        }
+    .stat-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        color: var(--cully-white);
+        flex-shrink: 0;
+    }
 
-        .header-info p {
-            color: var(--text-medium);
-            font-size: 1.1rem;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
-            font-family: 'Exo 2', 'Inter', sans-serif;
-        }
+    .stat-icon.stat-projects { background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%); }
+    .stat-icon.stat-pending { background: linear-gradient(135deg, #facc15 0%, #ea580c 100%); }
+    .stat-icon.stat-complete { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
 
-        .header-logo {
-            height: 80px;
-            filter: drop-shadow(0 8px 16px rgba(0, 229, 255, 0.3)) brightness(1.2);
-        }
+    .stat-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
 
-        /* Navigation - Dark Quantum Glass Style */
-        .dashboard-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--quantum-glass);
-            backdrop-filter: blur(20px);
-            padding: 20px 24px;
-            border-radius: 16px;
-            box-shadow: var(--quantum-shadow);
-            margin-bottom: 32px;
-            border: 2px solid var(--neural-border);
-            position: relative;
-            z-index: 1;
-        }
+    .stat-info .value {
+        font-size: 2.6rem;
+        font-weight: 700;
+        color: var(--cully-dark);
+        line-height: 1;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            flex-wrap: nowrap;
-        }
+    .stat-info .label {
+        font-size: 0.95rem;
+        color: var(--cully-gray);
+        font-weight: 600;
+    }
 
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 18px;
-            background: var(--surface-glass);
-            border: 2px solid var(--neural-border);
-            border-radius: 12px;
-            text-decoration: none;
-            color: var(--text-light);
-            font-family: 'Exo 2', 'Inter', sans-serif;
-            font-weight: 600;
-            transition: var(--transition);
-            position: relative;
-            white-space: nowrap;
-            font-size: 14px;
-            backdrop-filter: blur(10px);
-        }
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 1.25rem;
+        color: var(--cully-dark);
+    }
 
-        .nav-link:hover {
-            background: rgba(26, 35, 50, 0.35);
-            color: var(--cyber-electric);
-            transform: translateY(-2px);
-            box-shadow: var(--cyber-glow);
-            border-color: var(--cyber-electric);
-        }
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
 
-        .nav-link.active {
-            background: var(--cyber-gradient);
-            color: var(--crystal-white);
-            box-shadow: var(--cyber-glow), var(--quantum-shadow);
-            border-color: transparent;
-        }
+    .action-card {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: 1.75rem;
+        box-shadow: var(--cully-shadow);
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        color: var(--cully-dark);
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
 
-        .nav-link i {
-            font-size: 16px;
-            width: 20px;
-            text-align: center;
-            flex-shrink: 0;
-        }
+    .action-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--cully-shadow-lg);
+        color: var(--cully-navy);
+    }
 
-        .nav-link.featured {
-            background: var(--cyber-gradient);
-            color: var(--crystal-white);
-            font-weight: 700;
-            border-color: transparent;
-            box-shadow: var(--cyber-glow);
-        }
+    .action-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
 
-        .nav-link.featured:hover {
-            background: var(--cyber-gradient);
-            color: var(--crystal-white);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4), 0 12px 40px rgba(0, 229, 255, 0.3);
-        }
+    .action-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(123, 165, 199, 0.12);
+        color: var(--cully-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
 
-        /* Navigation badges */
-        .nav-badge {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-            min-width: 18px;
-            text-align: center;
-        }
+    .action-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+    }
 
-        .nav-link.active .nav-badge {
-            background: rgba(255, 255, 255, 0.3);
-        }
+    .action-description {
+        color: var(--cully-gray);
+        line-height: 1.55;
+        margin: 0;
+        flex-grow: 1;
+    }
 
-        .nav-link.featured .nav-badge {
-            background: rgba(255, 255, 255, 0.3);
-            color: white;
-        }
+    .action-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: var(--cully-navy);
+    }
 
-        /* User Info Section */
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+    .widget-card {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--cully-shadow);
+        margin-bottom: 2rem;
+    }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--cyber-electric) 0%, var(--plasma-cyan) 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-        }
+    .widget-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 1.5rem;
+    }
 
-        .user-details {
-            display: flex;
-            flex-direction: column;
-        }
+    .widget-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
 
-        .user-name {
-            font-weight: 600;
-            color: var(--crystal-white);
-            font-size: 14px;
-            margin: 0;
-        }
+    .widget-title i {
+        color: var(--cully-navy);
+    }
 
-        /* Widget Cards - Exact same as engineer dashboard */
-        .widgets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
+    .widget-action {
+        font-weight: 600;
+        color: var(--cully-navy);
+        text-decoration: none;
+    }
 
-        .widget-card {
-            background: var(--quantum-glass);
-            backdrop-filter: blur(15px);
-            border: 2px solid var(--neural-border);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--quantum-shadow);
-            transition: all 0.3s ease;
-        }
+    .report-list,
+    .pending-list {
+        display: flex;
+        flex-direction: column;
+    }
 
-        .widget-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--cyber-glow), var(--quantum-shadow);
-            border-color: var(--cyber-electric);
-        }
+    .report-list-item,
+    .pending-list-item {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--cully-light-gray);
+        gap: 1.5rem;
+    }
 
-        .widget-header {
-            background: var(--surface-glass);
-            backdrop-filter: blur(10px);
-            padding: 20px 24px;
-            border-bottom: 2px solid var(--neural-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .report-list-item:last-child,
+    .pending-list-item:last-child {
+        border-bottom: none;
+    }
 
-        .widget-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--cyber-electric);
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
-        }
+    .report-info,
+    .pending-info {
+        flex: 1;
+    }
 
-        .widget-action {
-            padding: 8px 16px;
-            background: var(--cyber-gradient);
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
+    .report-title,
+    .pending-title {
+        font-weight: 600;
+        color: var(--cully-dark);
+        margin-bottom: 0.25rem;
+    }
 
-        .widget-action:hover {
-            background: var(--cyber-gradient);
-            transform: translateY(-1px);
-            color: white;
-        }
+    .report-meta,
+    .pending-meta {
+        font-size: 0.9rem;
+        color: var(--cully-gray);
+    }
 
-        .widget-content {
-            padding: 24px;
-        }
+    .status-chip {
+        font-weight: 600;
+        text-transform: capitalize;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        background: rgba(123, 165, 199, 0.12);
+        color: var(--cully-navy);
+    }
 
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
+    .report-actions a,
+    .pending-actions a {
+        color: var(--cully-gray);
+        text-decoration: none;
+        margin-left: 1rem;
+        font-size: 1.1rem;
+    }
 
-        .action-item {
-            background: var(--surface-glass);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 20px;
-            border: 2px solid var(--neural-border);
-            transition: all 0.2s ease;
-        }
+    .report-actions a:hover,
+    .pending-actions a:hover {
+        color: var(--cully-navy);
+    }
 
-        .action-item:hover:not(.disabled) {
-            background: rgba(26, 35, 50, 0.35);
-            border-color: var(--cyber-electric);
-            transform: translateY(-2px);
-            box-shadow: var(--cyber-glow);
-        }
-
-        .action-item.featured {
-            background: linear-gradient(135deg, rgba(0, 229, 255, 0.1) 0%, rgba(0, 188, 212, 0.08) 100%);
-            border-color: var(--cyber-electric);
-        }
-
-        .action-item.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .action-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .action-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            background: var(--cyber-gradient);
-            color: white;
-        }
-
-        .action-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 600;
-            background: #d1fae5;
-            color: #065f46;
-            margin-left: auto;
-        }
-
-        .action-badge.coming-soon {
-            background: #fbbf24;
-            color: white;
-        }
-
-        .action-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--crystal-white);
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
-        }
-
-        .action-description {
-            color: var(--text-light);
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-
-        .action-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            background: var(--cyber-gradient);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .action-button:hover:not(:disabled) {
-            background: var(--cyber-gradient);
-            transform: translateY(-1px);
-            color: white;
-            box-shadow: var(--cyber-glow);
-        }
-
-        .action-button.secondary {
-            background: var(--surface-glass);
-            color: var(--text-light);
-            border: 2px solid var(--neural-border);
-        }
-
-        .action-button.secondary:hover {
-            background: rgba(26, 35, 50, 0.35);
-            color: var(--cyber-electric);
-            border-color: var(--cyber-electric);
-        }
-
-        .action-button:disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        /* FORCE DARK QUANTUM GLASS THEME - HIGHEST PRIORITY */
-        body {
-            background: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #2c3e50 100%) !important;
-            color: #ffffff !important;
-        }
-        
-        .dashboard-header {
-            background: rgba(26, 35, 50, 0.15) !important;
-            backdrop-filter: blur(25px) !important;
-            border: 2px solid #00e5ff !important;
-        }
-        
-        .dashboard-nav {
-            background: rgba(26, 35, 50, 0.15) !important;
-            backdrop-filter: blur(20px) !important;
-            border: 2px solid rgba(0, 229, 255, 0.2) !important;
-        }
-        
+    @media (max-width: 900px) {
         .stat-card {
-            background: rgba(26, 35, 50, 0.15) !important;
-            backdrop-filter: blur(15px) !important;
-            border: 2px solid rgba(0, 229, 255, 0.2) !important;
-            color: #ffffff !important;
-        }
-        
-        .action-card {
-            background: rgba(26, 35, 50, 0.15) !important;
-            backdrop-filter: blur(15px) !important;
-            border: 2px solid rgba(0, 229, 255, 0.2) !important;
-            color: #ffffff !important;
-        }
-
-        .flash-message {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 20px;
-            background: rgba(16, 185, 129, 0.2);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 12px;
-            color: #10b981;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Stats Grid - Dark Quantum Glass Style */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            background: var(--quantum-glass);
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: var(--quantum-shadow);
-            display: flex;
-            align-items: center;
-            transition: var(--transition);
-            border: 2px solid var(--neural-border);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--cyber-glow), var(--quantum-shadow);
-            border-color: var(--cyber-electric);
+            padding: 1.5rem;
         }
 
         .stat-icon {
+            width: 60px;
+            height: 60px;
             font-size: 2rem;
-            color: var(--cyber-electric);
-            width: 40px;
-            height: 40px;
-            margin-right: 16px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
+    }
 
-        .stat-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .stat-info .value {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--crystal-white);
-        }
-
-        .stat-info .label {
-            font-size: 0.9rem;
-            color: var(--text-medium);
-            font-weight: 500;
-        }
-
-        /* Dashboard Widgets - Same as admin */
-        .dashboard-section {
-            margin-bottom: 32px;
-        }
-
-        .section-header {
-            margin-bottom: 20px;
-        }
-
-        .section-header h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--cyber-electric);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
-        }
-
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
-
-        .action-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            border: 1px solid #e2e8f0;
-        }
-
-        .action-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow-hover);
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .action-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            margin-bottom: 16px;
-        }
-
-        .action-card h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--crystal-white);
-            margin: 0 0 8px 0;
-            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
-        }
-
-        .action-card p {
-            color: var(--text-light);
-            font-size: 14px;
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        /* Table styling */
-        .table-responsive {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            border: 1px solid #e2e8f0;
-        }
-
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .users-table th {
-            background: var(--surface-glass);
-            backdrop-filter: blur(10px);
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            color: var(--cyber-electric);
-            border-bottom: 1px solid var(--neural-border);
-            text-shadow: 0 2px 4px rgba(0, 15, 28, 0.3);
-        }
-
-        .users-table td {
-            padding: 16px;
-            border-bottom: 1px solid var(--neural-border);
-            vertical-align: middle;
-            color: var(--text-medium);
-        }
-
-        .users-table tr:hover {
-            background: rgba(26, 35, 50, 0.3);
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-draft {
-            background: #f3f4f6;
-            color: #374151;
-            border: 1px solid #d1d5db;
-        }
-
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
-            border: 1px solid #f59e0b;
-        }
-
-        .status-approved {
-            background: #d1fae5;
-            color: #065f46;
-            border: 1px solid #059669;
-        }
-
-        .progress-bar {
-            width: 100px;
-            height: 8px;
-            background: #e5e7eb;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 4px;
-        }
-
-        .progress-fill-approved {
-            width: 100%;
-        }
-
-        .progress-fill-pending {
-            width: 75%;
-        }
-
-        .progress-fill-draft {
-            width: 25%;
-        }
-
-        .btn-view {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-view:hover {
-            background: linear-gradient(135deg, var(--admin-primary-dark), #00acc1);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(77, 208, 225, 0.3);
-            color: white;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 32px 16px;
-            color: #64748b;
-            background: white;
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            color: #cbd5e1;
-            margin-bottom: 16px;
-        }
-
-        .empty-state h3 {
-            color: #374151;
-            font-size: 18px;
-            margin: 0 0 8px 0;
-        }
-
-        .empty-state p {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .notification-badge {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-            min-width: 18px;
+    @media (max-width: 600px) {
+        .page-header {
             text-align: center;
         }
 
-        .nav-link.active .notification-badge {
-            background: rgba(255, 255, 255, 0.3);
+        .page-subtitle {
+            text-align: center;
+            margin: 0 auto;
         }
 
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .dashboard-container {
-                padding: 16px;
-            }
-
-            .header-content {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-
-            .header-info h1 {
-                font-size: 2rem;
-                justify-content: center;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 4px;
-            }
-
-            .nav-link {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-        }
-        /* Updated stat tile presentation */
-        .stats-grid {
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 28px;
-        }
-        .stats-grid .stat-card {
-            border-radius: 16px;
-            padding: 2rem;
-            display: flex;
+        .stat-card {
             flex-direction: column;
-            gap: 1.1rem;
             align-items: flex-start;
         }
-        .stats-grid .stat-header {
-            width: 100%;
+
+        .stat-icon {
+            margin-bottom: 1rem;
         }
-        .stats-grid .stat-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.4rem;
-            color: #ffffff;
-            background: linear-gradient(135deg, rgba(123, 165, 199, 0.6) 0%, rgba(90, 127, 163, 0.9) 100%);
+
+        .report-list-item,
+        .pending-list-item {
+            flex-direction: column;
+            align-items: flex-start;
         }
-        .stats-grid .stat-icon i {
-            color: inherit;
+
+        .report-actions,
+        .pending-actions {
+            margin-top: 1rem;
         }
-        .stats-grid .stat-value {
-            font-size: 2.6rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--crystal-white);
-        }
-        .stats-grid .stat-label {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-medium);
-            margin: 0;
-        }
-        .stats-grid .stat-card:nth-child(1) .stat-icon {
-            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-        }
-        .stats-grid .stat-card:nth-child(2) .stat-icon {
-            background: linear-gradient(135deg, #facc15 0%, #ea580c 100%);
-        }
-        .stats-grid .stat-card:nth-child(3) .stat-icon {
-            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
-        }
-    </style>
-</head>
-<body class="dashboard-layout">
-    <div class="dashboard-container">
-        <!-- Header -->
-        <div class="dashboard-header">
-            <div class="header-content">
-                <div class="header-info">
-                    <h1><i class="fas fa-project-diagram"></i> Project Manager Dashboard</h1>
-                    <p>Welcome back, {{ current_user.full_name if current_user and current_user.full_name else 'Project Manager' }}! Oversee project deliverables and track progress.</p>
-                </div>
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
-            </div>
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Project Manager Dashboard</h1>
+    <p class="page-subtitle">
+        Welcome back, {{ current_user.full_name if current_user and current_user.full_name else 'Project Manager' }}.
+        Oversee deliverables, keep approvals moving, and stay aligned with the team.
+    </p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <i class="fas fa-diagram-project stat-icon stat-projects"></i>
+        <div class="stat-info">
+            <div class="value">{{ project_count if project_count is defined else 0 }}</div>
+            <div class="label">Active Projects</div>
         </div>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash-message">
-                            <i class="fa fa-check-circle"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Horizontal Navigation -->
-        <div class="dashboard-nav">
-            <div class="nav-links">
-                <a href="{{ url_for('dashboard.pm') }}" class="nav-link active">
-                    <i class="fas fa-tachometer-alt"></i>
-                    Dashboard
-                </a>
-                <a href="{{ url_for('reports.new') }}" class="nav-link featured">
-                    <i class="fas fa-plus-circle"></i>
-                    Create Report
-                    <span class="nav-badge">New</span>
-                </a>
-                <a href="{{ url_for('dashboard.my_reports') }}" class="nav-link">
-                    <i class="fas fa-folder-open"></i>
-                    My Reports
-                </a>
-                <a href="{{ url_for('io_builder.index') }}" class="nav-link">
-                    <i class="fas fa-sitemap"></i>
-                    I/O Builder
-                </a>
-                <a href="{{ url_for('notifications.notification_center') }}" class="nav-link">
-                    <i class="fas fa-bell"></i>
-                    Notifications
-                </a>
-            </div>
-            
-            <div class="user-info">
-                <div class="user-avatar">
-                    {{ current_user.full_name[0] if current_user and current_user.full_name else 'P' }}
-                </div>
-                <div class="user-details">
-                    <div class="user-name">{{ current_user.full_name if current_user and current_user.full_name else 'Project Manager' }}</div>
-                    <div class="user-role">{{ current_user.role if current_user and current_user.role else 'Project Manager' }}</div>
-                </div>
-                <a href="{{ url_for('auth.change_password') }}" class="nav-link">
-                    <i class="fas fa-key"></i>
-                    Settings
-                </a>
-                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="color: #ef4444;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
-            </div>
-        </div>
-
-        <!-- Stats Overview -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-file-alt"></i>
-                    </div>
-                </div>
-                <div class="stat-value">{{ project_count if project_count is defined else 0 }}</div>
-                <p class="stat-label">Active Projects</p>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-clock"></i>
-                    </div>
-                </div>
-                <div class="stat-value">{{ pending_deliverables if pending_deliverables is defined else 0 }}</div>
-                <p class="stat-label">Pending Deliverables</p>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-check-circle"></i>
-                    </div>
-                </div>
-                <div class="stat-value">{{ completed_reports if completed_reports is defined else 0 }}</div>
-                <p class="stat-label">Completed Reports</p>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="widgets-grid">
-            <div class="widget-card">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-rocket"></i>
-                        Project Management Tools
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <div class="action-grid">
-                        <div class="action-item featured">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-vial"></i>
-                                </div>
-                                <h4 class="action-title">System Acceptance Testing (SAT)</h4>
-                                <div class="action-badge">Available</div>
-                            </div>
-                            <p class="action-description">Comprehensive testing documentation for system acceptance and validation procedures</p>
-                            <a href="{{ url_for('reports.new_sat') }}" class="action-button">
-                                <i class="fa fa-plus"></i>
-                                Create SAT Report
-                            </a>
-                        </div>
-
-                        <div class="action-item">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-map-marker-alt"></i>
-                                </div>
-                                <h4 class="action-title">Site Survey Form</h4>
-                                <div class="action-badge">Available</div>
-                            </div>
-                            <p class="action-description">Comprehensive site assessment and survey form for infrastructure evaluation and documentation</p>
-                            <a href="{{ url_for('reports.new_site_survey') if url_for('reports.new_site_survey') else '#' }}" class="action-button">
-                                <i class="fa fa-clipboard-list"></i>
-                                Start Site Survey
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="widget-card">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-tools"></i>
-                        Design Specifications
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <div class="action-grid">
-                        <div class="action-item disabled">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-cogs"></i>
-                                </div>
-                                <h4 class="action-title">Functional Design Specification (FDS)</h4>
-                                <div class="action-badge coming-soon">Coming Soon</div>
-                            </div>
-                            <p class="action-description">Detailed functional requirements and design specifications for system components</p>
-                            <button class="action-button" disabled>
-                                <i class="fa fa-clock"></i>
-                                Coming Soon
-                            </button>
-                        </div>
-
-                        <div class="action-item disabled">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-microchip"></i>
-                                </div>
-                                <h4 class="action-title">Hardware Design Specification (HDS)</h4>
-                                <div class="action-badge coming-soon">Coming Soon</div>
-                            </div>
-                            <p class="action-description">Comprehensive hardware design documentation and specifications</p>
-                            <button class="action-button" disabled>
-                                <i class="fa fa-clock"></i>
-                                Coming Soon
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <footer class="developer-credit">
-            <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 2px solid var(--cyber-electric); background: var(--surface-glass); backdrop-filter: blur(15px); border-radius: 12px; box-shadow: var(--quantum-shadow);">
-                <p style="color: var(--text-medium); font-size: 0.9rem; margin: 0;">
-                    <i class="fas fa-code"></i> Developed by <strong style="color: var(--cyber-electric);">Revanth Meda</strong> for <strong style="color: var(--crystal-white);">CULLY LTD</strong>
-                </p>
-            </div>
-        </footer>
     </div>
-    
-    {% if not current_user.is_authenticated %}
-    <script>
-        window.location.replace('/welcome');
-    </script>
-    {% endif %}
-    
-    <script>
-        // Detect if page was accessed via back button after logout
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-                // Page was restored from cache
-                fetch('/api/check-auth', {
-                    method: 'GET',
-                    credentials: 'same-origin'
-                }).then(response => {
-                    if (!response.ok) {
-                        // Not authenticated - redirect to welcome
-                        window.location.replace('/welcome');
-                    }
-                }).catch(() => {
-                    // Error checking auth - redirect to be safe
-                    window.location.replace('/welcome');
-                });
-            }
-        });
-        
-        // Disable page caching
-        if ('caches' in window) {
-            caches.keys().then(names => {
-                names.forEach(name => {
-                    caches.delete(name);
-                });
-            });
-        }
-    </script>
-</body>
-</html>.replace('/welcome');
-                });
-            }
-        });
-        
-        // Disable page caching
-        if ('caches' in window) {
-            caches.keys().then(names => {
-                names.forEach(name => {
-                    caches.delete(name);
-                });
-            });
-        }
-    </script>
-</body>
-</html>
+    <div class="stat-card">
+        <i class="fas fa-hourglass-half stat-icon stat-pending"></i>
+        <div class="stat-info">
+            <div class="value">{{ pending_deliverables if pending_deliverables is defined else 0 }}</div>
+            <div class="label">Pending Deliverables</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-check-circle stat-icon stat-complete"></i>
+        <div class="stat-info">
+            <div class="value">{{ completed_reports if completed_reports is defined else 0 }}</div>
+            <div class="label">Completed Reports</div>
+        </div>
+    </div>
+</div>
+
+<div class="section-title">Quick Actions</div>
+<div class="action-grid">
+    <a href="{{ url_for('dashboard.pm') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-list-check"></i></div>
+            <h3 class="action-title">Pending Approvals</h3>
+        </div>
+        <p class="action-description">Jump straight to the reports awaiting your stage-two approval.</p>
+        <span class="action-link">View Queue <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="{{ url_for('reports.new') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-plus-circle"></i></div>
+            <h3 class="action-title">Create New Report</h3>
+        </div>
+        <p class="action-description">Start a new SAT, Site Survey, or other report straight from approved templates.</p>
+        <span class="action-link">Start Now <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="{{ url_for('dashboard.my_reports') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-folder-open"></i></div>
+            <h3 class="action-title">Team Reports</h3>
+        </div>
+        <p class="action-description">Review the reports your engineers prepared so you can coordinate sign-off.</p>
+        <span class="action-link">Browse Reports <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="{{ url_for('notifications.notification_center') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-bell"></i></div>
+            <h3 class="action-title">Notifications</h3>
+        </div>
+        <p class="action-description">Catch up on alerts, edits, and approvals that need your attention.</p>
+        <span class="action-link">Open Center <i class="fas fa-arrow-right"></i></span>
+    </a>
+</div>
+
+<div class="widget-card">
+    <div class="widget-header">
+        <h3 class="widget-title"><i class="fas fa-exclamation-triangle"></i> Approvals Awaiting You</h3>
+        <span class="widget-action">{{ pending_deliverables }} open items</span>
+    </div>
+    <div class="pending-list">
+        {% if pending_reports and pending_reports|length > 0 %}
+            {% for report in pending_reports %}
+                <div class="pending-list-item">
+                    <div class="pending-info">
+                        <div class="pending-title">{{ report.document_title or 'Untitled Report' }}</div>
+                        <div class="pending-meta">{{ report.client_name or 'Unknown Client' }} - {{ report.project_reference or 'N/A' }}</div>
+                    </div>
+                    <div class="status-chip">Stage {{ report.approval_stage or 2 }}</div>
+                    <div class="pending-actions">
+                        <a href="{{ url_for('reports.view_report', report_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
+                        {% if report.approval_url %}
+                        <a href="{{ report.approval_url }}" title="Approve"><i class="fas fa-check"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No approvals waiting. Enjoy the clear runway!</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="widget-card">
+    <div class="widget-header">
+        <h3 class="widget-title"><i class="fas fa-clock"></i> Recent Activity</h3>
+        <a href="{{ url_for('dashboard.my_reports') }}" class="widget-action">View All Reports</a>
+    </div>
+    <div class="report-list">
+        {% if recent_reports and recent_reports|length > 0 %}
+            {% for report in recent_reports %}
+                <div class="report-list-item">
+                    <div class="report-info">
+                        <div class="report-title">{{ report.document_title or 'Untitled Report' }}</div>
+                        <div class="report-meta">Updated {{ report.updated_at.strftime('%d %b %Y, %H:%M') if report.updated_at else 'Recently' }}</div>
+                    </div>
+                    <div class="status-chip">{{ report.status | replace('_', ' ') | title }}</div>
+                    <div class="report-actions">
+                        <a href="{{ url_for('reports.view_report', report_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No recent activity recorded.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
