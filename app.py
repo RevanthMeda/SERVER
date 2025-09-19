@@ -363,10 +363,7 @@ def create_app(config_name='default'):
             response.headers['X-Frame-Options'] = 'DENY'
         return response
 
-    # Make CSRF token available in all templates
-    @app.context_processor
-    def inject_csrf():
-        return dict(csrf_token=getattr(g, 'csrf_token', generate_csrf()))
+
     
     # Add timestamp function for cache busting
     @app.context_processor
