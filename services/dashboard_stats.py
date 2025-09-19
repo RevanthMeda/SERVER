@@ -1,11 +1,13 @@
 import json
 import threading
 import time
+import hashlib
 from datetime import datetime, timedelta
 from typing import Dict, Optional
 
 from flask import current_app, has_app_context
 from sqlalchemy import and_, or_
+from sqlalchemy.exc import SQLAlchemyError
 
 from models import db, Report, User, SystemSettings
 
@@ -46,7 +48,13 @@ def _normalise_role(role: str) -> str:
 
 
 def _make_cache_key(role: str, email: str) -> str:
-    return _CACHE_KEY_TEMPLATE.format(role=_normalise_role(role), email=email.lower())
+    role_segment = _normalise_role(role)[:12]
+    email_segment = email.lower()
+    raw_key = _CACHE_KEY_TEMPLATE.format(role=role_segment, email=email_segment)
+    if len(raw_key) <= 50:
+        return raw_key
+    digest = hashlib.sha1(raw_key.encode('utf-8')).hexdigest()[:8]
+    return f"ds:{role_segment}:{digest}"
 
 
 def _store_dashboard_stats(role: str, email: str, stats: Dict[str, int]) -> None:
@@ -55,7 +63,11 @@ def _store_dashboard_stats(role: str, email: str, stats: Dict[str, int]) -> None
         'data': stats,
     }
     key = _make_cache_key(role, email)
-    SystemSettings.set_setting(key, json.dumps(payload))
+    try:
+        SystemSettings.set_setting(key, json.dumps(payload))
+    except SQLAlchemyError:
+        db.session.rollback()
+        raise
 
 
 def get_cached_dashboard_stats(role: str, email: str, max_age_seconds: Optional[int] = None) -> Optional[Dict[str, int]]:
