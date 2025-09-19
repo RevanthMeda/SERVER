@@ -668,33 +668,27 @@
         <!-- Stats Overview -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-file-alt"></i>
-                    </div>
+                <i class="fa fa-file-alt stat-icon"></i>
+                <div class="stat-info">
+                    <div class="value">{{ automation_count if automation_count is defined else 0 }}</div>
+                    <div class="label">Active Automations</div>
                 </div>
-                <div class="stat-value">{{ automation_count if automation_count is defined else 0 }}</div>
-                <p class="stat-label">Active Automations</p>
             </div>
 
             <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-clock"></i>
-                    </div>
+                <i class="fa fa-clock stat-icon"></i>
+                <div class="stat-info">
+                    <div class="value">{{ pending_workflows if pending_workflows is defined else 0 }}</div>
+                    <div class="label">Pending Workflows</div>
                 </div>
-                <div class="stat-value">{{ pending_workflows if pending_workflows is defined else 0 }}</div>
-                <p class="stat-label">Pending Workflows</p>
             </div>
 
             <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-icon">
-                        <i class="fa fa-check-circle"></i>
-                    </div>
+                <i class="fa fa-check-circle stat-icon"></i>
+                <div class="stat-info">
+                    <div class="value">{{ completed_automations if completed_automations is defined else 0 }}</div>
+                    <div class="label">Completed Automations</div>
                 </div>
-                <div class="stat-value">{{ completed_automations if completed_automations is defined else 0 }}</div>
-                <p class="stat-label">Completed Automations</p>
             </div>
         </div>
 
