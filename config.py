@@ -37,6 +37,12 @@ class Config:
     SESSION_COOKIE_SAMESITE = 'Lax'
     SESSION_COOKIE_SECURE = False  # Set to True when using HTTPS
     SEND_FILE_MAX_AGE_DEFAULT = 0  # Disable caching for static files
+
+    # Dashboard stats caching
+    ENABLE_DASHBOARD_STATS_CACHE = os.environ.get('ENABLE_DASHBOARD_STATS_CACHE', 'True').lower() == 'true'
+    DASHBOARD_STATS_REFRESH_SECONDS = int(os.environ.get('DASHBOARD_STATS_REFRESH_SECONDS', 300))
+    DASHBOARD_STATS_MAX_AGE_SECONDS = int(os.environ.get('DASHBOARD_STATS_MAX_AGE_SECONDS', 600))
+
     
     # SSL/HTTPS Configuration
     SSL_CERT_PATH = r'E:\report generator\SERVER\ssl\mobilehmi.org2025.pfx'

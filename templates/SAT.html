@@ -62,6 +62,38 @@
       --border-radius-lg: 16px;
     }
 
+    .prefill-banner {
+      margin: 20px auto;
+      max-width: 960px;
+      background: linear-gradient(135deg, rgba(192, 132, 252, 0.15), rgba(59, 130, 246, 0.15));
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--cully-dark);
+      box-shadow: var(--cully-shadow);
+    }
+
+    .prefill-banner i {
+      color: #7c3aed;
+      font-size: 1.2rem;
+    }
+
+    .prefill-banner a {
+      color: #7c3aed;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .prefill-banner a:hover {
+      text-decoration: underline;
+    }
+
+      --border-radius-lg: 16px;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -1035,6 +1067,17 @@
       {% endfor %}
       </div>
     {% endif %}
+    {% if prefill_source %}
+    <div class="prefill-banner">
+      <i class="fas fa-copy"></i>
+      <div>
+        <strong>Pre-filled from {{ prefill_source.document_title or 'existing report' }}.</strong><br/>
+        <span>Client: {{ prefill_source.client_name or 'Unknown client' }}</span>{% if prefill_source.project_reference %}<span> - Project: {{ prefill_source.project_reference }}</span>{% endif %}{% if prefill_source.prepared_by %}<span> - Prepared by: {{ prefill_source.prepared_by }}</span>{% endif %}<br/>
+        <a href="{{ url_for('status.view_status', submission_id=prefill_source.id) }}" target="_blank" rel="noopener">View source report</a>
+      </div>
+    </div>
+    {% endif %}
+
     {% endwith %}
 
     <!-- Horizontal Progress Bar -->

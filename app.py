@@ -536,6 +536,15 @@ def create_app(config_name='default'):
 
     register_blueprints()
 
+    if db_initialized and app.config.get('ENABLE_DASHBOARD_STATS_CACHE', True):
+        try:
+            from services.dashboard_stats import start_dashboard_stats_refresher
+            start_dashboard_stats_refresher(app)
+        except Exception as e:
+            app.logger.error(f"Failed to start dashboard stats refresher: {e}")
+    else:
+        app.logger.debug('Dashboard stats cache disabled or database not initialized; skipping refresher thread')
+
     # Error handlers
     @app.errorhandler(404)
     def not_found_error(error):

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from flask_login import login_required, current_user
-from models import db, Report, User
+from models import db, Report, User, SATReport
 from auth import login_required, role_required
 from utils import setup_approval_workflow_db, create_new_submission_notification, get_unread_count
 import json
@@ -8,6 +8,75 @@ import uuid
 from datetime import datetime
 
 reports_bp = Blueprint('reports', __name__, url_prefix='/reports')
+
+
+
+_SAT_LIST_FIELDS = {
+    "RELATED_DOCUMENTS",
+    "PRE_EXECUTION_APPROVAL",
+    "POST_EXECUTION_APPROVAL",
+    "PRE_TEST_REQUIREMENTS",
+    "KEY_COMPONENTS",
+    "IP_RECORDS",
+    "SIGNAL_LISTS",
+    "DIGITAL_OUTPUTS",
+    "ANALOGUE_INPUTS",
+    "ANALOGUE_OUTPUTS",
+    "MODBUS_DIGITAL_LISTS",
+    "MODBUS_ANALOGUE_LISTS",
+    "PROCESS_TEST",
+    "SCADA_VERIFICATION",
+    "TRENDS_TESTING",
+    "ALARM_LIST",
+    "DIGITAL_SIGNALS",
+    "ANALOGUE_INPUT_SIGNALS",
+    "ANALOGUE_OUTPUT_SIGNALS",
+    "DIGITAL_OUTPUT_SIGNALS",
+    "MODBUS_DIGITAL_SIGNALS",
+    "MODBUS_ANALOGUE_SIGNALS",
+    "SCADA_SCREENSHOTS",
+    "TRENDS_SCREENSHOTS",
+    "ALARM_SCREENSHOTS"
+}
+
+
+
+def _build_empty_sat_submission():
+    base = {
+        "DOCUMENT_TITLE": "",
+        "PROJECT_REFERENCE": "",
+        "DOCUMENT_REFERENCE": "",
+        "DATE": "",
+        "CLIENT_NAME": "",
+        "REVISION": "",
+        "REVISION_DETAILS": "",
+        "REVISION_DATE": "",
+        "USER_EMAIL": "",
+        "PREPARED_BY": "",
+        "REVIEWED_BY_TECH_LEAD": "",
+        "REVIEWED_BY_PM": "",
+        "APPROVED_BY_CLIENT": "",
+        "PURPOSE": "",
+        "SCOPE": ""
+    }
+    for field in _SAT_LIST_FIELDS:
+        base.setdefault(field, [])
+    return base
+
+
+
+def _merge_sat_submission_data(base: dict, context: dict) -> dict:
+    merged = {key: (list(value) if isinstance(value, list) else value) for key, value in base.items()}
+    for key, value in context.items():
+        if value in (None, ""):
+            continue
+        if key in _SAT_LIST_FIELDS:
+            if isinstance(value, list):
+                merged[key] = value
+        else:
+            merged[key] = value
+    return merged
+
 
 @reports_bp.route('/new')
 @login_required
@@ -29,62 +98,63 @@ def new_sat():
 def new_sat_full():
     """Full SAT report form"""
     try:
-        import uuid
-        from utils import get_unread_count
-        
-        # Create completely empty submission data structure for new forms
-        submission_data = {
-            'DOCUMENT_TITLE': '',
-            'PROJECT_REFERENCE': '',
-            'DOCUMENT_REFERENCE': '',
-            'DATE': '',
-            'CLIENT_NAME': '',
-            'REVISION': '',
-            'REVISION_DETAILS': '',
-            'REVISION_DATE': '',
-            'USER_EMAIL': current_user.email if current_user.is_authenticated else '',
-            'PREPARED_BY': current_user.full_name if current_user.is_authenticated else '',
-            'REVIEWED_BY_TECH_LEAD': '',
-            'REVIEWED_BY_PM': '',
-            'APPROVED_BY_CLIENT': '',
-            'PURPOSE': '',
-            'SCOPE': '',
-            'RELATED_DOCUMENTS': [],
-            'PRE_EXECUTION_APPROVAL': [],
-            'POST_EXECUTION_APPROVAL': [],
-            'PRE_TEST_REQUIREMENTS': [],
-            'KEY_COMPONENTS': [],
-            'IP_RECORDS': [],
-            'SIGNAL_LISTS': [],
-            'DIGITAL_OUTPUTS': [],
-            'ANALOGUE_INPUTS': [],
-            'ANALOGUE_OUTPUTS': [],
-            'MODBUS_DIGITAL_LISTS': [],
-            'MODBUS_ANALOGUE_LISTS': [],
-            'PROCESS_TEST': [],
-            'SCADA_VERIFICATION': [],
-            'TRENDS_TESTING': [],
-            'ALARM_LIST': []
-        }
-        
-        # Completely clear any cached form data for new reports
         unread_count = get_unread_count()
         submission_id = str(uuid.uuid4())
-        
-        # Don't load wizard_data for new reports - start completely fresh        
-        return render_template('SAT.html', 
+        submission_data = _build_empty_sat_submission()
+        prefill_source = None
+
+        template_id = request.args.get('template_id') or request.args.get('source_id')
+        if template_id:
+            source_report = Report.query.filter_by(id=template_id).first()
+            if not source_report:
+                flash('Source report could not be found.', 'warning')
+            else:
+                sat_report = SATReport.query.filter_by(report_id=template_id).first()
+                if sat_report and sat_report.data_json:
+                    try:
+                        stored_data = json.loads(sat_report.data_json)
+                        context_data = stored_data.get('context', stored_data)
+                        if isinstance(context_data, dict):
+                            submission_data = _merge_sat_submission_data(submission_data, context_data)
+                            prefill_source = {
+                                'id': template_id,
+                                'document_title': context_data.get('DOCUMENT_TITLE') or source_report.document_title or 'SAT Report',
+                                'client_name': context_data.get('CLIENT_NAME') or source_report.client_name,
+                                'project_reference': context_data.get('PROJECT_REFERENCE') or source_report.project_reference,
+                                'prepared_by': context_data.get('PREPARED_BY') or source_report.prepared_by,
+                            }
+                            flash('Report details pre-filled from existing submission.', 'success')
+                        else:
+                            flash('Existing report data could not be used to pre-fill the form.', 'warning')
+                    except (ValueError, TypeError) as parse_error:
+                        current_app.logger.warning('Failed to parse SAT data for template %s: %s', template_id, parse_error)
+                        flash('Could not read data from the selected report.', 'warning')
+                else:
+                    flash('No SAT data available on the selected report.', 'warning')
+
+        if current_user.is_authenticated:
+            submission_data['USER_EMAIL'] = current_user.email
+            submission_data['PREPARED_BY'] = current_user.full_name
+
+        return render_template('SAT.html',
                              submission_data=submission_data,
                              submission_id=submission_id,
                              unread_count=unread_count,
-                             is_new_report=True)
+                             is_new_report=True,
+                             prefill_source=prefill_source)
     except Exception as e:
-        current_app.logger.error(f"Error rendering SAT form: {e}")
-        # Provide minimal data structure even on error
-        submission_data = {}
-        return render_template('SAT.html', 
+        current_app.logger.error(f"Error rendering SAT form: {e}", exc_info=True)
+        submission_data = _build_empty_sat_submission()
+        if current_user.is_authenticated:
+            submission_data['USER_EMAIL'] = current_user.email
+            submission_data['PREPARED_BY'] = current_user.full_name
+        return render_template('SAT.html',
                              submission_data=submission_data,
                              submission_id='',
-                             unread_count=0)
+                             unread_count=0,
+                             is_new_report=True,
+                             prefill_source=None)
+
 
 @reports_bp.route('/sat/wizard')
 @login_required

@@ -8,6 +8,18 @@ from sqlalchemy import and_, or_, func
 import json
 from functools import wraps, lru_cache
 from datetime import datetime, timedelta
+from services.dashboard_stats import get_cached_dashboard_stats, compute_and_cache_dashboard_stats
+
+EMPTY_DASHBOARD_STATS = {
+    'draft': 0,
+    'pending': 0,
+    'rejected': 0,
+    'approved': 0,
+    'requests_received': 0,
+    'requests_approved': 0,
+    'total_reports': 0,
+}
+
 
 def no_cache(f):
     """Decorator to prevent caching of routes"""
@@ -267,34 +279,6 @@ def automation_manager():
     except Exception as e:
         current_app.logger.error(f"Error getting pending approvals for Automation Manager: {e}")
     
-    # Only count reports owned by or routed to this Automation Manager
-    approver_match = f'"approver_email": "{current_user.email}"'
-    relevant_reports_filter = or_(
-        Report.user_email == current_user.email,
-        and_(
-            Report.approvals_json.isnot(None),
-            Report.approvals_json.contains(approver_match)
-        )
-    )
-
-    # Get approved reports count
-    approved_reports_count = Report.query.filter(
-        Report.status == 'APPROVED',
-        relevant_reports_filter
-    ).count()
-
-    # Get reports in draft status
-    draft_reports_count = Report.query.filter(
-        Report.status == 'DRAFT',
-        relevant_reports_filter
-    ).count()
-
-    # Get reports in rejected status
-    rejected_reports_count = Report.query.filter(
-        Report.status == 'REJECTED',
-        relevant_reports_filter
-    ).count()
-
     # Test database connection
     try:
         db_status = test_db_connection()
@@ -302,13 +286,20 @@ def automation_manager():
         current_app.logger.warning(f"Database connection test failed: {e}")
         db_status = False
 
-    # Calculate statistics for the dashboard
-    stats = {
-        'draft': draft_reports_count,
-        'pending': pending_approvals,
-        'rejected': rejected_reports_count,
-        'approved': approved_reports_count
-    }
+    stats = get_cached_dashboard_stats('Automation Manager', current_user.email)
+    if not stats:
+        try:
+            stats = compute_and_cache_dashboard_stats('Automation Manager', current_user.email)
+        except Exception as exc:
+            current_app.logger.error(
+                "Failed to compute Automation Manager dashboard stats for %s: %s",
+                current_user.email,
+                exc,
+                exc_info=exc
+            )
+            stats = EMPTY_DASHBOARD_STATS.copy()
+
+    completed_automations = stats.get('approved', 0)
 
     # Get recent reports (limit to 5 for display)
     recent_reports = pending_reports[:5]
@@ -319,7 +310,7 @@ def automation_manager():
                          unread_count=unread_count,
                          automation_count=len(pending_reports),
                          pending_workflows=pending_approvals,
-                         completed_automations=approved_reports_count,
+                         completed_automations=completed_automations,
                          db_status=db_status)
 
 @dashboard_bp.route('/automation-manager-reviews')
@@ -402,22 +393,28 @@ def pm():
     except Exception as e:
         current_app.logger.error(f"Error getting pending approvals for PM: {e}")
     
-    # Calculate PM-specific statistics
-    project_count = Report.query.count()
-    completed_reports = Report.query.filter_by(status='APPROVED').count()
-    on_time_percentage = 85  # Placeholder for now
-    
+    stats = get_cached_dashboard_stats('PM', current_user.email)
+    if not stats:
+        try:
+            stats = compute_and_cache_dashboard_stats('PM', current_user.email)
+        except Exception as exc:
+            current_app.logger.error(
+                "Failed to compute PM dashboard stats for %s: %s",
+                current_user.email,
+                exc,
+                exc_info=exc
+            )
+            stats = EMPTY_DASHBOARD_STATS.copy()
+
     # Get recent reports for PM
     recent_reports = Report.query.order_by(Report.created_at.desc()).limit(5).all()
 
     return render_template('pm_dashboard.html',
-                             project_count=project_count,
                              pending_deliverables=pending_deliverables,
-                             completed_reports=completed_reports,
-                             on_time_percentage=on_time_percentage,
                              recent_reports=recent_reports,
                              pending_reports=pending_reports,
-                             unread_count=unread_count)
+                             unread_count=unread_count,
+                             stats=stats)
 
 # Legacy redirects for dashboard routes
 @dashboard_bp.route('/technical-manager')

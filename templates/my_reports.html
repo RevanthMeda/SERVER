@@ -487,6 +487,19 @@
             color: white;
         }
 
+        .btn-template {
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            color: white;
+            box-shadow: 0 2px 8px rgba(192, 132, 252, 0.25);
+        }
+
+        .btn-template:hover {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
+            color: white;
+        }
+
         .btn-download {
             background: linear-gradient(135deg, var(--admin-success), #059669);
             color: white;
@@ -907,6 +920,11 @@
                                                class="btn-small btn-view">
                                                 <i class="fas fa-eye"></i>
                                                 View
+                                            </a>
+                                            <a href="{{ url_for('reports.new_sat_full', template_id=report.id) }}" 
+                                               class="btn-small btn-template">
+                                                <i class="fas fa-copy"></i>
+                                                Use as Template
                                             </a>
                                             {% if not report.locked and report.status in ['DRAFT', 'PENDING'] and report.user_email == current_user.email %}
                                             <a href="{{ url_for('edit.edit_report', report_id=report.id) }}" 
