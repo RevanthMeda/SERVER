@@ -72,9 +72,14 @@
 
         /* Header */
         .cully-header {
-            background: var(--cully-white);
-            box-shadow: var(--cully-shadow);
-            padding: 0 2rem;
+            background: rgba(90, 127, 163, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(90, 127, 163, 0.15);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header-nav {
@@ -99,7 +104,7 @@
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            color: var(--cully-dark);
+            color: var(--cully-white);
         }
 
         .header-user-info span {
@@ -107,7 +112,7 @@
         }
 
         .header-user-info a {
-            color: var(--cully-gray);
+            color: var(--cully-white);
             text-decoration: none;
             font-weight: 500;
             transition: var(--transition-smooth);
@@ -117,7 +122,7 @@
         }
 
         .header-user-info a:hover {
-            color: var(--cully-navy);
+            color: var(--cully-light-blue);
         }
 
         /* Footer */

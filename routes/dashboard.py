@@ -155,6 +155,7 @@ def engineer():
     """Engineer dashboard"""
     from models import Report, Notification
     import json
+    current_app.logger.info(f"Fetching dashboard for user: {current_user.email}")
 
     # Get unread notifications count
     try:
@@ -168,33 +169,32 @@ def engineer():
 
     # Get report statistics for current user
     user_reports = Report.query.filter_by(user_email=current_user.email).all()
+    current_app.logger.info(f"Found {len(user_reports)} reports for user {current_user.email}")
 
     # Calculate statistics
-    total_reports = len(user_reports)
+    draft_reports = 0
     pending_reports = 0
+    rejected_reports = 0
     approved_reports = 0
 
     for report in user_reports:
-        if report.approvals_json:
-            try:
-                approvals = json.loads(report.approvals_json)
-                statuses = [a.get("status", "pending") for a in approvals]
-
-                if all(status == "approved" for status in statuses):
-                    approved_reports += 1
-                elif any(status == "pending" for status in statuses):
-                    pending_reports += 1
-            except json.JSONDecodeError:
-                current_app.logger.warning(f"Could not decode approvals_json for report ID: {report.id}")
-                pending_reports += 1 # Consider it pending if decoding fails
-        else:
+        current_app.logger.info(f"Report {report.id} has status: {report.status}")
+        if report.status == 'DRAFT':
+            draft_reports += 1
+        elif report.status == 'PENDING':
             pending_reports += 1
+        elif report.status == 'REJECTED':
+            rejected_reports += 1
+        elif report.status == 'APPROVED':
+            approved_reports += 1
 
     stats = {
-        'total_reports': total_reports,
-        'pending_reports': pending_reports,
-        'approved_reports': approved_reports
+        'draft': draft_reports,
+        'pending': pending_reports,
+        'rejected': rejected_reports,
+        'approved': approved_reports
     }
+    current_app.logger.info(f"Calculated stats: {stats}")
 
     return render_template('engineer_dashboard.html', stats=stats, unread_count=unread_count)
 
