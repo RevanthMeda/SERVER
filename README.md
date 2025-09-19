@@ -67,6 +67,8 @@ The application automates the complete lifecycle of SAT (System Acceptance Testi
 - **Authentication System**: Flask-Login with secure password hashing
 - **Authorization Layer**: Role-based access control decorators
 - **Email Integration**: SMTP integration for automated notifications
+- **Caching System**: Redis-based caching for improved performance
+- **Background Tasks**: Celery for asynchronous processing
 
 #### **Document Processing Engine**
 - **Template Processing**: Uses company-specific Word templates (SAT_Template.docx)
@@ -77,10 +79,12 @@ The application automates the complete lifecycle of SAT (System Acceptance Testi
 
 #### **Database Schema**
 - **Users Table**: User accounts with roles, status, and authentication data
-- **Reports Table**: Complete report data with JSON storage for flexibility
+- **Reports Table**: Base report data with relationships to specific report types
 - **SAT Reports Table**: Specialized SAT report structure with detailed form data
+- **FDS/HDS/Site Survey Reports**: Additional report types with specialized fields
 - **System Settings**: Configurable application parameters
 - **Approval Tracking**: Complete audit trail of all approval actions
+- **Notifications**: User notification system for workflow events
 
 ## 🔄 Complete User Journey
 
@@ -185,7 +189,7 @@ Format Verification → PDF Generation → Storage → Download Ready
 - **PostgreSQL Database** (production) or SQLite (development)
 - **Windows Server** (required for Word to PDF conversion)
 - **SMTP Email Account** (Gmail recommended) for notifications
-- **Network Access** to company domain (automation-reports.mobilehmi.org)
+- **Redis Server** (optional, for caching and session management)
 
 ### Environment Configuration (.env)
 ```env
@@ -198,282 +202,93 @@ FLASK_DEBUG=False  # Set to True for development only
 DATABASE_URL=postgresql://username:password@host:5432/database
 # Development alternative: DATABASE_URL=sqlite:///sat_reports.db
 
-# Email Configuration (Gmail App Password recommended)
-SMTP_SERVER=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USERNAME=your-company-email@gmail.com
-SMTP_PASSWORD=your-gmail-app-password
-DEFAULT_SENDER=your-company-email@gmail.com
+# Email Configuration
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USE_TLS=True
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-app-password
+MAIL_DEFAULT_SENDER=your-email@gmail.com
 
-# Approval Workflow Configuration
-APPROVER_1=techlead@company.com        # Technical Manager email
-APPROVER_2=projectmanager@company.com  # Project Manager email
+# File Storage Configuration
+UPLOAD_FOLDER=static/uploads
+MAX_CONTENT_LENGTH=16777216  # 16MB max upload size
+ALLOWED_EXTENSIONS=pdf,png,jpg,jpeg,docx,xlsx,csv
 
-# Company Branding
-COMPANY_NAME=Cully Automation
-COMPANY_LOGO=static/images/company-logo.png
-
-# Security Configuration
-ALLOWED_DOMAINS=automation-reports.mobilehmi.org
-BLOCK_IP_ACCESS=True  # Block direct IP access for security
-SSL_CERT_PATH=ssl/mobilehmi.org2025.pfx  # HTTPS certificate
-SSL_CERT_PASSWORD=your-certificate-password
-
-# Feature Toggles
-ENABLE_PDF_EXPORT=True
-ENABLE_EMAIL_NOTIFICATIONS=True
-ENABLE_HTTPS=True  # Set to False for development only
+# Redis Configuration (optional)
+REDIS_URL=redis://localhost:6379/0
 ```
 
 ### Installation Steps
-```bash
-# 1. Clone the repository
-git clone <your-repository-url>
-cd sat-report-generator
 
-# 2. Install Python dependencies
-pip install -r requirements.txt
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/your-org/sat-report-generator.git
+   cd sat-report-generator
+   ```
 
-# 3. Configure environment variables
-cp .env.example .env
-# Edit .env file with your specific configuration
+2. **Create Virtual Environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-# 4. Initialize database
-python init_new_db.py
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-# 5. Create admin user (first time only)
-python app.py --create-admin
+4. **Initialize Database**
+   ```bash
+   flask db init
+   flask db migrate -m "Initial migration"
+   flask db upgrade
+   ```
 
-# 6. For production deployment
-python start_production.py
-# Or use the Windows batch file
-start_production.bat
-```
+5. **Create Required Directories**
+   ```bash
+   python deploy.py
+   ```
 
-## 🚀 Production Deployment
+6. **Start Development Server**
+   ```bash
+   flask run
+   ```
 
-### Server Requirements
-- **Target Server**: 172.16.18.21 (Windows Server)
-- **Internal Network Access**: http://172.16.18.21:5000
-- **HTTPS Support**: SSL certificate (mobilehmi.org2025.pfx)
-- **Security Model**: Internal company network only, no external exposure
-- **Database**: PostgreSQL for production reliability
+## 📊 System Monitoring & Maintenance
 
-### Deployment Configuration
-```python
-# Production configuration in config.py
-class ProductionConfig:
-    DEBUG = False
-    TESTING = False
-    DATABASE_URL = os.getenv('DATABASE_URL')
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    PERMANENT_SESSION_LIFETIME = timedelta(hours=8)  # Work day session
-```
+### Database Maintenance
+- **Backup Schedule**: Daily automated backups
+- **Cleanup Tasks**: Temporary file cleanup every 24 hours
+- **Performance Monitoring**: Query optimization and index management
 
-### Security Features
-- **HTTPS Enforced**: All communications encrypted
-- **CSRF Protection**: All forms protected against cross-site attacks
-- **Password Hashing**: Werkzeug secure password hashing with salt
-- **Session Security**: HTTP-only cookies with configurable expiration
-- **Network Isolation**: Internal company network access only
-- **Input Validation**: Server-side validation for all user inputs
-- **File Upload Security**: Type and size restrictions on uploaded files
+### Security Measures
+- **CSRF Protection**: All forms protected against cross-site request forgery
+- **Password Security**: Bcrypt hashing with appropriate work factor
+- **Session Management**: Secure, time-limited sessions with proper invalidation
+- **Input Validation**: Client and server-side validation of all inputs
+- **Access Controls**: Strict role-based access control on all routes
 
-## 📊 Database Structure & Data Flow
+### Troubleshooting Common Issues
+- **Database Connection Errors**: Check PostgreSQL service status and credentials
+- **Email Sending Failures**: Verify SMTP settings and server connectivity
+- **PDF Generation Issues**: Ensure Word is properly installed on the server
+- **File Upload Problems**: Check directory permissions and file size limits
 
-### Core Tables
+## 📚 Additional Resources
 
-#### Users Table
-```sql
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
-    full_name VARCHAR(100) NOT NULL,
-    email VARCHAR(120) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(30),  -- Admin, Engineer, Automation Manager, PM
-    status VARCHAR(20) DEFAULT 'Pending',  -- Pending, Active, Disabled
-    created_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    requested_role VARCHAR(20)
-);
-```
+For more detailed technical information, please refer to the [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md) file, which contains:
 
-#### Reports Table (Main report storage)
-```sql
-CREATE TABLE reports (
-    id VARCHAR(36) PRIMARY KEY,  -- UUID
-    type VARCHAR(20) NOT NULL,   -- 'SAT', 'FDS', 'HDS', etc.
-    status VARCHAR(20) DEFAULT 'DRAFT',
-    document_title VARCHAR(200),
-    document_reference VARCHAR(100),
-    project_reference VARCHAR(100),
-    client_name VARCHAR(200),
-    user_email VARCHAR(120),
-    submission_date DATETIME,
-    approval_date DATETIME,
-    approvals_json TEXT,  -- JSON storage of approval workflow
-    data_json TEXT        -- Complete form data in JSON format
-);
-```
+- Detailed system architecture diagrams
+- Complete API documentation
+- Component interface specifications
+- Call hierarchy and dependencies
+- List of potentially redundant files
 
-#### SAT Reports Table (Specialized SAT data)
-```sql
-CREATE TABLE sat_reports (
-    id INTEGER PRIMARY KEY,
-    report_id VARCHAR(36),  -- Foreign key to reports table
-    project_reference VARCHAR(100),
-    document_title VARCHAR(200),
-    document_reference VARCHAR(100),
-    revision VARCHAR(10),
-    date_created DATE,
-    client_name VARCHAR(200),
-    prepared_by VARCHAR(100),
-    reviewed_by_tech_lead VARCHAR(100),
-    reviewed_by_pm VARCHAR(100),
-    data_json TEXT,  -- Detailed SAT form data
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-```
+## 🔄 Version Control
 
-### Data Flow Architecture
-```
-User Input → Form Validation → Database Storage → 
-Approval Workflow → Template Processing → Document Generation → 
-File Storage → Download Delivery
-```
-
-## 🔧 Advanced Features
-
-### Template Processing Engine
-The application uses an advanced template processing system that:
-
-- **Preserves Formatting**: Maintains all company branding, colors, fonts, and styling
-- **Dynamic Field Replacement**: Replaces template tags with actual data
-- **Invisible Tag Detection**: Handles template tags that are invisible on servers without Office
-- **Automatic Tag Addition**: Adds missing template tags for server compatibility
-- **Efficient Processing**: Optimized for performance to prevent application freezing
-
-### Template Tags Supported
-```
-{{ PROJECT_REFERENCE }}      → Project number/code
-{{ DOCUMENT_TITLE }}         → Report title
-{{ DOCUMENT_REFERENCE }}     → Document reference number
-{{ REVISION }}               → Document revision (R0, R1, etc.)
-{{ DATE }}                   → Report creation date
-{{ CLIENT_NAME }}            → Client company name
-{{ PREPARED_BY }}            → Engineer name
-{{ REVIEWED_BY_TECH_LEAD }}  → Technical Manager name
-{{ REVIEWED_BY_PM }}         → Project Manager name
-Plus all custom form fields from the SAT form
-```
-
-### File Management System
-- **Organized Storage**: Separate directories for uploads, signatures, outputs
-- **Naming Conventions**: Standardized file naming (SAT_PROJECTNUMBER.docx)
-- **Version Control**: Automatic versioning for document revisions
-- **Security**: Access-controlled file downloads based on user roles
-- **Cleanup**: Automatic cleanup of temporary files and old versions
-
-### Email Notification System
-- **Template-Based Emails**: Professional HTML email templates
-- **Role-Specific Content**: Different email content for different recipients
-- **Retry Logic**: Built-in retry mechanism for failed email deliveries
-- **Status Updates**: Real-time email notifications for all workflow changes
-
-## 🔍 Troubleshooting & Maintenance
-
-### Common Issues & Solutions
-
-#### **Application Freezing**
-- **Cause**: Excessive logging or inefficient document processing
-- **Solution**: Optimized document processing with reduced logging
-- **Prevention**: Regular performance monitoring and code optimization
-
-#### **Template Tag Issues**
-- **Cause**: Server without Microsoft Office cannot see certain template tags
-- **Solution**: Automatic invisible tag detection and addition system
-- **Prevention**: Use template validation before deployment
-
-#### **Database Connection Issues**
-- **Symptoms**: Red database status indicator on admin dashboard
-- **Solution**: Check DATABASE_URL configuration and PostgreSQL service
-- **Monitoring**: Real-time database status monitoring
-
-#### **Email Delivery Problems**
-- **Cause**: SMTP configuration or Gmail app password issues
-- **Solution**: Verify SMTP settings and use Gmail app-specific passwords
-- **Testing**: Built-in email testing functionality
-
-### Maintenance Tasks
-
-#### **Regular Maintenance**
-- Monitor database performance and storage usage
-- Review user account status and clean up inactive accounts
-- Archive old reports and maintain storage space
-- Update SSL certificates before expiration
-- Review system logs for errors and performance issues
-
-#### **Database Maintenance**
-```sql
--- Clean up old session data
-DELETE FROM sessions WHERE expires < NOW();
-
--- Archive old reports (older than 2 years)
-UPDATE reports SET archived = TRUE WHERE submission_date < NOW() - INTERVAL '2 years';
-
--- User activity report
-SELECT role, status, COUNT(*) FROM users GROUP BY role, status;
-```
-
-## 📞 Support & Contact Information
-
-### For System Administrators
-- **Application Issues**: Check application logs in `/logs/application.log`
-- **Database Issues**: Monitor PostgreSQL logs and connection status
-- **Email Issues**: Verify SMTP configuration and Gmail app passwords
-- **SSL Certificate**: Monitor certificate expiration dates
-
-### For End Users
-- **Login Issues**: Contact system administrator for account status
-- **Report Problems**: Check report status page for detailed workflow information
-- **File Upload Issues**: Verify file types and sizes meet requirements
-- **Approval Delays**: Contact appropriate Technical Manager or Project Manager
-
-### Technical Support
-- **Development Team**: Cully Automation Technical Team
-- **System Monitoring**: Admin dashboard provides real-time system status
-- **Documentation**: This comprehensive README file
-- **Issue Reporting**: Use company internal support channels
+This documentation has been updated as part of a systematic code analysis. No functional code has been modified during this documentation update process.
 
 ---
 
-## 🎯 Business Value & ROI
-
-### Efficiency Improvements
-- **Report Creation Time**: Reduced from 2-3 hours to 30 minutes
-- **Approval Workflow**: Automated routing saves 1-2 days per report
-- **Document Consistency**: 100% compliance with company templates
-- **Error Reduction**: Eliminated manual document editing errors
-- **Status Tracking**: Real-time visibility into all report progress
-
-### Operational Benefits
-- **Centralized Storage**: All reports in one secure, accessible location
-- **Audit Trail**: Complete history of all changes and approvals
-- **Role-Based Security**: Proper access controls and user management
-- **Professional Output**: Consistently branded, professional client documents
-- **Scalability**: System can handle unlimited users and reports
-
-### Cost Savings
-- **Reduced Manual Labor**: Automation eliminates repetitive manual tasks
-- **Faster Client Delivery**: Streamlined process improves project timelines
-- **Reduced Errors**: Automated validation prevents costly mistakes
-- **Better Resource Utilization**: Engineers and managers focus on value-add activities
-
-This SAT Report Generator represents a complete digital transformation of Cully Automation's report management process, providing a modern, efficient, and secure solution for all SAT report needs.
-
----
-
-**Version**: Production Ready  
-**Last Updated**: 2025  
-**Deployment Target**: 172.16.18.21:5000 (Internal Network)  
-**Security Level**: Company Confidential - Internal Use Only
+*Last Updated: August 2023*

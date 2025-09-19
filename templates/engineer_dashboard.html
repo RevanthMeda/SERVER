@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
-        /* CULLY DASHBOARD CUSTOM STYLING */
+        /* CULLY DASHBOARD CUSTOM STYLING - Updated for clean design */
         :root {
             /* Shadows */
             --card-shadow: 0 4px 12px rgba(90, 127, 163, 0.15);
@@ -47,31 +47,35 @@
         .dashboard-container {
             width: 100%;
             margin: 0;
-            padding: 24px;
+            padding: 0;
             position: relative;
             z-index: 1;
             min-height: 100vh;
         }
-
-        /* Header Section - Cully Style */
-        .dashboard-header {
-            background: var(--cully-navy);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 40px;
-            margin-bottom: 32px;
-            box-shadow: var(--card-shadow-hover);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        
+        .page-content {
+            padding: 2rem;
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 2;
+        /* Clean Header Styling */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--cully-dark);
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--cully-gray);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .header-info h1 {
@@ -97,26 +101,41 @@
             filter: brightness(1.2) contrast(1.1);
         }
 
-        /* Flash Messages */
-        .flash-messages {
-            margin-bottom: 24px;
-        }
-
-        .flash-message {
+        /* Notification Alert - Clean Design */
+        .notification-alert {
+            background: rgba(255, 248, 230, 0.5);
+            border-left: 3px solid #ffc107;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 16px 20px;
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            border-radius: 12px;
-            color: #22c55e;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
         }
 
-        .flash-message i {
-            font-size: 18px;
+        .notification-alert i {
+            color: #ffc107;
+            font-size: 1.25rem;
+            margin-right: 1rem;
+        }
+
+        .notification-alert span {
+            flex: 1;
+            font-weight: 500;
+            color: var(--cully-dark);
+        }
+
+        .notification-link {
+            color: var(--cully-navy);
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .notification-link:hover {
+            color: var(--cully-dark);
+            text-decoration: underline;
         }
 
         /* Horizontal Navigation - Cully Style */
@@ -262,6 +281,65 @@
             margin-bottom: 32px;
         }
 
+        /* Report Types Grid */
+        .report-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .report-category {
+            margin-bottom: 2rem;
+        }
+
+        .category-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--cully-light-blue);
+            color: var(--cully-white);
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cully-dark);
+            margin: 0 0 0.5rem 0;
+        }
+
+        .category-description {
+            color: var(--cully-gray);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .report-card {
+            background: var(--cully-white);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--cully-light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .report-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .report-card.featured {
+            border-left: 4px solid var(--cully-blue);
+        }
+
         .stat-card {
             background: var(--cully-white);
             border-radius: 16px;
@@ -276,35 +354,6 @@
         .stat-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--card-shadow-hover);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--cully-gradient);
-        }
-
-        .stat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
         }
 
         .stat-value {
@@ -460,15 +509,16 @@
             margin-bottom: 16px;
         }
 
+        /* Action Buttons - Clean Design */
         .action-button {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 16px;
+            padding: 0.75rem 1.5rem;
             background: var(--cully-gradient);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 0.5rem;
             font-weight: 600;
             font-size: 14px;
             text-decoration: none;
@@ -476,22 +526,26 @@
             transition: all 0.2s ease;
             width: 100%;
             justify-content: center;
+            box-shadow: 0 2px 4px rgba(90, 127, 163, 0.2);
         }
 
         .action-button:hover:not(:disabled) {
             background: linear-gradient(135deg, #7ba5c7 0%, #5a7fa3 100%);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
             color: white;
+            box-shadow: 0 4px 8px rgba(90, 127, 163, 0.3);
         }
 
         .action-button.secondary {
-            background: #f1f5f9;
-            color: var(--cully-gray);
+            background: transparent;
+            color: var(--cully-navy);
+            border: 1px solid var(--cully-navy);
         }
 
         .action-button.secondary:hover {
-            background: #e2e8f0;
+            background: rgba(90, 127, 163, 0.1);
             color: var(--cully-dark);
+            border-color: var(--cully-dark);
         }
 
         .action-button:disabled {
@@ -690,22 +744,17 @@
 
     <div class="dashboard-container">
         <div class="page-content">
-            <!-- Header -->
-            <div class="dashboard-header">
-                <div class="header-content">
-                    <div class="header-info">
-                        <h1><i class="fas fa-hard-hat"></i> Engineer Dashboard</h1>
-                        <p>Welcome back, {{ current_user.full_name if current_user and current_user.full_name else 'Engineer' }}! Ready to create your next report?</p>
-                    </div>
-                    <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
-                </div>
+            <!-- Clean Header -->
+            <div class="page-header">
+                <h1 class="page-title">Engineer Dashboard</h1>
+                <p class="page-subtitle">Welcome back, {{ session.user }}! Ready to create your next report?</p>
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    <div class="flash-messages">
+                    <div class="alerts-container">
                         {% for category, message in messages %}
-                            <div class="flash-message">
+                            <div class="alert alert-{{ category }}">
                                 <i class="fa fa-check-circle"></i>
                                 {{ message }}
                             </div>
@@ -714,164 +763,123 @@
                 {% endif %}
             {% endwith %}
 
-            <!-- Horizontal Navigation -->
-            <div class="dashboard-nav">
-                <div class="nav-links">
-                    <a href="{{ url_for('dashboard.engineer') }}" class="nav-link active">
-                        <i class="fas fa-tachometer-alt"></i>
-                        Dashboard
-                    </a>
-                    <a href="{{ url_for('reports.new') }}" class="nav-link featured">
-                        <i class="fas fa-plus-circle"></i>
-                        Create Report
-                        <span class="nav-badge">New</span>
-                    </a>
-                    <a href="{{ url_for('dashboard.my_reports') }}" class="nav-link">
-                        <i class="fas fa-folder-open"></i>
-                        My Reports
-                    </a>
-                    <a href="{{ url_for('io_builder.index') }}" class="nav-link">
-                        <i class="fas fa-sitemap"></i>
-                        I/O Builder
-                    </a>
-                    <a href="{{ url_for('notifications.notification_center') }}" class="nav-link">
-                        <i class="fas fa-bell"></i>
-                        Notifications
-                    </a>
-                </div>
-                
-                <div class="user-info">
-                    <div class="user-avatar">
-                        {{ current_user.full_name[0] if current_user and current_user.full_name else 'U' }}
-                    </div>
-                    <div class="user-details">
-                        <div class="user-name">{{ current_user.full_name if current_user and current_user.full_name else 'User' }}</div>
-                        <div class="user-role">{{ current_user.role if current_user and current_user.role else 'Engineer' }}</div>
-                    </div>
-                    <a href="{{ url_for('auth.change_password') }}" class="nav-link">
-                        <i class="fas fa-key"></i>
-                        Settings
-                    </a>
-                    <a href="{{ url_for('auth.logout') }}" class="nav-link" style="color: #ef4444;">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </a>
-                </div>
-            </div>
-
-            <!-- Stats Overview -->
+            <!-- Stats Overview - Simplified -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fa fa-file-alt"></i>
-                        </div>
-                    </div>
                     <div class="stat-value">{{ stats.total_reports if stats else 0 }}</div>
                     <p class="stat-label">Total Reports</p>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fa fa-clock"></i>
-                        </div>
-                    </div>
                     <div class="stat-value">{{ stats.pending_reports if stats else 0 }}</div>
                     <p class="stat-label">Pending Approval</p>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fa fa-check-circle"></i>
-                        </div>
-                    </div>
                     <div class="stat-value">{{ stats.approved_reports if stats else 0 }}</div>
                     <p class="stat-label">Approved Reports</p>
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="widgets-grid">
-                <div class="widget-card">
-                    <div class="widget-header">
-                        <h3 class="widget-title">
-                            <i class="fa fa-rocket"></i>
-                            Quick Actions
-                        </h3>
+            <!-- Main Content - Redesigned to match Create Report page -->
+            <div class="report-types-grid">
+                <!-- Quick Actions Section -->
+                <div class="report-category">
+                    <div class="category-header">
+                        <div class="category-badge">Available Now</div>
+                        <h2 class="category-title">Active Report Types</h2>
+                        <p class="category-description">Create professional documentation with our automated report generation system.</p>
                     </div>
-                    <div class="widget-content">
-                        <div class="action-grid">
-                            <div class="action-item featured">
-                                <div class="action-header">
-                                    <div class="action-icon">
-                                        <i class="fa fa-plus-circle"></i>
-                                    </div>
-                                    <h4 class="action-title">Create Report</h4>
-                                    <div class="action-badge">Ready</div>
-                                </div>
-                                <p class="action-description">Start building a comprehensive report with our guided workflow.</p>
-                                <a href="{{ url_for('reports.new') }}" class="action-button">
-                                    <i class="fa fa-plus"></i>
-                                    Start New Report
-                                </a>
+                    
+                    <div class="report-card featured">
+                        <div class="report-header">
+                            <div class="report-icon">
+                                <i class="fas fa-vial"></i>
                             </div>
-
-                            <div class="action-item">
-                                <div class="action-header">
-                                    <div class="action-icon">
-                                        <i class="fa fa-folder-open"></i>
-                                    </div>
-                                    <h4 class="action-title">My Reports</h4>
-                                </div>
-                                <p class="action-description">Access, manage, and review all your previously created reports in one place.</p>
-                                <a href="{{ url_for('dashboard.my_reports') }}" class="action-button secondary">
-                                    <i class="fa fa-folder-open"></i>
-                                    View My Reports
-                                </a>
+                            <div class="report-info">
+                                <h3 class="report-title">System Acceptance Testing (SAT)</h3>
+                                <span class="report-status status-available">Available</span>
                             </div>
+                        </div>
+                        <div class="report-description">
+                            <p>Create comprehensive System Acceptance Test documentation for automation projects with detailed testing procedures and verification records.</p>
+                        </div>
+                        <div class="report-actions">
+                            <a href="{{ url_for('reports.new') }}" class="report-action-button primary">
+                                <i class="fas fa-plus"></i> Create Report
+                            </a>
                         </div>
                     </div>
                 </div>
 
-                <div class="widget-card">
-                    <div class="widget-header">
-                        <h3 class="widget-title">
-                            <i class="fa fa-tools"></i>
-                            Tools & Resources
-                        </h3>
+                <!-- Future Reports Section -->
+                <div class="report-category">
+                    <div class="category-header">
+                        <div class="category-badge">Coming Soon</div>
+                        <h2 class="category-title">Future Report Types</h2>
+                        <p class="category-description">Additional report templates that will be available in upcoming releases.</p>
                     </div>
-                    <div class="widget-content">
-                        <div class="action-grid">
-                            <div class="action-item">
-                                <div class="action-header">
-                                    <div class="action-icon">
-                                        <i class="fa fa-sitemap"></i>
-                                    </div>
-                                    <h4 class="action-title">I/O Builder</h4>
-                                </div>
-                                <p class="action-description">Design and configure input/output tables for your reports with our visual builder tool.</p>
-                                <a href="{{ url_for('io_builder.index') }}" class="action-button secondary">
-                                    <i class="fa fa-sitemap"></i>
-                                    Open I/O Builder
-                                </a>
+                    
+                    <div class="report-card">
+                        <div class="report-header">
+                            <div class="report-icon">
+                                <i class="fas fa-file-alt"></i>
                             </div>
-
-                            <div class="action-item">
-                                <div class="action-header">
-                                    <div class="action-icon">
-                                        <i class="fa fa-bell"></i>
-                                    </div>
-                                    <h4 class="action-title">Notifications</h4>
-                                </div>
-                                <p class="action-description">Stay updated with report approvals, system updates, and important notifications.</p>
-                                <a href="{{ url_for('notifications.notification_center') }}" class="action-button secondary">
-                                    <i class="fa fa-bell"></i>
-                                    View Notifications
-                                </a>
+                            <div class="report-info">
+                                <h3 class="report-title">Functional Design Specification (FDS)</h3>
+                                <span class="report-status status-coming-soon">Coming Soon</span>
                             </div>
                         </div>
+                        <div class="report-description">
+                            <p>Create detailed functional design specifications for automation systems with comprehensive requirements and system architecture documentation.</p>
+                        </div>
+                        <div class="report-actions">
+                            <button disabled class="report-action-button secondary">
+                                <i class="fas fa-clock"></i> Coming Soon
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools Section -->
+            <div class="tools-section">
+                <div class="section-header">
+                    <h2 class="section-title">Additional Tools</h2>
+                    <p class="section-description">Access these tools to enhance your workflow</p>
+                </div>
+                
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <h3 class="tool-title">My Reports</h3>
+                        <p class="tool-description">Access and manage all your created reports</p>
+                        <a href="{{ url_for('dashboard.my_reports') }}" class="tool-link">View Reports</a>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h3 class="tool-title">I/O Builder</h3>
+                        <p class="tool-description">Create and manage I/O lists for your projects</p>
+                        <a href="{{ url_for('io_builder.index') }}" class="tool-link">Open Builder</a>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3 class="tool-title">Notifications</h3>
+                        <p class="tool-description">View system notifications and updates</p>
+                        <a href="{{ url_for('notifications.notification_center') }}" class="tool-link">
+                            Check Notifications
+                            {% if unread_count and unread_count > 0 %}
+                            <span class="notification-badge">{{ unread_count }}</span>
+                            {% endif %}
+                        </a>
                     </div>
                 </div>
             </div>
