@@ -266,15 +266,34 @@ def automation_manager():
     except Exception as e:
         current_app.logger.error(f"Error getting pending approvals for Automation Manager: {e}")
     
+    # Only count reports owned by or routed to this Automation Manager
+    approver_match = f'"approver_email": "{current_user.email}"'
+    relevant_reports_filter = or_(
+        Report.user_email == current_user.email,
+        and_(
+            Report.approvals_json.isnot(None),
+            Report.approvals_json.contains(approver_match)
+        )
+    )
+
     # Get approved reports count
-    approved_reports_count = Report.query.filter_by(status='APPROVED').count()
-    
+    approved_reports_count = Report.query.filter(
+        Report.status == 'APPROVED',
+        relevant_reports_filter
+    ).count()
+
     # Get reports in draft status
-    draft_reports_count = Report.query.filter_by(status='DRAFT').count()
-    
+    draft_reports_count = Report.query.filter(
+        Report.status == 'DRAFT',
+        relevant_reports_filter
+    ).count()
+
     # Get reports in rejected status
-    rejected_reports_count = Report.query.filter_by(status='REJECTED').count()
-    
+    rejected_reports_count = Report.query.filter(
+        Report.status == 'REJECTED',
+        relevant_reports_filter
+    ).count()
+
     # Test database connection
     try:
         db_status = test_db_connection()
