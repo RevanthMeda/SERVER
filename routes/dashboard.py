@@ -269,6 +269,12 @@ def automation_manager():
     # Get approved reports count
     approved_reports_count = Report.query.filter_by(status='APPROVED').count()
     
+    # Get reports in draft status
+    draft_reports_count = Report.query.filter_by(status='DRAFT').count()
+    
+    # Get reports in rejected status
+    rejected_reports_count = Report.query.filter_by(status='REJECTED').count()
+    
     # Test database connection
     try:
         db_status = test_db_connection()
@@ -276,43 +282,25 @@ def automation_manager():
         current_app.logger.warning(f"Database connection test failed: {e}")
         db_status = False
 
+    # Calculate statistics for the dashboard
+    stats = {
+        'draft': draft_reports_count,
+        'pending': pending_approvals,
+        'rejected': rejected_reports_count,
+        'approved': approved_reports_count
+    }
+
+    # Get recent reports (limit to 5 for display)
+    recent_reports = pending_reports[:5]
+
     return render_template('automation_manager_dashboard.html',
+                         stats=stats,
+                         reports=recent_reports,
                          unread_count=unread_count,
-                         reports_count=len(pending_reports),
-                         pending_approvals=pending_approvals,
-                         approved_reports_count=approved_reports_count,
-                         pending_reports=pending_reports,
+                         automation_count=len(pending_reports),
+                         pending_workflows=pending_approvals,
+                         completed_automations=approved_reports_count,
                          db_status=db_status)
-
-    # Get team reports count (reports under Automation Manager's review)
-    team_reports_count = Report.query.filter_by(status='pending_review').count()
-
-    # Get recent pending reports for display
-    pending_reports = Report.query.filter_by(status='pending_review').limit(5).all()
-
-    # Enrich pending_reports with SATReport data if available
-    for report in pending_reports:
-        if hasattr(report, 'sat_report') and report.sat_report:
-            try:
-                data = json.loads(report.sat_report.data_json)
-                report.document_title = data.get('context', {}).get('DOCUMENT_TITLE', 'Untitled Report')
-                report.project_reference = data.get('context', {}).get('PROJECT_REFERENCE', 'N/A')
-            except Exception as e:
-                current_app.logger.warning(f"Could not parse SATReport data for report {report.id}: {e}")
-                report.document_title = 'Untitled Report'
-                report.project_reference = 'N/A'
-        else:
-            report.document_title = 'Untitled Report'
-            report.project_reference = 'N/A'
-
-    return render_template('automation_manager_dashboard.html',
-                         reports_count=reports_count,
-                         pending_approvals=pending_approvals,
-                         approved_reports=approved_reports_count,
-                         team_reports=team_reports_count,
-                         recent_reports=pending_reports,
-                         unread_count=unread_count)
-
 
 @dashboard_bp.route('/automation-manager-reviews')
 @role_required(['Automation Manager'])
