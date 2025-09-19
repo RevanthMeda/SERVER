@@ -324,7 +324,7 @@
                     </div>
                     <div class="report-status status-{{ report.status or 'DRAFT' }}">{{ report.status | replace('_', ' ') | title }}</div>
                     <div class="report-actions">
-                        <a href="{{ url_for('reports.view_report', report_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
+                        <a href="{{ url_for('status.view_status', submission_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
                         <a href="{{ url_for('edit.edit_report', report_id=report.id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                     </div>
                 </div>
