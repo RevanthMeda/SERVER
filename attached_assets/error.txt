@@ -1,32 +1,32 @@
 PS E:\report generator\SERVER> python app.py
 Initializing SAT Report Generator...
-[2025-09-19 11:17:31,715] INFO in app: Hierarchical configuration system initialized
+[2025-09-19 11:35:10,884] INFO in app: Hierarchical configuration system initialized
 Generated new master key for local secrets. Store this securely!
-[2025-09-19 11:17:31,829] INFO in app: Secrets management system initialized
-[2025-09-19 11:17:32,025] DEBUG in models: Database connection successful
-[2025-09-19 11:17:32,035] DEBUG in models: Database tables already exist: 31 tables found
-[2025-09-19 11:17:32,093] INFO in models: Default system settings initialized
-[2025-09-19 11:17:32,093] INFO in models: Database initialized successfully
-[2025-09-19 11:17:32,681] DEBUG in app: Skipping performance initialization in non-production
+[2025-09-19 11:35:10,991] INFO in app: Secrets management system initialized
+[2025-09-19 11:35:11,234] DEBUG in models: Database connection successful
+[2025-09-19 11:35:11,245] DEBUG in models: Database tables already exist: 31 tables found
+[2025-09-19 11:35:11,301] INFO in models: Default system settings initialized
+[2025-09-19 11:35:11,302] INFO in models: Database initialized successfully
+[2025-09-19 11:35:11,892] DEBUG in app: Skipping performance initialization in non-production
 DEBUG:app:Skipping performance initialization in non-production
 INFO:cache.redis_client:Cache system initialized successfully
-[2025-09-19 11:17:37,008] DEBUG in app: Using filesystem sessions (Redis not available)
+[2025-09-19 11:35:16,078] DEBUG in app: Using filesystem sessions (Redis not available)
 DEBUG:app:Using filesystem sessions (Redis not available)
-[2025-09-19 11:17:37,012] DEBUG in app: Cache system initialized successfully
+[2025-09-19 11:35:16,082] DEBUG in app: Cache system initialized successfully
 DEBUG:app:Cache system initialized successfully
-[2025-09-19 11:17:37,016] DEBUG in app: Query caching disabled (Redis not available)
+[2025-09-19 11:35:16,086] DEBUG in app: Query caching disabled (Redis not available)
 DEBUG:app:Query caching disabled (Redis not available)
 INFO:cache.cdn:CDN disabled or not configured
 INFO:cache.flask_cdn:Flask CDN extension initialized
-[2025-09-19 11:17:38,071] DEBUG in app: CDN integration initialized
+[2025-09-19 11:35:16,744] DEBUG in app: CDN integration initialized
 DEBUG:app:CDN integration initialized
-[2025-09-19 11:17:38,073] DEBUG in app: Background task processing disabled (Redis not available)
+[2025-09-19 11:35:16,745] DEBUG in app: Background task processing disabled (Redis not available)
 DEBUG:app:Background task processing disabled (Redis not available)
-[2025-09-19 11:17:38,075] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
+[2025-09-19 11:35:16,746] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
 INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
 C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
   import pkg_resources
-[2025-09-19 11:17:39,733] INFO in app: CDN management blueprint registered
+[2025-09-19 11:35:18,100] INFO in app: CDN management blueprint registered
 INFO:app:CDN management blueprint registered
 Starting SAT Report Generator...
 Debug Mode: True
@@ -37,19 +37,11 @@ Health check endpoint available at /health
 HTTPS enabled with password-protected .pfx SSL certificate
  * Serving Flask app 'app'
  * Debug mode: off
-[2025-09-19 11:18:08,082] INFO in auth: User admin@cullyautomation.com logged in with session cdb906031ffe5f069392fe06f893637d6875afebecc604030723820b5578ae11
-INFO:app:User admin@cullyautomation.com logged in with session cdb906031ffe5f069392fe06f893637d6875afebecc604030723820b5578ae11
-[2025-09-19 11:18:08,766] WARNING in middleware_optimized: Slow request: POST /auth/login took 1.246s
-WARNING:app:Slow request: POST /auth/login took 1.246s
-[2025-09-19 11:18:28,008] INFO in dashboard: Admin dashboard: Found 6 total reports
-INFO:app:Admin dashboard: Found 6 total reports
-[2025-09-19 11:18:28,058] INFO in dashboard: Admin dashboard: Processing 5 recent reports
-INFO:app:Admin dashboard: Processing 5 recent reports
-[2025-09-19 11:18:30,301] INFO in dashboard: Automation Manager: Found 0 PENDING reports
-INFO:app:Automation Manager: Found 0 PENDING reports
-[2025-09-19 11:18:30,318] INFO in dashboard: Automation Manager has 0 pending approvals
-INFO:app:Automation Manager has 0 pending approvals
-[2025-09-19 11:18:30,374] ERROR in app: Exception on /dashboard/automation_manager [GET]
+[2025-09-19 11:35:39,838] INFO in dashboard: PM: Found 0 PENDING reports
+INFO:app:PM: Found 0 PENDING reports
+[2025-09-19 11:35:39,841] INFO in dashboard: PM has 0 pending approvals
+INFO:app:PM has 0 pending approvals
+[2025-09-19 11:35:39,891] ERROR in app: Exception on /dashboard/pm [GET]
 Traceback (most recent call last):
   File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
     response = self.full_dispatch_request()
@@ -75,32 +67,37 @@ Traceback (most recent call last):
   File "E:\report generator\SERVER\routes\dashboard.py", line 16, in decorated_function
     response = make_response(f(*args, **kwargs))
                              ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 316, in automation_manager
-    return render_template('automation_manager_dashboard.html',
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
-    template = app.jinja_env.get_or_select_template(template_name_or_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
-    return self.get_template(template_name_or_list, parent, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
-    return self._load_template(name, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
-    template = self.loader.load(self, name, self.make_globals(globals))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
-    code = environment.compile(source, name, filename)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 771, in compile
-    self.handle_exception(source=source_hint)
+  File "E:\report generator\SERVER\routes\dashboard.py", line 413, in pm
+    return render_template('pm_dashboard.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 147, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 130, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
   File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
     raise rewrite_traceback_stack(source=source)
-  File "E:\report generator\SERVER\templates\automation_manager_dashboard.html", line 387, in template
-    {% endblock %}
-jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
-ERROR:app:Exception on /dashboard/automation_manager [GET]
+  File "E:\report generator\SERVER\templates\pm_dashboard.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "E:\report generator\SERVER\templates\base.html", line 216, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\templates\pm_dashboard.html", line 408, in block 'content'
+    <a href="{{ url_for('reports.view_report', report_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2034, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2023, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\routing\map.py", line 917, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'reports.view_report' with values ['report_id']. Did you mean 'reports.new_sat' instead?
+ERROR:app:Exception on /dashboard/pm [GET]
 Traceback (most recent call last):
   File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
     response = self.full_dispatch_request()
@@ -126,36 +123,41 @@ Traceback (most recent call last):
   File "E:\report generator\SERVER\routes\dashboard.py", line 16, in decorated_function
     response = make_response(f(*args, **kwargs))
                              ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 316, in automation_manager
-    return render_template('automation_manager_dashboard.html',
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
-    template = app.jinja_env.get_or_select_template(template_name_or_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
-    return self.get_template(template_name_or_list, parent, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
-    return self._load_template(name, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
-    template = self.loader.load(self, name, self.make_globals(globals))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
-    code = environment.compile(source, name, filename)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 771, in compile
-    self.handle_exception(source=source_hint)
+  File "E:\report generator\SERVER\routes\dashboard.py", line 413, in pm
+    return render_template('pm_dashboard.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 147, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 130, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
   File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
     raise rewrite_traceback_stack(source=source)
-  File "E:\report generator\SERVER\templates\automation_manager_dashboard.html", line 387, in template
-    {% endblock %}
-jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
-[2025-09-19 11:18:34,594] INFO in dashboard: Automation Manager: Found 0 PENDING reports
-INFO:app:Automation Manager: Found 0 PENDING reports
-[2025-09-19 11:18:34,597] INFO in dashboard: Automation Manager has 0 pending approvals
-INFO:app:Automation Manager has 0 pending approvals
-[2025-09-19 11:18:34,611] ERROR in app: Exception on /dashboard/automation_manager [GET]
+  File "E:\report generator\SERVER\templates\pm_dashboard.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "E:\report generator\SERVER\templates\base.html", line 216, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\templates\pm_dashboard.html", line 408, in block 'content'
+    <a href="{{ url_for('reports.view_report', report_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2034, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2023, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\routing\map.py", line 917, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'reports.view_report' with values ['report_id']. Did you mean 'reports.new_sat' instead?
+[2025-09-19 11:35:44,391] INFO in dashboard: PM: Found 0 PENDING reports
+INFO:app:PM: Found 0 PENDING reports
+[2025-09-19 11:35:44,394] INFO in dashboard: PM has 0 pending approvals
+INFO:app:PM has 0 pending approvals
+[2025-09-19 11:35:44,400] ERROR in app: Exception on /dashboard/pm [GET]
 Traceback (most recent call last):
   File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
     response = self.full_dispatch_request()
@@ -181,32 +183,37 @@ Traceback (most recent call last):
   File "E:\report generator\SERVER\routes\dashboard.py", line 16, in decorated_function
     response = make_response(f(*args, **kwargs))
                              ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 316, in automation_manager
-    return render_template('automation_manager_dashboard.html',
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
-    template = app.jinja_env.get_or_select_template(template_name_or_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
-    return self.get_template(template_name_or_list, parent, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
-    return self._load_template(name, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
-    template = self.loader.load(self, name, self.make_globals(globals))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
-    code = environment.compile(source, name, filename)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 771, in compile
-    self.handle_exception(source=source_hint)
+  File "E:\report generator\SERVER\routes\dashboard.py", line 413, in pm
+    return render_template('pm_dashboard.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 147, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 130, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
   File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
     raise rewrite_traceback_stack(source=source)
-  File "E:\report generator\SERVER\templates\automation_manager_dashboard.html", line 387, in template
-    {% endblock %}
-jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
-ERROR:app:Exception on /dashboard/automation_manager [GET]
+  File "E:\report generator\SERVER\templates\pm_dashboard.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "E:\report generator\SERVER\templates\base.html", line 216, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\templates\pm_dashboard.html", line 408, in block 'content'
+    <a href="{{ url_for('reports.view_report', report_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2034, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2023, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\routing\map.py", line 917, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'reports.view_report' with values ['report_id']. Did you mean 'reports.new_sat' instead?
+ERROR:app:Exception on /dashboard/pm [GET]
 Traceback (most recent call last):
   File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
     response = self.full_dispatch_request()
@@ -232,250 +239,33 @@ Traceback (most recent call last):
   File "E:\report generator\SERVER\routes\dashboard.py", line 16, in decorated_function
     response = make_response(f(*args, **kwargs))
                              ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 316, in automation_manager
-    return render_template('automation_manager_dashboard.html',
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
-    template = app.jinja_env.get_or_select_template(template_name_or_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
-    return self.get_template(template_name_or_list, parent, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
-    return self._load_template(name, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
-    template = self.loader.load(self, name, self.make_globals(globals))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
-    code = environment.compile(source, name, filename)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 771, in compile
-    self.handle_exception(source=source_hint)
+  File "E:\report generator\SERVER\routes\dashboard.py", line 413, in pm
+    return render_template('pm_dashboard.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 147, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 130, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
   File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
     raise rewrite_traceback_stack(source=source)
-  File "E:\report generator\SERVER\templates\automation_manager_dashboard.html", line 387, in template
-    {% endblock %}
-jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
-[2025-09-19 11:18:39,462] INFO in dashboard: Automation Manager: Found 0 PENDING reports
-INFO:app:Automation Manager: Found 0 PENDING reports
-[2025-09-19 11:18:39,465] INFO in dashboard: Automation Manager has 0 pending approvals
-INFO:app:Automation Manager has 0 pending approvals
-[2025-09-19 11:18:39,479] ERROR in app: Exception on /dashboard/automation_manager [GET]
-Traceback (most recent call last):
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1825, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
-    return original_handler(e)
-           ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1823, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 16, in decorated_function
-    response = make_response(f(*args, **kwargs))
-                             ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 316, in automation_manager
-    return render_template('automation_manager_dashboard.html',
+  File "E:\report generator\SERVER\templates\pm_dashboard.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "E:\report generator\SERVER\templates\base.html", line 216, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\templates\pm_dashboard.html", line 408, in block 'content'
+    <a href="{{ url_for('reports.view_report', report_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2034, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
-    template = app.jinja_env.get_or_select_template(template_name_or_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
-    return self.get_template(template_name_or_list, parent, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
-    return self._load_template(name, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
-    template = self.loader.load(self, name, self.make_globals(globals))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
-    code = environment.compile(source, name, filename)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 771, in compile
-    self.handle_exception(source=source_hint)
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "E:\report generator\SERVER\templates\automation_manager_dashboard.html", line 387, in template
-    {% endblock %}
-jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
-ERROR:app:Exception on /dashboard/automation_manager [GET]
-Traceback (most recent call last):
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1825, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
-    return original_handler(e)
-           ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1823, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 16, in decorated_function
-    response = make_response(f(*args, **kwargs))
-                             ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 316, in automation_manager
-    return render_template('automation_manager_dashboard.html',
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
-    template = app.jinja_env.get_or_select_template(template_name_or_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
-    return self.get_template(template_name_or_list, parent, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
-    return self._load_template(name, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
-    template = self.loader.load(self, name, self.make_globals(globals))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
-    code = environment.compile(source, name, filename)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 771, in compile
-    self.handle_exception(source=source_hint)
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "E:\report generator\SERVER\templates\automation_manager_dashboard.html", line 387, in template
-    {% endblock %}
-jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
-[2025-09-19 11:18:59,290] INFO in auth: User jchacko@cully.ie logged in with session 52c0d569430ee17df84d45df474e58e105f4c7bc2cabf5c41662e537368ece36
-INFO:app:User jchacko@cully.ie logged in with session 52c0d569430ee17df84d45df474e58e105f4c7bc2cabf5c41662e537368ece36
-[2025-09-19 11:19:00,140] INFO in dashboard: Automation Manager: Found 0 PENDING reports
-INFO:app:Automation Manager: Found 0 PENDING reports
-[2025-09-19 11:19:00,153] INFO in dashboard: Automation Manager has 0 pending approvals
-INFO:app:Automation Manager has 0 pending approvals
-[2025-09-19 11:19:00,165] ERROR in app: Exception on /dashboard/automation_manager [GET]
-Traceback (most recent call last):
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1825, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
-    return original_handler(e)
-           ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1823, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 16, in decorated_function
-    response = make_response(f(*args, **kwargs))
-                             ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 316, in automation_manager
-    return render_template('automation_manager_dashboard.html',
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
-    template = app.jinja_env.get_or_select_template(template_name_or_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
-    return self.get_template(template_name_or_list, parent, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
-    return self._load_template(name, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
-    template = self.loader.load(self, name, self.make_globals(globals))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
-    code = environment.compile(source, name, filename)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 771, in compile
-    self.handle_exception(source=source_hint)
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "E:\report generator\SERVER\templates\automation_manager_dashboard.html", line 387, in template
-    {% endblock %}
-jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
-ERROR:app:Exception on /dashboard/automation_manager [GET]
-Traceback (most recent call last):
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1825, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
-    return original_handler(e)
-           ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1823, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
-    return f(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 16, in decorated_function
-    response = make_response(f(*args, **kwargs))
-                             ^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\routes\dashboard.py", line 316, in automation_manager
-    return render_template('automation_manager_dashboard.html',
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
-    template = app.jinja_env.get_or_select_template(template_name_or_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
-    return self.get_template(template_name_or_list, parent, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
-    return self._load_template(name, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
-    template = self.loader.load(self, name, self.make_globals(globals))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
-    code = environment.compile(source, name, filename)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 771, in compile
-    self.handle_exception(source=source_hint)
-  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "E:\report generator\SERVER\templates\automation_manager_dashboard.html", line 387, in template
-    {% endblock %}
-jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
-[2025-09-19 11:19:25,515] INFO in dashboard: Admin dashboard: Found 6 total reports
-INFO:app:Admin dashboard: Found 6 total reports
-[2025-09-19 11:19:25,524] INFO in dashboard: Admin dashboard: Processing 5 recent reports
-INFO:app:Admin dashboard: Processing 5 recent reports
-[2025-09-19 11:19:49,501] INFO in dashboard: Admin dashboard: Found 6 total reports
-INFO:app:Admin dashboard: Found 6 total reports
-[2025-09-19 11:19:49,505] INFO in dashboard: Admin dashboard: Processing 5 recent reports
-INFO:app:Admin dashboard: Processing 5 recent reports
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2023, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\routing\map.py", line 917, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'reports.view_report' with values ['report_id']. Did you mean 'reports.new_sat' instead?
