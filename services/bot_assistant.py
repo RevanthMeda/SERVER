@@ -526,44 +526,90 @@ def _parse_document_request(message: str) -> Optional[str]:
     return None
 
 
+def _parse_summary_request(message: str) -> bool:
+    lowered = message.lower().strip()
+    if not lowered:
+        return False
+    triggers = ("summary", "status", "progress", "what's left", "what is left")
+    return any(trigger in lowered for trigger in triggers)
+
+
+def _format_summary_message(summary: Dict[str, Any]) -> str:
+    collected = summary.get('collected') or {}
+    pending = summary.get('pending_fields') or []
+    collected_count = len(collected)
+    if not pending:
+        return f"All required SAT fields are captured ({collected_count} fields). You're ready to continue."
+    pending_labels = [_field_label(name) for name in pending]
+    pending_text = _format_human_list(pending_labels)
+    return f"Collected {collected_count} fields so far. Still waiting on {pending_text}."
+
+
+def _format_human_list(items: List[str]) -> str:
+    if not items:
+        return ''
+    if len(items) == 1:
+        return items[0]
+    if len(items) == 2:
+        return f"{items[0]} and {items[1]}"
+    return ', '.join(items[:-1]) + f", and {items[-1]}"
+
+
+
 def _handle_command(message: str, state: BotConversationState) -> Optional[Dict[str, Any]]:
     submission_id = _parse_document_request(message)
-    if not submission_id:
-        return None
+    if submission_id:
+        result = resolve_report_download_url(submission_id)
+        payload = _build_question_payload(state)
 
-    result = resolve_report_download_url(submission_id)
-    payload = _build_question_payload(state)
-
-    command: Dict[str, Any] = {
-        'type': 'document_fetch',
-        'requested_id': submission_id,
-        'success': 'download_url' in result,
-    }
-
-    if command['success']:
-        command['download_url'] = result['download_url']
-        metadata = {
-            key: result[key]
-            for key in ('document_title', 'client_name', 'project_reference')
-            if result.get(key)
+        command: Dict[str, Any] = {
+            'type': 'document_fetch',
+            'requested_id': submission_id,
+            'success': 'download_url' in result,
         }
-        if metadata:
-            command['metadata'] = metadata
-        title = metadata.get('document_title') if metadata else None
-        if not title:
-            title = 'SAT Report'
+
+        if command['success']:
+            command['download_url'] = result['download_url']
+            metadata = {
+                key: result[key]
+                for key in ('document_title', 'client_name', 'project_reference')
+                if result.get(key)
+            }
+            if metadata:
+                command['metadata'] = metadata
+            title = metadata.get('document_title') if metadata else None
+            if not title:
+                title = 'SAT Report'
+            payload.setdefault('messages', []).append(
+                f"{title} is ready to download."
+            )
+        else:
+            command['error'] = result.get('error', 'Document not found.')
+            payload.setdefault('command_errors', []).append(command['error'])
+            payload.setdefault('messages', []).append(command['error'])
+
+        payload['command'] = command
+        return payload
+
+    if _parse_summary_request(message):
+        payload = _build_question_payload(state)
+        collected = _merge_results(state)
+        summary_command: Dict[str, Any] = {
+            'type': 'summary',
+            'completed': payload['completed'],
+            'collected': collected,
+            'pending_fields': payload.get('pending_fields', []),
+            'missing_required': [
+                field for field in REQUIRED_FIELDS if not _has_value(collected.get(field))
+            ],
+        }
+        payload['command'] = summary_command
         payload.setdefault('messages', []).append(
-            f"{title} is ready to download."
+            _format_summary_message(summary_command)
         )
-    else:
-        command['error'] = result.get('error', 'Document not found.')
-        payload.setdefault('command_errors', []).append(command['error'])
-        payload.setdefault('messages', []).append(command['error'])
+        return payload
 
-    payload['command'] = command
-    return payload
-
-
+    return None
 def resolve_report_download_url(submission_id: str) -> Dict[str, str]:
     report = Report.query.filter_by(id=submission_id).first()
     if not report:

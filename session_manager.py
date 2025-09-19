@@ -12,6 +12,10 @@ from flask import session, current_app
 from threading import Lock
 import secrets
 
+SESSION_TIMEOUT_SECONDS = 1800  # 30 minutes
+ACTIVITY_UPDATE_THRESHOLD = 60  # seconds between disk writes
+
+
 class SessionManager:
     """
     Manages session revocation and validation
@@ -23,6 +27,8 @@ class SessionManager:
         self.session_timestamps = {}
         self.lock = Lock()
         self.revocation_file = 'instance/revoked_sessions.json'
+        self.session_timeout = SESSION_TIMEOUT_SECONDS
+        self.activity_update_threshold = ACTIVITY_UPDATE_THRESHOLD
         self._load_revoked_sessions()
         
     def _load_revoked_sessions(self):
@@ -97,37 +103,43 @@ class SessionManager:
         with self.lock:
             return session_id in self.revoked_sessions
     
-    def is_session_valid(self, session_id=None):
-        """Check if a session is valid and not revoked"""
-        if not session_id:
-            session_id = session.get('session_id')
-        
-        if not session_id:
+
+def is_session_valid(self, session_id=None):
+    """Check if a session is valid and not revoked"""
+    if not session_id:
+        session_id = session.get('session_id')
+
+    if not session_id:
+        return False
+
+    now = time.time()
+
+    with self.lock:
+        if session_id in self.revoked_sessions:
             return False
-        
-        with self.lock:
-            # Check if session is revoked
-            if session_id in self.revoked_sessions:
-                return False
-            
-            # Check session age (30 minutes max)
-            created_at = session.get('created_at', 0)
-            if created_at > 0 and time.time() - created_at > 1800:  # 30 minutes
-                self.revoked_sessions.add(session_id)
-                self._save_revoked_sessions()
-                return False
-            
-            # Check inactivity (30 minutes)
-            last_activity = session.get('last_activity', 0)
-            if last_activity > 0 and time.time() - last_activity > 1800:  # 30 minutes
-                self.revoked_sessions.add(session_id)
-                self._save_revoked_sessions()
-                return False
-        
-        # Update last activity
-        session['last_activity'] = time.time()
-        return True
-    
+
+        created_at = float(session.get('created_at', 0) or 0)
+        if created_at and now - created_at > self.session_timeout:
+            self.revoked_sessions.add(session_id)
+            self._save_revoked_sessions()
+            return False
+
+        last_activity = float(session.get('last_activity', 0) or 0)
+        if last_activity and now - last_activity > self.session_timeout:
+            self.revoked_sessions.add(session_id)
+            self._save_revoked_sessions()
+            return False
+
+    last_activity = float(session.get('last_activity', 0) or 0)
+    if not last_activity:
+        session['last_activity'] = now
+        session.modified = True
+    elif now - last_activity >= self.activity_update_threshold:
+        session['last_activity'] = now
+        session.modified = True
+
+    return True
+
     def cleanup_old_sessions(self):
         """Remove old revoked sessions from tracking (housekeeping)"""
         with self.lock:

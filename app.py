@@ -85,7 +85,8 @@ def create_app(config_name='default'):
     app.config['SESSION_COOKIE_HTTPONLY'] = True
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
     app.config['SESSION_COOKIE_SECURE'] = app.config.get('USE_HTTPS', False)
-    
+    app.config['SESSION_REFRESH_EACH_REQUEST'] = False
+
     # Initialize Flask-Session for server-side session storage
     Session(app)
 
@@ -252,126 +253,67 @@ def create_app(config_name='default'):
     # Add CSRF token to g for access in templates and manage session
     @app.before_request
     def add_csrf_token():
-        # Force session validation on EVERY request
-        from flask import abort
         import time
-        
-        # Add timestamp to prevent caching
+
         g.request_time = time.time()
-        
-        # List of public endpoints that don't require authentication
-        public_endpoints = ['auth.login', 'auth.register', 'auth.welcome', 'auth.logout', 
-                          'auth.forgot_password', 'auth.reset_password', 'static', 
-                          'index', 'refresh_csrf', 'health', 'check_auth']
-        
-        # Check if this is a protected endpoint
-        if request.endpoint and request.endpoint not in public_endpoints:
-            # This is a protected endpoint - verify session is valid
-            if not session_manager.is_session_valid():
-                # Session is revoked or expired - force logout
+
+        public_endpoints = ['auth.login', 'auth.register', 'auth.welcome', 'auth.logout',
+                            'auth.forgot_password', 'auth.reset_password', 'static',
+                            'index', 'refresh_csrf', 'health', 'check_auth']
+
+        endpoint = request.endpoint or ''
+        is_public = not endpoint or endpoint in public_endpoints
+        user_authenticated = current_user.is_authenticated
+
+        session_valid = None
+        if (not is_public) or user_authenticated:
+            session_valid = session_manager.is_session_valid()
+
+        if not is_public:
+            if session_valid is False:
                 from flask_login import logout_user
                 logout_user()
                 session.clear()
                 session.permanent = False
-                
-                # Return 401 for AJAX requests
+
                 if request.is_json or 'application/json' in request.headers.get('Accept', ''):
                     return jsonify({'error': 'Session expired', 'authenticated': False}), 401
-                
-                # Redirect to welcome for regular requests
+
                 flash('Your session has expired. Please log in again.', 'info')
                 return redirect(url_for('auth.welcome'))
-            
-            # Verify authentication
-            if not current_user.is_authenticated:
-                # User is not authenticated - clear session and abort
+
+            if not user_authenticated:
                 session.clear()
                 session.permanent = False
-                
-                # Return 401 for AJAX requests
+
                 if request.is_json or 'application/json' in request.headers.get('Accept', ''):
                     return jsonify({'error': 'Not authenticated', 'authenticated': False}), 401
-                
-                # Redirect to welcome for regular requests
+
                 return redirect(url_for('auth.welcome'))
-            
-            # Additional check: verify session validity with user_id
+
             if 'user_id' not in session or session.get('user_id') != current_user.id:
-                # Session is invalid - force logout
                 from flask_login import logout_user
                 session_manager.revoke_session()
                 logout_user()
                 session.clear()
                 return redirect(url_for('auth.welcome'))
-        
-        # For public endpoints, still check if a logged-in user's session is valid
-        elif current_user.is_authenticated and not session_manager.is_session_valid():
-            # User appears logged in but session is invalid - force logout
+
+        elif user_authenticated and session_valid is False:
             from flask_login import logout_user
             logout_user()
             session.clear()
             session.permanent = False
-        
-        # Make session non-permanent to avoid persistence
+
         session.permanent = False
-        
+
         token = generate_csrf()
         g.csrf_token = token
-        
-        # Close any leftover database connections to prevent hanging
+
         try:
             db.session.close()
-        except:
+        except Exception:
             pass
-    
-    # Performance optimization - remove slow session checks
 
-    # Inject CSRF token into all responses and add security headers
-    @app.after_request
-    def set_csrf_cookie(response):
-        import time
-        
-        if response.mimetype == 'text/html' and hasattr(g, 'csrf_token'):
-            response.set_cookie(
-                'csrf_token', g.csrf_token,
-                httponly=False, samesite='Lax', secure=app.config.get('USE_HTTPS', False)
-            )
-        
-        # EXTREME cache prevention for ALL pages - Enhanced for development
-        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0, s-maxage=0, proxy-revalidate'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '0'
-        response.headers['Last-Modified'] = time.strftime('%a, %d %b %Y %H:%M:%S GMT')
-        response.headers['Vary'] = '*'
-        response.headers['X-Cache'] = 'BYPASS'
-        
-        # Add timestamp-based cache busting
-        current_time = str(int(time.time() * 1000))
-        response.headers['X-Timestamp'] = current_time
-        
-        # Add unique ETag to force revalidation
-        response.headers['ETag'] = f'"{time.time()}"'
-        
-        # Additional development cache busting
-        response.headers['Clear-Site-Data'] = '"cache"'
-        response.headers['X-Accel-Expires'] = '0'
-        
-        # Enforce HTTPS security headers
-        if app.config.get('USE_HTTPS', False):
-            response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-            response.headers['X-Content-Type-Options'] = 'nosniff'
-            response.headers['X-Frame-Options'] = 'DENY'
-        return response
-
-
-    
-    # Add timestamp function for cache busting
-    @app.context_processor
-    def inject_timestamp():
-        import time
-        return dict(timestamp=lambda: str(int(time.time() * 1000)))
-
-    # CSRF token refresh endpoint
     @app.route('/refresh_csrf')
     def refresh_csrf():
         """Refresh CSRF token via AJAX"""
@@ -774,3 +716,4 @@ if __name__ == '__main__':
         print(f"Server startup failed: {e}")
         traceback.print_exc()
         sys.exit(1)
+

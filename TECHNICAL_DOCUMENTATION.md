@@ -207,3 +207,10 @@ To maintain version integrity during documentation updates:
 - /status/download-modern/<id> streams a regenerated DOCX built by services/report_renderer.generate_modern_sat_report using the existing SAT template for styling.
 - The renderer assembles cover metadata, purpose/scope copy, and structured tables for any populated SAT list sections to maintain parity with legacy reports while modernising the layout.
 
+## Bot Quick Summary Command
+- A new natural-language trigger (e.g. "summary", "progress") now returns a structured snapshot of collected SAT fields, pending prompts, and missing required data via the bot conversation API.
+- The response includes both machine-readable command metadata and a friendly progress message so UI clients can surface the state instantly.
+
+## Session Performance Improvements
+- `session_manager.is_session_valid` now batches filesystem writes by updating the activity timestamp at most once per minute, reducing disk churn under Flask-Session's filesystem backend.
+- `app.before_request` caches the session validation result per request and disables `SESSION_REFRESH_EACH_REQUEST`, cutting redundant session store updates that previously caused server lag.
