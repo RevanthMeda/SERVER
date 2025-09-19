@@ -2,6 +2,10 @@
 (function() {
   // Track current step
   let currentStep = 1;
+  let purposeEditorEl = null;
+  let purposeTextareaEl = null;
+  let scopeEditorEl = null;
+  let scopeTextareaEl = null;
 
   // Define functions first so they can be used
   function goToStep(step) {
@@ -404,6 +408,7 @@
     // Initialize rich text editors
     setTimeout(() => {
       setupRichTextEditor();
+      setupAISuggestions();
     }, 500);
   });
 
@@ -504,27 +509,126 @@
   }
 
   // Rich text editor setup
+  function getSatContextForAI() {
+    const context = {};
+    const docTitle = document.getElementById('document_title');
+    const clientInput = document.getElementById('client_name');
+    const projectRef = document.getElementById('project_reference');
+    if (docTitle && docTitle.value) context.document_title = docTitle.value.trim();
+    if (clientInput && clientInput.value) context.client_name = clientInput.value.trim();
+    if (projectRef && projectRef.value) context.project_reference = projectRef.value.trim();
+    if (purposeEditorEl) context.current_purpose = purposeEditorEl.innerText.trim();
+    if (scopeEditorEl) context.current_scope = scopeEditorEl.innerText.trim();
+    return context;
+  }
+
+  function convertTextToHtml(text) {
+    const trimmed = text.trim();
+    if (!trimmed) {
+      return '<p><br></p>';
+    }
+    const paragraphs = trimmed.split(/\n{2,}/).map(part => part.trim()).filter(Boolean);
+    return paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+  }
+
+  function applyAISuggestion(field, suggestion) {
+    const html = convertTextToHtml(suggestion);
+    if (field === 'purpose' && purposeEditorEl && purposeTextareaEl) {
+      purposeEditorEl.innerHTML = html;
+      purposeTextareaEl.value = purposeEditorEl.innerHTML;
+      purposeEditorEl.dispatchEvent(new Event('input'));
+    } else if (field === 'scope' && scopeEditorEl && scopeTextareaEl) {
+      scopeEditorEl.innerHTML = html;
+      scopeTextareaEl.value = scopeEditorEl.innerHTML;
+      scopeEditorEl.dispatchEvent(new Event('input'));
+    }
+  }
+
+  async function requestAISuggestion(field, button) {
+    const feedback = document.querySelector(`.ai-feedback[data-field="${field}"]`);
+    const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : null;
+    const context = getSatContextForAI();
+    const payload = { field, context };
+
+    if (button) {
+      button.disabled = true;
+      button.classList.add('loading');
+    }
+    if (feedback) {
+      feedback.textContent = 'Generating suggestion...';
+    }
+
+    try {
+      const response = await fetch('/ai/sat/suggest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(csrfToken ? { 'X-CSRFToken': csrfToken } : {})
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+      if (!response.ok || !result.suggestion) {
+        throw new Error(result.error || 'AI request failed');
+      }
+
+      applyAISuggestion(field, result.suggestion);
+      if (feedback) {
+        feedback.textContent = 'Suggestion applied';
+        setTimeout(() => (feedback.textContent = ''), 4000);
+      }
+    } catch (error) {
+      console.error('AI suggestion error', error);
+      if (feedback) {
+        feedback.textContent = error.message || 'AI request failed';
+      }
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.classList.remove('loading');
+      }
+    }
+  }
+
+  function setupAISuggestions() {
+    const buttons = document.querySelectorAll('.ai-suggest-btn');
+    if (!buttons.length) {
+      return;
+    }
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const field = button.dataset.field;
+        if (!field) {
+          return;
+        }
+        requestAISuggestion(field.toLowerCase(), button);
+      });
+    });
+  }
+
   function setupRichTextEditor() {
     console.log('Setting up rich text editors...');
 
     // Set up Purpose editor
-    const purposeEditor = document.getElementById('purpose-editor');
-    const purposeTextarea = document.getElementById('purpose');
-    const purposeToolbar = document.querySelector('[data-target="purpose-editor"]');
+    purposeEditorEl = document.getElementById('purpose-editor');
+    purposeTextareaEl = document.getElementById('purpose');
+        const purposeToolbar = document.querySelector('[data-target="purpose-editor"]');
 
-    if (purposeEditor && purposeTextarea) {
+    if (purposeEditorEl && purposeTextareaEl) {
       console.log('Initializing Purpose editor');
-      initializeEditor(purposeEditor, purposeTextarea, purposeToolbar);
+      initializeEditor(purposeEditorEl, purposeTextareaEl, purposeToolbar);
     }
 
     // Set up Scope editor
-    const scopeEditor = document.getElementById('scope-editor');
-    const scopeTextarea = document.getElementById('scope');
+    scopeEditorEl = document.getElementById('scope-editor');
+    scopeTextareaEl = document.getElementById('scope');
     const scopeToolbar = document.querySelector('[data-target="scope-editor"]');
 
-    if (scopeEditor && scopeTextarea) {
+    if (scopeEditorEl && scopeTextareaEl) {
       console.log('Initializing Scope editor');
-      initializeEditor(scopeEditor, scopeTextarea, scopeToolbar);
+      initializeEditor(scopeEditorEl, scopeTextareaEl, scopeToolbar);
     }
   }
 

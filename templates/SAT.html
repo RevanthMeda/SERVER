@@ -90,6 +90,41 @@
     .prefill-banner a:hover {
       text-decoration: underline;
     }
+    .ai-helper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .ai-suggest-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ai-suggest-btn:hover {
+      box-shadow: var(--cully-shadow-lg);
+      transform: translateY(-1px);
+    }
+
+    .ai-suggest-btn.loading {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
+    .ai-feedback {
+      font-size: 0.85rem;
+      color: var(--cully-gray);
+    }
 
       --border-radius-lg: 16px;
     }
@@ -1317,6 +1352,10 @@
               <div class="form-row">
                 <div class="form-group">
                   <label for="purpose">Purpose</label>
+                  <div class="ai-helper">
+                    <button type="button" class="ai-suggest-btn" data-field="purpose"><i class="fas fa-magic"></i> Ask AI</button>
+                    <span class="ai-feedback" data-field="purpose"></span>
+                  </div>
                   <div class="rich-text-container">
                     <div class="formatting-toolbar" data-target="purpose-editor">
                       <div class="toolbar-group">
@@ -1404,6 +1443,10 @@
               <div class="form-row">
                 <div class="form-group">
                   <label for="scope">Scope</label>
+                  <div class="ai-helper">
+                    <button type="button" class="ai-suggest-btn" data-field="scope"><i class="fas fa-magic"></i> Ask AI</button>
+                    <span class="ai-feedback" data-field="scope"></span>
+                  </div>
                   <div class="rich-text-container">
                     <div class="formatting-toolbar" data-target="scope-editor">
                       <div class="toolbar-group">
