@@ -1051,7 +1051,8 @@ def my_reports():
             "locked": report.locked,
             "user_email": report.user_email  # Include user_email for edit permission check
         })
-
+    
+    current_app.logger.info(f"Report list for {current_user.email}: {report_list}")
     return render_template('my_reports.html', reports=report_list)
 
 @dashboard_bp.route('/reviews')

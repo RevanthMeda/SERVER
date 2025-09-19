@@ -568,7 +568,7 @@ def create_app(config_name='default'):
 
 def sigint_handler(signum, frame):
     """Handle Ctrl+C gracefully"""
-    print("\n📡 Shutting down server...")
+    print("\nShutting down server...")
     sys.exit(0)
 
 if __name__ == '__main__':
@@ -577,7 +577,7 @@ if __name__ == '__main__':
     signal.signal(signal.SIGTERM, sigint_handler)
 
     try:
-        print("🔧 Initializing SAT Report Generator...")
+        print("Initializing SAT Report Generator...")
         
         # Determine environment
         flask_env = os.environ.get('FLASK_ENV', 'development')
@@ -588,16 +588,16 @@ if __name__ == '__main__':
         
         # Log security status for production
         if config_name == 'production':
-            print("🔒 Production mode: Domain security enabled")
-            print(f"🌐 Allowed domain: {app.config.get('ALLOWED_DOMAINS', [])}")
-            print(f"🚫 IP access blocking: {app.config.get('BLOCK_IP_ACCESS', False)}")
+            print("Production mode: Domain security enabled")
+            print(f"Allowed domain: {app.config.get('ALLOWED_DOMAINS', [])}")
+            print(f"IP access blocking: {app.config.get('BLOCK_IP_ACCESS', False)}")
 
         # Print startup information
-        print(f"🚀 Starting {app.config.get('APP_NAME', 'SAT Report Generator')}...")
+        print(f"Starting {app.config.get('APP_NAME', 'SAT Report Generator')}...")
         print(f"Debug Mode: {app.config.get('DEBUG', False)}")
         protocol = "http"  # Temporarily using HTTP for testing
         print(f"Running on {protocol}://0.0.0.0:{app.config.get('PORT', 5000)}")
-        print("ℹ️  Testing with HTTP - SSL disabled temporarily")
+        print("Testing with HTTP - SSL disabled temporarily")
 
         # Create required directories if they don't exist
         try:
@@ -619,9 +619,9 @@ if __name__ == '__main__':
             output_dir = app.config.get('OUTPUT_DIR')
             if output_dir and not os.path.exists(output_dir):
                 os.makedirs(output_dir, exist_ok=True)
-            print("✅ Required directories created successfully")
+            print("Required directories created successfully")
         except Exception as dir_error:
-            print(f"⚠️  Warning: Could not create some directories: {dir_error}")
+            print(f"Warning: Could not create some directories: {dir_error}")
 
         # Test a simple route to ensure app is working
         @app.route('/health')
@@ -642,7 +642,7 @@ if __name__ == '__main__':
                 'database': db_status
             })
 
-        print("🌐 Health check endpoint available at /health")
+        print("Health check endpoint available at /health")
 
         # Run the server
         try:
@@ -652,8 +652,8 @@ if __name__ == '__main__':
             debug = False  # Force debug off for performance
             
             if config_name == 'production':
-                print(f"🚀 Starting production server on port {port}")
-                print("⚠️  Production mode: Use a WSGI server like Gunicorn for deployment")
+                print(f"Starting production server on port {port}")
+                print("Production mode: Use a WSGI server like Gunicorn for deployment")
             
             # Enable SSL/HTTPS for secure connections
             if app.config.get('USE_HTTPS', False):
@@ -701,7 +701,7 @@ if __name__ == '__main__':
                         ssl_context.minimum_version = ssl.TLSVersion.TLSv1_2  # Use modern method instead of deprecated options
                         ssl_context.options |= ssl.OP_SINGLE_DH_USE | ssl.OP_SINGLE_ECDH_USE
                         
-                        print("🔒 HTTPS enabled with password-protected .pfx SSL certificate")
+                        print("HTTPS enabled with password-protected .pfx SSL certificate")
                         
                         # Clean up temporary files after loading
                         import atexit
@@ -714,21 +714,21 @@ if __name__ == '__main__':
                         atexit.register(cleanup_temp_files)
                         
                     except Exception as e:
-                        print(f"⚠️  Error loading .pfx certificate: {e}")
-                        print("💡 Make sure SSL_CERT_PASSWORD is set in your .env file")
+                        print(f"Error loading .pfx certificate: {e}")
+                        print("Make sure SSL_CERT_PASSWORD is set in your .env file")
                         ssl_context = None
-                        print("ℹ️  Falling back to HTTP mode")
+                        print("Falling back to HTTP mode")
                 # Check for separate cert and key files  
                 elif (ssl_cert_path and os.path.exists(ssl_cert_path) and 
                       app.config.get('SSL_KEY_PATH') and os.path.exists(app.config.get('SSL_KEY_PATH', ''))):
                     ssl_context = (ssl_cert_path, app.config['SSL_KEY_PATH'])
-                    print("🔒 HTTPS enabled with separate SSL certificate and key files")
+                    print("HTTPS enabled with separate SSL certificate and key files")
                 else:
                     ssl_context = None
-                    print("ℹ️  SSL certificate not found - running in HTTP mode")
+                    print("SSL certificate not found - running in HTTP mode")
             else:
                 ssl_context = None
-                print("ℹ️  HTTPS disabled - running in HTTP mode")
+                print("HTTPS disabled - running in HTTP mode")
 
             app.run(
                 host=host,
@@ -743,12 +743,12 @@ if __name__ == '__main__':
             )
         except OSError as e:
             if "Address already in use" in str(e):
-                print("⚠️  Port 5000 is already in use. Trying to kill existing processes...")
+                print("Port 5000 is already in use. Trying to kill existing processes...")
                 import os
                 os.system('pkill -f "python app.py"')
                 import time
                 time.sleep(2)
-                print("🔄 Retrying on port 5000...")
+                print("Retrying on port 5000...")
                 app.run(
                     host='0.0.0.0',
                     port=app.config['PORT'],
@@ -758,6 +758,6 @@ if __name__ == '__main__':
                 raise
 
     except Exception as e:
-        print(f"❌ Server startup failed: {e}")
+        print(f"Server startup failed: {e}")
         traceback.print_exc()
         sys.exit(1)
