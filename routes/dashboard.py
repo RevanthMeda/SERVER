@@ -1013,14 +1013,27 @@ def delete_report(report_id):
         return jsonify({'success': False, 'message': 'Failed to delete report'}), 500
 
 @dashboard_bp.route('/my-reports')
-@role_required(['Engineer'])
+@role_required(['Engineer', 'Automation Manager'])
 def my_reports():
-    """View engineer's own reports"""
+    """View reports relevant to the current user"""
     from models import Report, SATReport
     import json
 
-    # Get reports created by current user
-    reports = Report.query.filter_by(user_email=current_user.email).order_by(Report.updated_at.desc()).all()
+    # Build reports queryset based on role
+    if current_user.role == 'Engineer':
+        reports_query = Report.query.filter_by(user_email=current_user.email)
+    else:
+        approver_match = f'"approver_email": "{current_user.email}"'
+        reports_query = Report.query.filter(
+            or_(
+                Report.user_email == current_user.email,
+                and_(
+                    Report.approvals_json.isnot(None),
+                    Report.approvals_json.contains(approver_match)
+                )
+            )
+        )
+    reports = reports_query.order_by(Report.updated_at.desc()).all()
 
     report_list = []
     for report in reports:

@@ -816,6 +816,57 @@
                 grid-template-columns: 1fr;
             }
         }
+        /* Updated stat tile presentation */
+        .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 28px;
+        }
+        .stats-grid .stat-card {
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+            align-items: flex-start;
+        }
+        .stats-grid .stat-header {
+            width: 100%;
+        }
+        .stats-grid .stat-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            color: #ffffff;
+            background: linear-gradient(135deg, rgba(123, 165, 199, 0.6) 0%, rgba(90, 127, 163, 0.9) 100%);
+        }
+        .stats-grid .stat-icon i {
+            color: inherit;
+        }
+        .stats-grid .stat-value {
+            font-size: 2.6rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--crystal-white);
+        }
+        .stats-grid .stat-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-medium);
+            margin: 0;
+        }
+        .stats-grid .stat-card:nth-child(1) .stat-icon {
+            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+        }
+        .stats-grid .stat-card:nth-child(2) .stat-icon {
+            background: linear-gradient(135deg, #facc15 0%, #ea580c 100%);
+        }
+        .stats-grid .stat-card:nth-child(3) .stat-icon {
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+        }
     </style>
 </head>
 <body class="dashboard-layout">

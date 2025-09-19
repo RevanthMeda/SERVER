@@ -645,6 +645,72 @@
                 padding: 12px 8px;
             }
         }
+        /* Updated stat tile presentation */
+        .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 24px;
+        }
+        .stats-grid .stat-card {
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .stats-grid .stat-header {
+            width: 100%;
+        }
+        .stats-grid .stat-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            color: #ffffff;
+            background: linear-gradient(135deg, rgba(123, 165, 199, 0.6) 0%, rgba(90, 127, 163, 0.9) 100%);
+        }
+        .stats-grid .stat-icon i {
+            color: inherit;
+        }
+        .stats-grid .stat-value {
+            font-size: 2.6rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .stats-grid .stat-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--admin-neutral);
+            margin: 0;
+        }
+        .stats-grid .stat-card:nth-child(1) .stat-icon {
+            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+        }
+        .stats-grid .stat-card:nth-child(2) .stat-icon {
+            background: linear-gradient(135deg, #facc15 0%, #ea580c 100%);
+        }
+        .stats-grid .stat-card:nth-child(3) .stat-icon {
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+        }
+        .report-owner {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--admin-neutral);
+        }
+        .badge-assigned {
+            background: rgba(123, 165, 199, 0.18);
+            color: var(--admin-primary-dark);
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
     </style>
 </head>
 <body>
@@ -676,7 +742,7 @@
         <!-- Horizontal Navigation -->
         <div class="dashboard-nav">
             <div class="nav-links">
-                <a href="{{ url_for('dashboard.engineer') }}" class="nav-link">
+                <a href="{{ url_for('dashboard.automation_manager') if current_user.role == 'Automation Manager' else url_for('dashboard.engineer') }}" class="nav-link">
                     <i class="fas fa-tachometer-alt"></i>
                     Dashboard
                 </a>
@@ -774,6 +840,7 @@
                                     <th>Document Title</th>
                                     <th>Client</th>
                                     <th>Project Reference</th>
+                                    <th>Owner</th>
                                     <th>Status</th>
                                     <th>Created</th>
                                     <th>Last Updated</th>
@@ -796,6 +863,13 @@
                                     </td>
                                     <td>
                                         <div class="report-client">{{ report.project_reference or '-' }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="report-owner">{{ report.user_email or '-' }}
+                                            {% if report.user_email != current_user.email %}
+                                            <span class="badge-assigned">Assigned</span>
+                                            {% endif %}
+                                        </div>
                                     </td>
                                     <td>
                                         <span class="status-badge status-{{ report.status }}">

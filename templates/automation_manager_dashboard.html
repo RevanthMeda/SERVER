@@ -1,577 +1,416 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>Automation Manager Dashboard - Cully Report Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    {% extends "base.html" %}
+{% extends "base.html" %}
 
-    {% block title %}Automation Manager Dashboard - {{ super() }}{% endblock %}
+{% block title %}Automation Manager Dashboard - {{ super() }}{% endblock %}
 
-    {% block head %}
-    <style>
-        .page-header {
-            text-align: left;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--cully-light-gray);
-            margin-bottom: 2rem;
-        }
+{% block head %}
+<style>
+    .page-header {
+        text-align: left;
+        padding: 1rem 0 2rem;
+        border-bottom: 1px solid var(--cully-light-gray);
+        margin-bottom: 2.5rem;
+    }
 
-        .page-title {
-            font-size: 2rem;
-        }
+    .page-title {
+        font-size: 2.25rem;
+        margin-bottom: 0.5rem;
+    }
 
-        .page-subtitle {
-            text-align: left;
-            max-width: none;
-            font-size: 1.1rem;
-        }
+    .page-subtitle {
+        text-align: left;
+        max-width: 720px;
+        font-size: 1.05rem;
+        color: var(--cully-gray);
+    }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 1.75rem;
+        margin-bottom: 2.5rem;
+    }
 
+    .stat-card {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--cully-shadow);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: var(--transition-smooth);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--cully-shadow-lg);
+    }
+
+    .stat-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        color: var(--cully-white);
+        flex-shrink: 0;
+    }
+
+    .stat-icon.stat-draft { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); }
+    .stat-icon.stat-pending { background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%); }
+    .stat-icon.stat-rejected { background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%); }
+    .stat-icon.stat-approved { background: linear-gradient(135deg, #86efac 0%, #22c55e 100%); }
+    .stat-icon.stat-automation { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); }
+    .stat-icon.stat-workflows { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
+    .stat-icon.stat-complete { background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%); }
+
+    .stat-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .stat-info .value {
+        font-size: 2.6rem;
+        font-weight: 700;
+        color: var(--cully-dark);
+        line-height: 1;
+    }
+
+    .stat-info .label {
+        font-size: 0.95rem;
+        color: var(--cully-gray);
+        font-weight: 600;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+        color: var(--cully-dark);
+    }
+
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .action-card {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: 1.75rem;
+        box-shadow: var(--cully-shadow);
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        color: var(--cully-dark);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1.25rem;
+    }
+
+    .action-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--cully-shadow-lg);
+        color: var(--cully-navy);
+    }
+
+    .action-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .action-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(123, 165, 199, 0.12);
+        color: var(--cully-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .action-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .action-description {
+        color: var(--cully-gray);
+        line-height: 1.55;
+        margin: 0;
+        flex-grow: 1;
+    }
+
+    .action-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: var(--cully-navy);
+    }
+
+    .widget-card {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--cully-shadow);
+    }
+
+    .widget-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 1.5rem;
+    }
+
+    .widget-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .widget-action {
+        font-weight: 600;
+        color: var(--cully-navy);
+        text-decoration: none;
+    }
+
+    .report-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .report-list-item {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--cully-light-gray);
+        gap: 1.5rem;
+    }
+
+    .report-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .report-info {
+        flex: 1;
+    }
+
+    .report-title {
+        font-weight: 600;
+        color: var(--cully-dark);
+        margin-bottom: 0.25rem;
+    }
+
+    .report-meta {
+        font-size: 0.9rem;
+        color: var(--cully-gray);
+    }
+
+    .report-status {
+        font-weight: 600;
+        text-transform: capitalize;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+    }
+
+    .report-actions a {
+        color: var(--cully-gray);
+        text-decoration: none;
+        margin-left: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .report-actions a:hover {
+        color: var(--cully-navy);
+    }
+
+    .status-draft { background: rgba(96, 165, 250, 0.15); color: #1d4ed8; }
+    .status-pending { background: rgba(250, 204, 21, 0.18); color: #b45309; }
+    .status-rejected { background: rgba(248, 113, 113, 0.2); color: #b91c1c; }
+    .status-approved { background: rgba(74, 222, 128, 0.2); color: #047857; }
+
+    @media (max-width: 900px) {
         .stat-card {
-            background: var(--cully-white);
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: var(--cully-shadow);
-            display: flex;
-            align-items: center;
-            transition: var(--transition-smooth);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--cully-shadow-lg);
+            padding: 1.5rem;
         }
 
         .stat-icon {
+            width: 60px;
+            height: 60px;
             font-size: 2rem;
-            color: var(--cully-blue);
-            width: 40px;
-            height: 40px;
-            margin-right: 16px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
+    }
 
-        .stat-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .stat-info .value {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--cully-dark);
-        }
-
-        .stat-info .label {
-            font-size: 0.9rem;
-            color: var(--cully-gray);
-            font-weight: 500;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .action-card {
-            background: var(--cully-white);
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: var(--cully-shadow);
-            transition: var(--transition-smooth);
-            text-decoration: none;
-            color: var(--cully-dark);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .action-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--cully-shadow-lg);
-            color: var(--cully-navy);
-        }
-
-        .action-card .action-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .action-card .action-icon {
-            font-size: 1.5rem;
-            color: var(--cully-navy);
-        }
-
-        .action-card .action-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .action-card .action-description {
-            color: var(--cully-gray);
-            line-height: 1.5;
-            flex-grow: 1;
-        }
-
-        .action-card .action-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-            color: var(--cully-navy);
-            margin-top: 1.5rem;
-        }
-
-        .widget-card {
-            background: var(--cully-white);
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: var(--cully-shadow);
-        }
-
-        .widget-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .widget-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .widget-action {
-            font-weight: 600;
-            color: var(--cully-navy);
-            text-decoration: none;
-        }
-
-        .report-list-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--cully-light-gray);
-            transition: var(--transition-smooth);
-        }
-
-        .report-list-item:last-child {
-            border-bottom: none;
-        }
-
-        .report-list-item:hover {
-            background-color: #f8fafc;
-        }
-
-        .report-info {
-            flex-grow: 1;
-        }
-
-        .report-title {
-            font-weight: 600;
-            color: var(--cully-dark);
-        }
-
-        .report-meta {
-            font-size: 0.9rem;
-            color: var(--cully-gray);
-        }
-
-        .report-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            min-width: 80px;
+    @media (max-width: 600px) {
+        .page-header {
             text-align: center;
         }
 
-        .status-DRAFT {
-            background-color: #f1f5f9;
-            color: #475569;
+        .page-subtitle {
+            text-align: center;
+            margin: 0 auto;
         }
 
-        .status-SUBMITTED, .status-PENDING {
-            background-color: #fffbeb;
-            color: #b45309;
+        .stat-card {
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-        .status-REJECTED {
-            background-color: #fee2e2;
-            color: #991b1b;
+        .stat-icon {
+            margin-bottom: 1rem;
         }
 
-        .status-APPROVED {
-            background-color: #dcfce7;
-            color: #166534;
+        .report-list-item {
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-        .report-actions a {
-            color: var(--cully-gray);
-            text-decoration: none;
-            margin-left: 1rem;
-            font-size: 1.1rem;
+        .report-actions {
+            margin-top: 1rem;
         }
+    }
+</style>
+{% endblock %}
 
-        .report-actions a:hover {
-            color: var(--cully-navy);
-        }
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Automation Manager Dashboard</h1>
+    <p class="page-subtitle">
+        Welcome back, {{ current_user.full_name if current_user and current_user.full_name else 'Automation Manager' }}.
+        Review submissions, collaborate with engineers, and keep approvals moving.
+    </p>
+</div>
 
-    </style>
-    {% endblock %}
-
-    {% block content %}
-    <div class="page-header">
-        <h1 class="page-title">Automation Manager Dashboard</h1>
-        <p class="page-subtitle">Welcome back, {{ current_user.full_name if current_user and current_user.full_name else 'Automation Manager' }}. Review and approve technical documentation.</p>
+<div class="stats-grid">
+    <div class="stat-card">
+        <i class="fas fa-file-alt stat-icon stat-draft"></i>
+        <div class="stat-info">
+            <div class="value">{{ stats.get('draft', 0) }}</div>
+            <div class="label">Reports in Draft</div>
+        </div>
     </div>
+    <div class="stat-card">
+        <i class="fas fa-paper-plane stat-icon stat-pending"></i>
+        <div class="stat-info">
+            <div class="value">{{ stats.get('pending', 0) }}</div>
+            <div class="label">Pending Approval</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-exclamation-circle stat-icon stat-rejected"></i>
+        <div class="stat-info">
+            <div class="value">{{ stats.get('rejected', 0) }}</div>
+            <div class="label">Rejected Reports</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-check-circle stat-icon stat-approved"></i>
+        <div class="stat-info">
+            <div class="value">{{ stats.get('approved', 0) }}</div>
+            <div class="label">Approved Reports</div>
+        </div>
+    </div>
+</div>
 
-    <!-- Key Stats -->
+{% if automation_count is defined or pending_workflows is defined or completed_automations is defined %}
+<div class="automation-overview">
+    <h2 class="section-title">Automation Overview</h2>
     <div class="stats-grid">
         <div class="stat-card">
-            <i class="fas fa-file-alt stat-icon"></i>
+            <i class="fas fa-robot stat-icon stat-automation"></i>
             <div class="stat-info">
-                <div class="value">{{ stats.get('draft', 0) }}</div>
-                <div class="label">Reports in Draft</div>
+                <div class="value">{{ automation_count if automation_count is defined else 0 }}</div>
+                <div class="label">Active Automations</div>
             </div>
         </div>
         <div class="stat-card">
-            <i class="fas fa-paper-plane stat-icon"></i>
+            <i class="fas fa-route stat-icon stat-workflows"></i>
             <div class="stat-info">
-                <div class="value">{{ stats.get('pending', 0) }}</div>
-                <div class="label">Pending Approval</div>
+                <div class="value">{{ pending_workflows if pending_workflows is defined else 0 }}</div>
+                <div class="label">Pending Workflows</div>
             </div>
         </div>
         <div class="stat-card">
-            <i class="fas fa-exclamation-circle stat-icon" style="color: #ef4444;"></i>
+            <i class="fas fa-clipboard-check stat-icon stat-complete"></i>
             <div class="stat-info">
-                <div class="value">{{ stats.get('rejected', 0) }}</div>
-                <div class="label">Rejected Reports</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-check-circle stat-icon" style="color: #22c55e;"></i>
-            <div class="stat-info">
-                <div class="value">{{ stats.get('approved', 0) }}</div>
-                <div class="label">Approved Reports</div>
+                <div class="value">{{ completed_automations if completed_automations is defined else 0 }}</div>
+                <div class="label">Completed Automations</div>
             </div>
         </div>
     </div>
+</div>
+{% endif %}
 
-    <!-- Core Actions -->
-    <div class="action-grid">
-        <a href="{{ url_for('reports.new') }}" class="action-card">
-            <div>
-                <div class="action-header">
-                    <i class="fas fa-plus-circle action-icon"></i>
-                    <h3 class="action-title">Create New Report</h3>
-                </div>
-                <p class="action-description">Start a new SAT, Site Survey, or other report from an approved template.</p>
-            </div>
-            <span class="action-link">Start Now <i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="{{ url_for('dashboard.my_reports') }}" class="action-card">
-            <div>
-                <div class="action-header">
-                    <i class="fas fa-folder-open action-icon"></i>
-                    <h3 class="action-title">View My Reports</h3>
-                </div>
-                <p class="action-description">Access and manage all of your previously created reports, regardless of their status.</p>
-            </div>
-            <span class="action-link">View All <i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="{{ url_for('io_builder.index') }}" class="action-card">
-            <div>
-                <div class="action-header">
-                    <i class="fas fa-cogs action-icon"></i>
-                    <h3 class="action-title">I/O Builder</h3>
-                </div>
-                <p class="action-description">Use the I/O list generation tool to build and export hardware configurations.</p>
-            </div>
-            <span class="action-link">Open Tool <i class="fas fa-arrow-right"></i></span>
-        </a>
-    </div>
-
-    <!-- Recent Reports -->
-    <div class="widget-card">
-        <div class="widget-header">
-            <h3 class="widget-title">Recent Reports</h3>
-            <a href="{{ url_for('dashboard.my_reports') }}" class="widget-action">View All</a>
+<div class="section-title">Quick Actions</div>
+<div class="action-grid">
+    <a href="{{ url_for('reports.new') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-plus-circle"></i></div>
+            <h3 class="action-title">Create New Report</h3>
         </div>
-        <div class="report-list">
-            {% if reports and reports|length > 0 %}
-                {% for report in reports %}
-                    <div class="report-list-item">
-                        <div class="report-info">
-                            <div class="report-title">{{ report.document_title or 'Untitled Report' }}</div>
-                            <div class="report-meta">Last updated: {{ report.updated_at.strftime('%d %b %Y, %H:%M') }}</div>
-                        </div>
-                        <div class="report-status status-{{ report.status or 'DRAFT' }}">{{ report.status | replace('_', ' ') | title }}</div>
-                        <div class="report-actions">
-                            <a href="{{ url_for('reports.view_report', report_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
-                            <a href="{{ url_for('edit.edit_report', report_id=report.id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                        </div>
+        <p class="action-description">Start a new SAT, Site Survey, or other report from an approved template.</p>
+        <span class="action-link">Start Now <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="{{ url_for('dashboard.my_reports') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-folder-open"></i></div>
+            <h3 class="action-title">View My Reports</h3>
+        </div>
+        <p class="action-description">Access and manage the reports you authored or are assigned to approve.</p>
+        <span class="action-link">View All <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="{{ url_for('dashboard.reviews') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-clipboard-check"></i></div>
+            <h3 class="action-title">Review Pending Reports</h3>
+        </div>
+        <p class="action-description">Jump directly into approvals awaiting your decision.</p>
+        <span class="action-link">Open Reviews <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="{{ url_for('io_builder.index') }}" class="action-card">
+        <div class="action-header">
+            <div class="action-icon"><i class="fas fa-cogs"></i></div>
+            <h3 class="action-title">I/O Builder</h3>
+        </div>
+        <p class="action-description">Use the I/O list generation tool to build and export hardware configurations.</p>
+        <span class="action-link">Open Tool <i class="fas fa-arrow-right"></i></span>
+    </a>
+</div>
+
+<div class="widget-card">
+    <div class="widget-header">
+        <h3 class="widget-title">Recent Reports</h3>
+        <a href="{{ url_for('dashboard.my_reports') }}" class="widget-action">View All</a>
+    </div>
+    <div class="report-list">
+        {% if reports and reports|length > 0 %}
+            {% for report in reports %}
+                <div class="report-list-item">
+                    <div class="report-info">
+                        <div class="report-title">{{ report.document_title or 'Untitled Report' }}</div>
+                        <div class="report-meta">Last updated: {{ report.updated_at.strftime('%d %b %Y, %H:%M') if report.updated_at else 'N/A' }}</div>
                     </div>
-                {% endfor %}
-            {% else %}
-                <p>No reports found. <a href="{{ url_for('reports.new') }}">Create one now</a>.</p>
-            {% endif %}
-        </div>
-    </div>
-
-    {% endblock %}
-</head>
-<body>
-    <div class="dashboard-container">
-        <!-- Header -->
-        <div class="dashboard-header">
-            <div class="header-content">
-                <div class="header-info">
-                    <h1><i class="fas fa-robot"></i> Automation Manager Dashboard</h1>
-                    <p>Welcome back, {{ current_user.full_name if current_user and current_user.full_name else 'Automation Manager' }}! Streamline workflows and automate processes.</p>
-                </div>
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
-            </div>
-        </div>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash-message">
-                            <i class="fa fa-check-circle"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Horizontal Navigation -->
-        <div class="dashboard-nav">
-            <div class="nav-links">
-                <a href="{{ url_for('dashboard.automation_manager') }}" class="nav-link active">
-                    <i class="fas fa-tachometer-alt"></i>
-                    Dashboard
-                </a>
-                <a href="{{ url_for('reports.new') }}" class="nav-link featured">
-                    <i class="fas fa-plus-circle"></i>
-                    Create Report
-                    <span class="nav-badge">New</span>
-                </a>
-                <a href="{{ url_for('dashboard.my_reports') }}" class="nav-link">
-                    <i class="fas fa-folder-open"></i>
-                    My Reports
-                </a>
-                <a href="{{ url_for('io_builder.index') }}" class="nav-link">
-                    <i class="fas fa-sitemap"></i>
-                    I/O Builder
-                </a>
-                <a href="{{ url_for('notifications.notification_center') }}" class="nav-link">
-                    <i class="fas fa-bell"></i>
-                    Notifications
-                </a>
-            </div>
-            
-            <div class="user-info">
-                <div class="user-avatar">
-                    {{ current_user.full_name[0] if current_user and current_user.full_name else 'A' }}
-                </div>
-                <div class="user-details">
-                    <div class="user-name">{{ current_user.full_name if current_user and current_user.full_name else 'Automation Manager' }}</div>
-                    <div class="user-role">{{ current_user.role if current_user and current_user.role else 'Automation Manager' }}</div>
-                </div>
-                <a href="{{ url_for('auth.change_password') }}" class="nav-link">
-                    <i class="fas fa-key"></i>
-                    Settings
-                </a>
-                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="color: #ef4444;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
-            </div>
-        </div>
-
-        <!-- Stats Overview -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <i class="fa fa-file-alt stat-icon"></i>
-                <div class="stat-info">
-                    <div class="value">{{ automation_count if automation_count is defined else 0 }}</div>
-                    <div class="label">Active Automations</div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <i class="fa fa-clock stat-icon"></i>
-                <div class="stat-info">
-                    <div class="value">{{ pending_workflows if pending_workflows is defined else 0 }}</div>
-                    <div class="label">Pending Workflows</div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <i class="fa fa-check-circle stat-icon"></i>
-                <div class="stat-info">
-                    <div class="value">{{ completed_automations if completed_automations is defined else 0 }}</div>
-                    <div class="label">Completed Automations</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="widgets-grid">
-            <div class="widget-card">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-rocket"></i>
-                        Automation Tools
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <div class="action-grid">
-                        <div class="action-item featured">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-vial"></i>
-                                </div>
-                                <h4 class="action-title">System Acceptance Testing (SAT)</h4>
-                                <div class="action-badge">Available</div>
-                            </div>
-                            <p class="action-description">Comprehensive testing documentation for system acceptance and validation procedures</p>
-                            <a href="{{ url_for('reports.new_sat') }}" class="action-button">
-                                <i class="fa fa-plus"></i>
-                                Create SAT Report
-                            </a>
-                        </div>
-
-                        <div class="action-item">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-map-marker-alt"></i>
-                                </div>
-                                <h4 class="action-title">Site Survey Form</h4>
-                                <div class="action-badge">Available</div>
-                            </div>
-                            <p class="action-description">Comprehensive site assessment and survey form for infrastructure evaluation and documentation</p>
-                            <a href="{{ url_for('reports.new_site_survey') if url_for('reports.new_site_survey') else '#' }}" class="action-button">
-                                <i class="fa fa-clipboard-list"></i>
-                                Start Site Survey
-                            </a>
-                        </div>
+                    <div class="report-status status-{{ (report.status or 'draft') | lower }}">{{ report.status | replace('_', ' ') | title }}</div>
+                    <div class="report-actions">
+                        <a href="{{ url_for('reports.view_report', report_id=report.id) }}" title="View"><i class="fas fa-eye"></i></a>
+                        <a href="{{ url_for('edit.edit_report', report_id=report.id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                     </div>
                 </div>
-            </div>
-
-            <div class="widget-card">
-                <div class="widget-header">
-                    <h3 class="widget-title">
-                        <i class="fa fa-tools"></i>
-                        Design Specifications
-                    </h3>
-                </div>
-                <div class="widget-content">
-                    <div class="action-grid">
-                        <div class="action-item disabled">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-cogs"></i>
-                                </div>
-                                <h4 class="action-title">Functional Design Specification (FDS)</h4>
-                                <div class="action-badge coming-soon">Coming Soon</div>
-                            </div>
-                            <p class="action-description">Detailed functional requirements and design specifications for system components</p>
-                            <button class="action-button" disabled>
-                                <i class="fa fa-clock"></i>
-                                Coming Soon
-                            </button>
-                        </div>
-
-                        <div class="action-item disabled">
-                            <div class="action-header">
-                                <div class="action-icon">
-                                    <i class="fa fa-microchip"></i>
-                                </div>
-                                <h4 class="action-title">Hardware Design Specification (HDS)</h4>
-                                <div class="action-badge coming-soon">Coming Soon</div>
-                            </div>
-                            <p class="action-description">Comprehensive hardware design documentation and specifications</p>
-                            <button class="action-button" disabled>
-                                <i class="fa fa-clock"></i>
-                                Coming Soon
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <footer class="developer-credit">
-            <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 2px solid var(--cyber-electric); background: var(--surface-glass); backdrop-filter: blur(15px); border-radius: 12px; box-shadow: var(--quantum-shadow);">
-                <p style="color: var(--text-medium); font-size: 0.9rem; margin: 0;">
-                    <i class="fas fa-code"></i> Developed by <strong style="color: var(--cyber-electric);">Revanth Meda</strong> for <strong style="color: var(--crystal-white);">CULLY LTD</strong>
-                </p>
-            </div>
-        </footer>
+            {% endfor %}
+        {% else %}
+            <p>No reports found. <a href="{{ url_for('reports.new') }}">Create one now</a>.</p>
+        {% endif %}
     </div>
-    
-    {% if not current_user.is_authenticated %}
-    <script>
-        window.location.replace('/welcome');
-    </script>
-    {% endif %}
-    
-    <script>
-        // Detect if page was accessed via back button after logout
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-                // Page was restored from cache
-                fetch('/api/check-auth', {
-                    method: 'GET',
-                    credentials: 'same-origin'
-                }).then(response => {
-                    if (!response.ok) {
-                        // Not authenticated - redirect to welcome
-                        window.location.replace('/welcome');
-                    }
-                }).catch(() => {
-                    // Error checking auth - redirect to be safe
-                    window.location.replace('/welcome');
-                });
-            }
-        });
-        
-        // Disable page caching
-        if ('caches' in window) {
-            caches.keys().then(names => {
-                names.forEach(name => {
-                    caches.delete(name);
-                });
-            });
-        }
-    </script>
-</body>
-</html>
+</div>
+{% endblock %}
