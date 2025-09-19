@@ -76,7 +76,6 @@ Pillow>=8.0.0     # For image testing
 boto3
 celery
 click
-docx
 flask-login
 flask-session
 flask-sqlalchemy
