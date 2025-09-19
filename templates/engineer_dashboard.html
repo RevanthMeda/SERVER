@@ -733,10 +733,11 @@
                 <span></span>
             </div>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="{{ url_for('dashboard.engineer') }}" class="nav-item">Dashboard</a></li>
+                <li><a href="{{ url_for('dashboard.engineer') }}" class="nav-item active">Dashboard</a></li>
                 <li><a href="{{ url_for('dashboard.my_reports') }}" class="nav-item">My Reports</a></li>
                 <li><a href="{{ url_for('io_builder.index') }}" class="nav-item">I/O Builder</a></li>
                 <li><a href="{{ url_for('notifications.notification_center') }}" class="nav-item">Notifications</a></li>
+                <li><a href="{{ url_for('auth.change_password') }}" class="nav-item">Settings</a></li>
             </ul>
             <a href="{{ url_for('auth.logout') }}" class="contact-btn">Logout</a>
         </nav>
@@ -762,9 +763,36 @@
                     </div>
                 {% endif %}
             {% endwith %}
+            
+            <!-- User Information and Create Report Button -->
+            <div class="dashboard-nav" style="margin-bottom: 24px;">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        {{ session.user[0] if session.user else 'U' }}
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name">{{ session.user }}</div>
+                        <div class="user-role">Engineer</div>
+                    </div>
+                </div>
+                
+                <a href="{{ url_for('reports.new') }}" class="action-button" style="width: auto; position: relative; top: 0; right: 0;">
+                    <i class="fas fa-plus-circle"></i>
+                    Create Report
+                </a>
+            </div>
 
-            <!-- Stats Overview - Simplified -->
-            <div class="stats-grid">
+            <!-- Notification Alert -->
+            {% if notifications and notifications|length > 0 %}
+            <div class="notification-alert" style="margin-bottom: 24px;">
+                <i class="fas fa-bell"></i>
+                <span>You have {{ notifications|length }} new notification{% if notifications|length > 1 %}s{% endif %}.</span>
+                <a href="{{ url_for('notifications.notification_center') }}" class="notification-link">View All</a>
+            </div>
+            {% endif %}
+
+            <!-- Stats Overview - Simplified with consistent spacing -->
+            <div class="stats-grid" style="margin-bottom: 24px;">
                 <div class="stat-card">
                     <div class="stat-value">{{ stats.total_reports if stats else 0 }}</div>
                     <p class="stat-label">Total Reports</p>
@@ -781,202 +809,83 @@
                 </div>
             </div>
 
-            <!-- Main Content - Redesigned to match Create Report page -->
-            <div class="report-types-grid">
-                <!-- Quick Actions Section -->
-                <div class="report-category">
-                    <div class="category-header">
-                        <div class="category-badge">Available Now</div>
-                        <h2 class="category-title">Active Report Types</h2>
-                        <p class="category-description">Create professional documentation with our automated report generation system.</p>
-                    </div>
-                    
-                    <div class="report-card featured">
-                        <div class="report-header">
-                            <div class="report-icon">
-                                <i class="fas fa-vial"></i>
-                            </div>
-                            <div class="report-info">
-                                <h3 class="report-title">System Acceptance Testing (SAT)</h3>
-                                <span class="report-status status-available">Available</span>
-                            </div>
-                        </div>
-                        <div class="report-description">
-                            <p>Create comprehensive System Acceptance Test documentation for automation projects with detailed testing procedures and verification records.</p>
-                        </div>
-                        <div class="report-actions">
-                            <a href="{{ url_for('reports.new') }}" class="report-action-button primary">
-                                <i class="fas fa-plus"></i> Create Report
-                            </a>
-                        </div>
-                    </div>
+            <!-- Recent Activity Section -->
+            <div class="widget-card" style="margin-bottom: 24px;">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <i class="fa fa-history"></i>
+                        Recent Activity
+                    </h3>
                 </div>
 
-                <!-- Future Reports Section -->
-                <div class="report-category">
-                    <div class="category-header">
-                        <div class="category-badge">Coming Soon</div>
-                        <h2 class="category-title">Future Report Types</h2>
-                        <p class="category-description">Additional report templates that will be available in upcoming releases.</p>
-                    </div>
-                    
-                    <div class="report-card">
-                        <div class="report-header">
-                            <div class="report-icon">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                            <div class="report-info">
-                                <h3 class="report-title">Functional Design Specification (FDS)</h3>
-                                <span class="report-status status-coming-soon">Coming Soon</span>
-                            </div>
-                        </div>
-                        <div class="report-description">
-                            <p>Create detailed functional design specifications for automation systems with comprehensive requirements and system architecture documentation.</p>
-                        </div>
-                        <div class="report-actions">
-                            <button disabled class="report-action-button secondary">
-                                <i class="fas fa-clock"></i> Coming Soon
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tools Section -->
-            <div class="tools-section">
-                <div class="section-header">
-                    <h2 class="section-title">Additional Tools</h2>
-                    <p class="section-description">Access these tools to enhance your workflow</p>
-                </div>
-                
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <div class="tool-icon">
-                            <i class="fas fa-folder-open"></i>
-                        </div>
-                        <h3 class="tool-title">My Reports</h3>
-                        <p class="tool-description">Access and manage all your created reports</p>
-                        <a href="{{ url_for('dashboard.my_reports') }}" class="tool-link">View Reports</a>
-                    </div>
-                    
-                    <div class="tool-card">
-                        <div class="tool-icon">
-                            <i class="fas fa-sitemap"></i>
-                        </div>
-                        <h3 class="tool-title">I/O Builder</h3>
-                        <p class="tool-description">Create and manage I/O lists for your projects</p>
-                        <a href="{{ url_for('io_builder.index') }}" class="tool-link">Open Builder</a>
-                    </div>
-                    
-                    <div class="tool-card">
-                        <div class="tool-icon">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <h3 class="tool-title">Notifications</h3>
-                        <p class="tool-description">View system notifications and updates</p>
-                        <a href="{{ url_for('notifications.notification_center') }}" class="tool-link">
-                            Check Notifications
-                            {% if unread_count and unread_count > 0 %}
-                            <span class="notification-badge">{{ unread_count }}</span>
-                            {% endif %}
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="widgets-grid">
-                <div class="widget-card" style="grid-column: 1 / -1;">
-                    <div class="widget-header">
-                        <h3 class="widget-title">
-                            <i class="fa fa-history"></i>
-                            Recent Activity
-                        </h3>
-                        {% if stats and stats.total_reports > 0 %}
-                            <span class="widget-action" style="background: #f1f5f9; color: #64748b; cursor: default;">{{ stats.total_reports }} Report{{ 's' if stats.total_reports != 1 else '' }}</span>
-                        {% else %}
-                            <span class="widget-action" style="background: #f1f5f9; color: #64748b; cursor: default;">No Activity</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="widget-content">
-                        {% if stats and stats.total_reports > 0 %}
-                            <div class="activity-summary">
-                                <div class="activity-item">
-                                    <div class="activity-icon">
-                                        <i class="fa fa-file-alt"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h4>Total Reports Created</h4>
-                                        <p>You have successfully created <strong>{{ stats.total_reports }}</strong> report{{ 's' if stats.total_reports != 1 else '' }}</p>
-                                    </div>
+                <div class="widget-content">
+                    {% if recent_reports and recent_reports|length > 0 %}
+                        <div class="activity-summary">
+                            {% for report in recent_reports[:2] %}
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fa fa-file-alt"></i>
                                 </div>
-
-                                {% if stats.pending_reports > 0 %}
-                                <div class="activity-item">
-                                    <div class="activity-icon warning">
-                                        <i class="fa fa-clock"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h4>Pending Approval</h4>
-                                        <p><strong>{{ stats.pending_reports }}</strong> report{{ 's' if stats.pending_reports != 1 else '' }} awaiting approval from your manager</p>
-                                    </div>
+                                <div class="activity-content">
+                                    <h4>{{ report.document_title or 'Untitled Report' }}</h4>
+                                    <p>Created on <strong>{{ report.created_at.strftime('%d %b %Y, %H:%M') }}</strong> - Status: <strong>{{ report.status }}</strong></p>
                                 </div>
-                                {% endif %}
-
-                                {% if stats.approved_reports > 0 %}
-                                <div class="activity-item">
-                                    <div class="activity-icon success">
-                                        <i class="fa fa-check-circle"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h4>Approved Reports</h4>
-                                        <p><strong>{{ stats.approved_reports }}</strong> report{{ 's' if stats.approved_reports != 1 else '' }} have been approved and finalized</p>
-                                    </div>
-                                </div>
-                                {% endif %}
-
-                                <div style="margin-top: 24px; text-align: center;">
-                                    <a href="{{ url_for('dashboard.my_reports') }}" class="widget-action">
-                                        <i class="fa fa-folder-open"></i>
-                                        View All My Reports
-                                    </a>
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="empty-state">
-                                <i class="fa fa-file-alt"></i>
-                                <h4>No reports created yet</h4>
-                                <p>Get started by creating your first report. You'll see your activity and progress here once you begin.</p>
-                                <a href="{{ url_for('reports.new') }}" class="empty-action">
-                                    <i class="fa fa-plus-circle"></i>
-                                    Create Your First Report
+                                <a href="{{ url_for('reports.view_report', report_id=report.id) }}" class="activity-action" style="margin-left: auto;">
+                                    <i class="fas fa-eye"></i>
                                 </a>
                             </div>
-                        {% endif %}
-                    </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fa fa-file-alt"></i>
+                            <h4>No recent activity</h4>
+                            <p>Get started by creating your first report. You'll see your recent activity here once you begin.</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
-            <!-- Footer -->
-            <footer class="cully-footer">
-                <div class="section-container">
-                    <div class="footer-content">
-                        <div class="footer-logo">
-                            <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Automation" class="footer-logo-img">
-                        </div>
-                        <div class="footer-text">
-                            <p>Providing water & wastewater solutions for over 20 years. Trust in our expertise and industry knowledge for your project needs.</p>
-                        </div>
-                        <div class="developer-credit">
-                            <p style="color: var(--cully-gray); font-size: 0.9rem; margin: 1rem 0;">
-                                Developed by <span style="color: var(--cully-navy); font-weight: 600;"><a href="https://www.linkedin.com/in/revanth-meda-1ab294226/" target="_blank" style="color: var(--cully-navy); text-decoration: none;">Revanth Meda</a></span> for 
-                                <span style="color: var(--cully-navy); font-weight: 600;"><a href="https://www.cully.ie/" target="_blank" style="color: var(--cully-navy); text-decoration: none;">CULLY LTD</a></span>
-                            </p>
+            <!-- Performance Metrics Section (if valuable) -->
+            {% if stats and stats.total_reports > 0 %}
+            <div class="widget-card" style="margin-bottom: 24px;">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <i class="fa fa-chart-line"></i>
+                        Performance Metrics
+                    </h3>
+                </div>
+
+                <div class="widget-content">
+                    <div class="activity-summary">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fa fa-file-alt"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>Report Summary</h4>
+                                <p>Total: <strong>{{ stats.total_reports }}</strong> | 
+                                   Pending: <strong>{{ stats.pending_reports }}</strong> | 
+                                   Approved: <strong>{{ stats.approved_reports }}</strong></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </footer>
+            </div>
+            {% endif %}
+
+            <!-- Footer - Styled to match Create Report page -->
+            <div class="cully-footer">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <div class="footer-logo">Cully Report Generator</div>
+                        <div class="footer-tagline">Streamlining documentation for automation professionals</div>
+                    </div>
+                    <div class="footer-copyright">
+                        &copy; 2023 Cully Automation. All rights reserved.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
