@@ -14,11 +14,24 @@
     <style>
         /* CULLY DASHBOARD CUSTOM STYLING */
         :root {
+            /* Shadows */
             --card-shadow: 0 4px 12px rgba(90, 127, 163, 0.15);
             --card-shadow-hover: 0 8px 24px rgba(90, 127, 163, 0.2);
-            --admin-primary: #5a7fa3;
-            --admin-primary-light: #7ba5c7;
-            --admin-primary-dark: #2c3e50;
+            
+            /* Colors - aligned with design system */
+            --cully-navy: #5a7fa3;
+            --cully-blue: #7ba5c7;
+            --cully-light-blue: #9ec5e5;
+            --cully-dark: #2c3e50;
+            --cully-gray: #8fa3b5;
+            --cully-light-gray: #e8f2f7;
+            --cully-bg-light: #f5f7fa;
+            --cully-white: #ffffff;
+            
+            /* Legacy variables - maintained for compatibility */
+            --admin-primary: var(--cully-navy);
+            --admin-primary-light: var(--cully-blue);
+            --admin-primary-dark: var(--cully-dark);
         }
 
         body {
@@ -27,6 +40,8 @@
             color: var(--cully-dark);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            margin: 0;
+            padding: 0;
         }
 
         .dashboard-container {
@@ -40,12 +55,12 @@
 
         /* Header Section - Cully Style */
         .dashboard-header {
-            background: rgba(90, 127, 163, 0.95);
+            background: var(--cully-navy);
             backdrop-filter: blur(10px);
             border-radius: 16px;
             padding: 40px;
             margin-bottom: 32px;
-            box-shadow: 0 8px 24px rgba(90, 127, 163, 0.2);
+            box-shadow: var(--card-shadow-hover);
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -112,9 +127,9 @@
             background: var(--cully-white);
             padding: 20px 24px;
             border-radius: 16px;
-            box-shadow: var(--cully-shadow);
+            box-shadow: var(--card-shadow);
             margin-bottom: 32px;
-            border: 1px solid rgba(30, 58, 138, 0.1);
+            border: 1px solid var(--cully-light-gray);
             position: relative;
             z-index: 1;
         }
@@ -132,22 +147,22 @@
             gap: 8px;
             padding: 12px 18px;
             background: var(--cully-white);
-            border: 2px solid rgba(90, 127, 163, 0.2);
+            border: 2px solid var(--cully-light-blue);
             border-radius: 12px;
             text-decoration: none;
             color: var(--cully-navy);
             font-weight: 600;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             position: relative;
             white-space: nowrap;
             font-size: 14px;
         }
 
         .nav-link:hover {
-            background: rgba(123, 165, 199, 0.1);
+            background: var(--cully-light-gray);
             color: var(--cully-navy);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(90, 127, 163, 0.15);
+            box-shadow: var(--card-shadow);
             border-color: var(--cully-blue);
         }
 
