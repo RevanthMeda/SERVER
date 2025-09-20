@@ -98,6 +98,22 @@
             font-weight: 600;
         }
 
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.18);
+            color: var(--cully-white);
+            transition: var(--transition-smooth);
+        }
+        .header-icon:hover {
+            background: rgba(255, 255, 255, 0.28);
+            color: var(--cully-light-blue);
+        }
+
         .header-user-info a {
             color: var(--cully-white);
             text-decoration: none;
@@ -176,6 +192,7 @@
             <div class="header-user-info">
                 {% if current_user.is_authenticated %}
                     <span>Welcome, {{ current_user.full_name }}</span>
+                    <a href="{{ url_for('notifications.notification_center') }}" class="header-icon" title="Notifications" aria-label="Notifications"><i class="fas fa-bell"></i></a>
                     <a href="{{ url_for('auth.change_password') }}" title="Settings"><i class="fas fa-cog"></i> Settings</a>
                     <a href="{{ url_for('auth.logout') }}" title="Logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 {% else %}

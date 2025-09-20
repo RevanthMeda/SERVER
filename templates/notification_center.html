@@ -4,8 +4,41 @@
 
 {% block head %}
 <style>
-    .notification-layout {
+    .notification-page {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xl);
+    }
+
+    .notification-metrics {
         display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: var(--space-sm);
+        max-width: 420px;
+    }
+
+    .notification-metric {
+        background: rgba(255, 255, 255, 0.22);
+        border-radius: 16px;
+        padding: var(--space-md);
+        color: var(--cully-white);
+        display: grid;
+        gap: 0.3rem;
+    }
+
+    .notification-metric span {
+        font-size: 0.85rem;
+        opacity: 0.85;
+    }
+
+    .notification-metric strong {
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
+    .notification-layout {
+        display: flex;
+        flex-direction: column;
         gap: var(--space-xl);
     }
 
@@ -76,31 +109,11 @@
         color: var(--cully-navy);
     }
 
-    .notification-summary {
-        display: grid;
-        gap: var(--space-md);
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    .filter-chip-group {
+        display: flex;
+        gap: var(--space-sm);
+        flex-wrap: wrap;
     }
-
-    .notification-summary__item {
-        background: rgba(123, 165, 199, 0.14);
-        border-radius: 16px;
-        padding: var(--space-md);
-        color: var(--cully-white);
-    }
-
-    .notification-summary__item span {
-        display: block;
-        font-size: 0.85rem;
-        opacity: 0.9;
-    }
-
-    .notification-summary__item strong {
-        display: block;
-        font-size: 1.6rem;
-        margin-top: var(--space-xs);
-    }
-
 
     .action-secondary {
         background: rgba(123, 165, 199, 0.15);
@@ -118,6 +131,12 @@
     .action-secondary:hover {
         background: rgba(123, 165, 199, 0.25);
     }
+
+    @media (max-width: 768px) {
+        .notification-metrics {
+            max-width: 100%;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -133,20 +152,20 @@
             <h1 class="page-hero__title"><i class="fas fa-bell"></i> Notification Center</h1>
             <p class="page-hero__subtitle">Stay updated with report activity, approvals, and system alerts for your automation projects.</p>
         </div>
-        <div class="notification-summary">
-            <div class="notification-summary__item">
+        <div class="notification-metrics">
+            <div class="notification-metric">
                 <span>Total notifications</span>
                 <strong>{{ total_notifications }}</strong>
             </div>
-            <div class="notification-summary__item" style="background: rgba(22, 163, 74, 0.25);">
+            <div class="notification-metric">
                 <span>Unread</span>
                 <strong>{{ unread_notifications }}</strong>
             </div>
-            <div class="notification-summary__item" style="background: rgba(245, 158, 11, 0.35);">
+            <div class="notification-metric">
                 <span>Alerts</span>
                 <strong>{{ alert_notifications }}</strong>
             </div>
-            <div class="notification-summary__item" style="background: rgba(148, 163, 184, 0.35);">
+            <div class="notification-metric">
                 <span>Reminders</span>
                 <strong>{{ reminder_notifications }}</strong>
             </div>
@@ -154,21 +173,21 @@
     </div>
 </section>
 
-<div class="notification-layout">
-    <div class="module-nav">
-        <div class="module-nav__links filter-chip-group" id="notification-filter-group">
-            <button class="filter-chip is-active" data-filter="all">All</button>
-            <button class="filter-chip" data-filter="unread">Unread</button>
-            <button class="filter-chip" data-filter="alert">Alerts</button>
-            <button class="filter-chip" data-filter="reminder">Reminders</button>
-            <button class="filter-chip" data-filter="system">System</button>
-        </div>
-        <button id="mark-all-read-btn" class="action-secondary">
-            <i class="fas fa-check-double"></i>
-            Mark all as read
-        </button>
+<nav class="module-nav">
+    <div class="module-nav__links filter-chip-group" id="notification-filter-group">
+        <button class="filter-chip is-active" data-filter="all">All</button>
+        <button class="filter-chip" data-filter="unread">Unread</button>
+        <button class="filter-chip" data-filter="alert">Alerts</button>
+        <button class="filter-chip" data-filter="reminder">Reminders</button>
+        <button class="filter-chip" data-filter="system">System</button>
     </div>
+    <button id="mark-all-read-btn" class="action-secondary">
+        <i class="fas fa-check-double"></i>
+        Mark all as read
+    </button>
+</nav>
 
+<div class="notification-page">
     <div class="card-surface">
         <div class="notification-actions-bar">
             <div>
@@ -192,7 +211,7 @@
                         <p class="notification-card__body">{{ notification.message }}</p>
                         <div class="notification-card__actions">
                             {% if notification.action_url %}
-                                <a class="button-primary" style="padding: 0.6rem 1.1rem;" href="{{ notification.action_url }}">
+                                <a class="button-primary" style="padding: 0.55rem 1rem;" href="{{ notification.action_url }}">
                                     <i class="fas fa-arrow-right"></i> View details
                                 </a>
                             {% endif %}
@@ -253,7 +272,7 @@
             btn.addEventListener('click', async event => {
                 const { id } = event.currentTarget.dataset;
                 try {
-                    const response = await fetch(/notifications/api/notifications//mark-read, {
+                    const response = await fetch(`/notifications/api/notifications/${id}/mark-read`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -261,7 +280,7 @@
                         }
                     });
                     if (response.ok) {
-                        const card = document.querySelector([data-id=""]);
+                        const card = document.querySelector(`[data-id="${id}"]`);
                         if (card) {
                             card.classList.remove('unread');
                             card.dataset.read = 'true';
@@ -303,4 +322,3 @@
     });
 </script>
 {% endblock %}
-
