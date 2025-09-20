@@ -206,10 +206,6 @@
             <h1 class="page-hero__title">Engineer Dashboard</h1>
             <p class="page-hero__subtitle">Welcome back, {{ current_user.full_name }}. Track your documentation progress and jump into key actions.</p>
         </div>
-        <div class="page-hero__actions">
-            <a class="button-primary" href="{{ url_for('reports.new') }}"><i class="fas fa-plus-circle"></i> Create report</a>
-            <a class="btn-ghost" href="{{ url_for('dashboard.my_reports') }}"><i class="fas fa-folder-open"></i> My reports</a>
-        </div>
     </div>
 </section>
 
