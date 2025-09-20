@@ -185,6 +185,19 @@
     <p class="page-subtitle">Select a report type to begin creating a new document. All reports follow Cully's professional documentation standards.</p>
 </div>
 
+
+<nav class="module-nav">
+    <div class="module-nav__links">
+        <a class="module-nav__link" href="{{ url_for('dashboard.engineer') }}"><i class="fas fa-home"></i> Dashboard</a>
+        <a class="module-nav__link module-nav__link--active" href="{{ url_for('reports.new') }}"><i class="fas fa-plus-circle"></i> Create report</a>
+        <a class="module-nav__link" href="{{ url_for('dashboard.my_reports') }}"><i class="fas fa-folder-open"></i> Reports</a>
+        <a class="module-nav__link" href="{{ url_for('io_builder.index') }}"><i class="fas fa-sitemap"></i> I/O builder</a>
+    </div>
+    <div class="module-nav__meta">
+        <i class="fas fa-pen-square"></i> Choose a template to get started quickly
+    </div>
+</nav>
+
 <div class="report-types-grid">
     <div class="report-category">
         <div class="category-header">
