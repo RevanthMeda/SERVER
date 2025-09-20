@@ -20,6 +20,11 @@ NAME_PATTERN = re.compile(r"^[A-Za-z][A-Za-z\s\.\-']+$")
 CLIENT_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9\s\.\-&']+$")
 PROJECT_REFERENCE_PATTERN = re.compile(r'^[A-Z0-9][A-Z0-9_\-./ ]{2,}$')
 UUID_PATTERN = re.compile(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', re.IGNORECASE)
+GENERAL_KB_RESPONSES = {
+    'report_types': 'I can assemble SAT acceptance tests, Site Survey packs, FAT summaries, and design documentation including FDS, HDS, and SDS. I also help with automation manager reviews, IO builder templates, and status tracking.',
+    'progress_help': 'Ask for a "summary" or "what\'s left" whenever you need a checkpoint on collected and pending SAT fields.',
+}
+
 
 
 def _normalize_alias(value: str) -> str:
@@ -248,6 +253,11 @@ def start_conversation() -> Dict[str, Any]:
 
 def process_user_message(message: str, mode: str = "default") -> Dict[str, Any]:
     state = BotConversationState.load()
+
+    general_payload = _handle_general_query(message, state)
+    if general_payload is not None:
+        state.save()
+        return general_payload
 
     command_payload = _handle_command(message, state)
     if command_payload is not None:
@@ -885,6 +895,28 @@ def _parse_duckduckgo_topic(topic: Any) -> List[Dict[str, Any]]:
     for nested in topic.get('Topics', []) or []:
         results.extend(_parse_duckduckgo_topic(nested))
     return results
+
+
+
+def _handle_general_query(message: str, state: BotConversationState) -> Optional[Dict[str, Any]]:
+    normalized = message.strip().lower()
+    if not normalized:
+        return None
+
+    responses = []
+    if 'document type' in normalized or 'report type' in normalized or 'report template' in normalized:
+        responses.append(GENERAL_KB_RESPONSES['report_types'])
+    elif 'summary' in normalized or "what's left" in normalized:
+        responses.append(GENERAL_KB_RESPONSES['progress_help'])
+    elif 'help' in normalized and 'sat' in normalized:
+        responses.append('I can guide you through each SAT field, fill values from spreadsheets, and fetch generated documents on demand.')
+
+    if not responses:
+        return None
+
+    payload = _build_question_payload(state)
+    payload.setdefault('messages', []).extend(responses)
+    return payload
 
 def _handle_command(message: str, state: BotConversationState) -> Optional[Dict[str, Any]]:
     submission_id = _parse_document_request(message)

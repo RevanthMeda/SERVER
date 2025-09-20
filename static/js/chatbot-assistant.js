@@ -12,8 +12,10 @@
     const input = form ? form.querySelector('.assistant-input') : null;
     const sendButton = form ? form.querySelector('.assistant-form-button--primary') : null;
     const researchButton = root.querySelector('[data-assistant-research]');
-    const dropzone = root.querySelector('[data-assistant-dropzone]');
+    const dropzoneWrapper = root.querySelector('[data-assistant-dropzone]');
+    const dropzone = dropzoneWrapper ? dropzoneWrapper.querySelector('.assistant-file-drop') : null;
     const fileInput = root.querySelector('.assistant-file-input');
+    const attachmentsButton = root.querySelector('[data-assistant-attachments]');
     const hintButtons = root.querySelectorAll('[data-assistant-hint]');
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
@@ -348,6 +350,11 @@
             if (fileInput) {
                 fileInput.value = '';
             }
+            if (dropzoneWrapper) {
+                dropzoneWrapper.classList.remove('is-visible');
+                dropzoneWrapper.setAttribute('hidden', '');
+            }
+            attachmentsButton?.classList.remove('is-active');
             setBusy(false);
         }
     }
@@ -367,7 +374,7 @@
                 return;
             }
             if (!input.value.trim()) {
-                input.placeholder = 'Describe what you want me to research…';
+                input.placeholder = 'Describe what you want me to research...';
                 input.focus();
                 return;
             }
@@ -389,6 +396,38 @@
                 const target = event.target;
                 if (target.files && target.files.length) {
                     uploadFiles(target.files);
+                }
+            });
+        }
+
+        if (dropzoneWrapper) {
+            ['dragenter', 'dragover'].forEach((type) => {
+                dropzoneWrapper.addEventListener(type, (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    dropzoneWrapper.classList.add('is-visible');
+                    dropzoneWrapper.removeAttribute('hidden');
+                    if (attachmentsButton) {
+                        attachmentsButton.classList.add('is-active');
+                    }
+                });
+            });
+            ['dragleave', 'drop'].forEach((type) => {
+                dropzoneWrapper.addEventListener(type, (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    dropzoneWrapper.classList.remove('is-visible');
+                    if (!dropzone?.classList.contains('is-active')) {
+                        dropzoneWrapper.setAttribute('hidden', '');
+                    }
+                    if (attachmentsButton) {
+                        attachmentsButton.classList.remove('is-active');
+                    }
+                });
+            });
+            dropzoneWrapper.addEventListener('drop', (event) => {
+                if (event.dataTransfer?.files?.length) {
+                    uploadFiles(event.dataTransfer.files);
                 }
             });
         }
@@ -415,12 +454,27 @@
             });
         }
 
+        if (attachmentsButton && dropzoneWrapper) {
+            attachmentsButton.addEventListener('click', () => {
+                const isHidden = dropzoneWrapper.hasAttribute('hidden');
+                if (isHidden) {
+                    dropzoneWrapper.classList.add('is-visible');
+                    dropzoneWrapper.removeAttribute('hidden');
+                    attachmentsButton.classList.add('is-active');
+                } else {
+                    dropzoneWrapper.classList.remove('is-visible');
+                    dropzoneWrapper.setAttribute('hidden', '');
+                    attachmentsButton.classList.remove('is-active');
+                }
+            });
+        }
+
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape' && panel.classList.contains('is-open')) {
                 closePanel();
             }
         });
     }
-
     bindEvents();
 })();
+

@@ -1139,6 +1139,7 @@
       contain: layout;
     }
   </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot-assistant.css') }}">
 </head>
 
 <body>
@@ -3300,5 +3301,8 @@
       </p>
     </div>
   </footer>
+
+    {% include 'partials/chatbot_widget.html' %}
+    <script src="{{ url_for('static', filename='js/chatbot-assistant.js') }}" defer></script>
 </body>
 </html>

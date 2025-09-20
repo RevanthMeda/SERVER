@@ -480,3 +480,28 @@
         padding: 1rem;
     }
 }
+.assistant-file-wrapper[hidden] {
+    display: none;
+}
+
+.assistant-file-wrapper {
+    padding: 0 1.25rem 1.1rem;
+}
+
+.assistant-file-wrapper.is-visible {
+    display: block;
+}
+
+.assistant-action[data-assistant-attachments] {
+    position: relative;
+}
+
+.assistant-action[data-assistant-attachments].is-active::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 229, 255, 0.45);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.25);
+}
+

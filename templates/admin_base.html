@@ -77,19 +77,16 @@
 
     <!-- Unified JavaScript -->
     <script>
-        // Common dashboard functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto-refresh database status with error handling
             function updateDatabaseStatus() {
                 fetch('/dashboard/db-status')
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error(`HTTP ${response.status}`);
+                            throw new Error(HTTP );
                         }
                         return response.json();
                     })
                     .then(data => {
-                        // Update all database status indicators
                         const statusElements = document.querySelectorAll('.status-badge');
                         statusElements.forEach(element => {
                             const textContent = element.textContent || '';
@@ -104,9 +101,7 @@
                             }
                         });
                     })
-                    .catch(error => {
-                        console.warn('Database status check failed:', error.message);
-                        // Update status to show disconnected on error
+                    .catch(() => {
                         const statusElements = document.querySelectorAll('.status-badge');
                         statusElements.forEach(element => {
                             const textContent = element.textContent || '';
@@ -118,79 +113,45 @@
                     });
             }
 
-            // Initial status check and setup interval
             updateDatabaseStatus();
-            setInterval(updateDatabaseStatus, 30000); // Refresh every 30 seconds
+            setInterval(updateDatabaseStatus, 30000);
 
-            // Common notification function
             window.showNotification = function(message, type) {
                 const notification = document.createElement('div');
-                notification.className = `notification notification-${type}`;
-                notification.style.cssText = `
+                notification.className = 
+otification notification-;
+                notification.style.cssText = 
                     position: fixed;
                     top: 20px;
                     right: 20px;
                     padding: 15px 20px;
-                    border-radius: 4px;
-                    color: white;
-                    font-weight: 500;
-                    z-index: 10000;
-                    max-width: 400px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                `;
-                
-                if (type === 'success') {
-                    notification.style.backgroundColor = '#10b981';
-                } else if (type === 'error') {
-                    notification.style.backgroundColor = '#ef4444';
-                } else if (type === 'warning') {
-                    notification.style.backgroundColor = '#f59e0b';
-                } else {
-                    notification.style.backgroundColor = '#3b82f6';
-                }
-                
-                notification.textContent = message;
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.remove();
-                }, 5000);
-            };
-        });
-    </script>osition: fixed;
-                    top: 20px;
-                    right: 20px;
-                    padding: 16px 24px;
                     border-radius: 12px;
                     color: white;
                     font-weight: 600;
                     z-index: 1000;
-                    transform: translateX(100%);
-                    transition: transform 0.3s ease;
-                    ${type === 'success' ? 'background: linear-gradient(135deg, #10b981, #059669);' : 'background: linear-gradient(135deg, #ef4444, #dc2626);'}
-                    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-                `;
+                    max-width: 340px;
+                    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.2);
+                ;
+
+                if (type === 'success') {
+                    notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                } else if (type === 'error') {
+                    notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                } else if (type === 'warning') {
+                    notification.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                } else {
+                    notification.style.background = 'linear-gradient(135deg, #3b82f6, #1d4ed8)';
+                }
+
                 notification.textContent = message;
-
                 document.body.appendChild(notification);
-
-                // Animate in
-                setTimeout(() => {
-                    notification.style.transform = 'translateX(0)';
-                }, 100);
-
-                // Remove after 3 seconds
-                setTimeout(() => {
-                    notification.style.transform = 'translateX(100%)';
-                    setTimeout(() => {
-                        document.body.removeChild(notification);
-                    }, 300);
-                }, 3000);
+                setTimeout(() => notification.remove(), 5000);
             };
         });
     </script>
 
-    <!-- CSRF Token Manager - Prevents token expiry errors -->
+    {% include 'partials/chatbot_widget.html' %}
+    <script src="{{ url_for('static', filename='js/chatbot-assistant.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/csrf_manager.js') }}"></script>
     {% block extra_js %}{% endblock %}
 </body>

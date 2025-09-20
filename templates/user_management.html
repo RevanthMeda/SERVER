@@ -548,6 +548,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot-assistant.css') }}">
 </head>
 <body class="dashboard-layout">
     <div class="admin-container">
@@ -933,5 +934,8 @@
             return confirm('Change ' + userName + '\'s role to ' + newRole + '?\n\nThis will immediately update their system permissions.');
         }
     </script>
+
+    {% include 'partials/chatbot_widget.html' %}
+    <script src="{{ url_for('static', filename='js/chatbot-assistant.js') }}" defer></script>
 </body>
 </html>

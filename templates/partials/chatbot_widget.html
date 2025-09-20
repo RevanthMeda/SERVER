@@ -23,6 +23,9 @@
                 </div>
             </div>
             <div class="assistant-actions">
+                <button type="button" class="assistant-action" data-assistant-attachments title="Manage uploads">
+                    <i class="fas fa-paperclip"></i>
+                </button>
                 <button type="button" class="assistant-action" data-assistant-reset title="Reset conversation">
                     <i class="fas fa-rotate"></i>
                 </button>
@@ -43,15 +46,17 @@
                     </div>
                 </div>
             </div>
-            <div class="assistant-file-drop" data-assistant-dropzone>
-                <input type="file" id="assistant-file-input" class="assistant-file-input" multiple accept=".xlsx,.xls,.csv,image/*">
-                <label for="assistant-file-input" class="assistant-file-label">
-                    <span class="assistant-file-icon"><i class="fas fa-cloud-arrow-up"></i></span>
-                    <span>
-                        Drop spreadsheets or images here<br>
-                        <small>I'll read values, spot duplicates, and place visuals where they belong.</small>
-                    </span>
-                </label>
+            <div class="assistant-file-wrapper" data-assistant-dropzone hidden>
+                <div class="assistant-file-drop">
+                    <input type="file" id="assistant-file-input" class="assistant-file-input" multiple accept=".xlsx,.xls,.csv,image/*">
+                    <label for="assistant-file-input" class="assistant-file-label">
+                        <span class="assistant-file-icon"><i class="fas fa-cloud-arrow-up"></i></span>
+                        <span>
+                            Drop spreadsheets or images here<br>
+                            <small>I'll read values, spot duplicates, and place visuals where they belong.</small>
+                        </span>
+                    </label>
+                </div>
             </div>
         </div>
         <footer class="assistant-footer">
