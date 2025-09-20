@@ -1,121 +1,97 @@
 PS E:\report generator\SERVER> python app.py
 Initializing SAT Report Generator...
-[2025-09-19 13:12:23,224] INFO in app: Hierarchical configuration system initialized
+[2025-09-20 09:02:33,164] INFO in app: Hierarchical configuration system initialized
 Generated new master key for local secrets. Store this securely!
-[2025-09-19 13:12:23,322] INFO in app: Secrets management system initialized
-[2025-09-19 13:12:23,550] DEBUG in models: Database connection successful
-[2025-09-19 13:12:23,562] DEBUG in models: Database tables already exist: 31 tables found
-[2025-09-19 13:12:23,622] INFO in models: Default system settings initialized
-[2025-09-19 13:12:23,622] INFO in models: Database initialized successfully
-[2025-09-19 13:12:24,180] DEBUG in app: Skipping performance initialization in non-production
+[2025-09-20 09:02:33,279] INFO in app: Secrets management system initialized
+[2025-09-20 09:02:33,584] DEBUG in models: Database connection successful
+[2025-09-20 09:02:33,595] DEBUG in models: Database tables already exist: 31 tables found
+[2025-09-20 09:02:33,661] INFO in models: Default system settings initialized
+[2025-09-20 09:02:33,661] INFO in models: Database initialized successfully
+[2025-09-20 09:02:34,437] DEBUG in app: Skipping performance initialization in non-production
 DEBUG:app:Skipping performance initialization in non-production
 INFO:cache.redis_client:Cache system initialized successfully
-[2025-09-19 13:12:28,370] DEBUG in app: Using filesystem sessions (Redis not available)
+[2025-09-20 09:02:38,802] DEBUG in app: Using filesystem sessions (Redis not available)
 DEBUG:app:Using filesystem sessions (Redis not available)
-[2025-09-19 13:12:28,374] DEBUG in app: Cache system initialized successfully
+[2025-09-20 09:02:38,806] DEBUG in app: Cache system initialized successfully
 DEBUG:app:Cache system initialized successfully
-[2025-09-19 13:12:28,378] DEBUG in app: Query caching disabled (Redis not available)
+[2025-09-20 09:02:38,810] DEBUG in app: Query caching disabled (Redis not available)
 DEBUG:app:Query caching disabled (Redis not available)
 INFO:cache.cdn:CDN disabled or not configured
 INFO:cache.flask_cdn:Flask CDN extension initialized
-[2025-09-19 13:12:29,001] DEBUG in app: CDN integration initialized
+[2025-09-20 09:02:39,443] DEBUG in app: CDN integration initialized
 DEBUG:app:CDN integration initialized
-[2025-09-19 13:12:29,002] DEBUG in app: Background task processing disabled (Redis not available)
+[2025-09-20 09:02:39,444] DEBUG in app: Background task processing disabled (Redis not available)
 DEBUG:app:Background task processing disabled (Redis not available)
-[2025-09-19 13:12:29,003] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
+[2025-09-20 09:02:39,445] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
 INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
 C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
   import pkg_resources
-[2025-09-19 13:12:30,367] INFO in app: CDN management blueprint registered
+[2025-09-20 09:02:40,863] INFO in app: CDN management blueprint registered
 INFO:app:CDN management blueprint registered
-[2025-09-19 13:12:30,370] DEBUG in dashboard_stats: Dashboard stats refresher thread started
+[2025-09-20 09:02:40,867] DEBUG in dashboard_stats: Dashboard stats refresher thread started
 Starting SAT Report Generator...
+DEBUG:app:Dashboard stats refresher thread started
 Debug Mode: True
 Running on http://0.0.0.0:5000
 Testing with HTTP - SSL disabled temporarily
-DEBUG:app:Dashboard stats refresher thread started
 Required directories created successfully
 Health check endpoint available at /health
 HTTPS enabled with password-protected .pfx SSL certificate
  * Serving Flask app 'app'
  * Debug mode: off
-[2025-09-19 13:12:42,737] INFO in app: Found 4 total users
-INFO:app:Found 4 total users
-[2025-09-19 13:12:42,740] INFO in app: Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
-INFO:app:Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
-[2025-09-19 13:12:51,955] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
+[2025-09-20 09:02:49,929] INFO in auth: User rmeda@cully.ie logged in with session 6ab97724498ddab791b2cad1e079108242c11a8a7d1c2dd53f93b98d39b08270
+INFO:app:User rmeda@cully.ie logged in with session 6ab97724498ddab791b2cad1e079108242c11a8a7d1c2dd53f93b98d39b08270
+[2025-09-20 09:02:50,003] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
 INFO:app:Fetching dashboard for user: rmeda@cully.ie
-[2025-09-19 13:12:51,961] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
+[2025-09-20 09:02:50,017] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
 INFO:app:Found 6 reports for user rmeda@cully.ie
-[2025-09-19 13:12:51,963] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+[2025-09-20 09:02:50,019] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
 INFO:app:Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
-[2025-09-19 13:12:51,964] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+[2025-09-20 09:02:50,020] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
 INFO:app:Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
-[2025-09-19 13:12:51,965] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+[2025-09-20 09:02:50,021] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
 INFO:app:Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
-[2025-09-19 13:12:51,966] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+[2025-09-20 09:02:50,022] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
 INFO:app:Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
-[2025-09-19 13:12:51,967] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+[2025-09-20 09:02:50,023] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
 INFO:app:Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
-[2025-09-19 13:12:51,967] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+[2025-09-20 09:02:50,024] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
 INFO:app:Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
-[2025-09-19 13:12:51,968] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+[2025-09-20 09:02:50,025] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
 INFO:app:Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
-[2025-09-19 13:13:05,733] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
-INFO:app:Fetching dashboard for user: rmeda@cully.ie
-[2025-09-19 13:13:05,740] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
-INFO:app:Found 6 reports for user rmeda@cully.ie
-[2025-09-19 13:13:05,741] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
-INFO:app:Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
-[2025-09-19 13:13:05,742] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
-INFO:app:Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
-[2025-09-19 13:13:05,742] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
-INFO:app:Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
-[2025-09-19 13:13:05,744] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
-INFO:app:Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
-[2025-09-19 13:13:05,745] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
-INFO:app:Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
-[2025-09-19 13:13:05,746] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
-INFO:app:Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
-[2025-09-19 13:13:05,747] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
-INFO:app:Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
-[2025-09-19 13:13:29,833] INFO in app: Found 4 total users
-INFO:app:Found 4 total users
-[2025-09-19 13:13:29,837] INFO in app: Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
-INFO:app:Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
 
 Shutting down server...
 PS E:\report generator\SERVER> python app.py
 Initializing SAT Report Generator...
-[2025-09-19 16:51:25,769] INFO in app: Hierarchical configuration system initialized
+[2025-09-20 09:07:01,997] INFO in app: Hierarchical configuration system initialized
 Generated new master key for local secrets. Store this securely!
-[2025-09-19 16:51:25,923] INFO in app: Secrets management system initialized
-[2025-09-19 16:51:26,280] DEBUG in models: Database connection successful
-[2025-09-19 16:51:26,297] DEBUG in models: Database tables already exist: 31 tables found
-[2025-09-19 16:51:26,364] INFO in models: Default system settings initialized
-[2025-09-19 16:51:26,364] INFO in models: Database initialized successfully
-[2025-09-19 16:51:27,794] DEBUG in app: Skipping performance initialization in non-production
+[2025-09-20 09:07:02,101] INFO in app: Secrets management system initialized
+[2025-09-20 09:07:02,354] DEBUG in models: Database connection successful
+[2025-09-20 09:07:02,366] DEBUG in models: Database tables already exist: 31 tables found
+[2025-09-20 09:07:02,428] INFO in models: Default system settings initialized
+[2025-09-20 09:07:02,428] INFO in models: Database initialized successfully
+[2025-09-20 09:07:03,026] DEBUG in app: Skipping performance initialization in non-production
 DEBUG:app:Skipping performance initialization in non-production
 INFO:cache.redis_client:Cache system initialized successfully
-[2025-09-19 16:51:32,171] DEBUG in app: Using filesystem sessions (Redis not available)
+[2025-09-20 09:07:07,204] DEBUG in app: Using filesystem sessions (Redis not available)
 DEBUG:app:Using filesystem sessions (Redis not available)
-[2025-09-19 16:51:32,179] DEBUG in app: Cache system initialized successfully
+[2025-09-20 09:07:07,208] DEBUG in app: Cache system initialized successfully
 DEBUG:app:Cache system initialized successfully
-[2025-09-19 16:51:32,187] DEBUG in app: Query caching disabled (Redis not available)
+[2025-09-20 09:07:07,212] DEBUG in app: Query caching disabled (Redis not available)
 DEBUG:app:Query caching disabled (Redis not available)
 INFO:cache.cdn:CDN disabled or not configured
 INFO:cache.flask_cdn:Flask CDN extension initialized
-[2025-09-19 16:51:33,152] DEBUG in app: CDN integration initialized
+[2025-09-20 09:07:07,861] DEBUG in app: CDN integration initialized
 DEBUG:app:CDN integration initialized
-[2025-09-19 16:51:33,153] DEBUG in app: Background task processing disabled (Redis not available)
+[2025-09-20 09:07:07,862] DEBUG in app: Background task processing disabled (Redis not available)
 DEBUG:app:Background task processing disabled (Redis not available)
-[2025-09-19 16:51:33,154] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
+[2025-09-20 09:07:07,863] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
 INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
 C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
   import pkg_resources
-[2025-09-19 16:51:35,610] INFO in app: CDN management blueprint registered
+[2025-09-20 09:07:09,293] INFO in app: CDN management blueprint registered
 INFO:app:CDN management blueprint registered
-[2025-09-19 16:51:35,613] DEBUG in dashboard_stats: Dashboard stats refresher thread started
+[2025-09-20 09:07:09,296] DEBUG in dashboard_stats: Dashboard stats refresher thread started
 Starting SAT Report Generator...
 Debug Mode: True
 Running on http://0.0.0.0:5000
@@ -126,80 +102,27 @@ Health check endpoint available at /health
 HTTPS enabled with password-protected .pfx SSL certificate
  * Serving Flask app 'app'
  * Debug mode: off
-[2025-09-19 16:55:30,073] INFO in models: Successfully updated Cully statistics: {'instruments': '8211', 'engineers': '46', 'experience': '20', 'plants': '250'}
-INFO:app:Successfully updated Cully statistics: {'instruments': '8211', 'engineers': '46', 'experience': '20', 'plants': '250'}
-[2025-09-19 16:55:30,114] WARNING in middleware_optimized: Slow request: GET /auth/welcome took 1.853s
-WARNING:app:Slow request: GET /auth/welcome took 1.853s
-[2025-09-19 16:55:36,889] INFO in auth: User rmeda@cully.ie logged in with session 02f02cada18cf80035c8356a1c2a57f18fd6c929c611568f68817b4130fd301d
-INFO:app:User rmeda@cully.ie logged in with session 02f02cada18cf80035c8356a1c2a57f18fd6c929c611568f68817b4130fd301d
-[2025-09-19 16:55:37,557] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
+[2025-09-20 09:07:17,665] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
 INFO:app:Fetching dashboard for user: rmeda@cully.ie
-[2025-09-19 16:55:37,576] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
+[2025-09-20 09:07:17,678] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
 INFO:app:Found 6 reports for user rmeda@cully.ie
-[2025-09-19 16:55:37,577] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+[2025-09-20 09:07:17,679] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
 INFO:app:Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
-[2025-09-19 16:55:37,578] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+[2025-09-20 09:07:17,680] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
 INFO:app:Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
-[2025-09-19 16:55:37,579] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+[2025-09-20 09:07:17,681] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
 INFO:app:Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
-[2025-09-19 16:55:37,580] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+[2025-09-20 09:07:17,682] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
 INFO:app:Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
-[2025-09-19 16:55:37,581] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+[2025-09-20 09:07:17,683] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
 INFO:app:Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
-[2025-09-19 16:55:37,582] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+[2025-09-20 09:07:17,684] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
 INFO:app:Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
-[2025-09-19 16:55:37,583] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+[2025-09-20 09:07:17,685] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
 INFO:app:Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
-[2025-09-19 16:55:46,956] INFO in app: Found 4 total users
-INFO:app:Found 4 total users
-[2025-09-19 16:55:46,960] INFO in app: Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
-INFO:app:Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
-
-Shutting down server...
-PS E:\report generator\SERVER> python app.py
-Initializing SAT Report Generator...
-[2025-09-20 06:06:05,395] INFO in app: Hierarchical configuration system initialized
-Generated new master key for local secrets. Store this securely!
-[2025-09-20 06:06:05,539] INFO in app: Secrets management system initialized
-[2025-09-20 06:06:05,940] DEBUG in models: Database connection successful
-[2025-09-20 06:06:05,952] DEBUG in models: Database tables already exist: 31 tables found
-[2025-09-20 06:06:06,012] INFO in models: Default system settings initialized
-[2025-09-20 06:06:06,012] INFO in models: Database initialized successfully
-[2025-09-20 06:06:07,734] DEBUG in app: Skipping performance initialization in non-production
-DEBUG:app:Skipping performance initialization in non-production
-INFO:cache.redis_client:Cache system initialized successfully
-[2025-09-20 06:06:12,211] DEBUG in app: Using filesystem sessions (Redis not available)
-DEBUG:app:Using filesystem sessions (Redis not available)
-[2025-09-20 06:06:12,222] DEBUG in app: Cache system initialized successfully
-DEBUG:app:Cache system initialized successfully
-[2025-09-20 06:06:12,233] DEBUG in app: Query caching disabled (Redis not available)
-DEBUG:app:Query caching disabled (Redis not available)
-INFO:cache.cdn:CDN disabled or not configured
-INFO:cache.flask_cdn:Flask CDN extension initialized
-[2025-09-20 06:06:13,469] DEBUG in app: CDN integration initialized
-DEBUG:app:CDN integration initialized
-[2025-09-20 06:06:13,470] DEBUG in app: Background task processing disabled (Redis not available)
-DEBUG:app:Background task processing disabled (Redis not available)
-[2025-09-20 06:06:13,471] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
-INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
-C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
-  import pkg_resources
-[2025-09-20 06:06:16,334] INFO in app: CDN management blueprint registered
-INFO:app:CDN management blueprint registered
-[2025-09-20 06:06:16,337] DEBUG in dashboard_stats: Dashboard stats refresher thread started
-Starting SAT Report Generator...
-Debug Mode: True
-Running on http://0.0.0.0:5000
-Testing with HTTP - SSL disabled temporarily
-DEBUG:app:Dashboard stats refresher thread started
-Required directories created successfully
-Health check endpoint available at /health
-HTTPS enabled with password-protected .pfx SSL certificate
- * Serving Flask app 'app'
- * Debug mode: off
-[2025-09-20 06:06:24,645] INFO in auth: User rmeda@cully.ie logged in with session 3d5ab0cf80f6ae59e1d31f2800a702528bd53bd920df0e69a1d04b43a61a0ab1
-INFO:app:User rmeda@cully.ie logged in with session 3d5ab0cf80f6ae59e1d31f2800a702528bd53bd920df0e69a1d04b43a61a0ab1
-[2025-09-20 06:06:24,695] ERROR in app: Exception on /dashboard/engineer [GET]
+[2025-09-20 09:10:05,598] INFO in dashboard: Report list for rmeda@cully.ie: [{'id': 'e47e006a-8f09-4774-aad0-62e835301f4c', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 14, 16, 16, 34, 127832), 'updated_at': datetime.datetime(2025, 9, 14, 16, 16, 34, 130873), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': 'c572f877-bfc2-4bfd-a320-33cc0e7b9bce', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 14, 15, 9, 13, 12202), 'updated_at': datetime.datetime(2025, 9, 14, 15, 27, 13, 24384), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': '83660e8e-d123-43eb-8fff-d91bb61f0607', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 14, 12, 50, 41, 818253), 'updated_at': datetime.datetime(2025, 9, 14, 13, 4, 41, 818146), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': '6803da01-4d12-4c62-ae60-296506084a25', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 14, 12, 38, 32, 865944), 'updated_at': datetime.datetime(2025, 9, 14, 12, 46, 32, 746099), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': '19890bcf-9093-4e33-9079-465e3888d2d8', 'document_title': 'Test', 'client_name': 'test', 'project_reference': 'TEST-123', 'created_at': datetime.datetime(2025, 9, 2, 11, 25, 19, 627402), 'updated_at': datetime.datetime(2025, 9, 13, 12, 29, 59, 772133), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': 'de26128d-eeb6-424d-a3f9-9065dcaaa304', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 10, 20, 8, 18, 353035), 'updated_at': datetime.datetime(2025, 9, 10, 20, 8, 19, 666583), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}]
+INFO:app:Report list for rmeda@cully.ie: [{'id': 'e47e006a-8f09-4774-aad0-62e835301f4c', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 14, 16, 16, 34, 127832), 'updated_at': datetime.datetime(2025, 9, 14, 16, 16, 34, 130873), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': 'c572f877-bfc2-4bfd-a320-33cc0e7b9bce', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 14, 15, 9, 13, 12202), 'updated_at': datetime.datetime(2025, 9, 14, 15, 27, 13, 24384), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': '83660e8e-d123-43eb-8fff-d91bb61f0607', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 14, 12, 50, 41, 818253), 'updated_at': datetime.datetime(2025, 9, 14, 13, 4, 41, 818146), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': '6803da01-4d12-4c62-ae60-296506084a25', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 14, 12, 38, 32, 865944), 'updated_at': datetime.datetime(2025, 9, 14, 12, 46, 32, 746099), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': '19890bcf-9093-4e33-9079-465e3888d2d8', 'document_title': 'Test', 'client_name': 'test', 'project_reference': 'TEST-123', 'created_at': datetime.datetime(2025, 9, 2, 11, 25, 19, 627402), 'updated_at': datetime.datetime(2025, 9, 13, 12, 29, 59, 772133), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}, {'id': 'de26128d-eeb6-424d-a3f9-9065dcaaa304', 'document_title': '', 'client_name': '', 'project_reference': '', 'created_at': datetime.datetime(2025, 9, 10, 20, 8, 18, 353035), 'updated_at': datetime.datetime(2025, 9, 10, 20, 8, 19, 666583), 'status': 'draft', 'locked': False, 'user_email': 'rmeda@cully.ie'}]
+[2025-09-20 09:10:05,604] ERROR in app: Exception on /dashboard/my-reports [GET]
 Traceback (most recent call last):
   File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
     response = self.full_dispatch_request()
@@ -210,34 +133,48 @@ Traceback (most recent call last):
   File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
     return original_handler(e)
            ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1821, in full_dispatch_request
-    rv = self.preprocess_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2312, in preprocess_request
-    rv = self.ensure_sync(before_func)()
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\app.py", line 266, in add_csrf_token
-    user_authenticated = current_user.is_authenticated
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 316, in __get__
-    obj = instance._get_current_object()
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 520, in _get_current_object
-    return get_name(local())  # type: ignore
-                    ^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 25, in <lambda>
-    current_user = LocalProxy(lambda: _get_user())
-                                      ^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 370, in _get_user
-    current_app.login_manager._load_user()
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\login_manager.py", line 364, in _load_user
-    user = self._user_callback(user_id)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 14, in load_user
-    if not session_manager.is_session_valid():
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'SessionManager' object has no attribute 'is_session_valid'. Did you mean: 'is_session_revoked'?
-ERROR:app:Exception on /dashboard/engineer [GET]
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1823, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 1087, in my_reports
+    return render_template('my_reports.html', reports=report_list)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 62, in get_source
+    return self._get_source_fast(environment, template)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 95, in _get_source_fast
+    return loader.get_source(environment, template)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 215, in get_source
+    contents = f.read()
+               ^^^^^^^^
+  File "<frozen codecs>", line 322, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb7 in position 3945: invalid start byte
+ERROR:app:Exception on /dashboard/my-reports [GET]
 Traceback (most recent call last):
   File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
     response = self.full_dispatch_request()
@@ -248,112 +185,90 @@ Traceback (most recent call last):
   File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
     return original_handler(e)
            ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1821, in full_dispatch_request
-    rv = self.preprocess_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2312, in preprocess_request
-    rv = self.ensure_sync(before_func)()
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\app.py", line 266, in add_csrf_token
-    user_authenticated = current_user.is_authenticated
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 316, in __get__
-    obj = instance._get_current_object()
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 520, in _get_current_object
-    return get_name(local())  # type: ignore
-                    ^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 25, in <lambda>
-    current_user = LocalProxy(lambda: _get_user())
-                                      ^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 370, in _get_user
-    current_app.login_manager._load_user()
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\login_manager.py", line 364, in _load_user
-    user = self._user_callback(user_id)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 14, in load_user
-    if not session_manager.is_session_valid():
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'SessionManager' object has no attribute 'is_session_valid'. Did you mean: 'is_session_revoked'?
-ERROR:werkzeug:Error on request:
-Traceback (most recent call last):
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1825, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
-    return original_handler(e)
-           ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1821, in full_dispatch_request
-    rv = self.preprocess_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2312, in preprocess_request
-    rv = self.ensure_sync(before_func)()
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\app.py", line 266, in add_csrf_token
-    user_authenticated = current_user.is_authenticated
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 316, in __get__
-    obj = instance._get_current_object()
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 520, in _get_current_object
-    return get_name(local())  # type: ignore
-                    ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 25, in <lambda>
-    current_user = LocalProxy(lambda: _get_user())
-                                      ^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 370, in _get_user
-    current_app.login_manager._load_user()
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\login_manager.py", line 364, in _load_user
-    user = self._user_callback(user_id)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 14, in load_user
-    if not session_manager.is_session_valid():
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'SessionManager' object has no attribute 'is_session_valid'. Did you mean: 'is_session_revoked'?
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\serving.py", line 333, in run_wsgi
-    execute(self.server.app)
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\serving.py", line 320, in execute
-    application_iter = app(environ, start_response)
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2551, in __call__
-    return self.wsgi_app(environ, start_response)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2531, in wsgi_app
-    response = self.handle_exception(e)
-               ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
-    return original_handler(e)
-           ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1727, in handle_exception
-    server_error = self.ensure_sync(handler)(server_error)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\app.py", line 502, in internal_error
-    return render_template('404.html'), 500
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 147, in render_template
-    return _render(app, template, context)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 128, in _render
-    app.update_template_context(context)
-  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 997, in update_template_context
-    context.update(func())
-                   ^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 405, in _user_context_processor
-    return dict(current_user=_get_user())
-                             ^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 370, in _get_user
-    current_app.login_manager._load_user()
-  File "C:\Program Files\Python312\Lib\site-packages\flask_login\login_manager.py", line 364, in _load_user
-    user = self._user_callback(user_id)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "E:\report generator\SERVER\auth.py", line 14, in load_user
-    if not session_manager.is_session_valid():
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'SessionManager' object has no attribute 'is_session_valid'. Did you mean: 'is_session_revoked'?
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1823, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 63, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 100, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\routes\dashboard.py", line 1087, in my_reports
+    return render_template('my_reports.html', reports=report_list)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 146, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 62, in get_source
+    return self._get_source_fast(environment, template)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 95, in _get_source_fast
+    return loader.get_source(environment, template)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\jinja2\loaders.py", line 215, in get_source
+    contents = f.read()
+               ^^^^^^^^
+  File "<frozen codecs>", line 322, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb7 in position 3945: invalid start byte
+[2025-09-20 09:10:08,614] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
+INFO:app:Fetching dashboard for user: rmeda@cully.ie
+[2025-09-20 09:10:08,621] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
+INFO:app:Found 6 reports for user rmeda@cully.ie
+[2025-09-20 09:10:08,622] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+INFO:app:Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+[2025-09-20 09:10:08,623] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+INFO:app:Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+[2025-09-20 09:10:08,624] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+INFO:app:Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+[2025-09-20 09:10:08,625] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+INFO:app:Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+[2025-09-20 09:10:08,626] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+INFO:app:Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+[2025-09-20 09:10:08,627] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+INFO:app:Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+[2025-09-20 09:10:08,628] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+INFO:app:Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+[2025-09-20 09:10:10,498] INFO in io_builder: === TESTING LOOKUP FOR ABB DA501 ===
+INFO:app:=== TESTING LOOKUP FOR ABB DA501 ===
+[2025-09-20 09:10:10,501] INFO in io_builder: Found spec for key: ABB_DA501
+INFO:app:Found spec for key: ABB_DA501
+[2025-09-20 09:10:10,502] INFO in io_builder: Found spec for key: DA501
+INFO:app:Found spec for key: DA501
+[2025-09-20 09:10:10,503] INFO in io_builder: Found spec for key: ABB_DA501
+INFO:app:Found spec for key: ABB_DA501
+[2025-09-20 09:10:10,504] INFO in io_builder: Found spec for key: ABB_DA501
+INFO:app:Found spec for key: ABB_DA501
+[2025-09-20 09:10:12,480] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
+INFO:app:Fetching dashboard for user: rmeda@cully.ie
+[2025-09-20 09:10:12,487] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
+INFO:app:Found 6 reports for user rmeda@cully.ie
+[2025-09-20 09:10:12,488] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+INFO:app:Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+[2025-09-20 09:10:12,489] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+INFO:app:Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+[2025-09-20 09:10:12,490] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+INFO:app:Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+[2025-09-20 09:10:12,491] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+INFO:app:Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+[2025-09-20 09:10:12,492] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+INFO:app:Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+[2025-09-20 09:10:12,493] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+INFO:app:Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+[2025-09-20 09:10:12,494] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+INFO:app:Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
