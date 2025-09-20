@@ -1,81 +1,62 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block title %}Engineer Dashboard - {{ super() }}{% endblock %}
 
 {% block head %}
 <style>
-    .page-header {
-        text-align: left;
-        padding: 1rem 0;
-        border-bottom: 1px solid var(--cully-light-gray);
-        margin-bottom: 2rem;
-    }
-
-    .page-title {
-        font-size: 2rem;
-    }
-
-    .page-subtitle {
-        text-align: left;
-        max-width: none;
-        font-size: 1.1rem;
-    }
-
-    .stats-grid {
+    .dashboard-summary {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-        gap: 1.75rem;
-        margin-bottom: 2.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: var(--space-lg);
     }
 
-    .stat-card {
+    .summary-card {
         background: var(--cully-white);
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: var(--cully-shadow);
+        border-radius: 20px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid rgba(90, 127, 163, 0.08);
+        padding: var(--space-lg);
         display: flex;
         align-items: center;
-        gap: 1.5rem;
+        gap: var(--space-md);
         transition: var(--transition-smooth);
     }
 
-    .stat-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--cully-shadow-lg);
+    .summary-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
     }
 
-    .stat-icon {
-        width: 72px;
-        height: 72px;
-        border-radius: 20px;
-        display: flex;
+    .summary-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 2.4rem;
+        font-size: 2rem;
         color: var(--cully-white);
-        flex-shrink: 0;
-        background: var(--cully-blue);
     }
-    .stat-icon.stat-draft { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); }
-    .stat-icon.stat-pending { background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%); }
-    .stat-icon.stat-rejected { background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%); }
-    .stat-icon.stat-approved { background: linear-gradient(135deg, #86efac 0%, #22c55e 100%); }
 
-    .stat-info {
+    .summary-icon--draft { background: linear-gradient(145deg, #60a5fa, #3b82f6); }
+    .summary-icon--pending { background: linear-gradient(145deg, #facc15, #f59e0b); }
+    .summary-icon--rejected { background: linear-gradient(145deg, #fca5a5, #ef4444); }
+    .summary-icon--approved { background: linear-gradient(145deg, #86efac, #22c55e); }
+
+    .summary-meta {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: var(--space-xs);
     }
 
-    .stat-info .value {
-        font-size: 2.6rem;
+    .summary-value {
+        font-size: 2.2rem;
         font-weight: 700;
         color: var(--cully-dark);
         line-height: 1;
     }
 
-    .stat-info .label {
-        font-size: 0.95rem;
+    .summary-label {
         color: var(--cully-gray);
         font-weight: 600;
     }
@@ -83,236 +64,229 @@
     .action-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2.5rem;
+        gap: var(--space-lg);
     }
 
     .action-card {
         background: var(--cully-white);
-        border-radius: 8px;
-        padding: 1.5rem;
-        box-shadow: var(--cully-shadow);
-        transition: var(--transition-smooth);
+        border-radius: 20px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid rgba(90, 127, 163, 0.08);
+        padding: var(--space-lg);
         text-decoration: none;
         color: var(--cully-dark);
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .action-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--cully-shadow-lg);
-        color: var(--cully-navy);
-    }
-
-    .action-card .action-header {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .action-card .action-icon {
-        font-size: 1.5rem;
-        color: var(--cully-navy);
-    }
-
-    .action-card .action-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-    }
-
-    .action-card .action-description {
-        color: var(--cully-gray);
-        line-height: 1.5;
-        flex-grow: 1;
-    }
-
-    .action-card .action-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-weight: 600;
-        color: var(--cully-navy);
-        margin-top: 1.5rem;
-    }
-
-    .widget-card {
-        background: var(--cully-white);
-        border-radius: 8px;
-        padding: 1.5rem;
-        box-shadow: var(--cully-shadow);
-    }
-
-    .widget-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-    }
-
-    .widget-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-    }
-
-    .widget-action {
-        font-weight: 600;
-        color: var(--cully-navy);
-        text-decoration: none;
-    }
-
-    .report-list-item {
-        display: flex;
-        align-items: center;
-        padding: 1rem 0;
-        border-bottom: 1px solid var(--cully-light-gray);
+        gap: var(--space-md);
         transition: var(--transition-smooth);
     }
 
-    .report-list-item:last-child {
-        border-bottom: none;
+    .action-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+        color: var(--cully-navy);
     }
 
-    .report-list-item:hover {
-        background-color: #f8fafc;
+    .action-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
     }
 
-    .report-info {
-        flex-grow: 1;
+    .action-icon {
+        font-size: 1.4rem;
+        color: var(--cully-blue);
     }
 
-    .report-title {
+    .action-title {
+        margin: 0;
+        font-size: 1.15rem;
         font-weight: 600;
-        color: var(--cully-dark);
     }
 
-    .report-meta {
-        font-size: 0.9rem;
+    .action-description {
+        margin: 0;
         color: var(--cully-gray);
+        line-height: 1.5;
     }
+
+    .action-link {
+        margin-left: auto;
+        font-weight: 600;
+        color: var(--cully-blue);
+    }
+
+    .action-link i { margin-left: 0.35rem; }
+
+    .widget-card {
+        background: var(--cully-white);
+        border-radius: 20px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid rgba(90, 127, 163, 0.08);
+        overflow: hidden;
+    }
+
+    .widget-header {
+        padding: var(--space-md) var(--space-lg);
+        border-bottom: 1px solid var(--cully-light-gray);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .widget-title { margin: 0; }
+
+    .widget-action {
+        font-weight: 600;
+        color: var(--cully-blue);
+        text-decoration: none;
+    }
+
+    .widget-content,
+    .report-list {
+        padding: var(--space-lg);
+        display: grid;
+        gap: var(--space-md);
+    }
+
+    .report-list-item {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) auto auto;
+        gap: var(--space-md);
+        align-items: center;
+        padding: var(--space-md);
+        border-radius: 14px;
+        background: rgba(123, 165, 199, 0.08);
+    }
+
+    .report-info { display: grid; gap: var(--space-xs); }
+    .report-title { font-weight: 600; color: var(--cully-dark); }
+    .report-meta { font-size: 0.85rem; color: var(--cully-gray); }
 
     .report-status {
-        padding: 0.25rem 0.75rem;
-        border-radius: 1rem;
-        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 999px;
         font-weight: 600;
-        min-width: 80px;
-        text-align: center;
+        font-size: 0.85rem;
+        text-transform: uppercase;
     }
 
-    .status-DRAFT {
-        background-color: #f1f5f9;
-        color: #475569;
-    }
-
-    .status-SUBMITTED, .status-PENDING {
-        background-color: #fffbeb;
-        color: #b45309;
-    }
-
-    .status-REJECTED {
-        background-color: #fee2e2;
-        color: #991b1b;
-    }
-
-    .status-APPROVED {
-        background-color: #dcfce7;
-        color: #166534;
+    .report-actions {
+        display: inline-flex;
+        gap: var(--space-sm);
     }
 
     .report-actions a {
         color: var(--cully-gray);
         text-decoration: none;
-        margin-left: 1rem;
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
-    .report-actions a:hover {
-        color: var(--cully-navy);
-    }
+    .report-actions a:hover { color: var(--cully-navy); }
 
+    .status-DRAFT { background: rgba(96, 165, 250, 0.18); color: #1d4ed8; }
+    .status-PENDING { background: rgba(250, 204, 21, 0.18); color: #b45309; }
+    .status-APPROVED { background: rgba(134, 239, 172, 0.2); color: #15803d; }
+    .status-REJECTED { background: rgba(248, 113, 113, 0.2); color: #b91c1c; }
+
+    @media (max-width: 768px) {
+        .report-list-item {
+            grid-template-columns: 1fr;
+            align-items: flex-start;
+        }
+        .report-actions { justify-content: flex-start; }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <h1 class="page-title">Engineer Dashboard</h1>
-    <p class="page-subtitle">Welcome back, {{ current_user.full_name }}. Here is your current workload and available actions.</p>
+<section class="page-hero">
+    <div class="page-hero__content">
+        <div>
+            <h1 class="page-hero__title">Engineer Dashboard</h1>
+            <p class="page-hero__subtitle">Welcome back, {{ current_user.full_name }}. Track your documentation progress and jump into key actions.</p>
+        </div>
+        <div class="page-hero__actions">
+            <a class="button-primary" href="{{ url_for('reports.new') }}"><i class="fas fa-plus-circle"></i> Create report</a>
+            <a class="btn-ghost" href="{{ url_for('dashboard.my_reports') }}"><i class="fas fa-folder-open"></i> My reports</a>
+        </div>
+    </div>
+</section>
+
+<nav class="module-nav">
+    <div class="module-nav__links">
+        <a class="module-nav__link module-nav__link--active" href="{{ url_for('dashboard.engineer') }}"><i class="fas fa-home"></i> Dashboard</a>
+        <a class="module-nav__link" href="{{ url_for('dashboard.my_reports') }}"><i class="fas fa-folder-open"></i> Reports</a>
+        <a class="module-nav__link" href="{{ url_for('io_builder.index') }}"><i class="fas fa-sitemap"></i> I/O builder</a>
+        <a class="module-nav__link" href="{{ url_for('notifications.notification_center') }}"><i class="fas fa-bell"></i> Notifications</a>
+    </div>
+    <div class="module-nav__meta">
+        <i class="fas fa-chart-line"></i> Live summary of your report workflow
+    </div>
+</nav>
+
+<div class="dashboard-summary">
+    <article class="summary-card">
+        <span class="summary-icon summary-icon--draft"><i class="fas fa-file-alt"></i></span>
+        <div class="summary-meta">
+            <div class="summary-value">{{ stats.get('draft', 0) }}</div>
+            <div class="summary-label">Reports in draft</div>
+        </div>
+    </article>
+    <article class="summary-card">
+        <span class="summary-icon summary-icon--pending"><i class="fas fa-paper-plane"></i></span>
+        <div class="summary-meta">
+            <div class="summary-value">{{ stats.get('pending', 0) }}</div>
+            <div class="summary-label">Pending approval</div>
+        </div>
+    </article>
+    <article class="summary-card">
+        <span class="summary-icon summary-icon--rejected"><i class="fas fa-exclamation-circle"></i></span>
+        <div class="summary-meta">
+            <div class="summary-value">{{ stats.get('rejected', 0) }}</div>
+            <div class="summary-label">Rejected reports</div>
+        </div>
+    </article>
+    <article class="summary-card">
+        <span class="summary-icon summary-icon--approved"><i class="fas fa-check-circle"></i></span>
+        <div class="summary-meta">
+            <div class="summary-value">{{ stats.get('approved', 0) }}</div>
+            <div class="summary-label">Approved reports</div>
+        </div>
+    </article>
 </div>
 
-<!-- Key Stats -->
-<div class="stats-grid">
-    <div class="stat-card">
-        <i class="fas fa-file-alt stat-icon stat-draft"></i>
-        <div class="stat-info">
-            <div class="value">{{ stats.get('draft', 0) }}</div>
-            <div class="label">Reports in Draft</div>
-        </div>
-    </div>
-    <div class="stat-card">
-        <i class="fas fa-paper-plane stat-icon stat-pending"></i>
-        <div class="stat-info">
-            <div class="value">{{ stats.get('pending', 0) }}</div>
-            <div class="label">Pending Approval</div>
-        </div>
-    </div>
-    <div class="stat-card">
-        <i class="fas fa-exclamation-circle stat-icon stat-rejected"></i>
-        <div class="stat-info">
-            <div class="value">{{ stats.get('rejected', 0) }}</div>
-            <div class="label">Rejected Reports</div>
-        </div>
-    </div>
-    <div class="stat-card">
-        <i class="fas fa-check-circle stat-icon stat-approved"></i>
-        <div class="stat-info">
-            <div class="value">{{ stats.get('approved', 0) }}</div>
-            <div class="label">Approved Reports</div>
-        </div>
-    </div>
-</div>
-
-<!-- Core Actions -->
 <div class="action-grid">
     <a href="{{ url_for('reports.new') }}" class="action-card">
-        <div>
-            <div class="action-header">
-                <i class="fas fa-plus-circle action-icon"></i>
-                <h3 class="action-title">Create New Report</h3>
-            </div>
-            <p class="action-description">Start a new SAT, Site Survey, or other report from an approved template.</p>
+        <div class="action-header">
+            <i class="fas fa-plus-circle action-icon"></i>
+            <h3 class="action-title">Create new report</h3>
         </div>
-        <span class="action-link">Start Now <i class="fas fa-arrow-right"></i></span>
+        <p class="action-description">Start a new SAT, Site Survey, or other report from an approved template.</p>
+        <span class="action-link">Start now <i class="fas fa-arrow-right"></i></span>
     </a>
     <a href="{{ url_for('dashboard.my_reports') }}" class="action-card">
-        <div>
-            <div class="action-header">
-                <i class="fas fa-folder-open action-icon"></i>
-                <h3 class="action-title">View My Reports</h3>
-            </div>
-            <p class="action-description">Access and manage all of your previously created reports, regardless of their status.</p>
+        <div class="action-header">
+            <i class="fas fa-folder-open action-icon"></i>
+            <h3 class="action-title">View my reports</h3>
         </div>
-        <span class="action-link">View All <i class="fas fa-arrow-right"></i></span>
+        <p class="action-description">Access and manage your previously created reports, regardless of status.</p>
+        <span class="action-link">View all <i class="fas fa-arrow-right"></i></span>
     </a>
     <a href="{{ url_for('io_builder.index') }}" class="action-card">
-        <div>
-            <div class="action-header">
-                <i class="fas fa-cogs action-icon"></i>
-                <h3 class="action-title">I/O Builder</h3>
-            </div>
-            <p class="action-description">Use the I/O list generation tool to build and export hardware configurations.</p>
+        <div class="action-header">
+            <i class="fas fa-sitemap action-icon"></i>
+            <h3 class="action-title">I/O builder</h3>
         </div>
-        <span class="action-link">Open Tool <i class="fas fa-arrow-right"></i></span>
+        <p class="action-description">Use the I/O list generation tool to build and export hardware configurations.</p>
+        <span class="action-link">Open tool <i class="fas fa-arrow-right"></i></span>
     </a>
 </div>
 
-<!-- Recent Reports -->
 <div class="widget-card">
     <div class="widget-header">
-        <h3 class="widget-title">Recent Reports</h3>
-        <a href="{{ url_for('dashboard.my_reports') }}" class="widget-action">View All</a>
+        <h3 class="widget-title">Recent reports</h3>
+        <a href="{{ url_for('dashboard.my_reports') }}" class="widget-action">View all</a>
     </div>
     <div class="report-list">
         {% if reports and reports|length > 0 %}
@@ -335,5 +309,4 @@
         {% endif %}
     </div>
 </div>
-
 {% endblock %}
