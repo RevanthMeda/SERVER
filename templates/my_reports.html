@@ -75,7 +75,7 @@
             </h2>
             <div class="card-shell__actions">
                 <span class="summary-card__trend">
-                    {{ rejected_reports }} rejected · {{ reports|selectattr('status', 'equalto', 'partially_approved')|list|length if reports else 0 }} partial
+                    {{ rejected_reports }} rejected -  {{ reports|selectattr('status', 'equalto', 'partially_approved')|list|length if reports else 0 }} partial
                 </span>
             </div>
         </div>
