@@ -222,3 +222,13 @@ To maintain version integrity during documentation updates:
 - New state field `BotConversationState.ingested_files` keeps lightweight metadata for uploaded media so later automation steps can map images into evidence sections; duplicate or low-value assets surface warnings immediately in the UI and in API responses.
 - To plug in higher-power LLM automation, wire `services.ai_assistant.generate_sat_suggestion` or an external orchestrator inside `process_user_message` (e.g., when `normalized_mode == "default"` and all required fields are present) and reuse the collected context payload for prompts.
 - Disable outbound research or run the assistant fully offline by setting `ASSISTANT_ALLOW_EXTERNAL=False`; the UI remains active and continues to automate internal workflows with gathered field data.
+
+## UI Consistency Retrofit Workflow (2025-09-20)
+- **Audit Intake:** Use `docs/ui_consistency_audit.md` to log annotated screenshots, severity, and remediation notes for Reports Notifications, I/O Builder, and Settings.
+- **Design System Assets:** Reference `static/css/design-system.css` for shared color tokens, typography, spacing, card shells, status chips, and button patterns. Extend this file before adding module-specific overrides.
+- **Implementation Loop:**
+  1. Import shared stylesheet into module templates (or bundle) and remove redundant inline styles.
+  2. Replace bespoke layouts with standard classes (`layout-shell`, `card-surface`, `status-chip`, utility spacing helpers).
+  3. Validate on desktop/tablet/mobile; run accessibility spot checks (contrast, focus order, keyboard navigation).
+- **Review & Sign-off:** After each module retrofit, capture before/after evidence, update the audit tracker, and schedule a cross-team walkthrough to confirm behavioral parity.
+- **Maintenance:** Document any new components or tokens inside `design-system.css` and mirror the guidance here to keep the design system single-sourced.

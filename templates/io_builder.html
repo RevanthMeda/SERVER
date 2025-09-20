@@ -1,642 +1,255 @@
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>I/O Builder - Cully Report Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --admin-primary: #4DD0E1;
-            --admin-primary-dark: #26C6DA;
-            --admin-primary-light: #80DEEA;
-            --admin-success: #10b981;
-            --admin-warning: #f59e0b;
-            --admin-danger: #ef4444;
-            --admin-neutral: #6b7280;
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
+{% block title %}I/O Builder - {{ super() }}{% endblock %}
 
-        body {
-            margin: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            color: #1f2937;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+{% block head %}
+<style>
+    :root {
+        --admin-primary: var(--cully-blue);
+        --admin-primary-dark: var(--cully-navy);
+        --admin-primary-light: var(--cully-light-blue);
+        --admin-success: var(--cully-success);
+        --admin-warning: var(--cully-warning);
+        --admin-danger: var(--cully-danger);
+        --admin-neutral: var(--cully-gray);
+        --card-shadow: var(--shadow-sm);
+        --card-shadow-hover: var(--shadow-lg);
+    }
 
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px;
-        }
+    .io-layout {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xl);
+    }
 
-        /* Header Section */
-        .dashboard-header {
-            background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-dark) 100%);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 32px;
-            box-shadow: var(--card-shadow);
-            position: relative;
-            overflow: hidden;
-        }
+    .widgets-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
+    .widget-card {
+        background: var(--cully-white);
+        border-radius: 20px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid rgba(90, 127, 163, 0.08);
+        overflow: hidden;
+    }
 
-        .header-info h1 {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+    .widget-header {
+        padding: var(--space-md) var(--space-lg);
+        border-bottom: 1px solid var(--cully-light-gray);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .header-info p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            margin: 0;
-        }
+    .widget-title {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--cully-dark);
+    }
 
-        .header-logo {
-            height: 80px;
-            filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-        }
+    .widget-content {
+        padding: var(--space-lg);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
 
-        /* Navigation */
-        .dashboard-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            padding: 20px 24px;
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 32px;
-            border: 1px solid #e2e8f0;
-        }
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            flex-wrap: nowrap;
-        }
+    .form-section {
+        background: rgba(123, 165, 199, 0.08);
+        border-radius: 16px;
+        padding: var(--space-lg);
+    }
 
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 16px;
-            background: #f8fafc;
-            border: 2px solid transparent;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #64748b;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            position: relative;
-            white-space: nowrap;
-            font-size: 14px;
-        }
+    .form-section h4 {
+        margin-top: 0;
+        margin-bottom: var(--space-md);
+        color: var(--cully-dark);
+    }
 
-        .nav-link:hover {
-            background: #e2e8f0;
-            color: var(--admin-primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(77, 208, 225, 0.25);
-        }
+    .form-grid {
+        display: grid;
+        gap: var(--space-md);
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
 
-        .nav-link.active {
-            background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-dark));
-            color: white;
-            box-shadow: 0 4px 15px rgba(77, 208, 225, 0.4);
-        }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
 
-        .nav-link.featured {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            color: white;
-            font-weight: 600;
-            border-color: #3b82f6;
-        }
+    .form-group label {
+        font-weight: 600;
+        color: var(--cully-dark);
+    }
 
-        .nav-link.featured:hover {
-            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-            color: white;
-            border-color: #1d4ed8;
-        }
+    .form-group input,
+    .form-group select {
+        border-radius: 10px;
+        border: 1px solid var(--cully-light-gray);
+        padding: 0.65rem 0.85rem;
+        font-size: 0.95rem;
+        transition: var(--transition-smooth);
+    }
 
-        /* User Info */
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--cully-blue);
+        box-shadow: 0 0 0 3px rgba(123, 165, 199, 0.25);
+    }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-dark) 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-        }
+    .spec-grid {
+        display: grid;
+        gap: var(--space-md);
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
 
-        .user-details {
-            display: flex;
-            flex-direction: column;
-        }
+    .spec-item,
+    .modules-list {
+        background: var(--cully-white);
+        border-radius: 16px;
+        padding: var(--space-md);
+        box-shadow: inset 0 0 0 1px rgba(90, 127, 163, 0.08);
+    }
 
-        .user-name {
-            font-weight: 600;
-            color: #1f2937;
-            font-size: 14px;
-            margin: 0;
-        }
+    .spec-item label {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--cully-gray);
+    }
 
-        .user-role {
-            color: #64748b;
-            font-size: 12px;
-            margin: 0;
-        }
+    .spec-item .value {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--cully-dark);
+    }
 
-        /* Widget Cards */
+    .modules-list-header {
+        font-weight: 600;
+        margin-bottom: var(--space-md);
+        color: var(--cully-dark);
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-xs);
+        border-radius: 12px;
+        padding: 0.65rem 1.2rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--cully-light-blue), var(--cully-blue));
+        color: var(--cully-white);
+    }
+
+    .btn-secondary {
+        background: rgba(123, 165, 199, 0.15);
+        color: var(--cully-blue);
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.85), var(--cully-success));
+        color: var(--cully-white);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .config-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+
+    .config-table th,
+    .config-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--cully-light-gray);
+        text-align: left;
+    }
+
+    .config-table th {
+        background: rgba(123, 165, 199, 0.15);
+        color: var(--cully-dark);
+        font-weight: 600;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    #statusMessages .alert {
+        margin-bottom: var(--space-sm);
+    }
+
+    .history-list {
+        display: grid;
+        gap: var(--space-sm);
+    }
+
+    .history-item {
+        padding: var(--space-sm) var(--space-md);
+        border-radius: 12px;
+        background: rgba(123, 165, 199, 0.08);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--cully-dark);
+    }
+
+    @media (max-width: 1024px) {
         .widgets-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            margin-bottom: 32px;
+            gap: var(--space-md);
         }
+    }
+</style>
+{% endblock %}
 
-        .widget-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-        }
-
-        .widget-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow-hover);
-        }
-
-        .widget-header {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 20px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .widget-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .widget-content {
-            padding: 24px;
-        }
-
-        /* Form Styling */
-        .form-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        .form-section {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .form-section h4 {
-            color: var(--admin-primary);
-            margin: 0 0 16px 0;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: #1f2937;
-            font-size: 14px;
-        }
-
-        .form-group input, .form-group select {
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            background: white;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--admin-primary);
-            box-shadow: 0 0 0 3px rgba(77, 208, 225, 0.1);
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            justify-content: center;
-        }
-
-        .btn-primary {
-            background: var(--admin-primary);
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: var(--admin-primary-dark);
-            transform: translateY(-1px);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #f1f5f9;
-            color: #64748b;
-        }
-
-        .btn-secondary:hover {
-            background: #e2e8f0;
-            color: #1f2937;
-        }
-
-        .btn-success {
-            background: var(--admin-success);
-            color: white;
-        }
-
-        .btn-success:hover:not(:disabled) {
-            background: #059669;
-            color: white;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* Module Configuration */
-        .module-spec-display {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border: 2px solid var(--admin-primary);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .module-spec-display h5 {
-            color: var(--admin-primary);
-            margin: 0 0 16px 0;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .spec-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-        }
-
-        .spec-item {
-            background: white;
-            border-radius: 8px;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            text-align: center;
-        }
-
-        .spec-item label {
-            display: block;
-            font-weight: 600;
-            color: #64748b;
-            font-size: 12px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .spec-item .value {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--admin-primary);
-        }
-
-        /* Status Messages */
-        .status-message {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin: 16px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-        }
-
-        .status-success {
-            background: #d1fae5;
-            color: #065f46;
-            border: 1px solid #10b981;
-        }
-
-        .status-warning {
-            background: #fef3c7;
-            color: #92400e;
-            border: 1px solid #f59e0b;
-        }
-
-        .status-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #ef4444;
-        }
-
-        .status-info {
-            background: #dbeafe;
-            color: #1e40af;
-            border: 1px solid #3b82f6;
-        }
-
-        /* Module List */
-        .modules-list {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            margin: 20px 0;
-            border: 1px solid #e2e8f0;
-        }
-
-        .modules-list-header {
-            background: var(--admin-primary);
-            color: white;
-            padding: 16px 20px;
-            font-weight: 600;
-        }
-
-        .module-item {
-            padding: 16px 20px;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .module-item:last-child {
-            border-bottom: none;
-        }
-
-        .module-item:hover {
-            background: #f8fafc;
-        }
-
-        .module-info {
-            flex: 1;
-        }
-
-        .module-name {
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 4px;
-        }
-
-        .module-details {
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .module-stats {
-            display: flex;
-            gap: 16px;
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .module-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-        }
-
-        /* Tables */
-        .table-container {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            margin: 20px 0;
-            box-shadow: var(--card-shadow);
-        }
-
-        .table-header {
-            background: var(--admin-primary);
-            color: white;
-            padding: 16px 20px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .io-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .io-table th {
-            background: #f8fafc;
-            padding: 12px 16px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 12px;
-            color: #64748b;
-            border-bottom: 1px solid #e2e8f0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .io-table td {
-            padding: 12px 16px;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 14px;
-        }
-
-        .io-table tr:hover {
-            background: #f8fafc;
-        }
-
-        .signal-tag {
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
-            color: var(--admin-primary);
-        }
-
-        /* Loading States */
-        .loading {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .loading i {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Hidden class */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .form-container {
-                grid-template-columns: 1fr;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .spec-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .dashboard-nav {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot-assistant.css') }}">
-</head>
-<body>
-    <div class="dashboard-container">
-        <!-- Header -->
-        <div class="dashboard-header">
-            <div class="header-content">
-                <div class="header-info">
-                    <h1><i class="fas fa-sitemap"></i> I/O Configuration Builder</h1>
-                    <p>Advanced I/O module configuration with online specifications and automatic testing table generation</p>
-                </div>
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Logo" class="header-logo">
-            </div>
+{% block content %}
+<section class="page-hero">
+    <div class="page-hero__content">
+        <div>
+            <h1 class="page-hero__title"><i class="fas fa-sitemap"></i> I/O Configuration Builder</h1>
+            <p class="page-hero__subtitle">Build, validate, and export I/O module specifications with consistent automation styling.</p>
         </div>
-
-        <!-- Navigation -->
-        <div class="dashboard-nav">
-            <div class="nav-links">
-                <a href="{{ url_for('dashboard.engineer') }}" class="nav-link">
-                    <i class="fas fa-tachometer-alt"></i>
-                    Dashboard
-                </a>
-                <a href="{{ url_for('reports.new') }}" class="nav-link featured">
-                    <i class="fas fa-plus-circle"></i>
-                    Create Report
-                </a>
-                <a href="{{ url_for('dashboard.my_reports') }}" class="nav-link">
-                    <i class="fas fa-folder-open"></i>
-                    My Reports
-                </a>
-                <a href="{{ url_for('io_builder.index') }}" class="nav-link active">
-                    <i class="fas fa-sitemap"></i>
-                    I/O Builder
-                </a>
-                <a href="{{ url_for('notifications.notification_center') }}" class="nav-link">
-                    <i class="fas fa-bell"></i>
-                    Notifications
-                </a>
-            </div>
-
-            <div class="user-info">
-                <div class="user-avatar">
-                    {{ current_user.full_name[0] if current_user and current_user.full_name else 'U' }}
-                </div>
-                <div class="user-details">
-                    <div class="user-name">{{ current_user.full_name if current_user and current_user.full_name else 'User' }}</div>
-                    <div class="user-role">{{ current_user.role if current_user and current_user.role else 'Engineer' }}</div>
-                </div>
-                <a href="{{ url_for('auth.change_password') }}" class="nav-link">
-                    <i class="fas fa-key"></i>
-                    Settings
-                </a>
-                <a href="{{ url_for('auth.logout') }}" class="nav-link" style="color: #ef4444;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
-            </div>
+        <div class="page-hero__actions">
+            <a class="btn-ghost" href="{{ url_for('dashboard.engineer') }}"><i class="fas fa-arrow-left"></i> Back to dashboard</a>
+            <a class="button-primary" href="{{ url_for('reports.new') }}"><i class="fas fa-plus-circle"></i> New report</a>
         </div>
+    </div>
+</section>
 
-        <!-- Main I/O Builder Interface -->
-        <div class="widgets-grid">
+<nav class="module-nav">
+    <div class="module-nav__links">
+        <a class="module-nav__link" href="{{ url_for('dashboard.my_reports') }}"><i class="fas fa-folder-open"></i> My reports</a>
+        <a class="module-nav__link module-nav__link--active" href="{{ url_for('io_builder.index') }}"><i class="fas fa-sitemap"></i> I/O builder</a>
+        <a class="module-nav__link" href="{{ url_for('notifications.notification_center') }}"><i class="fas fa-bell"></i> Notifications</a>
+        <a class="module-nav__link" href="{{ url_for('system_settings') }}"><i class="fas fa-sliders-h"></i> Settings</a>
+    </div>
+    <div class="module-nav__meta">
+        <i class="fas fa-check-circle"></i> Digital, analog, and mixed module templates supported
+    </div>
+</nav>
+
+<div class="io-layout">
+<div class="widgets-grid">
             <div class="widget-card">
                 <div class="widget-header">
                     <h3 class="widget-title">
@@ -832,7 +445,12 @@
         </div>
     </div>
 
-    <script>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
         // Global variables
         let configuredModules = [];
         let currentModuleSpec = null;
@@ -1349,8 +967,5 @@
             });
         });
     </script>
+{% endblock %}
 
-    {% include 'partials/chatbot_widget.html' %}
-    <script src="{{ url_for('static', filename='js/chatbot-assistant.js') }}" defer></script>
-</body>
-</html>

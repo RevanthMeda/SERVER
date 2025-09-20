@@ -9,25 +9,11 @@
     <meta http-equiv="Expires" content="0">
     <title>{% block title %}Cully Report Generator{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome-cully.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design-system.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot-assistant.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <style>
-        /* Base styles from report_selector.html */
-        :root {
-            --cully-navy: #5a7fa3;
-            --cully-blue: #7ba5c7;
-            --cully-light-blue: #9ec5e5;
-            --cully-dark: #2c3e50;
-            --cully-gray: #8fa3b5;
-            --cully-light-gray: #e8f2f7;
-            --cully-bg-light: #f5f7fa;
-            --cully-white: #ffffff;
-            --cully-shadow: 0 4px 12px rgba(90, 127, 163, 0.15);
-            --cully-shadow-lg: 0 8px 24px rgba(90, 127, 163, 0.2);
-            --transition-smooth: all 0.3s ease;
-        }
-
         body {
             font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--cully-bg-light);
@@ -179,7 +165,7 @@
     </style>
     {% block head %}{% endblock %}
 </head>
-<body>
+<body class="layout-shell">
     <header class="cully-header">
         <nav class="header-nav">
             <div class="header-logo-container">
