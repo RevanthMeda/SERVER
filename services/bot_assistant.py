@@ -20,10 +20,47 @@ NAME_PATTERN = re.compile(r"^[A-Za-z][A-Za-z\s\.\-']+$")
 CLIENT_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9\s\.\-&']+$")
 PROJECT_REFERENCE_PATTERN = re.compile(r'^[A-Z0-9][A-Z0-9_\-./ ]{2,}$')
 UUID_PATTERN = re.compile(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', re.IGNORECASE)
+SERVICE_OVERVIEW_MESSAGE = (
+    "Here are the automation workflows I can help with:\n"
+    "- SAT (Site Acceptance Testing) reports\n"
+    "- FAT (Factory Acceptance Testing) documentation\n"
+    "- Site survey packs and field data collection\n"
+    "- Design documentation (FDS, HDS, SDS)\n"
+    "- Automation manager reviews\n"
+    "- IO builder templates and configurations\n"
+    "- Status tracking and compliance reports"
+)
 GENERAL_KB_RESPONSES = {
-    'report_types': 'I can assemble SAT acceptance tests, Site Survey packs, FAT summaries, and design documentation including FDS, HDS, and SDS. I also help with automation manager reviews, IO builder templates, and status tracking.',
+    'report_types': SERVICE_OVERVIEW_MESSAGE,
     'progress_help': 'Ask for a "summary" or "what\'s left" whenever you need a checkpoint on collected and pending SAT fields.',
 }
+
+NEGATIVE_INTENT_PHRASES = (
+    'i do not want',
+    "i don't want",
+    'i do not need',
+    "i don't need",
+    'i am not looking',
+    'not looking for',
+    "don't want",
+    "don't need",
+    'not interested',
+    'something else',
+    'different task',
+    'no thanks',
+    'no thank you',
+)
+NEGATIVE_INTENT_PREFIXES = (
+    'no, i',
+    'no i ',
+    "no that's",
+    'no thats',
+    'no, that',
+    'no that',
+    'no this is not',
+    'no this isnt',
+)
+NEGATIVE_INTENT_COMMANDS = {'cancel', 'stop', 'exit', 'quit', 'no'}
 
 
 
@@ -65,6 +102,23 @@ def _has_value(value: Any) -> bool:
     if isinstance(value, str):
         return bool(value.strip())
     return True
+
+
+def _detect_negative_intent(message: str) -> bool:
+    normalized = (message or '').strip().lower()
+    if not normalized:
+        return False
+    if normalized in NEGATIVE_INTENT_COMMANDS:
+        return True
+    for prefix in NEGATIVE_INTENT_PREFIXES:
+        if normalized.startswith(prefix):
+            return True
+    for phrase in NEGATIVE_INTENT_PHRASES:
+        if phrase in normalized:
+            return True
+    if normalized.startswith('no ') and any(token in normalized for token in (' want', ' need', ' interested', ' looking')):
+        return True
+    return False
 
 
 CONVERSATION_FLOW: List[Dict[str, Any]] = [
@@ -253,6 +307,10 @@ def start_conversation() -> Dict[str, Any]:
 
 def process_user_message(message: str, mode: str = "default") -> Dict[str, Any]:
     state = BotConversationState.load()
+
+    if _detect_negative_intent(message):
+        state.reset()
+        return _build_negative_intent_response()
 
     general_payload = _handle_general_query(message, state)
     if general_payload is not None:
@@ -701,6 +759,20 @@ def _pending_fields(state: BotConversationState) -> List[str]:
     return pending
 
 
+def _build_negative_intent_response() -> Dict[str, Any]:
+    return {
+        'completed': False,
+        'collected': {},
+        'pending_fields': [],
+        'messages': [
+            "No problem! I understand you don't need that right now.",
+            SERVICE_OVERVIEW_MESSAGE,
+            "What would you like to work on instead?",
+        ],
+        'question': 'Is there another workflow I can help you with?',
+    }
+
+
 def _build_question_payload(state: BotConversationState) -> Dict[str, Any]:
     state.sync_to_next_question()
     merged = _merge_results(state)
@@ -903,16 +975,37 @@ def _handle_general_query(message: str, state: BotConversationState) -> Optional
     if not normalized:
         return None
 
-    responses = []
-    if 'document type' in normalized or 'report type' in normalized or 'report template' in normalized:
-        responses.append(GENERAL_KB_RESPONSES['report_types'])
-    elif 'summary' in normalized or "what's left" in normalized:
+    responses: List[str] = []
+
+    service_requested = False
+    if (
+        'document type' in normalized
+        or 'report type' in normalized
+        or 'report template' in normalized
+        or ('report' in normalized and any(token in normalized for token in ('available', 'options', 'list', 'types')))
+        or ('services' in normalized and any(token in normalized for token in ('offer', 'available', 'options', 'provide', 'list')))
+        or ('what' in normalized and 'services' in normalized)
+    ):
+        responses.append(SERVICE_OVERVIEW_MESSAGE)
+        service_requested = True
+
+    if ('summary' in normalized or "what's left" in normalized) and not service_requested:
         responses.append(GENERAL_KB_RESPONSES['progress_help'])
-    elif 'help' in normalized and 'sat' in normalized:
+
+    if 'help' in normalized and 'sat' in normalized:
         responses.append('I can guide you through each SAT field, fill values from spreadsheets, and fetch generated documents on demand.')
 
     if not responses:
         return None
+
+    if service_requested:
+        return {
+            'completed': False,
+            'collected': _merge_results(state),
+            'pending_fields': _pending_fields(state),
+            'messages': responses,
+            'question': 'Would you like me to start one of these workflows?',
+        }
 
     payload = _build_question_payload(state)
     payload.setdefault('messages', []).extend(responses)
