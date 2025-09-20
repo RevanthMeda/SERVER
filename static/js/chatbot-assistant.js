@@ -19,6 +19,19 @@
     const hintButtons = root.querySelectorAll('[data-assistant-hint]');
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
+    const FIELD_LABELS = {
+        DOCUMENT_TITLE: 'document title',
+        CLIENT_NAME: 'client organisation',
+        PROJECT_REFERENCE: 'project reference',
+        PURPOSE: 'purpose',
+        SCOPE: 'scope',
+        PREPARED_BY: 'prepared by',
+        USER_EMAIL: 'prepared by email',
+        DOCUMENT_REFERENCE: 'document reference',
+        REVISION: 'revision'
+    };
+    const MAX_SNAPSHOT_ITEMS = 3;
+
     const endpoints = {
         start: root.dataset.assistantStart,
         message: root.dataset.assistantMessage,
@@ -29,6 +42,7 @@
 
     let conversationBootstrapped = false;
     let busy = false;
+    let lastProgressSignature = '';
 
     function togglePanel(forceOpen) {
         const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : panel.hidden;
@@ -115,10 +129,17 @@
         if (typeof text !== 'string') {
             text = String(text || '');
         }
-        const parts = text.split(/\n{2,}/);
+        const parts = text.split(/
+{2,}/);
         parts.forEach((block, index) => {
             const paragraph = document.createElement('p');
-            paragraph.textContent = block.replace(/\n/g, ' ');
+            block.split('
+').forEach((line, lineIndex) => {
+                if (lineIndex > 0) {
+                    paragraph.appendChild(document.createElement('br'));
+                }
+                paragraph.appendChild(document.createTextNode(line.trim()));
+            });
             container.appendChild(paragraph);
             if (index !== parts.length - 1) {
                 container.appendChild(document.createElement('br'));
@@ -150,7 +171,7 @@
         try {
             const payload = await requestJSON(endpoints.start, { method: 'POST' });
             conversationBootstrapped = true;
-            renderAssistantPayload(payload, { headline: 'Let me orchestrate the workflow for you.' });
+            renderAssistantPayload(payload, { headline: 'Let's launch your SAT or FAT workflow step by step.' });
         } catch (error) {
             showToast(error.message || 'Failed to initialise assistant.', 'error');
         }
@@ -174,29 +195,6 @@
             throw new Error(text || response.statusText);
         }
         return response.json();
-    }
-
-    function updateStatus(payload) {
-        if (!statusLabel) {
-            return;
-        }
-        if (payload.completed) {
-            statusLabel.textContent = 'Automation ready – review & publish when you are.';
-            return;
-        }
-        if (payload.pending_fields && payload.pending_fields.length) {
-            const nextLabel = formatFieldLabel(payload.field);
-            statusLabel.textContent = `Collecting ${nextLabel}. ${payload.pending_fields.length} step(s) remain.`;
-            return;
-        }
-        statusLabel.textContent = 'Preparing orchestration steps…';
-    }
-
-    function formatFieldLabel(field) {
-        if (!field) {
-            return 'details';
-        }
-        return field.replace(/_/g, ' ').toLowerCase();
     }
 
     function renderAssistantPayload(payload, options = {}) {
@@ -227,7 +225,7 @@
         }
 
         if (payload.completed) {
-            appendMessage('bot', 'All critical inputs are locked in. I can push them into the form when you open it.');
+            appendMessage('bot', 'All SAT essentials are captured. I can generate the report or launch approvals whenever you are ready.');
         } else if (payload.question) {
             const meta = [];
             if (payload.help_text) {
@@ -237,26 +235,119 @@
         }
 
         if (payload.collected) {
-            const preview = summariseCollected(payload.collected, payload.pending_fields || []);
-            if (preview) {
-                appendMessage('bot', preview);
+            const snapshot = buildProgressSnapshot(payload);
+            if (snapshot && snapshot.signature !== lastProgressSignature) {
+                appendMessage('bot', snapshot.text);
+                lastProgressSignature = snapshot.signature;
             }
         }
 
         updateStatus(payload);
     }
 
-    function summariseCollected(collected, pending) {
-        const keys = Object.keys(collected || {}).filter((key) => collected[key]);
-        if (!keys.length) {
-            return '';
+    function updateStatus(payload) {
+        if (!statusLabel) {
+            return;
         }
-        const summary = keys.slice(0, 3).map((key) => `${formatFieldLabel(key)} ? ${collected[key]}`);
-        let text = `Captured ${keys.length} field${keys.length > 1 ? 's' : ''}: ${summary.join('; ')}`;
-        if (pending && pending.length) {
-            text += `. Pending: ${pending.map(formatFieldLabel).join(', ')}`;
+        const collected = payload.collected || {};
+        const capturedKeys = Object.keys(collected).filter((key) => collected[key]);
+        const pending = (payload.pending_fields || []).filter(Boolean);
+        const total = capturedKeys.length + pending.length;
+        if (payload.completed) {
+            const denominator = total > 0 ? total : (capturedKeys.length || 0);
+            const readyCount = denominator > 0 ? `${capturedKeys.length}/${denominator}` : `${capturedKeys.length}`;
+            statusLabel.textContent = `Captured ${readyCount} fields - ready to generate.`;
+            return;
         }
-        return text;
+        const nextLabel = formatFieldLabel(payload.field);
+        let capturedSummary = `Captured ${capturedKeys.length}`;
+        if (total > 0) {
+            capturedSummary += `/${total}`;
+        }
+        if (capturedKeys.length) {
+            capturedSummary += ` (${capturedKeys.slice(0, 2).map(formatFieldLabel).join(', ')}`;
+            if (capturedKeys.length > 2) {
+                capturedSummary += ', ...';
+            }
+            capturedSummary += ')';
+        }
+        let pendingSummary = `Pending ${pending.length}`;
+        if (pending.length) {
+            pendingSummary += ` (${pending.slice(0, 2).map(formatFieldLabel).join(', ')}`;
+            if (pending.length > 2) {
+                pendingSummary += ', ...';
+            }
+            pendingSummary += ')';
+        }
+        statusLabel.textContent = `${capturedSummary} | ${pendingSummary} | Next: ${nextLabel}`;
+    }
+
+    function formatFieldLabel(field) {
+        if (!field) {
+            return 'details';
+        }
+        const key = String(field).trim().toUpperCase();
+        if (key && FIELD_LABELS[key]) {
+            return FIELD_LABELS[key];
+        }
+        return key.replace(/_/g, ' ').toLowerCase();
+    }
+
+    function buildProgressSnapshot(payload) {
+        const collected = payload.collected || {};
+        const pending = payload.pending_fields || [];
+        const capturedKeys = Object.keys(collected).filter((key) => collected[key]);
+        const capturedSorted = capturedKeys.slice().sort();
+        const pendingSorted = pending.slice().sort();
+        const signature = `${capturedSorted.join('|')}::${pendingSorted.join('|')}::${payload.completed ? '1' : '0'}`;
+        const lines = [];
+
+        if (capturedSorted.length) {
+            lines.push(`Captured ${capturedSorted.length} field${capturedSorted.length === 1 ? '' : 's'} so far:`);
+            capturedSorted.slice(0, MAX_SNAPSHOT_ITEMS).forEach((key) => {
+                lines.push(`- ${formatFieldLabel(key)}: ${truncateValue(collected[key])}`);
+            });
+            if (capturedSorted.length > MAX_SNAPSHOT_ITEMS) {
+                lines.push(`- ...and ${capturedSorted.length - MAX_SNAPSHOT_ITEMS} more.`);
+            }
+        } else {
+            lines.push('Captured 0 fields so far.');
+        }
+
+        if (pendingSorted.length) {
+            lines.push(`Pending ${pendingSorted.length} field${pendingSorted.length === 1 ? '' : 's'}:`);
+            pendingSorted.slice(0, MAX_SNAPSHOT_ITEMS).forEach((key) => {
+                lines.push(`- ${formatFieldLabel(key)}`);
+            });
+            if (pendingSorted.length > MAX_SNAPSHOT_ITEMS) {
+                lines.push(`- ...and ${pendingSorted.length - MAX_SNAPSHOT_ITEMS} more.`);
+            }
+        } else {
+            lines.push('Pending 0 fields. All required inputs are in.');
+        }
+
+        if (payload.completed) {
+            lines.push('Ready to generate reports or route approvals.');
+        } else if (payload.field) {
+            lines.push(`Next prompt: ${formatFieldLabel(payload.field)}.`);
+        }
+
+        return {
+            signature,
+            text: lines.join('\n')
+        };
+
+    }
+
+    function truncateValue(value, maxLength = 120) {
+        const normalised = String(value || '').replace(/\s+/g, ' ').trim();
+        if (!normalised) {
+            return '-';
+        }
+        if (normalised.length > maxLength) {
+            return `${normalised.slice(0, maxLength - 3)}...`;
+        }
+        return normalised;
     }
 
     function handleCommand(command) {
@@ -265,7 +356,7 @@
         }
         if (command.type === 'document_fetch') {
             if (command.success && command.download_url) {
-                appendMessage('bot', 'Download ready. Tap to open the generated report.', {
+                appendMessage('bot', 'Download ready. Use the link to open the regenerated report.', {
                     meta: [command.download_url]
                 });
             } else if (command.error) {
@@ -310,7 +401,8 @@
         try {
             const payload = await requestJSON(endpoints.reset, { method: 'POST' });
             messagesContainer.innerHTML = '';
-            appendMessage('bot', 'Starting fresh. Let’s re-align.');
+            appendMessage('bot', 'Starting fresh. Let's re-align on your SAT workflow.');
+            lastProgressSignature = '';
             renderAssistantPayload(payload);
         } catch (error) {
             showToast(error.message || 'Unable to reset.', 'error');
@@ -477,4 +569,6 @@
     }
     bindEvents();
 })();
+
+
 
