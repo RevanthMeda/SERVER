@@ -1,43 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In - Cully Report Generator</title>
+{% extends "base.html" %}
+
+{% block title %}Log In - {{ super() }}{% endblock %}
+
+{% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/water-excellence.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
-        /* CULLY.IE EXACT STYLING - MATCHING WELCOME PAGE */
         :root {
-            /* CULLY EXACT COLOR SYSTEM */
             --cully-navy: #5a7fa3;
             --cully-blue: #7ba5c7;
             --cully-light-blue: #9ec5e5;
             --cully-dark: #2c3e50;
             --cully-gray: #8fa3b5;
             --cully-light-gray: #e8f2f7;
-            --cully-bg-light: #f5f7fa;
             --cully-white: #ffffff;
             --cully-shadow: 0 4px 12px rgba(90, 127, 163, 0.15);
             --transition: all 0.3s ease;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--cully-bg-light);
-            color: var(--cully-dark);
-            line-height: 1.6;
-            min-height: 100vh;
         }
 
         .login-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            min-height: 70vh;
             padding: 20px;
         }
 
@@ -53,32 +37,30 @@
         }
 
         .login-header {
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
         .login-header img {
-            height: 80px;
-            margin-bottom: 24px;
+            height: 72px;
+            margin-bottom: 20px;
         }
 
         .login-header h1 {
             color: var(--cully-dark);
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             line-height: 1.2;
-            font-family: 'Montserrat', sans-serif;
         }
 
         .login-header .subtitle {
             color: var(--cully-gray);
-            font-size: 1.1rem;
-            line-height: 1.5;
+            font-size: 1.05rem;
             margin: 0;
         }
 
         .auth-form {
-            margin: 32px 0;
+            margin: 28px 0;
         }
 
         .form-group {
@@ -123,327 +105,170 @@
             background: var(--cully-white);
             color: var(--cully-dark);
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
         }
 
         .form-group input:focus {
+            border-color: var(--cully-blue);
             outline: none;
-            border-color: var(--cully-navy);
-            box-shadow: 0 0 0 3px rgba(90, 127, 163, 0.1);
-        }
-
-        .form-group input::placeholder {
-            color: var(--cully-gray);
+            box-shadow: 0 0 0 3px rgba(123, 165, 199, 0.2);
         }
 
         .password-toggle {
             position: absolute;
-            right: 16px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
             border: none;
-            color: var(--text-light);
+            background: transparent;
+            color: var(--cully-gray);
             cursor: pointer;
-            padding: 0;
-            z-index: 2;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 24px;
-            width: 24px;
+            padding: 4px;
         }
 
-        .password-toggle:hover {
-            color: var(--cyber-electric);
+        .field-error {
+            color: #b91c1c;
+            font-size: 0.85rem;
+            margin-top: 6px;
+            display: none;
         }
 
         .login-btn {
             width: 100%;
-            background: var(--cully-navy);
+            padding: 14px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--cully-navy), var(--cully-blue));
             color: var(--cully-white);
             border: none;
-            padding: 18px 24px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             cursor: pointer;
-            transition: var(--transition);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-top: 32px;
-            box-shadow: var(--cully-shadow);
-            font-family: 'Montserrat', sans-serif;
+            transition: var(--transition);
         }
 
         .login-btn:hover {
-            background: var(--cully-blue);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 6px 16px rgba(90, 127, 163, 0.25);
-        }
-
-        .login-btn:active {
-            transform: translateY(-1px) scale(1.01);
-        }
-
-        .login-btn:focus {
-            outline: 3px solid rgba(90, 127, 163, 0.3);
-            outline-offset: 2px;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(90, 127, 163, 0.2);
         }
 
         .login-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.7;
             cursor: not-allowed;
-            transform: none;
             box-shadow: none;
         }
 
         .auth-links {
-            margin-top: 32px;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .auth-links p {
-            margin: 12px 0;
-            color: var(--text-medium);
-            font-size: 0.95rem;
+            margin-top: 24px;
+            color: var(--cully-gray);
         }
 
         .auth-links a {
-            color: var(--cyber-electric);
-            text-decoration: none;
+            color: var(--cully-navy);
             font-weight: 600;
-            transition: var(--transition);
+            text-decoration: none;
         }
 
         .auth-links a:hover {
-            color: var(--crystal-white);
             text-decoration: underline;
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
         }
 
-        .auth-links .btn-link {
-            display: inline-block;
-            padding: 12px 20px;
-            background: var(--cully-light-gray);
-            border: 1px solid var(--cully-gray);
-            border-radius: 25px;
-            color: var(--cully-navy);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: var(--transition);
-            margin: 8px;
-        }
-
-        .auth-links .btn-link:hover {
-            background: var(--cully-gray);
-            border-color: var(--cully-navy);
-            transform: translateY(-2px);
-            box-shadow: var(--cully-shadow);
-        }
-
-        .alert {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(10px);
-        }
-
-        .alert-error {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fecaca;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .alert-success {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .alert-info {
-            background: rgba(59, 130, 246, 0.2);
-            color: #93c5fd;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .loading {
-            display: inline-block;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Development Environment Notice */
         .dev-notice {
             margin-top: 24px;
             padding: 16px;
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.2);
             border-radius: 12px;
+            background: #fef9c3;
+            color: #92400e;
             text-align: left;
         }
 
         .dev-notice h4 {
-            color: #d97706;
-            margin: 0 0 8px 0;
-            font-size: 0.9rem;
-            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
+            margin: 0 0 8px;
         }
 
-        .dev-notice p {
-            color: var(--cully-dark);
-            font-size: 0.85rem;
-            margin: 4px 0;
-            line-height: 1.4;
+        .loading {
+            animation: spin 1s linear infinite;
         }
 
-        .dev-notice strong {
-            font-weight: 600;
-            color: var(--cully-dark);
+        @keyframes spin {
+            from { transform: rotate(0); }
+            to { transform: rotate(360deg); }
         }
 
-        /* Field Error Styling */
-        .field-error {
-            color: #dc2626;
-            font-size: 0.75rem;
-            margin-top: 4px;
-            display: none;
-        }
-
-        /* Mobile Responsiveness */
         @media (max-width: 640px) {
             .login-card {
-                padding: 32px 24px;
-                margin: 16px;
-            }
-
-            .login-header h1 {
-                font-size: 2rem;
-            }
-
-            .login-header img {
-                height: 60px;
-            }
-
-            .auth-links .btn-link {
-                width: 100%;
-                justify-content: center;
-                margin: 8px 0;
+                padding: 28px;
             }
         }
     </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Report Generator Logo" />
-                <h1>Welcome Back</h1>
-                <p class="subtitle">Sign in to your Cully Report Generator account to access professional documentation tools for SAT, FAT, commissioning, maintenance, QA, and compliance reporting</p>
-            </div>
+{% endblock %}
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}" role="alert" aria-live="polite">
-                            <i class="fa fa-{% if category == 'error' %}exclamation-triangle{% elif category == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-            <form method="POST" class="auth-form" id="loginForm" novalidate>
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
-
-                <div class="form-group">
-                    <label for="email">Email Address <span class="required">*</span></label>
-                    <div class="input-wrapper">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
-                            required 
-                            placeholder="Enter your email address"
-                            autocomplete="email"
-                            aria-describedby="email-error"
-                        >
-                    </div>
-                    <div id="email-error" class="field-error" role="alert"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password <span class="required">*</span></label>
-                    <div class="input-wrapper">
-                        <i class="fa fa-lock" aria-hidden="true"></i>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            required 
-                            placeholder="Enter your password"
-                            autocomplete="current-password"
-                            aria-describedby="password-error"
-                        >
-                        <button type="button" class="password-toggle" onclick="togglePassword()" aria-label="Toggle password visibility">
-                            <i class="fas fa-eye" id="toggleIcon"></i>
-                        </button>
-                    </div>
-                    <div id="password-error" class="field-error" role="alert"></div>
-                </div>
-
-                <button type="submit" class="login-btn" id="loginButton">
-                    <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                    <span>Sign In</span>
-                </button>
-            </form>
-
-            <div class="auth-links">
-                <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Create Account</a></p>
-                <p>Forgot your password? <a href="{{ url_for('auth.forgot_password') }}">Reset Password</a></p>
-                <p><a href="{{ url_for('auth.welcome') }}">← Back to Welcome</a></p>
-            </div>
-
-            <!-- Development Environment Notice -->
-            {% if config.DEBUG %}
-            <div class="dev-notice">
-                <h4><i class="fas fa-flask" aria-hidden="true"></i> Development Mode</h4>
-                <p><strong>Demo Account:</strong> admin@cully.ie</p>
-                <p><strong>Password:</strong> admin123</p>
-                <p><em>This information is only visible in development mode.</em></p>
-            </div>
-            {% endif %}
-
-            <!-- Developer Credit -->
-            <div style="text-align: center; margin-top: 24px; padding: 12px; background: var(--cully-light-gray); border-radius: 8px;">
-                <p style="margin: 0; font-size: 0.8rem; color: var(--cully-gray);">
-                    Developed by <strong style="color: var(--cully-navy);">Revanth Meda</strong> for Cully Automation
-                </p>
-            </div>
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <img src="https://www.cully.ie/wp-content/themes/cullyautomation/assets/images/logo-25-blue.svg" alt="Cully Automation">
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Sign in to manage reports, dashboards, and collaborative workflows.</p>
         </div>
-    </div>
 
+        <form id="loginForm" class="auth-form" method="post" action="{{ url_for('auth.login') }}">
+            {{ form.hidden_tag() if form else '' }}
+            <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                    <input type="email" id="email" name="email" placeholder="you@cully.ie" required autocomplete="username">
+                </div>
+                <div id="email-error" class="field-error" role="alert"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock" aria-hidden="true"></i>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                    <button type="button" class="password-toggle" onclick="togglePassword()" aria-label="Show password">
+                        <i class="fas fa-eye" id="toggleIcon"></i>
+                    </button>
+                </div>
+                <div id="password-error" class="field-error" role="alert"></div>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginButton">
+                <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                <span>Sign In</span>
+            </button>
+        </form>
+
+        <div class="auth-links">
+            <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Create Account</a></p>
+            <p>Forgot your password? <a href="{{ url_for('auth.forgot_password') }}">Reset Password</a></p>
+            <p><a href="{{ url_for('auth.welcome') }}">? Back to Welcome</a></p>
+        </div>
+
+        {% if config.DEBUG %}
+        <div class="dev-notice">
+            <h4><i class="fas fa-flask" aria-hidden="true"></i> Development Mode</h4>
+            <p><strong>Demo Account:</strong> admin@cully.ie</p>
+            <p><strong>Password:</strong> admin123</p>
+            <p><em>This information is only visible in development mode.</em></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
     <script>
-        // Password visibility toggle
         function togglePassword() {
             const passwordField = document.getElementById('password');
             const toggleIcon = document.getElementById('toggleIcon');
@@ -451,27 +276,22 @@
 
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
+                toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
                 toggleButton.setAttribute('aria-label', 'Hide password');
             } else {
                 passwordField.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
+                toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
                 toggleButton.setAttribute('aria-label', 'Show password');
             }
         }
 
-        // Form validation and submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             const loginButton = document.getElementById('loginButton');
             const email = document.getElementById('email');
             const password = document.getElementById('password');
 
-            // Clear previous errors
             clearErrors();
 
-            // Basic validation
             let hasErrors = false;
 
             if (!email.value.trim()) {
@@ -492,12 +312,10 @@
                 return false;
             }
 
-            // Show loading state
             loginButton.disabled = true;
             loginButton.innerHTML = '<i class="fa fa-spinner loading" aria-hidden="true"></i> <span>Signing In...</span>';
         });
 
-        // Helper functions
         function isValidEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
@@ -510,26 +328,17 @@
         }
 
         function clearErrors() {
-            const errorElements = document.querySelectorAll('.field-error');
-            errorElements.forEach(element => {
+            document.querySelectorAll('.field-error').forEach(element => {
                 element.textContent = '';
                 element.style.display = 'none';
             });
         }
 
-        // Auto-focus email field
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('email').focus();
+            const emailField = document.getElementById('email');
+            if (emailField) {
+                emailField.focus();
+            }
         });
     </script>
-
-    <!-- Developer Credit Section -->
-    <footer class="developer-credit">
-        <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid var(--cully-light-gray);">
-            <p style="color: var(--cully-gray); font-size: 0.9rem; margin: 0;">
-                <i class="fas fa-code"></i> Developed by <strong style="color: var(--cully-navy);">Revanth Meda</strong> for <strong style="color: var(--cully-dark);">CULLY LTD</strong>
-            </p>
-        </div>
-    </footer>
-</body>
-</html>
+{% endblock %}

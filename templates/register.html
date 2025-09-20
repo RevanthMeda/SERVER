@@ -1,95 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account - Cully Report Generator</title>
+{% extends "base.html" %}
+
+{% block title %}Create Account - {{ super() }}{% endblock %}
+
+{% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
-        /* CULLY.IE EXACT STYLING - MATCHING WELCOME PAGE */
         :root {
-            /* CULLY EXACT COLOR SYSTEM */
             --cully-navy: #5a7fa3;
             --cully-blue: #7ba5c7;
             --cully-light-blue: #9ec5e5;
             --cully-dark: #2c3e50;
             --cully-gray: #8fa3b5;
             --cully-light-gray: #e8f2f7;
-            --cully-bg-light: #f5f7fa;
             --cully-white: #ffffff;
             --cully-shadow: 0 4px 12px rgba(90, 127, 163, 0.15);
             --transition: all 0.3s ease;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--cully-bg-light);
-            color: var(--cully-dark);
-            line-height: 1.6;
-            min-height: 100vh;
         }
 
         .register-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            padding: 24px;
+            min-height: 70vh;
+            padding: clamp(24px, 4vw, 48px);
         }
 
         .register-card {
             background: var(--cully-white);
             border-radius: 16px;
             box-shadow: var(--cully-shadow);
-            max-width: 500px;
+            max-width: 520px;
             width: 100%;
-            padding: 48px;
+            padding: clamp(32px, 4vw, 48px);
             text-align: center;
             border: 1px solid rgba(90, 127, 163, 0.1);
         }
 
         .register-header {
-            margin-bottom: 48px;
+            margin-bottom: clamp(32px, 4vw, 48px);
         }
 
         .register-header img {
-            height: 80px;
-            margin-bottom: 24px;
+            height: clamp(60px, 8vw, 80px);
+            margin-bottom: clamp(18px, 2vw, 24px);
         }
 
         .register-header h1 {
             color: var(--cully-dark);
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 4vw, 2.5rem);
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             line-height: 1.2;
-            font-family: 'Montserrat', sans-serif;
         }
 
         .register-header .subtitle {
             color: var(--cully-gray);
-            font-size: 1.1rem;
-            line-height: 1.5;
+            font-size: 1.05rem;
             margin: 0;
         }
 
         .auth-form {
-            margin: 40px 0;
+            margin: 32px 0;
             text-align: left;
-        }
-
-        .form-group {
-            position: relative;
-            margin-bottom: 28px;
+            display: grid;
+            gap: 22px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: var(--cully-dark);
             font-weight: 600;
             font-size: 0.95rem;
@@ -103,20 +82,14 @@
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 18px 24px;
-            font-size: 16px;
+            padding: 16px 18px;
+            font-size: 1rem;
             border: 2px solid var(--cully-light-gray);
             border-radius: 8px;
             background: var(--cully-white);
             color: var(--cully-dark);
             transition: var(--transition);
-            font-family: 'Montserrat', sans-serif;
             box-sizing: border-box;
-            font-weight: 400;
-        }
-
-        .form-group input::placeholder {
-            color: var(--cully-gray);
         }
 
         .form-group input:focus,
@@ -126,263 +99,143 @@
             box-shadow: 0 0 0 3px rgba(90, 127, 163, 0.1);
         }
 
-        .form-group select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='12' height='7' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l6 7 6-7z' fill='%235a7fa3'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 24px center;
-            background-size: 12px 7px;
-        }
-
-        .form-group select option {
-            background: var(--cully-white);
-            color: var(--cully-dark);
-            padding: 12px;
+        .password-wrapper {
+            position: relative;
         }
 
         .password-toggle {
             position: absolute;
-            right: 16px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
             border: none;
+            background: transparent;
             color: var(--cully-gray);
             cursor: pointer;
-            padding: 0;
-            z-index: 2;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 24px;
-            width: 24px;
-        }
-
-        .password-toggle:hover {
-            color: var(--cully-navy);
-        }
-
-        .form-group .password-wrapper {
-            position: relative;
+            padding: 4px;
         }
 
         .btn-primary {
             width: 100%;
-            padding: 20px 32px;
-            font-size: 16px;
-            font-weight: 700;
-            border: none;
-            border-radius: 25px;
-            background: var(--cully-navy);
+            padding: 16px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--cully-navy), var(--cully-blue));
             color: var(--cully-white);
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             cursor: pointer;
-            transition: var(--transition);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-top: 16px;
-            box-shadow: var(--cully-shadow);
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 0.02em;
+            gap: 10px;
+            transition: var(--transition);
         }
 
         .btn-primary:hover {
-            background: var(--cully-blue);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 6px 16px rgba(90, 127, 163, 0.25);
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px) scale(1.01);
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(90, 127, 163, 0.2);
         }
 
         .auth-links {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .auth-links p {
-            margin: 18px 0;
+            margin-top: 28px;
             color: var(--cully-gray);
-            font-size: 14px;
         }
 
         .auth-links a {
             color: var(--cully-navy);
-            text-decoration: none;
             font-weight: 600;
-            transition: var(--transition);
+            text-decoration: none;
         }
 
         .auth-links a:hover {
-            color: var(--cully-dark);
             text-decoration: underline;
         }
 
-        .alert {
-            padding: 18px 24px;
-            margin-bottom: 28px;
-            border-radius: 12px;
-            font-weight: 500;
-            border: 1px solid;
-            font-size: 0.9rem;
-        }
-
-        .alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            color: #dc2626;
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-
-        .alert-success {
-            background: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            border-color: rgba(16, 185, 129, 0.2);
-        }
-
-        .alert-warning {
-            background: rgba(245, 158, 11, 0.1);
-            color: #d97706;
-            border-color: rgba(245, 158, 11, 0.2);
-        }
-
-        .alert-info {
-            background: rgba(59, 130, 246, 0.1);
-            color: #1d4ed8;
-            border-color: rgba(59, 130, 246, 0.2);
-        }
-
-        /* Mobile responsiveness */
-        @media (max-width: 768px) {
-            .register-container {
-                padding-bottom: 80px; /* Space for footer */
-            }
-
+        @media (max-width: 640px) {
             .register-card {
-                padding: 32px 24px;
-                border-radius: 12px;
-            }
-
-            .register-header h1 {
-                font-size: 2rem;
-            }
-
-            .register-header img {
-                height: 60px;
-                margin-bottom: 16px;
-            }
-
-            .form-group input,
-            .form-group select {
-                padding: 16px 20px;
-                font-size: 15px;
-            }
-
-            .btn-primary {
-                padding: 18px 24px;
-                font-size: 15px;
-            }
-
-            .auth-links {
-                margin-top: 32px;
+                padding: 28px 20px;
             }
         }
     </style>
-</head>
-<body>
-    <div class="register-container">
-        <div class="register-card">
-            <div class="register-header">
-                <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Report Generator Logo"/>
-                <h1>Create Account</h1>
-                <p class="subtitle">Register for access to the Cully Report Generator Platform</p>
-            </div>
-            
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            
-            <form method="POST" class="auth-form">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
-                
-                <div class="form-group">
-                    <label for="full_name">Full Name <span class="required">*</span></label>
-                    <input type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email Address <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" required placeholder="Enter your email address">
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Password <span class="required">*</span></label>
-                    <div class="password-wrapper">
-                        <input type="password" id="password" name="password" required placeholder="Create a secure password">
-                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="requested_role">Requested Role <span class="required">*</span></label>
-                    <select id="requested_role" name="requested_role" required>
-                        <option value="">Select your role</option>
-                        <option value="Engineer">Engineer</option>
-                        <option value="AM">Automation Manager</option>
-                        <option value="PM">Project Manager</option>
-                    </select>
-                </div>
-                
-                <button type="submit" class="btn-primary">
-                    <i class="fa fa-user-plus"></i> Register
-                </button>
-            </form>
-            
-            <div class="auth-links">
-                <p>Already have an account? <a href="{{ url_for('auth.login') }}">Log In</a></p>
-                <p><a href="{{ url_for('auth.welcome') }}">← Back to Welcome</a></p>
-            </div>
+{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-header">
+            <img src="{{ url_for('static', filename='cully.png') }}" alt="Cully Report Generator Logo">
+            <h1>Create Account</h1>
+            <p class="subtitle">Register for access to the Cully Report Generator Platform</p>
         </div>
-        
-        <!-- Developer Credit Footer -->
-        <footer class="developer-credit" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;">
-            <div style="text-align: center; padding: 16px; background: var(--cully-white); border-top: 1px solid var(--cully-light-gray);">
-                <p style="color: var(--cully-gray); font-size: 0.85rem; margin: 0;">
-                    <i class="fas fa-code"></i> Developed by <strong style="color: var(--cully-navy);">Revanth Meda</strong> for <strong style="color: var(--cully-dark);">CULLY LTD</strong>
-                </p>
+
+        <form method="POST" class="auth-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <div class="form-group">
+                <label for="full_name">Full Name <span class="required">*</span></label>
+                <input type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
             </div>
-        </footer>
+
+            <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email address">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" required placeholder="Create a secure password">
+                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility()" aria-label="Show password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="requested_role">Requested Role <span class="required">*</span></label>
+                <select id="requested_role" name="requested_role" required>
+                    <option value="">Select your role</option>
+                    <option value="Engineer">Engineer</option>
+                    <option value="AM">Automation Manager</option>
+                    <option value="PM">Project Manager</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                <i class="fa fa-user-plus"></i>
+                <span>Register</span>
+            </button>
+        </form>
+
+        <div class="auth-links">
+            <p>Already have an account? <a href="{{ url_for('auth.login') }}">Log In</a></p>
+            <p><a href="{{ url_for('auth.welcome') }}">? Back to Welcome</a></p>
+        </div>
     </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
     <script>
-        // Password visibility toggle
         function togglePasswordVisibility() {
             const passwordField = document.getElementById('password');
             const toggleIcon = document.querySelector('.password-toggle i');
-            
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
+
+            const showing = passwordField.type === 'text';
+            passwordField.type = showing ? 'password' : 'text';
+            toggleIcon.classList.toggle('fa-eye', showing);
+            toggleIcon.classList.toggle('fa-eye-slash', !showing);
         }
-        
-        // Auto-focus full name field
+
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('full_name').focus();
+            const fullName = document.getElementById('full_name');
+            if (fullName) {
+                fullName.focus();
+            }
         });
     </script>
-</body>
-</html>
+{% endblock %}
