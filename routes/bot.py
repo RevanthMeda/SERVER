@@ -4,7 +4,7 @@ from flask_login import login_required
 from services.bot_assistant import (
     start_conversation,
     process_user_message,
-    ingest_excel,
+    ingest_upload,
     resolve_report_download_url,
     BotConversationState,
 )
@@ -51,7 +51,7 @@ def bot_upload():
     last_payload = None
 
     for storage in files:
-        result = ingest_excel(storage)
+        result = ingest_upload(storage)
         last_payload = result
         if 'message' in result:
             messages.append(result['message'])

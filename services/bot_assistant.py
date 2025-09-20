@@ -1,9 +1,9 @@
 import io
 import re
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
-from flask import session
+from flask import current_app, session
 
 try:
     from openpyxl import load_workbook
@@ -197,6 +197,7 @@ class BotConversationState:
         self.position = 0
         self.answers: Dict[str, str] = {}
         self.extracted: Dict[str, str] = {}
+        self.ingested_files: Dict[str, Dict[str, Any]] = {}
 
     @classmethod
     def load(cls) -> "BotConversationState":
@@ -207,6 +208,7 @@ class BotConversationState:
         state.position = raw.get("position", 0)
         state.answers = raw.get("answers", {})
         state.extracted = raw.get("extracted", {})
+        state.ingested_files = raw.get("ingested_files", {})
         return state
 
     def save(self) -> None:
@@ -214,6 +216,7 @@ class BotConversationState:
             "position": self.position,
             "answers": self.answers,
             "extracted": self.extracted,
+            "ingested_files": self.ingested_files,
         }
 
     def reset(self) -> None:
@@ -221,6 +224,7 @@ class BotConversationState:
         self.position = 0
         self.answers = {}
         self.extracted = {}
+        self.ingested_files = {}
 
     def sync_to_next_question(self) -> None:
         """Advance pointer to the next unanswered field."""
@@ -242,7 +246,7 @@ def start_conversation() -> Dict[str, Any]:
     return payload
 
 
-def process_user_message(message: str) -> Dict[str, Any]:
+def process_user_message(message: str, mode: str = "default") -> Dict[str, Any]:
     state = BotConversationState.load()
 
     command_payload = _handle_command(message, state)
@@ -281,6 +285,207 @@ def process_user_message(message: str) -> Dict[str, Any]:
     state.save()
     return payload
 
+
+def ingest_upload(file_storage) -> Dict[str, Any]:
+    """Route uploaded assets to the right processor."""
+    filename = (file_storage.filename or '').lower()
+    extension = os.path.splitext(filename)[1]
+    if extension in ('.xlsx', '.xls', '.xlsm'):
+        return ingest_excel(file_storage)
+    if extension == '.csv':
+        return ingest_csv(file_storage)
+    if extension in IMAGE_EXTENSIONS:
+        return ingest_image(file_storage)
+    return _ingest_unknown_file(file_storage)
+
+
+def ingest_csv(file_storage) -> Dict[str, Any]:
+    state = BotConversationState.load()
+    try:
+        extracted, warnings = _extract_csv_fields(file_storage)
+    except Exception as exc:  # noqa: BLE001 - user feedback preferred
+        payload = _build_question_payload(state)
+        state.save()
+        response: Dict[str, Any] = {
+            "error": f"Failed to read CSV file: {exc}",
+            "collected": payload.get("collected", _merge_results(state)),
+            "completed": payload["completed"],
+            "pending_fields": payload.get("pending_fields", []),
+        }
+        if not payload["completed"]:
+            response["field"] = payload["field"]
+            response["question"] = payload["question"]
+            if "help_text" in payload:
+                response["help_text"] = payload["help_text"]
+        return response
+
+    if extracted:
+        state.extracted.update(extracted)
+
+    message = (
+        f"Processed {len(extracted)} fields from {file_storage.filename}."
+        if extracted
+        else f"No recognised fields found in {file_storage.filename}."
+    )
+
+    payload = _build_question_payload(state)
+    state.save()
+
+    response: Dict[str, Any] = {
+        "message": message,
+        "collected": payload.get("collected", _merge_results(state)),
+        "completed": payload["completed"],
+        "pending_fields": payload.get("pending_fields", []),
+    }
+
+    if not payload["completed"]:
+        response.update({
+            "field": payload["field"],
+            "question": payload["question"],
+        })
+        if "help_text" in payload:
+            response["help_text"] = payload["help_text"]
+
+    if warnings:
+        response["warnings"] = warnings
+
+    return response
+
+
+def ingest_image(file_storage) -> Dict[str, Any]:
+    state = BotConversationState.load()
+    filename = file_storage.filename or 'image'
+    content = file_storage.read()
+    file_storage.stream.seek(0)
+    digest = hashlib.sha256(content).hexdigest()
+
+    duplicate = state.ingested_files.get(digest)
+    if duplicate:
+        payload = _build_question_payload(state)
+        state.save()
+        warning_text = (
+            f"{filename} appears to duplicate {duplicate.get('filename', 'a previous image')}. "
+            "I've skipped it to keep the gallery clean."
+        )
+        payload.setdefault('warnings', []).append(warning_text)
+        payload['message'] = warning_text
+        return payload
+
+    metadata, analysis_warnings = _analyse_image_stream(content, filename)
+    metadata['filename'] = filename
+    state.ingested_files[digest] = metadata
+
+    payload = _build_question_payload(state)
+    state.save()
+
+    human_resolution = (
+        f"{metadata['width']}x{metadata['height']}"
+        if metadata.get('width') and metadata.get('height')
+        else 'unknown resolution'
+    )
+
+    message = (
+        f"Stored {filename} ({human_resolution}). I'll stage it for the SAT photo evidence section."
+    )
+
+    payload.setdefault('messages', []).append(message)
+    payload['message'] = message
+
+    if analysis_warnings:
+        payload.setdefault('warnings', []).extend(analysis_warnings)
+
+    payload.setdefault('insights', {})['media'] = list(state.ingested_files.values())
+
+    return payload
+
+
+def _ingest_unknown_file(file_storage) -> Dict[str, Any]:
+    state = BotConversationState.load()
+    payload = _build_question_payload(state)
+    state.save()
+    filename = file_storage.filename or 'the provided file'
+    extension = os.path.splitext(filename)[1] or 'unknown format'
+    warning_text = (
+        f"I can't automate {filename} ({extension}) yet. Try Excel, CSV, or image evidence."
+    )
+    payload.setdefault('warnings', []).append(warning_text)
+    payload['message'] = warning_text
+    return payload
+
+
+def _extract_csv_fields(file_storage) -> Tuple[Dict[str, str], List[str]]:
+    content = file_storage.read()
+    file_storage.stream.seek(0)
+    if not content:
+        return {}, ["The CSV file is empty."]
+
+    try:
+        text = content.decode('utf-8-sig')
+    except UnicodeDecodeError:
+        text = content.decode('latin-1', errors='ignore')
+
+    sample = text[:2048]
+    try:
+        dialect = csv.Sniffer().sniff(sample)
+    except csv.Error:
+        dialect = csv.excel
+
+    reader = csv.DictReader(io.StringIO(text), dialect=dialect)
+    extracted: Dict[str, str] = {}
+    warnings: List[str] = []
+
+    if not reader.fieldnames:
+        warnings.append('Could not detect a header row in the CSV file.')
+        return extracted, warnings
+
+    for row_idx, row in enumerate(reader, start=2):
+        for header, value in row.items():
+            field_name = _match_field_alias(header)
+            if not field_name or field_name in extracted:
+                continue
+            if not _has_value(value):
+                continue
+            ok, normalized, error = _apply_validation(field_name, value)
+            if not ok:
+                warnings.append(
+                    f"Row {row_idx}: {_field_label(field_name)} skipped - {error}"
+                )
+                continue
+            extracted[field_name] = normalized
+
+    return extracted, warnings
+
+
+def _analyse_image_stream(content: bytes, filename: str) -> Tuple[Dict[str, Any], List[str]]:
+    metadata: Dict[str, Any] = {"size_bytes": len(content)}
+    warnings: List[str] = []
+
+    if metadata["size_bytes"] < 10_240:
+        warnings.append(
+            f"{filename} is very small ({metadata['size_bytes']} bytes); it may not be usable in final reports."
+        )
+
+    if Image is None:
+        warnings.append('Install Pillow to unlock detailed image analysis.')
+        return metadata, warnings
+
+    try:
+        with Image.open(io.BytesIO(content)) as img:
+            width, height = img.size
+            metadata.update({
+                'width': width,
+                'height': height,
+                'format': img.format,
+                'mode': img.mode,
+            })
+            megapixels = (width * height) / 1_000_000
+            metadata['megapixels'] = round(megapixels, 2)
+            if width * height < 640 * 480:
+                warnings.append('The image resolution looks low; consider a higher quality capture.')
+    except Exception as exc:  # noqa: BLE001
+        warnings.append(f'Unable to analyse {filename}: {exc}')
+
+    return metadata, warnings
 
 def ingest_excel(file_storage) -> Dict[str, Any]:
     state = BotConversationState.load()
@@ -555,6 +760,131 @@ def _format_human_list(items: List[str]) -> str:
     return ', '.join(items[:-1]) + f", and {items[-1]}"
 
 
+
+def _handle_research_request(query: str, state: BotConversationState) -> Dict[str, Any]:
+    state.sync_to_next_question()
+    payload = _build_question_payload(state)
+    payload.setdefault("messages", [])
+    context = _merge_results(state)
+    insights, warnings = _perform_external_research(query, context)
+
+    normalized_query = _collapse_whitespace(query)
+    if normalized_query:
+        payload["messages"].append(
+            f'Analysed live sources for "{normalized_query}".'
+        )
+    else:
+        warnings.append('Provide a topic or question for me to research.')
+
+    if insights:
+        for insight in insights:
+            title = insight.get('title') or 'Insight'
+            summary = insight.get('summary') or ''
+            line = f"{title}: {summary}".strip()
+            if insight.get('url'):
+                line += f" ({insight['url']})"
+            payload["messages"].append(line)
+        payload['research'] = insights
+    elif not warnings:
+        payload["messages"].append(
+            "No external intelligence surfaced yet, but I'll keep leveraging internal context."
+        )
+
+    if warnings:
+        payload.setdefault('warnings', []).extend(warnings)
+
+    return payload
+
+
+def _perform_external_research(query: str, context: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], List[str]]:
+    warnings: List[str] = []
+    clean_query = _collapse_whitespace(query)
+    if not clean_query:
+        return [], ['I need a topic to research.']
+
+    app = current_app._get_current_object()
+    if not app.config.get('ASSISTANT_ALLOW_EXTERNAL', True):
+        warnings.append('External research is disabled for this environment.')
+        return [], warnings
+
+    search_terms = [clean_query]
+    for key in ("PROJECT_REFERENCE", "CLIENT_NAME", "PURPOSE"):
+        value = context.get(key)
+        if value:
+            search_terms.append(str(value))
+    search_query = ' '.join(search_terms)
+
+    params = {
+        'q': search_query,
+        'format': 'json',
+        'no_html': 1,
+        'no_redirect': 1,
+        'skip_disambig': 1,
+    }
+
+    try:
+        timeout = app.config.get('ASSISTANT_RESEARCH_TIMEOUT', 8)
+        response = requests.get('https://api.duckduckgo.com/', params=params, timeout=timeout)
+        response.raise_for_status()
+        data = response.json()
+    except requests.RequestException as exc:  # pragma: no cover - best effort outreach
+        warnings.append(f'External research failed: {exc}')
+        return [], warnings
+
+    insights: List[Dict[str, Any]] = []
+
+    abstract = (data.get('AbstractText') or '').strip()
+    if abstract:
+        insights.append({
+            'title': data.get('Heading') or 'Instant insight',
+            'summary': abstract,
+            'url': data.get('AbstractURL'),
+        })
+
+    for topic in data.get('RelatedTopics', []):
+        insights.extend(_parse_duckduckgo_topic(topic))
+        if len(insights) >= 5:
+            break
+
+    filtered: List[Dict[str, Any]] = []
+    seen_titles: Set[str] = set()
+    for insight in insights:
+        title = insight.get('title') or 'Insight'
+        if title in seen_titles:
+            continue
+        summary = insight.get('summary') or ''
+        if len(summary) > 240:
+            summary = summary[:237].rstrip() + '...'
+        filtered.append({
+            'title': title,
+            'summary': summary,
+            'url': insight.get('url'),
+        })
+        seen_titles.add(title)
+        if len(filtered) >= 3:
+            break
+
+    if not filtered:
+        warnings.append('No external intelligence returned yet for that request.')
+
+    return filtered, warnings
+
+
+def _parse_duckduckgo_topic(topic: Any) -> List[Dict[str, Any]]:
+    results: List[Dict[str, Any]] = []
+    if not isinstance(topic, dict):
+        return results
+    text = topic.get('Text')
+    if text:
+        title = text.split(' - ')[0]
+        results.append({
+            'title': title,
+            'summary': text,
+            'url': topic.get('FirstURL'),
+        })
+    for nested in topic.get('Topics', []) or []:
+        results.extend(_parse_duckduckgo_topic(nested))
+    return results
 
 def _handle_command(message: str, state: BotConversationState) -> Optional[Dict[str, Any]]:
     submission_id = _parse_document_request(message)

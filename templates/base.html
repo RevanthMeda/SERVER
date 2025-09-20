@@ -9,6 +9,7 @@
     <meta http-equiv="Expires" content="0">
     <title>{% block title %}Cully Report Generator{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome-cully.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot-assistant.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <style>
@@ -235,6 +236,8 @@
     </script>
     {% endif %}
     
+    {% include 'partials/chatbot_widget.html' %}
+    <script src="{{ url_for('static', filename='js/chatbot-assistant.js') }}" defer></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

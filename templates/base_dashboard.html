@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
     <title>{% block title %}Dashboard{% endblock %} - Cully Report Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot-assistant.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -162,6 +163,8 @@
         </div>
     </div>
 
+    {% include 'partials/chatbot_widget.html' %}
+    <script src="{{ url_for('static', filename='js/chatbot-assistant.js') }}" defer></script>
     <!-- CSRF Token Manager - Prevents token expiry errors -->
     <script src="{{ url_for('static', filename='js/csrf_manager.js') }}"></script>
     {% block extra_js %}{% endblock %}
