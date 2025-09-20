@@ -1,289 +1,359 @@
 PS E:\report generator\SERVER> python app.py
 Initializing SAT Report Generator...
-[2025-09-19 12:44:09,221] INFO in app: Hierarchical configuration system initialized
+[2025-09-19 13:12:23,224] INFO in app: Hierarchical configuration system initialized
 Generated new master key for local secrets. Store this securely!
-[2025-09-19 12:44:09,329] INFO in app: Secrets management system initialized
-[2025-09-19 12:44:09,568] DEBUG in models: Database connection successful
-[2025-09-19 12:44:09,583] DEBUG in models: Database tables already exist: 31 tables found
-[2025-09-19 12:44:09,646] INFO in models: Default system settings initialized
-[2025-09-19 12:44:09,646] INFO in models: Database initialized successfully
-[2025-09-19 12:44:10,196] DEBUG in app: Skipping performance initialization in non-production
+[2025-09-19 13:12:23,322] INFO in app: Secrets management system initialized
+[2025-09-19 13:12:23,550] DEBUG in models: Database connection successful
+[2025-09-19 13:12:23,562] DEBUG in models: Database tables already exist: 31 tables found
+[2025-09-19 13:12:23,622] INFO in models: Default system settings initialized
+[2025-09-19 13:12:23,622] INFO in models: Database initialized successfully
+[2025-09-19 13:12:24,180] DEBUG in app: Skipping performance initialization in non-production
 DEBUG:app:Skipping performance initialization in non-production
 INFO:cache.redis_client:Cache system initialized successfully
-[2025-09-19 12:44:14,390] DEBUG in app: Using filesystem sessions (Redis not available)
+[2025-09-19 13:12:28,370] DEBUG in app: Using filesystem sessions (Redis not available)
 DEBUG:app:Using filesystem sessions (Redis not available)
-[2025-09-19 12:44:14,394] DEBUG in app: Cache system initialized successfully
+[2025-09-19 13:12:28,374] DEBUG in app: Cache system initialized successfully
 DEBUG:app:Cache system initialized successfully
-[2025-09-19 12:44:14,398] DEBUG in app: Query caching disabled (Redis not available)
+[2025-09-19 13:12:28,378] DEBUG in app: Query caching disabled (Redis not available)
 DEBUG:app:Query caching disabled (Redis not available)
 INFO:cache.cdn:CDN disabled or not configured
 INFO:cache.flask_cdn:Flask CDN extension initialized
-[2025-09-19 12:44:15,098] DEBUG in app: CDN integration initialized
+[2025-09-19 13:12:29,001] DEBUG in app: CDN integration initialized
 DEBUG:app:CDN integration initialized
-[2025-09-19 12:44:15,099] DEBUG in app: Background task processing disabled (Redis not available)
+[2025-09-19 13:12:29,002] DEBUG in app: Background task processing disabled (Redis not available)
 DEBUG:app:Background task processing disabled (Redis not available)
-[2025-09-19 12:44:15,100] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
+[2025-09-19 13:12:29,003] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
 INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
 C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
   import pkg_resources
-[2025-09-19 12:44:16,599] INFO in app: CDN management blueprint registered
+[2025-09-19 13:12:30,367] INFO in app: CDN management blueprint registered
 INFO:app:CDN management blueprint registered
+[2025-09-19 13:12:30,370] DEBUG in dashboard_stats: Dashboard stats refresher thread started
 Starting SAT Report Generator...
-[2025-09-19 12:44:16,603] DEBUG in dashboard_stats: Dashboard stats refresher thread started
-DEBUG:app:Dashboard stats refresher thread started
 Debug Mode: True
 Running on http://0.0.0.0:5000
 Testing with HTTP - SSL disabled temporarily
+DEBUG:app:Dashboard stats refresher thread started
 Required directories created successfully
 Health check endpoint available at /health
 HTTPS enabled with password-protected .pfx SSL certificate
  * Serving Flask app 'app'
  * Debug mode: off
-[2025-09-19 12:44:16,657] ERROR in dashboard_stats: Dashboard stats refresh cycle failed
+[2025-09-19 13:12:42,737] INFO in app: Found 4 total users
+INFO:app:Found 4 total users
+[2025-09-19 13:12:42,740] INFO in app: Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+INFO:app:Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+[2025-09-19 13:12:51,955] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
+INFO:app:Fetching dashboard for user: rmeda@cully.ie
+[2025-09-19 13:12:51,961] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
+INFO:app:Found 6 reports for user rmeda@cully.ie
+[2025-09-19 13:12:51,963] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+INFO:app:Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+[2025-09-19 13:12:51,964] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+INFO:app:Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+[2025-09-19 13:12:51,965] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+INFO:app:Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+[2025-09-19 13:12:51,966] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+INFO:app:Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+[2025-09-19 13:12:51,967] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+INFO:app:Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+[2025-09-19 13:12:51,967] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+INFO:app:Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+[2025-09-19 13:12:51,968] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+INFO:app:Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+[2025-09-19 13:13:05,733] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
+INFO:app:Fetching dashboard for user: rmeda@cully.ie
+[2025-09-19 13:13:05,740] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
+INFO:app:Found 6 reports for user rmeda@cully.ie
+[2025-09-19 13:13:05,741] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+INFO:app:Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+[2025-09-19 13:13:05,742] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+INFO:app:Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+[2025-09-19 13:13:05,742] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+INFO:app:Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+[2025-09-19 13:13:05,744] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+INFO:app:Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+[2025-09-19 13:13:05,745] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+INFO:app:Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+[2025-09-19 13:13:05,746] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+INFO:app:Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+[2025-09-19 13:13:05,747] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+INFO:app:Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+[2025-09-19 13:13:29,833] INFO in app: Found 4 total users
+INFO:app:Found 4 total users
+[2025-09-19 13:13:29,837] INFO in app: Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+INFO:app:Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+
+Shutting down server...
+PS E:\report generator\SERVER> python app.py
+Initializing SAT Report Generator...
+[2025-09-19 16:51:25,769] INFO in app: Hierarchical configuration system initialized
+Generated new master key for local secrets. Store this securely!
+[2025-09-19 16:51:25,923] INFO in app: Secrets management system initialized
+[2025-09-19 16:51:26,280] DEBUG in models: Database connection successful
+[2025-09-19 16:51:26,297] DEBUG in models: Database tables already exist: 31 tables found
+[2025-09-19 16:51:26,364] INFO in models: Default system settings initialized
+[2025-09-19 16:51:26,364] INFO in models: Database initialized successfully
+[2025-09-19 16:51:27,794] DEBUG in app: Skipping performance initialization in non-production
+DEBUG:app:Skipping performance initialization in non-production
+INFO:cache.redis_client:Cache system initialized successfully
+[2025-09-19 16:51:32,171] DEBUG in app: Using filesystem sessions (Redis not available)
+DEBUG:app:Using filesystem sessions (Redis not available)
+[2025-09-19 16:51:32,179] DEBUG in app: Cache system initialized successfully
+DEBUG:app:Cache system initialized successfully
+[2025-09-19 16:51:32,187] DEBUG in app: Query caching disabled (Redis not available)
+DEBUG:app:Query caching disabled (Redis not available)
+INFO:cache.cdn:CDN disabled or not configured
+INFO:cache.flask_cdn:Flask CDN extension initialized
+[2025-09-19 16:51:33,152] DEBUG in app: CDN integration initialized
+DEBUG:app:CDN integration initialized
+[2025-09-19 16:51:33,153] DEBUG in app: Background task processing disabled (Redis not available)
+DEBUG:app:Background task processing disabled (Redis not available)
+[2025-09-19 16:51:33,154] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
+INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-09-19 16:51:35,610] INFO in app: CDN management blueprint registered
+INFO:app:CDN management blueprint registered
+[2025-09-19 16:51:35,613] DEBUG in dashboard_stats: Dashboard stats refresher thread started
+Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+Testing with HTTP - SSL disabled temporarily
+DEBUG:app:Dashboard stats refresher thread started
+Required directories created successfully
+Health check endpoint available at /health
+HTTPS enabled with password-protected .pfx SSL certificate
+ * Serving Flask app 'app'
+ * Debug mode: off
+[2025-09-19 16:55:30,073] INFO in models: Successfully updated Cully statistics: {'instruments': '8211', 'engineers': '46', 'experience': '20', 'plants': '250'}
+INFO:app:Successfully updated Cully statistics: {'instruments': '8211', 'engineers': '46', 'experience': '20', 'plants': '250'}
+[2025-09-19 16:55:30,114] WARNING in middleware_optimized: Slow request: GET /auth/welcome took 1.853s
+WARNING:app:Slow request: GET /auth/welcome took 1.853s
+[2025-09-19 16:55:36,889] INFO in auth: User rmeda@cully.ie logged in with session 02f02cada18cf80035c8356a1c2a57f18fd6c929c611568f68817b4130fd301d
+INFO:app:User rmeda@cully.ie logged in with session 02f02cada18cf80035c8356a1c2a57f18fd6c929c611568f68817b4130fd301d
+[2025-09-19 16:55:37,557] INFO in dashboard: Fetching dashboard for user: rmeda@cully.ie
+INFO:app:Fetching dashboard for user: rmeda@cully.ie
+[2025-09-19 16:55:37,576] INFO in dashboard: Found 6 reports for user rmeda@cully.ie
+INFO:app:Found 6 reports for user rmeda@cully.ie
+[2025-09-19 16:55:37,577] INFO in dashboard: Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+INFO:app:Report 6803da01-4d12-4c62-ae60-296506084a25 has status: DRAFT
+[2025-09-19 16:55:37,578] INFO in dashboard: Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+INFO:app:Report de26128d-eeb6-424d-a3f9-9065dcaaa304 has status: DRAFT
+[2025-09-19 16:55:37,579] INFO in dashboard: Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+INFO:app:Report 19890bcf-9093-4e33-9079-465e3888d2d8 has status: DRAFT
+[2025-09-19 16:55:37,580] INFO in dashboard: Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+INFO:app:Report 83660e8e-d123-43eb-8fff-d91bb61f0607 has status: DRAFT
+[2025-09-19 16:55:37,581] INFO in dashboard: Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+INFO:app:Report c572f877-bfc2-4bfd-a320-33cc0e7b9bce has status: DRAFT
+[2025-09-19 16:55:37,582] INFO in dashboard: Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+INFO:app:Report e47e006a-8f09-4774-aad0-62e835301f4c has status: DRAFT
+[2025-09-19 16:55:37,583] INFO in dashboard: Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+INFO:app:Calculated stats: {'draft': 6, 'pending': 0, 'rejected': 0, 'approved': 0}
+[2025-09-19 16:55:46,956] INFO in app: Found 4 total users
+INFO:app:Found 4 total users
+[2025-09-19 16:55:46,960] INFO in app: Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+INFO:app:Users by role: Automation Manager=1, PM=1, Admin=1, Engineer=1
+
+Shutting down server...
+PS E:\report generator\SERVER> python app.py
+Initializing SAT Report Generator...
+[2025-09-20 06:06:05,395] INFO in app: Hierarchical configuration system initialized
+Generated new master key for local secrets. Store this securely!
+[2025-09-20 06:06:05,539] INFO in app: Secrets management system initialized
+[2025-09-20 06:06:05,940] DEBUG in models: Database connection successful
+[2025-09-20 06:06:05,952] DEBUG in models: Database tables already exist: 31 tables found
+[2025-09-20 06:06:06,012] INFO in models: Default system settings initialized
+[2025-09-20 06:06:06,012] INFO in models: Database initialized successfully
+[2025-09-20 06:06:07,734] DEBUG in app: Skipping performance initialization in non-production
+DEBUG:app:Skipping performance initialization in non-production
+INFO:cache.redis_client:Cache system initialized successfully
+[2025-09-20 06:06:12,211] DEBUG in app: Using filesystem sessions (Redis not available)
+DEBUG:app:Using filesystem sessions (Redis not available)
+[2025-09-20 06:06:12,222] DEBUG in app: Cache system initialized successfully
+DEBUG:app:Cache system initialized successfully
+[2025-09-20 06:06:12,233] DEBUG in app: Query caching disabled (Redis not available)
+DEBUG:app:Query caching disabled (Redis not available)
+INFO:cache.cdn:CDN disabled or not configured
+INFO:cache.flask_cdn:Flask CDN extension initialized
+[2025-09-20 06:06:13,469] DEBUG in app: CDN integration initialized
+DEBUG:app:CDN integration initialized
+[2025-09-20 06:06:13,470] DEBUG in app: Background task processing disabled (Redis not available)
+DEBUG:app:Background task processing disabled (Redis not available)
+[2025-09-20 06:06:13,471] INFO in app: Database, auth, migrations, performance, backup, and cache systems initialized
+INFO:app:Database, auth, migrations, performance, backup, and cache systems initialized
+C:\Program Files\Python312\Lib\site-packages\docxcompose\properties.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-09-20 06:06:16,334] INFO in app: CDN management blueprint registered
+INFO:app:CDN management blueprint registered
+[2025-09-20 06:06:16,337] DEBUG in dashboard_stats: Dashboard stats refresher thread started
+Starting SAT Report Generator...
+Debug Mode: True
+Running on http://0.0.0.0:5000
+Testing with HTTP - SSL disabled temporarily
+DEBUG:app:Dashboard stats refresher thread started
+Required directories created successfully
+Health check endpoint available at /health
+HTTPS enabled with password-protected .pfx SSL certificate
+ * Serving Flask app 'app'
+ * Debug mode: off
+[2025-09-20 06:06:24,645] INFO in auth: User rmeda@cully.ie logged in with session 3d5ab0cf80f6ae59e1d31f2800a702528bd53bd920df0e69a1d04b43a61a0ab1
+INFO:app:User rmeda@cully.ie logged in with session 3d5ab0cf80f6ae59e1d31f2800a702528bd53bd920df0e69a1d04b43a61a0ab1
+[2025-09-20 06:06:24,695] ERROR in app: Exception on /dashboard/engineer [GET]
 Traceback (most recent call last):
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
-    cursor.execute(statement, parameters)
-psycopg2.errors.StringDataRightTruncation: value too long for type character varying(50)
-
-
-The above exception was the direct cause of the following exception:
-
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1825, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1821, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2312, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\app.py", line 266, in add_csrf_token
+    user_authenticated = current_user.is_authenticated
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 316, in __get__
+    obj = instance._get_current_object()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 520, in _get_current_object
+    return get_name(local())  # type: ignore
+                    ^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 25, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+                                      ^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 370, in _get_user
+    current_app.login_manager._load_user()
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\login_manager.py", line 364, in _load_user
+    user = self._user_callback(user_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 14, in load_user
+    if not session_manager.is_session_valid():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionManager' object has no attribute 'is_session_valid'. Did you mean: 'is_session_revoked'?
+ERROR:app:Exception on /dashboard/engineer [GET]
 Traceback (most recent call last):
-  File "E:\report generator\SERVER\services\dashboard_stats.py", line 172, in refresh_all_dashboard_stats
-    _store_dashboard_stats(role, user.email, stats)
-  File "E:\report generator\SERVER\services\dashboard_stats.py", line 58, in _store_dashboard_stats
-    SystemSettings.set_setting(key, json.dumps(payload))
-  File "E:\report generator\SERVER\models.py", line 67, in set_setting
-    db.session.commit()
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\scoping.py", line 599, in commit
-    return self._proxied.commit()
-           ^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2032, in commit
-    trans.commit(_to_root=True)
-  File "<string>", line 2, in commit
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
-    ret_value = fn(self, *arg, **kw)
-                ^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 1313, in commit
-    self._prepare_impl()
-  File "<string>", line 2, in _prepare_impl
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
-    ret_value = fn(self, *arg, **kw)
-                ^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 1288, in _prepare_impl
-    self.session.flush()
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 4345, in flush
-    self._flush(objects)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 4480, in _flush
-    with util.safe_reraise():
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 224, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 4441, in _flush
-    flush_context.execute()
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
-    rec.execute(self)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
-    util.preloaded.orm_persistence.save_obj(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\persistence.py", line 93, in save_obj
-    _emit_insert_statements(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\persistence.py", line 1233, in _emit_insert_statements
-    result = connection.execute(
-             ^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
-    return meth(
-           ^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
-    ret = self._execute_context(
-          ^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
-    return self._exec_single_context(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
-    self._handle_dbapi_exception(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.DataError: (psycopg2.errors.StringDataRightTruncation) value too long for type character varying(50)
-
-[SQL: INSERT INTO system_settings (key, value, updated_at) VALUES (%(key)s, %(value)s, %(updated_at)s) RETURNING system_settings.id]
-[parameters: {'key': 'dashboard_stats:automation_manager:jchacko@cully.ie', 'value': '{"computed_at": "2025-09-19T12:44:16.631352", "data": {"draft": 0, "pending": 0, "rejected": 0, "approved": 0, "requests_received": 0, "requests_approved": 0, "total_reports": 0}}', 'updated_at': datetime.datetime(2025, 9, 19, 12, 44, 16, 634372)}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1825, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1821, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2312, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\app.py", line 266, in add_csrf_token
+    user_authenticated = current_user.is_authenticated
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 316, in __get__
+    obj = instance._get_current_object()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 520, in _get_current_object
+    return get_name(local())  # type: ignore
+                    ^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 25, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+                                      ^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 370, in _get_user
+    current_app.login_manager._load_user()
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\login_manager.py", line 364, in _load_user
+    user = self._user_callback(user_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 14, in load_user
+    if not session_manager.is_session_valid():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionManager' object has no attribute 'is_session_valid'. Did you mean: 'is_session_revoked'?
+ERROR:werkzeug:Error on request:
+Traceback (most recent call last):
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2528, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1825, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1821, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2312, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\app.py", line 266, in add_csrf_token
+    user_authenticated = current_user.is_authenticated
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 316, in __get__
+    obj = instance._get_current_object()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\local.py", line 520, in _get_current_object
+    return get_name(local())  # type: ignore
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 25, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+                                      ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 370, in _get_user
+    current_app.login_manager._load_user()
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\login_manager.py", line 364, in _load_user
+    user = self._user_callback(user_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 14, in load_user
+    if not session_manager.is_session_valid():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionManager' object has no attribute 'is_session_valid'. Did you mean: 'is_session_revoked'?
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "E:\report generator\SERVER\services\dashboard_stats.py", line 196, in _refresh_loop
-    refresh_all_dashboard_stats()
-  File "E:\report generator\SERVER\services\dashboard_stats.py", line 174, in refresh_all_dashboard_stats
-    _log_error(f"Failed to refresh dashboard stats for {user.email}", exc)
-                                                        ^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\attributes.py", line 569, in __get__
-    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1096, in get
-    value = self._fire_loader_callables(state, key, passive)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1126, in _fire_loader_callables
-    return state._load_expired(state, passive)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\state.py", line 803, in _load_expired
-    self.manager.expired_attribute_loader(self, toload, passive)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\loading.py", line 1674, in load_scalar_attributes
-    result = load_on_ident(
-             ^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\loading.py", line 510, in load_on_ident
-    return load_on_pk_identity(
-           ^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\loading.py", line 695, in load_on_pk_identity
-    session.execute(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
-    return self._execute_internal(
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2241, in _execute_internal
-    conn = self._connection_for_bind(bind)
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\serving.py", line 333, in run_wsgi
+    execute(self.server.app)
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\werkzeug\serving.py", line 320, in execute
+    application_iter = app(environ, start_response)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2551, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 2531, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask_restx\api.py", line 672, in error_router
+    return original_handler(e)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1727, in handle_exception
+    server_error = self.ensure_sync(handler)(server_error)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\app.py", line 502, in internal_error
+    return render_template('404.html'), 500
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 147, in render_template
+    return _render(app, template, context)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2110, in _connection_for_bind
-    return trans._connection_for_bind(engine, execution_options)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<string>", line 2, in _connection_for_bind
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 101, in _go
-    self._raise_for_prerequisite_state(fn.__name__, current_state)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 973, in _raise_for_prerequisite_state
-    raise sa_exc.PendingRollbackError(
-sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (psycopg2.errors.StringDataRightTruncation) value too long for type character varying(50)
-
-[SQL: INSERT INTO system_settings (key, value, updated_at) VALUES (%(key)s, %(value)s, %(updated_at)s) RETURNING system_settings.id]
-[parameters: {'key': 'dashboard_stats:automation_manager:jchacko@cully.ie', 'value': '{"computed_at": "2025-09-19T12:44:16.631352", "data": {"draft": 0, "pending": 0, "rejected": 0, "approved": 0, "requests_received": 0, "requests_approved": 0, "total_reports": 0}}', 'updated_at': datetime.datetime(2025, 9, 19, 12, 44, 16, 634372)}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h) (Background on this error at: https://sqlalche.me/e/20/7s2a)
-ERROR:app:Dashboard stats refresh cycle failed
-Traceback (most recent call last):
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
-    cursor.execute(statement, parameters)
-psycopg2.errors.StringDataRightTruncation: value too long for type character varying(50)
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "E:\report generator\SERVER\services\dashboard_stats.py", line 172, in refresh_all_dashboard_stats
-    _store_dashboard_stats(role, user.email, stats)
-  File "E:\report generator\SERVER\services\dashboard_stats.py", line 58, in _store_dashboard_stats
-    SystemSettings.set_setting(key, json.dumps(payload))
-  File "E:\report generator\SERVER\models.py", line 67, in set_setting
-    db.session.commit()
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\scoping.py", line 599, in commit
-    return self._proxied.commit()
-           ^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2032, in commit
-    trans.commit(_to_root=True)
-  File "<string>", line 2, in commit
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
-    ret_value = fn(self, *arg, **kw)
-                ^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 1313, in commit
-    self._prepare_impl()
-  File "<string>", line 2, in _prepare_impl
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
-    ret_value = fn(self, *arg, **kw)
-                ^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 1288, in _prepare_impl
-    self.session.flush()
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 4345, in flush
-    self._flush(objects)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 4480, in _flush
-    with util.safe_reraise():
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 224, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 4441, in _flush
-    flush_context.execute()
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
-    rec.execute(self)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
-    util.preloaded.orm_persistence.save_obj(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\persistence.py", line 93, in save_obj
-    _emit_insert_statements(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\persistence.py", line 1233, in _emit_insert_statements
-    result = connection.execute(
-             ^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
-    return meth(
-           ^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
-    ret = self._execute_context(
-          ^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
-    return self._exec_single_context(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
-    self._handle_dbapi_exception(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.DataError: (psycopg2.errors.StringDataRightTruncation) value too long for type character varying(50)
-
-[SQL: INSERT INTO system_settings (key, value, updated_at) VALUES (%(key)s, %(value)s, %(updated_at)s) RETURNING system_settings.id]
-[parameters: {'key': 'dashboard_stats:automation_manager:jchacko@cully.ie', 'value': '{"computed_at": "2025-09-19T12:44:16.631352", "data": {"draft": 0, "pending": 0, "rejected": 0, "approved": 0, "requests_received": 0, "requests_approved": 0, "total_reports": 0}}', 'updated_at': datetime.datetime(2025, 9, 19, 12, 44, 16, 634372)}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "E:\report generator\SERVER\services\dashboard_stats.py", line 196, in _refresh_loop
-    refresh_all_dashboard_stats()
-  File "E:\report generator\SERVER\services\dashboard_stats.py", line 174, in refresh_all_dashboard_stats
-    _log_error(f"Failed to refresh dashboard stats for {user.email}", exc)
-                                                        ^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\attributes.py", line 569, in __get__
-    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1096, in get
-    value = self._fire_loader_callables(state, key, passive)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1126, in _fire_loader_callables
-    return state._load_expired(state, passive)
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 128, in _render
+    app.update_template_context(context)
+  File "C:\Users\localadmin\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 997, in update_template_context
+    context.update(func())
+                   ^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 405, in _user_context_processor
+    return dict(current_user=_get_user())
+                             ^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\utils.py", line 370, in _get_user
+    current_app.login_manager._load_user()
+  File "C:\Program Files\Python312\Lib\site-packages\flask_login\login_manager.py", line 364, in _load_user
+    user = self._user_callback(user_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\report generator\SERVER\auth.py", line 14, in load_user
+    if not session_manager.is_session_valid():
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\state.py", line 803, in _load_expired
-    self.manager.expired_attribute_loader(self, toload, passive)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\loading.py", line 1674, in load_scalar_attributes
-    result = load_on_ident(
-             ^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\loading.py", line 510, in load_on_ident
-    return load_on_pk_identity(
-           ^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\loading.py", line 695, in load_on_pk_identity
-    session.execute(
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
-    return self._execute_internal(
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2241, in _execute_internal
-    conn = self._connection_for_bind(bind)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 2110, in _connection_for_bind
-    return trans._connection_for_bind(engine, execution_options)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<string>", line 2, in _connection_for_bind
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 101, in _go
-    self._raise_for_prerequisite_state(fn.__name__, current_state)
-  File "C:\Program Files\Python312\Lib\site-packages\sqlalchemy\orm\session.py", line 973, in _raise_for_prerequisite_state
-    raise sa_exc.PendingRollbackError(
-sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (psycopg2.errors.StringDataRightTruncation) value too long for type character varying(50)
-
-[SQL: INSERT INTO system_settings (key, value, updated_at) VALUES (%(key)s, %(value)s, %(updated_at)s) RETURNING system_settings.id]
-[parameters: {'key': 'dashboard_stats:automation_manager:jchacko@cully.ie', 'value': '{"computed_at": "2025-09-19T12:44:16.631352", "data": {"draft": 0, "pending": 0, "rejected": 0, "approved": 0, "requests_received": 0, "requests_approved": 0, "total_reports": 0}}', 'updated_at': datetime.datetime(2025, 9, 19, 12, 44, 16, 634372)}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+AttributeError: 'SessionManager' object has no attribute 'is_session_valid'. Did you mean: 'is_session_revoked'?
