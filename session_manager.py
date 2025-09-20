@@ -103,42 +103,41 @@ class SessionManager:
         with self.lock:
             return session_id in self.revoked_sessions
     
+    def is_session_valid(self, session_id=None):
+        """Return True when the session exists, is active, and not revoked."""
+        if not session_id:
+            session_id = session.get('session_id')
 
-def is_session_valid(self, session_id=None):
-    """Check if a session is valid and not revoked"""
-    if not session_id:
-        session_id = session.get('session_id')
-
-    if not session_id:
-        return False
-
-    now = time.time()
-
-    with self.lock:
-        if session_id in self.revoked_sessions:
+        if not session_id:
             return False
 
-        created_at = float(session.get('created_at', 0) or 0)
-        if created_at and now - created_at > self.session_timeout:
-            self.revoked_sessions.add(session_id)
-            self._save_revoked_sessions()
-            return False
+        now = time.time()
+
+        with self.lock:
+            if session_id in self.revoked_sessions:
+                return False
+
+            created_at = float(session.get('created_at', 0) or 0)
+            if created_at and now - created_at > self.session_timeout:
+                self.revoked_sessions.add(session_id)
+                self._save_revoked_sessions()
+                return False
+
+            last_activity = float(session.get('last_activity', 0) or 0)
+            if last_activity and now - last_activity > self.session_timeout:
+                self.revoked_sessions.add(session_id)
+                self._save_revoked_sessions()
+                return False
 
         last_activity = float(session.get('last_activity', 0) or 0)
-        if last_activity and now - last_activity > self.session_timeout:
-            self.revoked_sessions.add(session_id)
-            self._save_revoked_sessions()
-            return False
+        if not last_activity:
+            session['last_activity'] = now
+            session.modified = True
+        elif now - last_activity >= self.activity_update_threshold:
+            session['last_activity'] = now
+            session.modified = True
 
-    last_activity = float(session.get('last_activity', 0) or 0)
-    if not last_activity:
-        session['last_activity'] = now
-        session.modified = True
-    elif now - last_activity >= self.activity_update_threshold:
-        session['last_activity'] = now
-        session.modified = True
-
-    return True
+        return True
 
     def cleanup_old_sessions(self):
         """Remove old revoked sessions from tracking (housekeeping)"""
