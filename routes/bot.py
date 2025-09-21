@@ -1,12 +1,20 @@
 from flask import Blueprint, jsonify, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 
+# Import both old and new systems for backward compatibility
 from services.bot_assistant import (
-    start_conversation,
-    process_user_message,
     ingest_upload,
     resolve_report_download_url,
     BotConversationState,
+)
+
+# Import new AI agent system
+from services.ai_agent import (
+    start_ai_conversation,
+    process_ai_message,
+    reset_ai_conversation,
+    get_ai_capabilities,
+    get_ai_context
 )
 
 bot_bp = Blueprint('bot', __name__, url_prefix='/bot')
@@ -15,27 +23,99 @@ bot_bp = Blueprint('bot', __name__, url_prefix='/bot')
 @bot_bp.route('/start', methods=['POST'])
 @login_required
 def bot_start():
-    """Start a new conversational session."""
-    return jsonify(start_conversation())
+    """Start a new AI-powered conversational session."""
+    try:
+        # Use new AI agent system
+        response = start_ai_conversation()
+        
+        # Add user context
+        response['user'] = {
+            'id': current_user.id,
+            'name': current_user.full_name,
+            'email': current_user.email,
+            'role': current_user.role
+        }
+        
+        return jsonify(response)
+    except Exception as e:
+        # Fallback to basic system if AI agent fails
+        from services.bot_assistant import start_conversation
+        return jsonify(start_conversation())
 
 
 @bot_bp.route('/message', methods=['POST'])
 @login_required
 def bot_message():
+    """Process user message with advanced AI agent."""
     data = request.get_json(silent=True) or {}
     message = (data.get('message') or '').strip()
+    context_updates = data.get('context', {})
+    
     if not message:
         return jsonify({'error': 'Message cannot be empty.'}), 400
 
-    response = process_user_message(message)
-    return jsonify(response)
+    try:
+        # Use new AI agent system
+        response = process_ai_message(message, context_updates)
+        
+        # Add user context
+        response['user'] = {
+            'id': current_user.id,
+            'name': current_user.full_name,
+            'role': current_user.role
+        }
+        
+        return jsonify(response)
+    except Exception as e:
+        # Fallback to basic system if AI agent fails
+        from services.bot_assistant import process_user_message
+        response = process_user_message(message)
+        return jsonify(response)
 
 
 @bot_bp.route('/reset', methods=['POST'])
 @login_required
 def bot_reset():
-    BotConversationState().reset()
-    return jsonify(start_conversation())
+    """Reset AI conversation."""
+    try:
+        # Reset AI agent
+        response = reset_ai_conversation()
+        return jsonify(response)
+    except Exception as e:
+        # Fallback to basic system
+        BotConversationState().reset()
+        from services.bot_assistant import start_conversation
+        return jsonify(start_conversation())
+
+
+@bot_bp.route('/capabilities', methods=['GET'])
+@login_required
+def bot_capabilities():
+    """Get AI agent capabilities."""
+    try:
+        capabilities = get_ai_capabilities()
+        return jsonify({
+            'capabilities': capabilities,
+            'agent_type': 'advanced_ai',
+            'version': '2.0'
+        })
+    except Exception as e:
+        return jsonify({
+            'capabilities': ['basic_conversation', 'form_filling'],
+            'agent_type': 'basic',
+            'version': '1.0'
+        })
+
+
+@bot_bp.route('/context', methods=['GET'])
+@login_required
+def bot_context():
+    """Get current AI context."""
+    try:
+        context = get_ai_context()
+        return jsonify(context)
+    except Exception as e:
+        return jsonify({'error': 'Context not available'}), 500
 
 
 @bot_bp.route('/upload', methods=['POST'])

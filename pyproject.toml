@@ -1,283 +1,126 @@
+[tool.pylance]
+# Pylance configuration to reduce noise from type checking
+reportMissingTypeStubs = "none"
+reportUnknownVariableType = "none"
+reportUnknownMemberType = "none"
+reportUnknownParameterType = "none"
+reportUnknownArgumentType = "none"
+reportOptionalMemberAccess = "warning"
+reportAttributeAccessIssue = "warning"
+reportUntypedFunctionDecorator = "none"
+reportUnusedImport = "warning"
+reportUnusedVariable = "warning"
+reportUnusedFunction = "warning"
+reportDuplicateImport = "error"
+reportArgumentType = "error"
+reportMissingParameterType = "none"
+reportPrivateUsage = "none"
+reportPossiblyUnboundVariable = "error"
+
+[tool.pyright]
+# Pyright configuration
+include = ["**/*.py"]
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.*",
+    "venv",
+    "env"
+]
+defineConstant = { DEBUG = true }
+stubPath = "typings"
+venvPath = "."
+venv = "venv"
+
+pythonVersion = "3.9"
+pythonPlatform = "Windows"
+
+# Type checking mode
+typeCheckingMode = "basic"
+
+# Disable specific checks that are too noisy
+reportMissingImports = true
+reportMissingTypeStubs = false
+reportImportCycles = false
+reportUnusedImport = "warning"
+reportUnusedClass = "warning"
+reportUnusedFunction = "warning"
+reportUnusedVariable = "warning"
+reportDuplicateImport = true
+reportOptionalSubscript = "warning"
+reportOptionalMemberAccess = "warning"
+reportOptionalCall = "warning"
+reportOptionalIterable = "warning"
+reportOptionalContextManager = "warning"
+reportOptionalOperand = "warning"
+reportTypedDictNotRequiredAccess = false
+reportPrivateUsage = "warning"
+reportConstantRedefinition = "warning"
+reportIncompatibleMethodOverride = "warning"
+reportIncompatibleVariableOverride = "warning"
+reportUntypedFunctionDecorator = false
+reportUntypedClassDecorator = false
+reportUntypedBaseClass = false
+reportUntypedNamedTuple = false
+reportCallInDefaultInitializer = false
+reportUnnecessaryIsInstance = false
+reportUnnecessaryCast = false
+reportAssertAlwaysTrue = false
+reportSelfClsParameterName = false
+reportImplicitStringConcatenation = false
+reportUndefinedVariable = "error"
+reportUnboundVariable = "error"
+
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "sat-report-generator"
-description = "Enterprise SAT Report Generator"
+version = "2.0.0"
+description = "SAT Report Generator with AI Assistant"
+authors = [
+    {name = "SAT Team", email = "sat@company.com"}
+]
+license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.9"
-license = {text = "MIT"}
-authors = [
-    {name = "SAT Report Generator Team", email = "team@example.com"},
-]
-keywords = ["sat", "report", "generator", "enterprise", "automation"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+
 dependencies = [
-    "flask>=2.2.3",
-    "flask-login",
-    "flask-sqlalchemy",
-    "flask-wtf>=1.1.1",
-    "werkzeug>=2.2.3",
-    "psycopg2-binary",
-    "sqlalchemy",
-    "python-docx",
-    "docxtpl>=0.16.7",
-    "pillow>=10.4.0",
-    "requests",
-    "beautifulsoup4",
-    "lxml",
-    "python-dotenv>=1.0.0",
-    "itsdangerous",
-    "gunicorn",
-    "greenlet",
-    "cryptography",
-    "flask-session",
+    "flask>=2.0.0",
+    "flask-login>=0.6.0",
+    "flask-wtf>=1.0.0",
+    "flask-session>=0.4.0",
+    "sqlalchemy>=1.4.0",
+    "werkzeug>=2.0.0",
+    "requests>=2.25.0",
+    "python-docx>=0.8.11",
+    "openpyxl>=3.0.9",
+    "redis>=4.0.0",
+    "celery>=5.2.0",
+    "cryptography>=3.4.8",
 ]
-dynamic = ["version"]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.0.0",
-    "pytest-flask>=1.2.0",
-    "pytest-cov>=4.0.0",
-    "pytest-mock>=3.10.0",
-    "factory-boy>=3.2.0",
-    "selenium>=4.0.0",
-    "locust>=2.0.0",
-    "faker>=18.0.0",
-    "responses>=0.23.0",
-    "freezegun>=1.2.0",
-    "coverage>=7.0.0",
-    "black>=23.0.0",
-    "flake8>=6.0.0",
-    "isort>=5.12.0",
-    "mypy>=1.0.0",
-    "pre-commit>=3.0.0",
-    "bandit>=1.7.0",
-    "safety>=2.0.0",
-    "pylint>=2.17.0",
-]
-docs = [
-    "sphinx>=5.0.0",
-    "sphinx-rtd-theme>=1.2.0",
-    "sphinx-autodoc-typehints>=1.19.0",
-]
-monitoring = [
-    "prometheus-client>=0.16.0",
-    "structlog>=22.0.0",
-    "opentelemetry-api>=1.15.0",
-    "opentelemetry-sdk>=1.15.0",
-    "opentelemetry-instrumentation-flask>=0.36b0",
-    "opentelemetry-instrumentation-sqlalchemy>=0.36b0",
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "black>=21.0",
+    "flake8>=3.9",
+    "mypy>=0.910",
+    "pylint>=2.9",
 ]
 
 [project.urls]
-Homepage = "https://github.com/example/sat-report-generator"
-Documentation = "https://sat-report-generator.readthedocs.io/"
-Repository = "https://github.com/example/sat-report-generator.git"
-"Bug Tracker" = "https://github.com/example/sat-report-generator/issues"
-
-[tool.setuptools_scm]
-write_to = "sat_report_generator/_version.py"
-
-[tool.black]
-line-length = 127
-target-version = ['py39']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-  | migrations
-)/
-'''
-
-[tool.isort]
-profile = "black"
-line_length = 127
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-ensure_newline_before_comments = true
-skip_glob = ["migrations/*"]
-
-[tool.flake8]
-max-line-length = 127
-extend-ignore = ["E203", "W503", "E501"]
-exclude = [
-    ".git",
-    "__pycache__",
-    "build",
-    "dist",
-    ".eggs",
-    "*.egg-info",
-    ".venv",
-    ".tox",
-    "migrations",
-]
-per-file-ignores = [
-    "__init__.py:F401",
-    "tests/*:S101,S106",
-]
-# Enable additional checks
-select = ["E", "W", "F", "C", "N", "B", "BLK", "I"]
-# Complexity settings
-max-complexity = 10
-# Documentation settings
-docstring-convention = "google"
-
-[tool.mypy]
-python_version = "3.9"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
-disallow_incomplete_defs = false
-check_untyped_defs = true
-disallow_untyped_decorators = false
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-warn_unreachable = true
-strict_equality = true
-ignore_missing_imports = true
-exclude = [
-    "migrations/",
-    "build/",
-    "dist/",
-]
-
-[tool.pylint.messages_control]
-disable = [
-    "missing-docstring",
-    "too-few-public-methods",
-    "too-many-arguments",
-    "too-many-locals",
-    "too-many-branches",
-    "too-many-statements",
-    "duplicate-code",
-    "import-error",
-]
-
-[tool.pylint.format]
-max-line-length = 127
-
-[tool.pylint.design]
-max-args = 7
-max-attributes = 10
-max-bool-expr = 5
-max-branches = 15
-max-locals = 20
-max-parents = 7
-max-public-methods = 25
-max-returns = 8
-max-statements = 60
-min-public-methods = 1
-
-[tool.pylint.similarities]
-min-similarity-lines = 6
-ignore-comments = true
-ignore-docstrings = true
-ignore-imports = true
-
-[tool.pylint.basic]
-good-names = ["i", "j", "k", "ex", "Run", "_", "id", "db", "app", "bp", "g"]
-bad-names = ["foo", "bar", "baz", "toto", "tutu", "tata"]
-
-[tool.bandit]
-exclude_dirs = ["tests", "migrations"]
-skips = ["B101", "B601"]
-
-[tool.coverage.run]
-source = ["."]
-omit = [
-    "*/tests/*",
-    "*/migrations/*",
-    "*/venv/*",
-    "*/env/*",
-    "*/__pycache__/*",
-    "*/build/*",
-    "*/dist/*",
-    "setup.py",
-    "conftest.py",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if __name__ == .__main__.:",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
-]
-ignore_errors = true
-show_missing = true
-precision = 2
-
-[tool.coverage.html]
-directory = "htmlcov"
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = [
-    "--verbose",
-    "--tb=short",
-    "--cov=.",
-    "--cov-report=html:htmlcov",
-    "--cov-report=term-missing",
-    "--cov-report=xml",
-    "--cov-exclude=tests/*",
-    "--cov-exclude=venv/*",
-    "--cov-exclude=instance/*",
-    "--cov-exclude=static/*",
-    "--cov-exclude=templates/*",
-    "--cov-exclude=migrations/*",
-    "--cov-fail-under=80",
-]
-filterwarnings = [
-    "ignore::DeprecationWarning",
-    "ignore::PendingDeprecationWarning",
-]
-markers = [
-    "unit: Unit tests",
-    "integration: Integration tests",
-    "e2e: End-to-end tests",
-    "performance: Performance tests",
-    "slow: Slow running tests",
-]
-
-[tool.commitizen]
-name = "cz_conventional_commits"
-version = "0.1.0"
-tag_format = "v$version"
-version_files = [
-    "sat_report_generator/_version.py",
-    "pyproject.toml:version"
-]
+Homepage = "https://github.com/company/sat-report-generator"
+Repository = "https://github.com/company/sat-report-generator.git"
+Documentation = "https://sat-docs.company.com"

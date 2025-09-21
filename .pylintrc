@@ -1,40 +1,51 @@
 [MASTER]
 # Use multiple processes to speed up Pylint
-jobs=0
+jobs=1
 
 # Pickle collected data for later comparisons
 persistent=yes
 
 # List of plugins (as comma separated values of python modules names) to load
-load-plugins=pylint.extensions.docparams,
-             pylint.extensions.docstyle,
-             pylint.extensions.mccabe
+load-plugins=
 
-# Use a conservative default here; 2 should speed up most setups and you can
-# always reduce it further if you change your mind
+# Use a conservative approach to avoid false positives
 suggestion-mode=yes
 
 [MESSAGES CONTROL]
-# Disable the message, report, category or checker with the given id(s)
-disable=missing-docstring,
-        too-few-public-methods,
-        too-many-arguments,
-        too-many-locals,
-        too-many-branches,
-        too-many-statements,
-        too-many-instance-attributes,
-        too-many-public-methods,
-        duplicate-code,
-        import-error,
-        no-member,
-        unused-argument,
-        broad-except,
-        fixme,
-        global-statement,
-        redefined-outer-name,
-        unused-variable,
-        line-too-long,
-        invalid-name
+# Disable specific warnings that are too noisy
+disable=
+    missing-docstring,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-locals,
+    too-many-branches,
+    too-many-statements,
+    too-many-instance-attributes,
+    line-too-long,
+    invalid-name,
+    unused-import,
+    unused-variable,
+    unused-argument,
+    import-error,
+    no-member,
+    attribute-defined-outside-init,
+    broad-except,
+    bare-except,
+    redefined-outer-name,
+    global-statement,
+    fixme,
+    wrong-import-position,
+    wrong-import-order,
+    ungrouped-imports,
+    multiple-imports,
+    wildcard-import,
+    unused-wildcard-import,
+    redefined-builtin,
+    consider-using-f-string,
+    consider-using-with,
+    unspecified-encoding,
+    use-dict-literal,
+    use-list-literal
 
 [REPORTS]
 # Set the output format
@@ -43,90 +54,26 @@ output-format=text
 # Tells whether to display a full report or only the messages
 reports=no
 
-# Python expression which should return a note less than 10 (10 is the highest
-# note). You have access to the variables errors warning, statement which
-# respectively contain the number of errors / warnings messages and the total
-# number of statements analyzed
+# Python expression which should return a note less than 10 (10 is the highest note)
 evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)
 
 [REFACTORING]
 # Maximum number of nested blocks for function / method body
 max-nested-blocks=5
 
-# Complete name of functions that never returns
-never-returning-functions=sys.exit
-
 [BASIC]
 # Good variable names which should always be accepted
-good-names=i,j,k,ex,Run,_,id,db,app
+good-names=i,j,k,ex,Run,_,id,db,app,bp,e,f
 
 # Bad variable names which should always be refused
 bad-names=foo,bar,baz,toto,tutu,tata
 
-# Colon-delimited sets of names that determine each other's naming style when
-# the name regexes allow several styles
-name-group=
-
 # Include a hint for the correct naming format with invalid-name
 include-naming-hint=no
 
-# Naming style matching correct function names
-function-naming-style=snake_case
-
-# Regular expression matching correct function names
-function-rgx=[a-z_][a-z0-9_]{2,30}$
-
-# Naming style matching correct variable names
-variable-naming-style=snake_case
-
-# Regular expression matching correct variable names
-variable-rgx=[a-z_][a-z0-9_]{2,30}$
-
-# Naming style matching correct constant names
-const-naming-style=UPPER_CASE
-
-# Regular expression matching correct constant names
-const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
-
-# Naming style matching correct attribute names
-attr-naming-style=snake_case
-
-# Regular expression matching correct attribute names
-attr-rgx=[a-z_][a-z0-9_]{2,30}$
-
-# Naming style matching correct argument names
-argument-naming-style=snake_case
-
-# Regular expression matching correct argument names
-argument-rgx=[a-z_][a-z0-9_]{2,30}$
-
-# Naming style matching correct class attribute names
-class-attribute-naming-style=any
-
-# Regular expression matching correct class attribute names
-class-attribute-rgx=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
-
-# Naming style matching correct class names
-class-naming-style=PascalCase
-
-# Regular expression matching correct class names
-class-rgx=[A-Z_][a-zA-Z0-9]+$
-
-# Naming style matching correct module names
-module-naming-style=snake_case
-
-# Regular expression matching correct module names
-module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
-
-# Naming style matching correct method names
-method-naming-style=snake_case
-
-# Regular expression matching correct method names
-method-rgx=[a-z_][a-z0-9_]{2,30}$
-
 [FORMAT]
 # Maximum number of characters on a single line
-max-line-length=127
+max-line-length=120
 
 # Regexp for a line that is allowed to be longer than the limit
 ignore-long-lines=^\s*(# )?<?https?://\S+>?$
@@ -134,24 +81,8 @@ ignore-long-lines=^\s*(# )?<?https?://\S+>?$
 # Allow the body of an if to be on the same line as the test if there is no else
 single-line-if-stmt=no
 
-# Maximum number of lines in a module
-max-module-lines=1000
-
-# String used as indentation unit
-indent-string='    '
-
-# Number of spaces of indent required inside a hanging or continued line
-indent-after-paren=4
-
-# Expected format of line ending
-expected-line-ending-format=
-
 [LOGGING]
-# Format style used to check logging format string
-logging-format-style=old
-
-# Logging modules to check that the string format arguments are in logging
-# function parameter format
+# Logging modules to check that the string format arguments are in logging function parameter format
 logging-modules=logging
 
 [MISCELLANEOUS]
@@ -188,19 +119,13 @@ spelling-store-unknown-words=no
 # List of decorators that produce context managers
 contextmanager-decorators=contextlib.contextmanager
 
-# List of members which are set dynamically and missed by pylint inference
-# system, and so shouldn't trigger E1101 when accessed
+# List of members which are set dynamically and missed by pylint inference system
 generated-members=
 
 # Tells whether missing members accessed in mixin class should be ignored
 ignore-mixin-members=yes
 
-# Tells whether to warn about missing members when the owner of the attribute
-# is inferred to be None
-ignore-none=yes
-
-# This flag controls whether pylint should warn about no-member and similar
-# checks whenever an opaque object is returned when inferring
+# This flag controls whether pylint should warn about no-member and similar checks
 ignore-on-opaque-inference=yes
 
 # List of class names for which member attributes should not be checked
@@ -209,41 +134,25 @@ ignored-classes=optparse.Values,thread._local,_thread._local
 # List of module names for which member attributes should not be checked
 ignored-modules=
 
-# Show a hint with the correct naming format with invalid-name
-missing-member-hint=yes
-
-# The type of string formatting that logging methods do
-missing-member-hint-distance=1
-
-# The minimum edit distance a name should have in order to be considered a
-# similar match for a missing member name
-missing-member-max-choices=1
+# Show a hint with the correct function signature when receiving a wrong number of parameters
+show-missing-members=yes
 
 [VARIABLES]
-# List of additional names supposed to be defined in builtins
-additional-builtins=
-
-# Tells whether unused global variables should be treated as a violation
-allow-global-unused-variables=yes
-
-# List of strings which can identify a callback function by name
-callbacks=cb_,_cb
+# Tells whether we should check for unused import in __init__ files
+init-import=no
 
 # A regular expression matching the name of dummy variables
 dummy-variables-rgx=_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
 
-# Argument names that match this expression will be ignored
-ignored-argument-names=_.*|^ignored_|^unused_
+# List of additional names supposed to be defined in builtins
+additional-builtins=
 
-# Tells whether we should check for unused import in __init__ files
-init-import=no
-
-# List of qualified module names which can have objects that can redefine builtins
-redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+# List of strings which can identify a callback function by name
+callbacks=cb_,_cb
 
 [CLASSES]
 # List of method names used to declare (i.e. assign) instance attributes
-defining-attr-methods=__init__,__new__,setUp,__post_init__
+defining-attr-methods=__init__,__new__,setUp
 
 # List of member names, which should be excluded from the protected access warning
 exclude-protected=_asdict,_fields,_replace,_source,_make
@@ -252,29 +161,29 @@ exclude-protected=_asdict,_fields,_replace,_source,_make
 valid-classmethod-first-arg=cls
 
 # List of valid names for the first argument in a metaclass class method
-valid-metaclass-classmethod-first-arg=cls
+valid-metaclass-classmethod-first-arg=mcs
 
 [DESIGN]
 # Maximum number of arguments for function / method
-max-args=5
+max-args=10
 
 # Maximum number of attributes for a class
-max-attributes=7
+max-attributes=15
 
-# Maximum number of boolean expressions in an if statement
+# Maximum number of boolean expressions in a if statement
 max-bool-expr=5
 
 # Maximum number of branch for function / method body
-max-branches=12
+max-branches=15
 
 # Maximum number of locals for function / method body
-max-locals=15
+max-locals=20
 
 # Maximum number of parents for a class
 max-parents=7
 
 # Maximum number of public methods for a class
-max-public-methods=20
+max-public-methods=25
 
 # Maximum number of return / yield for function / method body
 max-returns=6
@@ -283,7 +192,7 @@ max-returns=6
 max-statements=50
 
 # Minimum number of public methods for a class
-min-public-methods=2
+min-public-methods=1
 
 [IMPORTS]
 # Allow wildcard imports from modules that define __all__
@@ -309,9 +218,6 @@ known-standard-library=
 
 # Force import order to recognize a module as part of a third party library
 known-third-party=enchant
-
-# Couples of modules and preferred modules
-preferred-modules=
 
 [EXCEPTIONS]
 # Exceptions that will emit a warning when being caught

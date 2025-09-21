@@ -3,19 +3,21 @@ import sys
 import signal
 import logging
 import traceback
+import importlib.util
 from flask import Flask, g, request, render_template, jsonify, make_response, redirect, url_for, session, flash
 from flask_wtf.csrf import CSRFProtect, generate_csrf, CSRFError
-from flask_login import current_user, login_required, logout_user
+from flask_login import current_user, login_required
 from flask_session import Session
-import sys
-import os
-import importlib.util
+from typing import Optional, Any
 
 # Import Config directly from config.py file
 config_file_path = os.path.join(os.path.dirname(__file__), 'config.py')
 spec = importlib.util.spec_from_file_location("config_module", config_file_path)
-config_module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(config_module)
+if spec and spec.loader:
+    config_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(config_module)
+else:
+    raise ImportError("Could not load config module")
 
 # Now we can access Config and config from the file
 Config = config_module.Config
@@ -436,6 +438,7 @@ def create_app(config_name='default'):
         from routes.bot import bot_bp
         from routes.ai import ai_bp
         from routes.edit import edit_bp
+        from routes.mcp import mcp_bp
         
         # Import new RESTful API
         from api import api_bp as restful_api_bp
@@ -462,6 +465,7 @@ def create_app(config_name='default'):
         app.register_blueprint(bot_bp, url_prefix='/bot')
         app.register_blueprint(edit_bp, url_prefix='/edit')
         app.register_blueprint(ai_bp)
+        app.register_blueprint(mcp_bp)
         
         # Register new RESTful API at /api/v1
         app.register_blueprint(restful_api_bp)

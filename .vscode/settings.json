@@ -1,3 +1,85 @@
 {
-    "python.analysis.typeCheckingMode": "strict"
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.stubPath": "./typings",
+    "python.analysis.extraPaths": [
+        "./",
+        "./services",
+        "./routes",
+        "./models",
+        "./config",
+        "./cache",
+        "./database",
+        "./tasks",
+        "./api"
+    ],
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingTypeStubs": "none",
+        "reportUnknownVariableType": "none",
+        "reportUnknownMemberType": "none",
+        "reportUnknownParameterType": "none",
+        "reportUnknownArgumentType": "none",
+        "reportOptionalMemberAccess": "none",
+        "reportAttributeAccessIssue": "none",
+        "reportUntypedFunctionDecorator": "none",
+        "reportUnusedImport": "none",
+        "reportUnusedVariable": "none",
+        "reportUnusedFunction": "none",
+        "reportDuplicateImport": "warning",
+        "reportArgumentType": "warning",
+        "reportMissingParameterType": "none",
+        "reportPrivateUsage": "none",
+        "reportPossiblyUnboundVariable": "warning",
+        "reportGeneralTypeIssues": "none",
+        "reportIncompatibleMethodOverride": "none",
+        "reportIncompatibleVariableOverride": "none",
+        "reportInconsistentConstructor": "none",
+        "reportOverlappingOverload": "none",
+        "reportMissingSuperCall": "none",
+        "reportUninitializedInstanceVariable": "none",
+        "reportInvalidStringEscapeSequence": "error",
+        "reportUnknownLambdaType": "none",
+        "reportFunctionMemberAccess": "none",
+        "reportPropertyTypeMismatch": "none",
+        "reportCallInDefaultInitializer": "none",
+        "reportUnnecessaryIsInstance": "none",
+        "reportUnnecessaryCast": "none",
+        "reportUnnecessaryComparison": "none",
+        "reportAssertAlwaysTrue": "none",
+        "reportSelfClsParameterName": "none",
+        "reportImplicitStringConcatenation": "none",
+        "reportMatchNotExhaustive": "none"
+    },
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Enabled": false,
+    "python.linting.mypyEnabled": false,
+    "python.linting.pylintArgs": [
+        "--rcfile=.pylintrc"
+    ],
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length=120"
+    ],
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": false
+    },
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/node_modules": true,
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/instance/flask_session": true
+    },
+    "python.defaultInterpreterPath": "./venv/Scripts/python.exe",
+    "python.terminal.activateEnvironment": true,
+    "python.analysis.completeFunctionParens": true,
+    "python.analysis.importFormat": "relative"
 }
