@@ -14,7 +14,8 @@ from services.ai_agent import (
     process_ai_message,
     reset_ai_conversation,
     get_ai_capabilities,
-    get_ai_context
+    get_ai_context,
+    ai_agent
 )
 
 bot_bp = Blueprint('bot', __name__, url_prefix='/bot')

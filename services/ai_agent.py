@@ -1625,9 +1625,6 @@ Please provide a helpful, contextual response that considers the user's experien
             else:
                 return "I understand you're looking for assistance. I'm here to help with report creation, data analysis, workflow optimization, and much more. What specific task can I help you with today?"
 
-# Global agent instance
-ai_agent = AIAgentCore()
-
 # Public interface functions
 def start_ai_conversation() -> Dict[str, Any]:
     """Start a new AI conversation"""
@@ -1721,3 +1718,6 @@ def get_ai_context() -> Dict[str, Any]:
     """Get current AI context"""
     context = ai_agent.get_context()
     return asdict(context)
+
+# Global agent instance
+ai_agent = AIAgentCore()
