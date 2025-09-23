@@ -3425,10 +3425,10 @@
           if (data.success) {
             console.log('Users loaded successfully:', data.users);
 
-            // Populate Automation Manager dropdown (TM role) - name only
+            // Populate Automation Manager dropdown (Automation Manager role) - name only
             const amSelect = document.getElementById('approver_1_name_select');
-            if (amSelect && data.users.TM) {
-              data.users.TM.forEach(user => {
+            if (amSelect && data.users['Automation Manager']) {
+              data.users['Automation Manager'].forEach(user => {
                 const option = document.createElement('option');
                 option.value = user.name;
                 option.textContent = user.name;
