@@ -14,7 +14,7 @@
     ],
     "editor.formatOnSave": false,
     "editor.codeActionsOnSave": {
-        "source.organizeImports": false
+        "source.organizeImports": "never"
     },
     "files.exclude": {
         "**/__pycache__": true,
