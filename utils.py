@@ -343,7 +343,7 @@ def send_email(to_email, subject, html_content, text_content=None):
     logger.info(f"Attempting to send email to {to_email}")
 
     # Get fresh email configuration (prevents password caching)
-    from config import Config
+    from app_config import Config
     credentials = Config.get_smtp_credentials()
     
     smtp_server = credentials['server']

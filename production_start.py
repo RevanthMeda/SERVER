@@ -6,7 +6,7 @@ Ensures proper environment and configuration for domain-only access
 
 import os
 import sys
-from config import config
+from app_config import config
 from app import create_app
 
 def main():
